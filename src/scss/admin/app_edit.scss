@@ -1,0 +1,32 @@
+@import '~element-ui/lib/theme-chalk/menu.css';
+@import '~element-ui/lib/theme-chalk/menu-item.css';
+
+.el-menu--horizontal>.el-menu-item {
+  height: 50px;
+  line-height: 50px;
+  a {
+    text-decoration: none;
+    display: inline-block;
+  }
+}
+
+.wrap > a.page-title-action {
+  display: none;
+}
+.wrap > h1.wp-heading-inline {
+  display: none;
+}
+
+.wpjb_meta_field {
+  display: block;
+  margin-bottom: 15px;
+  label {
+    font-weight: 500;
+    margin-bottom: 4px;
+    display: block;
+  }
+  input {
+    width: 400px;
+    padding: 10px;
+  }
+}

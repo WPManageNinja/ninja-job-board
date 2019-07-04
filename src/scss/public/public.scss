@@ -1,0 +1,401 @@
+@import '../../../node_modules/pikaday/css/pikaday.css';
+@import "dropzone";
+.wpjb_form_notices {
+  padding: 10px 20px;
+  margin-top: 20px;
+
+  p, ul {
+    padding: 0;
+    margin: 0;
+  }
+
+  &.wpjb_form_errors {
+    color: rgb(114, 28, 36);
+    background-color: rgb(248, 215, 218);
+    border-color: rgb(245, 198, 203);
+  }
+
+  &.wpjb_form_success {
+    color: rgb(21, 87, 36);
+    background-color: rgb(212, 237, 218);
+    border-color: rgb(195, 230, 203);
+  }
+}
+
+.wpjb_strip_default_style {
+  .StripeElement {
+    background-color: white;
+    height: 40px;
+    padding: 10px 12px;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 3px 0 #e6ebf1;
+    -webkit-transition: box-shadow 150ms ease;
+    transition: box-shadow 150ms ease;
+  }
+
+  .StripeElement--focus {
+    box-shadow: 0 1px 3px 0 #cfd7df;
+  }
+
+  .StripeElement--invalid {
+    border-color: #fa755a;
+  }
+
+  .StripeElement--webkit-autofill {
+    background-color: #fefde5 !important;
+  }
+}
+
+.wpjb_form_wrapper {
+  form.wpjb_submitting_form {
+    span.wpjb_txt_normal {
+      display: none !important;
+    }
+
+    span.wpjb_txt_loading {
+      display: block !important;
+    }
+  }
+
+  form.wpjb_label_top {
+    .wpjb_form_group {
+      display: block;
+      width: 100%;
+      margin-bottom: 15px;
+
+      > label {
+        display: block;
+      }
+
+      .wpjb_form_control {
+        display: block;
+        width: 100%;
+      }
+    }
+  }
+
+  form.wpjb_form {
+    .wpjb_form_group {
+      .wpjb_form_item_group {
+        position: relative;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -webkit-box-align: stretch;
+        -ms-flex-align: stretch;
+        align-items: stretch;
+        width: 100%;
+        max-width: 250px;
+
+        .wpjb_input-group-prepend {
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+
+          .wpjb_input-group-text {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            padding: 0 15px;
+            margin-bottom: 0;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: rgb(73, 80, 87);
+            text-align: center;
+            white-space: nowrap;
+            background-color: rgb(233, 236, 239);
+            border: 1px solid rgb(206, 212, 218);
+            border-radius: 0;
+            border-top-left-radius: 0.25rem;
+            border-bottom-left-radius: 0.25rem;
+          }
+        }
+
+        input {
+          position: relative;
+          -webkit-box-flex: 1;
+          -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+          width: 1% !important;
+          margin-bottom: 0;
+          border-top-left-radius: 0 !important;
+          border-bottom-left-radius: 0 !important;
+
+        }
+      }
+    }
+  }
+
+  .wpjb_loading_svg {
+    display: none;
+  }
+
+  form.wpjb_submitting_form {
+    .wpjb_loading_svg {
+      display: inline-block;
+    }
+  }
+
+  .wpjb_form_group {
+    display: block;
+    margin-bottom: 20px;
+    * {
+      box-sizing: border-box;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .wpjb_inline_labels {
+      &.wpjb_label_left {
+        .wpjb_form_group {
+          .wpjb_input_label > label {
+            text-align: left;
+            display: block;
+          }
+        }
+      }
+
+      &.wpjb_label_right {
+        .wpjb_form_group {
+          .wpjb_input_label > label {
+            text-align: right;
+            display: block;
+          }
+        }
+      }
+
+      .wpjb_form_group {
+        .wpjb_input_label {
+          float: left;
+          width: 200px;
+          padding-right: 10px;
+        }
+
+        .wpjb_input_content {
+          margin-left: 200px;
+          display: block;
+
+          .wpjb_form_control {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 767px) {
+    .wpjb_form_group {
+      .wpjb_form_control, .wpjb_form_item_group {
+        width: 100%;
+        max-width: 100% !important;
+      }
+    }
+  }
+  .wpjb_submit_button_pos_center {
+    .wpjb_form_submissions {
+      display: block;
+      text-align: center;
+    }
+  }
+  .wpjb_submit_button_pos_left {
+    .wpjb_form_submissions {
+      display: block;
+      text-align: left;
+    }
+  }
+  .wpjb_submit_button_pos_right {
+    .wpjb_form_submissions {
+      display: block;
+      text-align: right;
+    }
+  }
+
+  form.wpjb_form {
+    .wpjb_default_btn, .wpjb_full_block_btn {
+      border-radius: 4px;
+      display: inline-block;
+      background-color: rgb(62, 168, 229);
+      background-image: linear-gradient(-180deg, rgb(68, 177, 232), rgb(48, 152, 222));
+      box-shadow: 0 1px 0 0 rgba(46, 86, 153, .15), inset 0 1px 0 0 rgba(46, 86, 153, .1), inset 0 -1px 0 0 rgba(46, 86, 153, .4);
+      font-size: 17px;
+      line-height: 17px;
+      height: 40px;
+      font-weight: 700;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, .12);
+      color: rgb(255, 255, 255);
+      cursor: pointer;
+      transition: all .2s ease-in-out;
+      padding: 10px 20px;
+      &:hover {
+        background-image: linear-gradient(rgb(125, 197, 238), rgb(0, 140, 221) 85%, rgb(48, 162, 228));
+      }
+    }
+
+    .wpjb_full_block_btn {
+      display: block !important;
+      width: 100%;
+    }
+
+  }
+
+  &.wpjb_restriction_action_hide_form {
+    form.wpjb_form {
+      display: none !important;
+      visibility: hidden !important;
+    }
+  }
+  &.wpjb_restriction_action_hide_submit_button {
+    form.wpjb_form {
+      .wpjb_form_submissions {
+        display: none !important;
+        visibility: hidden !important;
+      }
+    }
+  }
+
+  form.wpjb_bold_labels {
+    .wpjb_input_label {
+      > label {
+        font-weight: bold;
+      }
+    }
+  }
+
+}
+
+form.wpjb_default_form_styles {
+  .wpjb_form_group {
+    input[type="text"], input[type="email"], input[type="url"], input[type="password"], input[type="search"], input[type="number"], input[type="tel"], input[type="range"], input[type="date"], input[type="month"], input[type="week"], input[type="time"], input[type="datetime"], input[type="datetime-local"], input[type="color"] {
+      display: block;
+      width: 100%;
+      padding: .375rem .75rem;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: rgb(73, 80, 87);
+      background-color: rgb(255, 255, 255);
+      background-clip: padding-box;
+      border: 1px solid rgb(206, 212, 218);
+      border-radius: .25rem;
+      transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    }
+    select {
+      height: calc(2.25rem + 2px);
+    }
+    textarea {
+      display: block;
+      width: 100%;
+      padding: .375rem .75rem;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: rgb(73, 80, 87);
+      background-color: rgb(255, 255, 255);
+      background-clip: padding-box;
+      border: 1px solid rgb(206, 212, 218);
+      border-radius: .25rem;
+      transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    }
+  }
+}
+
+.dropzone_parent input[type=file] {
+  display: none !important;
+  visibility: hidden;
+}
+
+.wpjb_file_lists {
+  display: flex;
+  width: 100%;
+  .wpjb_each_file {
+    max-width: 150px;
+    margin-right: 20px;
+    flex: 1;
+    &:hover {
+      opacity: 0.8;
+      box-shadow: 0px 2px 5px 5px #eeeeef;
+    }
+    img {
+      max-width: 100%;
+    }
+  }
+}
+
+.wpjb_job_form_wrapper {
+  clear: both;
+  border: 1px solid #eee;
+  padding: .75em 1em;
+  margin: 1em 0;
+  line-height: 1.5em;
+  display: block;
+  position: relative;
+  box-shadow: 0 1px 1px rgba(0,0,0,.1);
+  &:before {
+    content: "";
+    position: absolute;
+    margin: -10px 0 0;
+    top: 0;
+    left: 5em;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #eee;
+  }
+}
+
+.wpjb_step_button_wrapper {
+  display: block;
+  overflow: hidden;
+  .wpjb_step_button {
+    background: #1a1a1a;
+    border: 0;
+    border-radius: 4px;
+    color: #fff;
+    font-weight: 500;
+    letter-spacing: 0.046875em;
+    line-height: 1;
+    padding: 7px 15px 7px;
+    &:hover {
+      background: #3ea8e5;
+      background-image: linear-gradient(-180deg, #44b1e8, #3098de);
+      box-shadow: 0 1px 0 0 rgba(46, 86, 153, 0.15), inset 0 1px 0 0 rgba(46, 86, 153, 0.1), inset 0 -1px 0 0 rgba(46, 86, 153, 0.4);
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+      color: white;
+      transition: all 0.2s ease-in-out;
+    }
+  }
+  .wpjb_step_next {
+    float: right;
+  }
+  .wpjb_step_back {
+    float: left;
+  }
+}
+
+.wpjb_step_title {
+  margin: 0 0 20px;
+  padding: 0;
+  font-size: 24px;
+  line-height: 1.2173913043;
+}
+
+.wpjb_job_apply_btn {
+  background: #1a1a1a;
+  border: 0;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: 500;
+  letter-spacing: 0.046875em;
+  line-height: 1;
+  margin: 0 .5em 0 0;
+  padding: .90909091em 2em;
+  &:hover {
+    background: #007acc;
+  }
+}
