@@ -143,11 +143,32 @@
                             <div class="entry_info_body wpf_meta_info">
                                 <label>
                                     Application Status
-                                    <el-select size="mini">
-
-                                    </el-select>
-
+                                    <div class="wpjb_field">
+                                        <el-select v-model="submission.application_status" size="mini">
+                                            <el-option
+                                                v-for="(status, status_value) in available_application_statuses"
+                                                :key="status_value"
+                                                :value="status_value"
+                                                :label="status"
+                                            ></el-option>
+                                        </el-select>
+                                    </div>
                                 </label>
+                                <label>
+                                    Internal Status
+                                    <div class="wpjb_field">
+                                        <el-select v-model="submission.status" size="mini">
+                                            <el-option
+                                                v-for="(status, status_value) in available_internal_statuses"
+                                                :key="status_value"
+                                                :value="status_value"
+                                                :label="status"
+                                            ></el-option>
+                                        </el-select>
+                                    </div>
+                                </label>
+                                <br/>
+                                <el-button size="mini" type="primary" @click="updateStatuses()">Update</el-button>
                             </div>
                         </div>
                         <div class="entry_info_box">
@@ -202,61 +223,6 @@
                 <el-button v-if="hide_sidebar == 'yes'" @click="hide_sidebar = 'no'" size="mini">Show Meta Info
                 </el-button>
             </div>
-            <!--Edit Application Status Modal-->
-            <el-dialog
-                title="Edit Payment Status"
-                :visible.sync="editApplicationStatusModal"
-                width="50%">
-                <div class="modal_body">
-                    <p>Current Application Status: <b>{{ submission.application_status }}</b></p>
-                    <el-form ref="application_status_form" :model="application_status_edit_model" label-width="180px">
-                        <el-form-item label="New Application Status">
-                            <el-radio-group v-model="application_status_edit_model.status">
-                                <el-radio v-for="(status, status_key) in available_application_statuses" :key="status"
-                                          :label="status_key">{{status}}
-                                </el-radio>
-                            </el-radio-group>
-                        </el-form-item>
-                        <el-form-item label="Note">
-                            <el-input type="textarea" placeholder="You may add a note for this status change (optional)"
-                                      size="mini"
-                                      v-model="application_status_edit_model.note"></el-input>
-                        </el-form-item>
-                    </el-form>
-                </div>
-                <span slot="footer" class="dialog-footer">
-                <el-button @click="editApplicationStatusModal = false">Cancel</el-button>
-                <el-button type="primary" @click="changeApplicationStatus()">Confirm</el-button>
-            </span>
-            </el-dialog>
-
-            <!--Edit Internal Status Modal-->
-            <el-dialog
-                title="Edit Payment Status"
-                :visible.sync="editInternalStatusModal"
-                width="50%">
-                <div class="modal_body">
-                    <p>Current Internal Status: <b>{{ submission.status }}</b></p>
-                    <el-form ref="internal_status_form" :model="internal_status_edit_model" label-width="180px">
-                        <el-form-item label="New Internal Status">
-                            <el-radio-group v-model="internal_status_edit_model.status">
-                                <el-radio v-for="(status, status_key) in available_internal_statuses" :key="status"
-                                          :label="status_key">{{status}}
-                                </el-radio>
-                            </el-radio-group>
-                        </el-form-item>
-                        <el-form-item label="Note">
-                            <el-input type="textarea" placeholder="You may add a note for this status change (optional)"
-                                      size="mini"
-                                      v-model="internal_status_edit_model.note"></el-input>
-                        </el-form-item>
-                    </el-form>
-                </div>
-                <span slot="footer" class="dialog-footer">
-                <el-button @click="editInternalStatusModal = false">Cancel</el-button>
-                <el-button type="primary" @click="changeInternalStatus()">Confirm</el-button>
-            </span>
-            </el-dialog>
         </div>
     </div>
 </template>
@@ -484,6 +450,26 @@
                 document.body.appendChild(downloadAnchorNode); // required for firefox
                 downloadAnchorNode.click();
                 downloadAnchorNode.remove();
+            },
+            updateStatuses() {
+                this.$post({
+                    action: 'wpjb_submission_endpoints',
+                    route: 'update_application_statuses',
+                    form_id: this.submission.form_id,
+                    submission_id: this.submission.id,
+                    application_status: this.submission.application_status,
+                    status: this.submission.status
+                })
+                    .then(response => {
+                        this.$message.success(response.data.message);
+                        this.getEntry();
+                    })
+                    .fail(error => {
+                        this.$message.error(error.responseJSON.data.message);
+                    })
+                    .always(() => {
+
+                    });
             }
         },
         mounted() {

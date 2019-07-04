@@ -60,6 +60,7 @@ class Activator
 				application_status varchar(255),
 				submission_hash varchar (255),
 				status varchar(255),
+				overall_score int(11) DEFAULT NULL,
 				ip_address varchar (45),
 				browser varchar(45),
 				device varchar(45),

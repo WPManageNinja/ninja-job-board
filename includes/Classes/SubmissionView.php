@@ -25,15 +25,16 @@ class SubmissionView
     public function routeAjaxMaps()
     {
         $routes = array(
-            'get_submissions'          => 'getSubmissions',
-            'get_submission'           => 'getSubmission',
-            'get_available_forms'      => 'getAvailableForms',
-            'get_next_prev_submission' => 'getNextPrevSubmission',
-            'add_submission_note'      => 'addSubmissionNote',
-            'change_application_status'    => 'changeApplicationStatus',
-            'change_internal_status'    => 'changeInternalStatus',
-            'delete_submission'        => 'deleteSubmission',
-            'get_form_report'          => 'getFormReport'
+            'get_submissions'             => 'getSubmissions',
+            'get_submission'              => 'getSubmission',
+            'get_available_forms'         => 'getAvailableForms',
+            'get_next_prev_submission'    => 'getNextPrevSubmission',
+            'add_submission_note'         => 'addSubmissionNote',
+            'change_application_status'   => 'changeApplicationStatus',
+            'change_internal_status'      => 'changeInternalStatus',
+            'delete_submission'           => 'deleteSubmission',
+            'get_form_report'             => 'getFormReport',
+            'update_application_statuses' => 'updateApplicationStatuses'
         );
         $route = sanitize_text_field($_REQUEST['route']);
 
@@ -63,7 +64,7 @@ class SubmissionView
             $wheres['application_status'] = sanitize_text_field($_REQUEST['application_status']);
         }
 
-        if(isset($_REQUEST['status']) && $_REQUEST['status']) {
+        if (isset($_REQUEST['status']) && $_REQUEST['status']) {
             $wheres['status'] = sanitize_text_field($_REQUEST['status']);
         }
 
@@ -73,8 +74,8 @@ class SubmissionView
         $submissionItems = apply_filters('wpjobboard/form_entries', $submissions->items, $formId);
 
         wp_send_json_success(array(
-            'submissions'    => $submissionItems,
-            'total'          => (int)$submissions->total
+            'submissions' => $submissionItems,
+            'total'       => (int)$submissions->total
         ), 200);
 
     }
@@ -94,7 +95,7 @@ class SubmissionView
             if ($user) {
                 $submission->user = [
                     'display_name' => $user->display_name,
-                    'profile_url' => get_edit_user_link($user->ID)
+                    'profile_url'  => get_edit_user_link($user->ID)
                 ];
             }
         }
@@ -230,7 +231,7 @@ class SubmissionView
         $submissionModel = new Submission();
         $submission = $submissionModel->getSubmission($submissionId);
 
-        if(!$newStatus) {
+        if (!$newStatus) {
             wp_send_json_error(array(
                 'message' => __('Please Provide a status', 'wpjobboard')
             ), 423);
@@ -305,7 +306,62 @@ class SubmissionView
         }
 
         wp_send_json_success([
-            'reports'          => $reports
+            'reports' => $reports
         ], 200);
+    }
+
+    public function updateApplicationStatuses()
+    {
+        $submissionId = intval($_REQUEST['submission_id']);
+        $submissionModel = new Submission();
+        $submission = $submissionModel->getSubmission($submissionId);
+
+
+        $userId = get_current_user_id();
+        $user = get_user_by('ID', $userId);
+
+        $newApplicationStatus = sanitize_text_field($_REQUEST['application_status']);
+        if ($submission->application_status != $newApplicationStatus) {
+
+            do_action('wpjobboard/before_application_status_change_manually', $submission, $newApplicationStatus, $submission->application_status);
+            $submissionModel->update($submissionId, array(
+                'application_status' => $newApplicationStatus
+            ));
+            do_action('wpjobboard/after_application_status_change_manually', $submissionId, $newApplicationStatus, $submission->application_status);
+
+            SubmissionActivity::createActivity(array(
+                'form_id'            => $submission->form_id,
+                'submission_id'      => $submission->id,
+                'type'               => 'info',
+                'created_by'         => $user->display_name,
+                'created_by_user_id' => $userId,
+                'content'            => 'Application status changed from <b>'.$submission->application_status.'</b> to <b>'.$newApplicationStatus.'</b>'
+            ));
+
+        }
+
+        $newStatus = sanitize_text_field($_REQUEST['status']);
+        if ($submission->status != $newStatus) {
+            do_action('wpjobboard/before_internal_status_change_manually', $submission, $newStatus, $submission->status);
+            $submissionModel->update($submissionId, array(
+                'status' => $newStatus
+            ));
+            do_action('wpjobboard/after_internal_status_change_manually', $submissionId, $newStatus, $submission->status);
+
+            SubmissionActivity::createActivity(array(
+                'form_id'            => $submission->form_id,
+                'submission_id'      => $submission->id,
+                'type'               => 'info',
+                'created_by'         => $user->display_name,
+                'created_by_user_id' => $userId,
+                'content'            => 'Internal status changed from <b>'.$submission->status.'</b> to <b>'.$newStatus.'</b>'
+            ));
+
+        }
+
+        wp_send_json_success([
+           'message' => __('Status has been changed successfully', 'wpjobboard')
+        ]);
+
     }
 }
