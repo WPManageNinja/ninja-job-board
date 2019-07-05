@@ -55,6 +55,12 @@ e.g.
 1. Activate the plugin through the ‘Plugins’ screen in WordPress
 1. Use the WPPay Forms -> All Forms -> Add a Form to create a form and get started.
 
+##### How to Build
+- `npm install`
+- `npm run dev` # for dev build
+- `npm run watch` # for development and auto compile
+- `npm run production` # form Production build
+
 ##### Other Plugins by WPManageNinja
 <ul>
 <li><a href="https://wordpress.org/plugins/ninja-tables/" target="_blank">Ninja Tables – WP Data Table Plugin for WordPress</a></li>
