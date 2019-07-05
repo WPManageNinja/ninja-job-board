@@ -42,6 +42,7 @@ This is a super fast form builder and it's only loads css and js if you add the 
 - Email Notification System management *(Done)*
 - Export Data as CSV/Excel/JSON *(On development)
 - Send bulk emails to the applicants and filter by application status (On development)
+- Application Assesment for HR Department (On development)
 
 This plugin is a very planned project, and we have a long term development plan for this. We already invested around 200 human working hours (+coffees) on it, and we have the intention to spend much more on it. Please let us know what features you want, and we are happy to add that in our development sprint.
 

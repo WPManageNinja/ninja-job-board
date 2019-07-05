@@ -19,7 +19,7 @@ class ApplicantNameComponent extends BaseComponent
     {
         return array(
             'type'            => 'applicant_name',
-            'editor_title'    => 'Name',
+            'editor_title'    => 'Applicant Name',
             'group'           => 'input',
             'postion_group'   => 'general',
             'editor_elements' => array(

@@ -20,7 +20,7 @@ class ApplicantEmailComponent extends BaseComponent
     {
         return array(
             'type'            => 'applicant_email',
-            'editor_title'    => 'Email',
+            'editor_title'    => 'Applicant Email',
             'group'           => 'input',
             'postion_group'   => 'general',
             'editor_elements' => array(
