@@ -1,13 +1,14 @@
 WP Job Board Plugin for WordPress 
 ---
 WP Job Board us a light weight plugin that adds a job board along with application form to your WordPress website.
-####Description
+
+<b>Description</b>
 
 Want to hire your next effective and energetic employee then WP Job Board can help. With this plugin you can post a job circular right into your WordPress site and manage the whole hiring process from your WordPress dashboard.
 
 WP Job Board is a self-hosted WordPress Plugin where you can build a questionnaire form by drag and drop form builder. 
 
-#####The Following Form fields are available to build your :
+<b>The Following Form fields are available to build your:</b>
 - Applicant Name
 - Applicant Email
 - File Upload Field
