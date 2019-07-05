@@ -114,6 +114,20 @@ class WPJobBoard
             $builder = new \WPJobBoard\Classes\Builder\Render();
             return $builder->render($args['id'], $args['show_title'], $args['show_description']);
         });
+        add_shortcode('wp_job_list', function ($args) {
+            $args = shortcode_atts(array(
+                'categories'     => '',
+                'order'          => 'DESC',
+                'title'          => __('Job List', 'wpjobboard'),
+                'show_apply'     => 'yes',
+                'current_only'   => 'yes',
+                'show_cat'       => 'yes',
+                'show_filter'    => 'yes',
+                'posts_per_page' => 200
+            ), $args);
+            $builder = new \WPJobBoard\Classes\Builder\RenderJobList();
+            return $builder->render($args);
+        });
         add_shortcode('wpjobboard_confirmation', function () {
             if (isset($_REQUEST['wpjb_submission']) && $_REQUEST['wpjb_submission']) {
                 $submissionHash = sanitize_text_field($_REQUEST['wpjb_submission']);

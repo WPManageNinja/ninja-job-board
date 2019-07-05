@@ -46,6 +46,8 @@ class Submission
             $resultQuery->where(function ($q) use ($searchString) {
                 $q->where('wjb_applications.applicant_name', 'LIKE', "%{$searchString}%")
                     ->orWhere('wjb_applications.applicant_email', 'LIKE', "%{$searchString}%")
+                    ->orWhere('wjb_applications.status', 'LIKE', "%{$searchString}%")
+                    ->orWhere('wjb_applications.application_status', 'LIKE', "%{$searchString}%")
                     ->orWhere('wjb_applications.form_data_formatted', 'LIKE', "%{$searchString}%")
                     ->orWhere('wjb_applications.created_at', 'LIKE', "%{$searchString}%");
             });

@@ -12,6 +12,7 @@ mix
     .sass('src/scss/admin/app.scss', 'assets/css/jobboard-admin.css')
     .sass('src/scss/admin/jobboard-print.scss', 'assets/css/jobboard-print.css')
     .sass('src/scss/public/public.scss', 'assets/css/wp_job_board-public.css')
+    .sass('src/scss/public/joblist.scss', 'assets/css/joblist.css')
     .copy('src/images', 'assets/images')
     .copy('src/integrations/tinymce_icon.png', 'assets/js/tinymce_icon.png')
     .copy('src/libs', 'assets/libs');

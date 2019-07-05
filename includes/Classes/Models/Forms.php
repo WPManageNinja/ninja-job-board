@@ -26,6 +26,7 @@ class Forms
         $formsQuery = wpJobBoardDB()->table('posts')
             ->orderBy('ID', 'DESC')
             ->offset($args['offset'])
+            ->whereNotIn('post_status', ['auto-draft'])
             ->limit($args['posts_per_page']);
 
         foreach ($whereArgs as $key => $where) {
@@ -36,6 +37,7 @@ class Forms
             $formsQuery->where(function ($q) use ($args) {
                 $q->where('post_title', 'LIKE', "%{$args['s']}%");
                 $q->orWhere('ID', 'LIKE', "%{$args['s']}%");
+                $q->orWhere('post_content', 'LIKE', "%{$args['s']}%");
             });
         }
 
@@ -78,6 +80,7 @@ class Forms
         return wpJobBoardDB()->table('posts')
             ->select(array('ID', 'post_title'))
             ->where('post_type', 'wp_job_board')
+            ->whereNotIn('post_status', ['auto-draft'])
             ->orderBy('ID', 'DESC')
             ->get();
     }
@@ -183,7 +186,6 @@ class Forms
         );
         return wp_parse_args($confirmationSettings, $defaultSettings);
     }
-
 
     public static function getEditorShortCodes($formId, $html = true)
     {
@@ -317,5 +319,22 @@ class Forms
             'restriction_applied_type' => 'hide_form'
         );
         return wp_parse_args($settings, $defaults);
+    }
+
+    public function getExpirationDateTime($formId)
+    {
+        $settings = get_post_meta($formId, 'wpjb_form_scheduling_settings', true);
+        if (!$settings) {
+            return false;
+        }
+
+        if (ArrayHelper::get($settings, 'scheduleForm.status') == 'yes') {
+            $timeSchedule = ArrayHelper::get($settings, 'scheduleForm');
+            if($timeSchedule['end_date']) {
+               return $timeSchedule['end_date'];
+            }
+        }
+
+        return false;
     }
 }

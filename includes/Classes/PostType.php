@@ -77,7 +77,6 @@ class PostType
         $this->registerJobCategories();
     }
 
-
     public function registerJobCategories()
     {
         // Add new taxonomy, make it hierarchical (like categories)
@@ -141,17 +140,14 @@ class PostType
         $vacancies = get_post_meta($postId, 'job_vacancies', true);
         $experinceText = get_post_meta($postId, 'job_experince_text', true);
 
-        $categoryies = wp_get_post_terms($postId, 'wpjb-job-categories');
-        $category = false;
-        if($categoryies) {
-            $category = $categoryies[0];
-        }
+        $jobType = GeneralSettings::getJobTypeName(get_post_meta($postId, 'job_type', true));
+
 
         $display_date = sprintf( esc_html__( '%s ago', 'wpjobboard' ), human_time_diff( get_post_time( 'U', false, $post ), current_time( 'timestamp' ) ) );
 
         $html = '<ul class="wpjb_job_meta">';
-        if($category) {
-            $html .= '<li class="wpjb_job_category">'.$category->name.'</li>';
+        if($jobType) {
+            $html .= '<li class="wpjb_job_type">'.$jobType.'</li>';
         }
         if($location) {
             $html .= '<li class="wpjb_job_location"><img class="wpjb_meta_icon" src="'.WPJOBBOARD_URL.'assets/images/map.svg" />'.$location.'</li>';
@@ -200,7 +196,7 @@ class PostType
                 ul.wpjb_job_meta li:last-child {
                     margin-right: 0px;
                 }
-                ul.wpjb_job_meta li.wpjb_job_category {
+                ul.wpjb_job_meta li.wpjb_job_type {
                     background-color: #f7e2c5;
                     color: #906b37;
                     border-radius: 3px;
@@ -242,6 +238,8 @@ class PostType
         $location = get_post_meta($post->ID, 'job_location', true);
         $vacancies = get_post_meta($post->ID, 'job_vacancies', true);
         $experinceText = get_post_meta($post->ID, 'job_experince_text', true);
+        $jobType = get_post_meta($post->ID, 'job_type', true);
+        $availableJobTypes = GeneralSettings::getJobTypes();
         ?>
         <input type="hidden" name="wpjobboard_job_meta" value="1"/>
         <div class="wpjb_meta_field">
@@ -265,9 +263,19 @@ class PostType
                        name="wpjobboard_job_meta_values[job_experince_text]"/>
             </div>
         </div>
+        <div class="wpjb_meta_field">
+            <label><?php _e('Job Type', 'wpjobboard');?> </label>
+            <div class="wpjb_input_container">
+                <select name="wpjobboard_job_meta_values[job_type]">
+                    <option value="">Select Job Type</option>
+                    <?php foreach ($availableJobTypes as $type => $label): ?>
+                    <option <?php selected($jobType, $type); ?> value="<?php echo $type; ?>"><?php echo $label; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
         <?php
     }
-
 
     public function saveMetaData($postId)
     {

@@ -51,14 +51,20 @@ class SchedulingSettings
         $formId = intval($_REQUEST['form_id']);
         $settings = wp_unslash($_REQUEST['settings']);
 
-
-
         if (
             ArrayHelper::get($settings, 'limitNumberOfEntries.status') == 'no' &&
             ArrayHelper::get($settings, 'scheduleForm.status') == 'no' &&
             ArrayHelper::get($settings, 'requireLogin.status') == 'no'
         ) {
             $settings = false;
+        }
+
+        if(ArrayHelper::get($settings, 'scheduleForm.status') == 'no') {
+            update_post_meta($formId, 'application_start_date', 0);
+            update_post_meta($formId, 'application_end_date', 0);
+        } else {
+            update_post_meta($formId, 'application_start_timestamp', strtotime(ArrayHelper::get($settings, 'scheduleForm.start_date')));
+            update_post_meta($formId, 'application_end_timestamp', strtotime(ArrayHelper::get($settings, 'scheduleForm.end_date')));
         }
 
         update_post_meta($formId, 'wpjb_form_scheduling_settings', $settings);
