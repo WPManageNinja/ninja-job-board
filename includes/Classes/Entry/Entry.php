@@ -103,16 +103,7 @@ class Entry
             return $this->getSubscriptionsHtml();
         }
 
-        if ($name == 'payment_total_in_cents') {
-            return $this->submission->payment_total;
-        } else if ($name == 'payment_total_in_decimal') {
-            return number_format($this->submission->payment_total / 100, 2);
-        }
-
         if (property_exists($this->submission, $name)) {
-            if ($name == 'payment_total') {
-                return $this->paymentTotal();
-            }
             return $this->submission->{$name};
         }
 

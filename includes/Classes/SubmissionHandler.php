@@ -3,12 +3,7 @@
 namespace WPJobBoard\Classes;
 
 use WPJobBoard\Classes\Models\Forms;
-use WPJobBoard\Classes\Models\OrderItem;
 use WPJobBoard\Classes\Models\Submission;
-use WPJobBoard\Classes\Models\SubmissionActivity;
-use WPJobBoard\Classes\Models\Subscription;
-use WPJobBoard\Classes\Models\Transaction;
-use WPJobBoard\Classes\PaymentMethods\Stripe\Plan;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -174,7 +169,7 @@ class SubmissionHandler
                 $url = get_permalink(intval($confirmation['customPage']));
             }
             $confirmation['redirectTo'] = 'customUrl';
-            $url = add_query_arg('wpf_submission', $submission->submission_hash, $url);
+            $url = add_query_arg('wpjb_submission', $submission->submission_hash, $url);
             $confirmation['customUrl'] = PlaceholderParser::parse($url, $submission);
         } else if ($confirmation['redirectTo'] == 'samePage') {
             do_action('wpjobboard/require_entry_html');

@@ -47,7 +47,7 @@
             getSettings() {
                 this.fetching = true;
                 this.$get({
-                    action: 'wpf_global_settings_handler',
+                    action: 'wpjb_global_settings_handler',
                     route: 'get_global_settings'
                 })
                     .then(response => {
@@ -63,7 +63,7 @@
             saveSettings() {
                 this.saving = true;
                 this.$post({
-                    action: 'wpf_global_settings_handler',
+                    action: 'wpjb_global_settings_handler',
                     route: 'get_global_settings',
                     ip_logging_status: this.ip_logging_status
                 })

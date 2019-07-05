@@ -14,7 +14,7 @@ class GlobalSettingsHandler
 {
     public function registerHooks()
     {
-        add_action('wp_ajax_wpf_global_settings_handler', array($this, 'handleEndpoints'));
+        add_action('wp_ajax_wpjb_global_settings_handler', array($this, 'handleEndpoints'));
     }
 
     public function handleEndpoints()
@@ -22,7 +22,7 @@ class GlobalSettingsHandler
         $routes = array(
             'get_global_settings'    => 'getGeneralSettings',
             'update_global_settings' => 'updateGenetalSettings',
-            'wpf_upload_image'       => 'handleFileUpload'
+            'wpjb_upload_image'       => 'handleFileUpload'
         );
         $route = sanitize_text_field($_REQUEST['route']);
         if (isset($routes[$route])) {

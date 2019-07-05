@@ -26,17 +26,12 @@ class PlaceholderParser
      * {submission.submission_hash}
      * {submission.applicant_name}
      * {submission.applicant_email}
-     * {submission.payment_total}
      * {submission.application_status}
      *
      * Possible Input Item Parameters [can be found on submission.form_data_formatted.INPUTNAME]
      * {input.INPUTNAME}
      *
-     * Possible Product Items [can be found on submission -> wpf_order_items  where submission_id = submission.id and parent_holder = INPUTNAME]
-     * {payment_item.INPUTNAME}
      *
-     * Possible Quantity items: [can be found on submission.form_data_raw.INPUTNAME]
-     * {quantity.INPUTNAME}
      */
     public static function parse($string, $submission)
     {
@@ -56,7 +51,7 @@ class PlaceholderParser
         $entry = new Entry($submission);
 
         $sunmissionPlaceholders = ArrayHelper::only($formattedParsables, array(
-            'input', 'quantity', 'payment_item', 'submission'
+            'input', 'submission'
         ));
         $submissionParseItems = self::parseInpuFields($sunmissionPlaceholders, $entry);
 
@@ -89,10 +84,6 @@ class PlaceholderParser
             foreach ($values as $placeholder => $targetItem) {
                 if ($groupKey == 'input') {
                     $parsedData[$placeholder] = $entry->getInput($targetItem);
-                } else if ($groupKey == 'quantity') {
-                    $parsedData[$placeholder] = $entry->getItemQuantity($targetItem);
-                } else if ($groupKey == 'payment_item') {
-                    $parsedData[$placeholder] = implode(', ', $entry->getPaymentItems($targetItem));
                 } else if ($groupKey == 'submission') {
                     $parsedData[$placeholder] = $entry->{$targetItem};
                 }
@@ -100,7 +91,6 @@ class PlaceholderParser
         }
         return $parsedData;
     }
-
 
     public static function parseWPFields($placeHolders, $entry)
     {

@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: WP Job Board
- * Plugin URI:  https://wpmanageninja.com/downloads/wpjobboard-pro-wordpress-payments-form-builder/
- * Description: Create and Accept Payments in minutes with Stripe, PayPal with built-in form builder
+ * Plugin URI:  https://github.com/WPManageNinja/wp-job-board
+ * Description: Create Job Posting and Manage Jon Application In WordPress
  * Author: WPManageNinja LLC
  * Author URI:  https://wpmanageninja.com
  * Version: 1.2.1
@@ -34,9 +34,7 @@ if (!defined('ABSPATH')) {
 
 define('WPJOBBOARD_VERSION_LITE', true);
 define('WPJOBBOARD_VERSION', '1.2.1');
-define('WPJOBBOARD_DB_VERSION', 120);
-// Stripe API version should be in 'YYYY-MM-DD' format.
-define('WPJOBBOARD_STRIPE_API_VERSION', '2018-10-31');
+define('WPJOBBOARD_DB_VERSION', 100);
 define('WPJOBBOARD_MAIN_FILE', __FILE__);
 define('WPJOBBOARD_URL', plugin_dir_url(__FILE__));
 define('WPJOBBOARD_DIR', plugin_dir_path(__FILE__));
@@ -117,8 +115,8 @@ class WPJobBoard
             return $builder->render($args['id'], $args['show_title'], $args['show_description']);
         });
         add_shortcode('wpjobboard_confirmation', function () {
-            if (isset($_REQUEST['wpf_submission']) && $_REQUEST['wpf_submission']) {
-                $submissionHash = sanitize_text_field($_REQUEST['wpf_submission']);
+            if (isset($_REQUEST['wpjb_submission']) && $_REQUEST['wpjb_submission']) {
+                $submissionHash = sanitize_text_field($_REQUEST['wpjb_submission']);
                 $submission = wpJobBoardDB()->table('wjb_applications')
                     ->where('submission_hash', '=', $submissionHash)
                     ->first();
@@ -126,10 +124,10 @@ class WPJobBoard
                     $receiptHandler = new \WPJobBoard\Classes\Builder\ApplicationConfirmation();
                     return $receiptHandler->render($submission->id);
                 } else {
-                    return '<p class="wpf_no_recipt_found">' . __('Sorry, no submission confirmation found, Please check your URL', 'wpjobboard') . '</p>';
+                    return '<p class="wpjb_no_recipt_found">' . __('Sorry, no submission confirmation found, Please check your URL', 'wpjobboard') . '</p>';
                 }
             } else {
-                return '<p class="wpf_no_recipt_found">' . __('Sorry, no submission conirmation found, Please check your URL', 'wpjobboard') . '</p>';
+                return '<p class="wpjb_no_recipt_found">' . __('Sorry, no submission conirmation found, Please check your URL', 'wpjobboard') . '</p>';
             }
         });
     }
@@ -138,8 +136,8 @@ class WPJobBoard
     {
         // Form Submission Handler
         $submissionHandler = new \WPJobBoard\Classes\SubmissionHandler();
-        add_action('wp_ajax_wpf_submit_form', array($submissionHandler, 'handeSubmission'));
-        add_action('wp_ajax_nopriv_wpf_submit_form', array($submissionHandler, 'handeSubmission'));
+        add_action('wp_ajax_wpjb_submit_form', array($submissionHandler, 'handeSubmission'));
+        add_action('wp_ajax_nopriv_wpjb_submit_form', array($submissionHandler, 'handeSubmission'));
 
         $scheduleSettings = new \WPJobBoard\Classes\Tools\SchedulingSettings();
         $scheduleSettings->checkRestrictionHooks();

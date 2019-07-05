@@ -75,12 +75,6 @@ class DashboardWidgetModule
         </div>
     <?php endif; ?>
         <style>
-            .wpjb_payment_summary {
-                display: block;
-                padding-top: 10px;
-                border-bottom: 1px solid #eeeeee;
-                padding-bottom: 10px;
-            }
             ul.wpjb_dashboard_stats span.wpjb_status {
                 border: 1px solid gray;
                 border-radius: 3px;

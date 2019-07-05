@@ -48,7 +48,7 @@ class EmailAjax
             'wpjobboard/after_form_submission_complete' => array(
                 'hook_name'   => 'wpjobboard/after_form_submission_complete',
                 'hook_title'  => 'After Form Submission',
-                'description' => 'Send email when the form will be submitted. Please note that, If you select this, Email will be sent even form payment (if any) failed'
+                'description' => 'Send email when the form will be submitted.'
             )
         );
 

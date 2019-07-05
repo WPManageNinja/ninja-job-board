@@ -152,7 +152,7 @@ class Render
         <?php do_action('wpjobboard/form_render_before_submit_button', $form); ?>
         <div class="wpjb_form_group wpjb_form_submissions">
             <button <?php echo $this->builtAttributes($buttonAttributes); ?>>
-                <span class="wpf_txt_normal"><?php echo $this->parseText($button_text, $form->ID); ?></span>
+                <span class="wpjb_txt_normal"><?php echo $this->parseText($button_text, $form->ID); ?></span>
                 <span style="display: none;" class="wpjb_txt_loading">
                     <?php echo $this->parseText($processingText, $form->ID); ?>
                 </span>
@@ -286,19 +286,7 @@ class Render
 
     private function parseText($text, $formId)
     {
-        return str_replace(
-            array(
-                '{sub_total}',
-                '{tax_total}',
-                '{payment_total}'
-            ),
-            array(
-                '<span class="wpf_calc_sub_total"></span>',
-                '<span class="wpf_calc_tax_total"></span>',
-                '<span class="wpf_calc_payment_total"></span>',
-            ),
-            $text
-        );
+        return $text;
     }
 
     private function builtAttributes($attributes)

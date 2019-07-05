@@ -46,8 +46,6 @@ class Submission
             $resultQuery->where(function ($q) use ($searchString) {
                 $q->where('wjb_applications.applicant_name', 'LIKE', "%{$searchString}%")
                     ->orWhere('wjb_applications.applicant_email', 'LIKE', "%{$searchString}%")
-                    ->orWhere('wjb_applications.payment_method', 'LIKE', "%{$searchString}%")
-                    ->orWhere('wjb_applications.payment_total', 'LIKE', "%{$searchString}%")
                     ->orWhere('wjb_applications.form_data_formatted', 'LIKE', "%{$searchString}%")
                     ->orWhere('wjb_applications.created_at', 'LIKE', "%{$searchString}%");
             });
@@ -112,7 +110,7 @@ class Submission
 
     public function getParsedSubmission($submission)
     {
-        $elements = get_post_meta($submission->form_id, 'wpjobboard_paymentform_builder_settings', true);
+        $elements = get_post_meta($submission->form_id, 'wpjobboard_application_builder_settings', true);
         if (!$elements) {
             return array();
         }

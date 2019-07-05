@@ -69,7 +69,7 @@ e.g.
 
 = Is The Application Forms build with this plugin responsive? =
 
-Forms created by WPPayForm Plugin are mobile responsive and looks beautiful on any device.
+Forms created by WP Job Board Plugin are mobile responsive and looks beautiful on any device.
 
 
 == Other Plugins by WPManageNinja ==

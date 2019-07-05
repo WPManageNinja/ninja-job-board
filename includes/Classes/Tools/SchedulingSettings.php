@@ -63,7 +63,7 @@ class SchedulingSettings
 
         update_post_meta($formId, 'wpjb_form_scheduling_settings', $settings);
         wp_send_json_success(array(
-            'message' => __('Settings successfully updated', 'wppayform')
+            'message' => __('Settings successfully updated', 'wpjobboard')
         ), 200);
     }
 
@@ -136,7 +136,7 @@ class SchedulingSettings
             if ($totalEntryCount >= intval($numberOfEntries)) {
                 return $limitEntrySettings['limit_exceeds_message']
                     ? $limitEntrySettings['limit_exceeds_message']
-                    : __('Submission limit has been excceded.', 'wppayform');
+                    : __('Submission limit has been excceded.', 'wpjobboard');
             }
         }
         return false;
@@ -152,13 +152,13 @@ class SchedulingSettings
             if ($time < $start) {
                 return $timeSchedule['before_start_message']
                     ? $timeSchedule['before_start_message']
-                    : __('Form submission is not started yet.', 'wppayform');
+                    : __('Form submission is not started yet.', 'wpjobboard');
 
             }
             if ($time >= $end) {
                 return $timeSchedule['expire_message']
                     ? $timeSchedule['expire_message']
-                    : __('Form submission is now closed.', 'wppayform');
+                    : __('Form submission is now closed.', 'wpjobboard');
             }
         }
 
@@ -171,7 +171,7 @@ class SchedulingSettings
             if(!is_user_logged_in()) {
                 return  !empty($sheduleSettings['message'])
                     ? $sheduleSettings['message']
-                    : __('You must be logged in to submit the form.', 'wppayform');
+                    : __('You must be logged in to submit the form.', 'wpjobboard');
             }
         }
 

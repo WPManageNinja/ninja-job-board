@@ -40,7 +40,7 @@
             let formId = form.data('wpjb_form_id');
             form.trigger('wpjb_form_submitting', formId);
             $.post(this.general.ajax_url, {
-                action: 'wpf_submit_form',
+                action: 'wpjb_submit_form',
                 form_id: formId,
                 form_data: $(form).serialize()
             })

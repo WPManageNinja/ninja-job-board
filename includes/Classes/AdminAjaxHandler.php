@@ -106,6 +106,8 @@ class AdminAjaxHandler
 
         do_action('wpjobboard/after_create_form', $formId, $data);
 
+        $this->createDemoApplicationForm($formId);
+
         wp_send_json_success(array(
             'message'      => __('Please wait, You are redirecting to the next page', 'wpjobboard'),
             'form_id'      => $formId,
@@ -171,11 +173,7 @@ class AdminAjaxHandler
         $formId = absint($_REQUEST['form_id']);
         if (isset($_REQUEST['confirmation_settings'])) {
             $confirmationSettings = wp_unslash($_REQUEST['confirmation_settings']);
-            update_post_meta($formId, 'wppapyform_paymentform_confirmation_settings', $confirmationSettings);
-        }
-        if (isset($_REQUEST['currency_settings'])) {
-            $currency_settings = wp_unslash($_REQUEST['currency_settings']);
-            update_post_meta($formId, 'wpjobboard_paymentform_currency_settings', $currency_settings);
+            update_post_meta($formId, 'jobboard_confirmation_settings', $confirmationSettings);
         }
 
         wp_send_json_success(array(
@@ -197,16 +195,10 @@ class AdminAjaxHandler
         }
         $errors = array();
 
-        $hasRecurringField = 'no';
-
         foreach ($builderSettings as $builderSetting) {
             $error = apply_filters('wpjobboard/validate_component_on_save_' . $builderSetting['type'], false, $builderSetting, $formId);
             if ($error) {
                 $errors[$builderSetting['id']] = $error;
-            }
-
-            if ($builderSetting['type'] == 'recurring_payment_item') {
-                $hasRecurringField = 'yes';
             }
         }
 
@@ -218,7 +210,7 @@ class AdminAjaxHandler
         }
 
         $submit_button_settings = wp_unslash($_REQUEST['submit_button_settings']);
-        update_post_meta($formId, 'wpjobboard_paymentform_builder_settings', $builderSettings);
+        update_post_meta($formId, 'wpjobboard_application_builder_settings', $builderSettings);
         update_post_meta($formId, 'wpjobboard_submit_button_settings', $submit_button_settings);
 
         wp_send_json_success(array(
@@ -299,5 +291,10 @@ class AdminAjaxHandler
         wp_send_json_success(array(
             'message' => 'Job post successfully restored'
         ));
+    }
+
+    protected function createDemoApplicationForm($formId)
+    {
+
     }
 }

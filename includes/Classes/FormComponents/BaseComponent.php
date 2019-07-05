@@ -288,19 +288,7 @@ abstract class BaseComponent
 
     public function parseText($text, $formId)
     {
-        return str_replace(
-            array(
-                '{sub_total}',
-                '{tax_total}',
-                '{payment_total}'
-            ),
-            array(
-                '<span class="wpjb_calc_sub_total"></span>',
-                '<span class="wpjb_calc_tax_total"></span>',
-                '<span class="wpjb_calc_payment_total"></span>',
-            ),
-            $text
-        );
+        return $text;
     }
 
     public function buildLabel($fieldOptions, $form, $attributes = array())

@@ -25,7 +25,7 @@ class MetaData
     public function __construct($entry)
     {
         $this->entry = $entry;
-        $this->postId = $entry->getRawInput('__wpf_current_page_id');
+        $this->postId = $entry->getRawInput('__wpjb_current_page_id');
         $this->userId = $entry->user_id;
     }
 
@@ -112,7 +112,7 @@ class MetaData
     public function getFromUrlQuery($key)
     {
         if($this->queryVars == null) {
-            $submissionUrl = $this->entry->getRawInput('__wpf_current_url');
+            $submissionUrl = $this->entry->getRawInput('__wpjb_current_url');
             $parts = parse_url($submissionUrl);
             if (isset($parts['query'])) {
                 parse_str($parts['query'], $query);

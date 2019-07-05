@@ -132,10 +132,7 @@ class Forms
     {
         $elements = Forms::getBuilderSettings($formId);
         $formattedElements = array(
-            'input'                  => array(),
-            'payment'                => array(),
-            'payment_method_element' => array(),
-            'item_quantity'          => array()
+            'input'                  => array()
         );
         foreach ($elements as $element) {
             $formattedElements[$element['group']][$element['id']] = array(
@@ -151,7 +148,7 @@ class Forms
 
     public static function getFormInputLabels($formId)
     {
-        $elements = get_post_meta($formId, 'wpjobboard_paymentform_builder_settings', true);
+        $elements = get_post_meta($formId, 'wpjobboard_application_builder_settings', true);
         if (!$elements) {
             return (object)array();
         }
@@ -173,7 +170,7 @@ class Forms
 
     public static function getConfirmationSettings($formId)
     {
-        $confirmationSettings = get_post_meta($formId, 'wppapyform_paymentform_confirmation_settings', true);
+        $confirmationSettings = get_post_meta($formId, 'jobboard_confirmation_settings', true);
         if (!$confirmationSettings) {
             $confirmationSettings = array();
         }
@@ -190,7 +187,7 @@ class Forms
 
     public static function getEditorShortCodes($formId, $html = true)
     {
-        $builderSettings = get_post_meta($formId, 'wpjobboard_paymentform_builder_settings', true);
+        $builderSettings = get_post_meta($formId, 'wpjobboard_application_builder_settings', true);
         if (!$builderSettings) {
             return array();
         }
@@ -198,28 +195,18 @@ class Forms
             'input'   => array(
                 'title'      => 'Custom Input Items',
                 'shortcodes' => array()
-            ),
-            'payment' => array(
-                'title'      => 'Payment Items',
-                'shortcodes' => array()
             )
         );
 
-        $hasPayment = false;
 
         foreach ($builderSettings as $element) {
             $elementId = ArrayHelper::get($element, 'id');
             if ($element['group'] == 'input') {
                 $formattedShortcodes['input']['shortcodes']['{input.' . $elementId . '}'] = self::getLabel($element);
-            } elseif ($element['group'] == 'payment') {
-                $formattedShortcodes['payment']['shortcodes']['{payment_item.' . $elementId . '}'] = self::getLabel($element);
-                $hasPayment = true;
-            } else if ($element['group'] == 'item_quantity') {
-                $formattedShortcodes['input']['shortcodes']['{quantity.' . $elementId . '}'] = self::getLabel($element);
             }
         }
 
-        $items = array($formattedShortcodes['input'], $formattedShortcodes['payment']);
+        $items = $formattedShortcodes['input'];
 
         $submissionItem = array(
             'title'      => 'Submission Fields',
@@ -230,22 +217,9 @@ class Forms
                 '{submission.applicant_email}'  => __('Applicant Email', 'wpjobboard'),
             )
         );
-        if ($hasPayment) {
-            $submissionItem['shortcodes']['{submission.payment_total}'] = __('Payment Total', 'wpjobboard');
-        }
 
         if ($html) {
             $submissionItem['shortcodes']['{submission.all_input_field_html}'] = __('All input field html', 'wpjobboard');
-            if ($hasPayment) {
-                $submissionItem['shortcodes']['{submission.product_items_table_html}'] = __('Order items table html', 'wpjobboard');
-            }
-
-            // check if subsction payment is available for this for
-            $hasRecurringField = get_post_meta($formId, 'wpf_has_recurring_field', true) == 'yes';
-            if ($hasRecurringField) {
-                $submissionItem['shortcodes']['{submission.subscription_details_table_html}'] = __('Subscription details table html ', 'wpjobboard');
-            }
-
         }
 
 
@@ -255,7 +229,7 @@ class Forms
 
     public static function getBuilderSettings($formId)
     {
-        $builderSettings = get_post_meta($formId, 'wpjobboard_paymentform_builder_settings', true);
+        $builderSettings = get_post_meta($formId, 'wpjobboard_application_builder_settings', true);
         if (!$builderSettings) {
             $builderSettings = array();
         }
