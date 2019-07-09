@@ -40,7 +40,12 @@ class Activator
         $this->createSubmissionsTable();
         $this->createSubmissionActivitiesTable();
         $this->createPages();
-        flush_rewrite_rules();
+
+
+        include 'PostType.php';
+        $postTypeClass = new PostType();
+        $postTypeClass->register();
+        flush_rewrite_rules(true);
     }
 
     public function createSubmissionsTable()

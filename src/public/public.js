@@ -149,18 +149,19 @@
             }, 200);
         },
         validateIntoDom($scope, form) {
-            let $inputs = $scope.find('input[data-required="yes"],select[data-required="yes"]');
-            let errors = {}
-            let hasErrors = false;
+            let $inputs = $scope.find('input[data-required="yes"],textarea[data-required="yes"], select[data-required="yes"]');
+            let errors = []
             $.each($inputs, (index, input) => {
                 let $input = $(input);
                 if(!$input.val()) {
-                    hasErrors = true;
                     let label = $input.closest('.wpjb_form_group').find('.wpjb_input_label label').text();
                     if(!label) {
                         label = $input.attr('placeholder');
                     }
-                    errors[$input.attr('name')] = label + ' is required';
+                    errors.push({
+                        name: $input.attr('name'),
+                        text: label + ' is required'
+                    });
                 }
             });
 
@@ -168,9 +169,11 @@
             $.each($radioItems, (index, input) => {
                 let $input = $(input);
                 if(! form.find('input[name="'+$input.attr('name')+'"]:checked').length ) {
-                    hasErrors = true;
                     let label = $input.closest('.wpjb_form_group').find('.wpjb_input_label label').text();
-                    errors[$input.attr('name')] = label + ' is required';
+                    errors.push({
+                        name: $input.attr('name'),
+                        text: label + ' is required'
+                    });
                 }
             });
 
@@ -178,8 +181,10 @@
             $.each(checkboxRequiredWrappers, (index, checkWrapper) => {
                  $checkWrapper = $(checkWrapper);
                  if(!$checkWrapper.find('input:checked').length) {
-                     hasErrors = true;
-                     errors['checkbox'] = $checkWrapper.find('.wpjb_input_label label').text() + ' is required';
+                     errors.push({
+                         name: 'checkbox',
+                         text: $checkWrapper.find('.wpjb_input_label label').text() + ' is required'
+                     });
                  }
             });
 
@@ -188,22 +193,28 @@
                 let $fileInput = $(fileInput);
                 let associateKey = $fileInput.attr('data-associate_key');
                 if(!form.find('input[name="'+associateKey+'[]"]').val()) {
-                    hasErrors = true;
                     let label = $fileInput.closest('.wpjb_form_group').find('.wpjb_input_label label').text();
                     if(!label) {
                         label = 'File upload';
                     }
-                    errors[associateKey] = label+' is required';
+                    errors.push({
+                        name: associateKey,
+                        text: label+' is required'
+                    });
                 }
             });
 
             let $errorDiv = form.parent().find('.wpjb_form_errors');
             $errorDiv.html('').hide();
 
-            if(hasErrors) {
+            if(errors.length) {
                 $errorDiv.append('<ul class="wpjb_error_items">');
-                $.each(errors, (errorId, errorText) => {
-                    $errorDiv.append('<li class="error_item_' + errorId + '">' + errorText + '</li>');
+                let errorsCast = {};
+                $.each(errors, (errorIndex, error) => {
+                    if(!errorsCast[error.name]) {
+                        errorsCast[error.name] = true;
+                        $errorDiv.append('<li class="error_item_' + errorIndex + '">' + error.text + '</li>');
+                    }
                 });
                 $errorDiv.append('</ul>');
                 $errorDiv.show();

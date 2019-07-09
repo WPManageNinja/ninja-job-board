@@ -321,7 +321,7 @@ class Forms
         return wp_parse_args($settings, $defaults);
     }
 
-    public function getExpirationDateTime($formId)
+    public static function getExpirationDateTime($formId)
     {
         $settings = get_post_meta($formId, 'wpjb_form_scheduling_settings', true);
         if (!$settings) {

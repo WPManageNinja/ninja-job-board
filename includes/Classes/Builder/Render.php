@@ -106,6 +106,7 @@ class Render
             'id'               => "wpjb_form_id_" . $form->ID
         );
         $formAttributes = apply_filters('wpjobboard/form_attributes', $formAttributes, $form);
+
         $formWrapperClasses = apply_filters('wpjobboard/form_wrapper_css_classes', array(
             'wpjb_form_wrapper',
             'wpjb_form_wrapper_' . $form->ID

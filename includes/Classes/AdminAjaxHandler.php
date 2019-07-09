@@ -313,6 +313,8 @@ class AdminAjaxHandler
             update_post_meta($formId, 'wpjobboard_form_design_settings', $designSettings);
         }
 
+        update_post_meta($formId, 'application_end_timestamp', 0);
+
         $emailSettings = ArrayHelper::get($defaltForm, 'form_meta.wpjb_email_notifications');
         if($emailSettings) {
             update_post_meta($formId, 'wpjb_email_notifications', $emailSettings);

@@ -61,17 +61,24 @@ abstract class BaseComponent
             'id'            => $inputId
         );
 
+        if($attributes['type'] == 'number') {
+            $attributes['step'] = 'any';
+        }
+
         if (isset($fieldOptions['min_value'])) {
             $attributes['min'] = $fieldOptions['min_value'];
         }
 
-        if (isset($fieldOptions['min_value'])) {
+        if (isset($fieldOptions['max_value'])) {
             $attributes['max'] = $fieldOptions['max_value'];
         }
 
         if (ArrayHelper::get($fieldOptions, 'required') == 'yes') {
             $attributes['required'] = true;
+            $attributes['data-required'] = 'yes';
         }
+
+
 
         if($extraAtts = ArrayHelper::get($fieldOptions, 'extra_data_atts')) {
             if(is_array($extraAtts)) {

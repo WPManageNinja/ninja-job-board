@@ -2,8 +2,6 @@
 
 namespace WPJobBoard\Classes;
 
-use WPJobBoard\Classes\Builder\Render;
-
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -113,7 +111,7 @@ class PostType
         if (!is_singular('wp_job_board')) {
             return $content;
         }
-        $formRenderer = new Render();
+        $formRenderer = new \WPJobBoard\Classes\Builder\Render();
         global $post;
         $form = $formRenderer->render($post->ID, false);
 

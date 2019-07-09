@@ -13,7 +13,12 @@
   overflow: hidden;
   .wpjb_job_list_header-label {
     float: left;
+    font-weight: bold;
     margin: 0
+  }
+  .wpjb_job_filter {
+    display: inline-block;
+    text-align: right;
   }
 }
 

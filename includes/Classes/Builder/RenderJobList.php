@@ -55,6 +55,12 @@ class RenderJobList
                     'value'   => 0,
                     'compare' => '=',
                     'type' => 'NUMERIC'
+                ),
+                array(
+                    'key'     => 'application_end_timestamp',
+                    'value'   => '',
+                    'compare' => '=',
+                    'type' => 'NUMERIC'
                 )
             ];
         }
@@ -79,6 +85,8 @@ class RenderJobList
 
         if($jobs) {
             $this->addAssets();
+        } else {
+            return 'No Current Job Found';
         }
 
         $categories = array();
@@ -104,7 +112,7 @@ class RenderJobList
             $this->pushJS();
         }
 
-        return View::render('templates.job_list', [
+        return View::make('templates.job_list', [
             'jobs' => $jobs,
             'settings' => $args,
             'categories' => $categories,

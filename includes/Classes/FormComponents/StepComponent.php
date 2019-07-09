@@ -58,6 +58,7 @@ class StepComponent extends BaseComponent
         if (!$steps) {
             return;
         }
+
         ?>
         <!--Step start -->
         <div data-target_step_number="0" id="wpjb_step_0" class="wpjb_step_start">
@@ -86,6 +87,14 @@ class StepComponent extends BaseComponent
 
     public function render($element, $form, $elements)
     {
+
+        add_filter('wpjobboard/form_attributes', function ($attributes, $renderingForm) use ($form)  {
+            if($form->ID == $renderingForm->ID) {
+                $attributes['novalidate'] = true;
+            }
+            return $attributes;
+        }, 10, 2);
+
         $fieldOptions = ArrayHelper::get($element, 'field_options', []);
         $stepTitle = ArrayHelper::get($fieldOptions, 'step_title');
         $nextBtnText = ArrayHelper::get($fieldOptions, 'next_button', 'Next');
