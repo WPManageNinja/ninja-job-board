@@ -40,11 +40,6 @@ class AdminAjaxHandler
             'restore_form'               => 'restoreForm'
         );
 
-        if (WPJOBBOARD_DB_VERSION > intval(get_option('WPJB_DB_VERSION'))) {
-            $activator = new Activator();
-            $activator->maybeUpgradeDB();
-        }
-
         if (isset($validRoutes[$route])) {
             AccessControl::checkAndPresponseError($route, 'forms');
             do_action('wpjobboard/doing_ajax_forms_' . $route);
