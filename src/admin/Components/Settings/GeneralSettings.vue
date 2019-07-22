@@ -64,14 +64,14 @@
                 this.saving = true;
                 this.$post({
                     action: 'wpjb_global_settings_handler',
-                    route: 'get_global_settings',
+                    route: 'update_global_settings',
                     ip_logging_status: this.ip_logging_status
                 })
                     .then(response => {
                         this.$message.success(response.data.message);
                     })
                     .fail(error => {
-                        this.$message.error(error.responseJSON.data.message);
+                        this.$message(error.responseJSON.data.message);
                     })
                     .always(() => {
                         this.saving = false;

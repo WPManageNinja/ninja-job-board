@@ -184,7 +184,7 @@ class Submission
                 $query->where(wpJobBoardDB()->raw("{$year} AND {$month} AND {$day}"));
             } elseif ($period == 'week') {
                 $query->where(
-                    wpFluent()->raw("YEARWEEK(`{$col}`, 1) = YEARWEEK(CURDATE(), 1)")
+                    wpJobBoardDB()->raw("YEARWEEK(`{$col}`, 1) = YEARWEEK(CURDATE(), 1)")
                 );
             } elseif ($period == 'month') {
                 $year = "YEAR(`{$col}`) = YEAR(NOW())";
