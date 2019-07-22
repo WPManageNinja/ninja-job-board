@@ -8,7 +8,7 @@
             </el-button>
         </div>
         <hr/>
-        <div class="ninja_docs">
+        <div v-if="false" class="ninja_docs">
             <h4>WPJobBoard Documentation:</h4>
             <ul>
                 <li>

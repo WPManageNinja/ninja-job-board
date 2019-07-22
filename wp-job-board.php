@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: WP Job Board
+ * Plugin Name: Ninja Job Board
  * Plugin URI:  https://github.com/WPManageNinja/wp-job-board
  * Description: Create Job Posting and Manage Jon Application In WordPress
  * Author: WPManageNinja LLC
@@ -44,6 +44,7 @@ class WPJobBoard
 {
     public function boot()
     {
+        $this->textDomain();
         $this->loadDependecies();
         if (is_admin()) {
             $this->adminHooks();

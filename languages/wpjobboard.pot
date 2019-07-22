@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP Job Board\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-05 11:29+0000\n"
+"POT-Creation-Date: 2019-07-22 06:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -15,15 +15,15 @@ msgstr ""
 "X-Generator: Loco https://localise.biz/\n"
 "X-Loco-Version: 2.3.0; wp-5.2.2"
 
-#: wp-job-board.php:121
+#: wp-job-board.php:122
 msgid "Job List"
 msgstr ""
 
-#: wp-job-board.php:141
+#: wp-job-board.php:142
 msgid "Sorry, no submission confirmation found, Please check your URL"
 msgstr ""
 
-#: wp-job-board.php:144
+#: wp-job-board.php:145
 msgid "Sorry, no submission conirmation found, Please check your URL"
 msgstr ""
 
@@ -31,59 +31,59 @@ msgstr ""
 msgid "Sorry, You do not have permission to do this action: "
 msgstr ""
 
-#: includes/Classes/Activator.php:117
+#: includes/Classes/Activator.php:122
 msgid "Job Application Confirmation"
 msgstr ""
 
-#: includes/Classes/AdminAjaxHandler.php:81
+#: includes/Classes/AdminAjaxHandler.php:76
 msgid "Please Provide a job title"
 msgstr ""
 
-#: includes/Classes/AdminAjaxHandler.php:102
+#: includes/Classes/AdminAjaxHandler.php:97
 msgid "Something is wrong when createding the form. Please try again"
 msgstr ""
 
-#: includes/Classes/AdminAjaxHandler.php:112
+#: includes/Classes/AdminAjaxHandler.php:107
 msgid "Please wait, You are redirecting to the next page"
 msgstr ""
 
-#: includes/Classes/AdminAjaxHandler.php:125
+#: includes/Classes/AdminAjaxHandler.php:120
 msgid "Please provide form title"
 msgstr ""
 
-#: includes/Classes/AdminAjaxHandler.php:140
+#: includes/Classes/AdminAjaxHandler.php:135
 msgid "Form successfully updated"
 msgstr ""
 
-#: includes/Classes/AdminAjaxHandler.php:180 
-#: includes/Classes/AdminAjaxHandler.php:217 
-#: includes/Classes/AdminAjaxHandler.php:260 
-#: includes/Classes/GlobalSettingsHandler.php:47 
+#: includes/Classes/AdminAjaxHandler.php:175
+#: includes/Classes/AdminAjaxHandler.php:212
+#: includes/Classes/AdminAjaxHandler.php:255
+#: includes/Classes/GlobalSettingsHandler.php:47
 #: includes/Classes/Tools/SchedulingSettings.php:72
 msgid "Settings successfully updated"
 msgstr ""
 
-#: includes/Classes/AdminAjaxHandler.php:190
+#: includes/Classes/AdminAjaxHandler.php:185
 msgid "Validation Error, Please try again"
 msgstr ""
 
-#: includes/Classes/AdminAjaxHandler.php:192
+#: includes/Classes/AdminAjaxHandler.php:187
 msgid "Please add atleast one input element"
 msgstr ""
 
-#: includes/Classes/AdminAjaxHandler.php:207
+#: includes/Classes/AdminAjaxHandler.php:202
 msgid "Validation failed when saving the form"
 msgstr ""
 
-#: includes/Classes/AdminAjaxHandler.php:242
+#: includes/Classes/AdminAjaxHandler.php:237
 msgid "Selected form successfully deleted"
 msgstr ""
 
-#: includes/Classes/AdminAjaxHandler.php:274
+#: includes/Classes/AdminAjaxHandler.php:269
 msgid "No form found when duplicating the form"
 msgstr ""
 
-#: includes/Classes/AdminAjaxHandler.php:279
+#: includes/Classes/AdminAjaxHandler.php:274
 msgid "Form successfully duplicated"
 msgstr ""
 
@@ -95,12 +95,12 @@ msgstr ""
 msgid "Submission Info"
 msgstr ""
 
-#: includes/Classes/FormPlaceholders.php:25 
+#: includes/Classes/FormPlaceholders.php:25
 #: includes/Classes/DefaultValueParser/FormDefaultValueRenderer.php:29
 msgid "WordPress"
 msgstr ""
 
-#: includes/Classes/FormPlaceholders.php:29 
+#: includes/Classes/FormPlaceholders.php:29
 #: includes/Classes/DefaultValueParser/FormDefaultValueRenderer.php:37
 msgid "Other"
 msgstr ""
@@ -129,7 +129,7 @@ msgstr ""
 msgid "Post Meta"
 msgstr ""
 
-#: includes/Classes/FormPlaceholders.php:78 
+#: includes/Classes/FormPlaceholders.php:78
 #: includes/Classes/FormPlaceholders.php:146
 msgid "User ID"
 msgstr ""
@@ -146,12 +146,12 @@ msgstr ""
 msgid "User Display Name"
 msgstr ""
 
-#: includes/Classes/FormPlaceholders.php:102 
+#: includes/Classes/FormPlaceholders.php:102
 #: includes/Classes/FormPlaceholders.php:166
 msgid "User Email"
 msgstr ""
 
-#: includes/Classes/FormPlaceholders.php:108 
+#: includes/Classes/FormPlaceholders.php:108
 #: includes/Classes/FormPlaceholders.php:171
 msgid "User URL"
 msgstr ""
@@ -301,60 +301,60 @@ msgstr ""
 msgid "All Job Posts"
 msgstr ""
 
-#: includes/Classes/Menu.php:160
+#: includes/Classes/Menu.php:154
 msgid "Post Details"
 msgstr ""
 
-#: includes/Classes/Menu.php:166
+#: includes/Classes/Menu.php:160
 msgid "Application Form"
 msgstr ""
 
-#: includes/Classes/Menu.php:172
+#: includes/Classes/Menu.php:166
 msgid "Form Settings"
 msgstr ""
 
-#: includes/Classes/Menu.php:178
+#: includes/Classes/Menu.php:172
 msgid "Email Notifications"
 msgstr ""
 
-#: includes/Classes/Menu.php:184
+#: includes/Classes/Menu.php:178
 msgid "Job Applications"
 msgstr ""
 
-#: includes/Classes/PostType.php:130
+#: includes/Classes/PostType.php:128
 msgid "Apply for this position"
 msgstr ""
 
-#: includes/Classes/PostType.php:146
+#: includes/Classes/PostType.php:144
 #, php-format
 msgid "%s ago"
 msgstr ""
 
-#: includes/Classes/PostType.php:156
+#: includes/Classes/PostType.php:154
 msgid "No. of Vacancies:"
 msgstr ""
 
-#: includes/Classes/PostType.php:158
+#: includes/Classes/PostType.php:156
 msgid "No. of Vacancy:"
 msgstr ""
 
-#: includes/Classes/PostType.php:228
+#: includes/Classes/PostType.php:226
 msgid "Job Info"
 msgstr ""
 
-#: includes/Classes/PostType.php:246
+#: includes/Classes/PostType.php:244
 msgid "Location"
 msgstr ""
 
-#: includes/Classes/PostType.php:253
+#: includes/Classes/PostType.php:251
 msgid "Number of Vacancies"
 msgstr ""
 
-#: includes/Classes/PostType.php:260
+#: includes/Classes/PostType.php:258
 msgid "Experince Year Requirement"
 msgstr ""
 
-#: includes/Classes/PostType.php:267
+#: includes/Classes/PostType.php:265
 msgid "Job Type"
 msgstr ""
 
@@ -382,7 +382,7 @@ msgstr ""
 msgid "Note successfully added"
 msgstr ""
 
-#: includes/Classes/SubmissionView.php:194 
+#: includes/Classes/SubmissionView.php:194
 #: includes/Classes/SubmissionView.php:242
 msgid "The submission have the same status"
 msgstr ""
@@ -407,198 +407,198 @@ msgstr ""
 msgid "Status has been changed successfully"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:136 
+#: includes/Classes/Builder/Render.php:137
 #: includes/Classes/Models/Forms.php:117
 msgid "Please Wait…"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:140 
+#: includes/Classes/Builder/Render.php:141
 #: includes/Classes/Models/Forms.php:116
 msgid "Apply"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:208
+#: includes/Classes/Builder/Render.php:209
 msgid "Previous Month"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:209
+#: includes/Classes/Builder/Render.php:210
 msgid "Next Month"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:212
+#: includes/Classes/Builder/Render.php:213
 msgid "Jan"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:213
+#: includes/Classes/Builder/Render.php:214
 msgid "Feb"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:214
+#: includes/Classes/Builder/Render.php:215
 msgid "Mar"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:215
+#: includes/Classes/Builder/Render.php:216
 msgid "Apr"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:216 
-#: includes/Classes/Builder/Render.php:230
+#: includes/Classes/Builder/Render.php:217
+#: includes/Classes/Builder/Render.php:231
 msgid "May"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:217
+#: includes/Classes/Builder/Render.php:218
 msgid "Jun"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:218
+#: includes/Classes/Builder/Render.php:219
 msgid "Jul"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:219
+#: includes/Classes/Builder/Render.php:220
 msgid "Aug"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:220
+#: includes/Classes/Builder/Render.php:221
 msgid "Sep"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:221
+#: includes/Classes/Builder/Render.php:222
 msgid "Oct"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:222
+#: includes/Classes/Builder/Render.php:223
 msgid "Nov"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:223
+#: includes/Classes/Builder/Render.php:224
 msgid "Dec"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:226
+#: includes/Classes/Builder/Render.php:227
 msgid "January"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:227
+#: includes/Classes/Builder/Render.php:228
 msgid "February"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:228
+#: includes/Classes/Builder/Render.php:229
 msgid "March"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:229
+#: includes/Classes/Builder/Render.php:230
 msgid "April"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:231
+#: includes/Classes/Builder/Render.php:232
 msgid "June"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:232
+#: includes/Classes/Builder/Render.php:233
 msgid "July"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:233
+#: includes/Classes/Builder/Render.php:234
 msgid "August"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:234
+#: includes/Classes/Builder/Render.php:235
 msgid "September"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:235
+#: includes/Classes/Builder/Render.php:236
 msgid "October"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:236
+#: includes/Classes/Builder/Render.php:237
 msgid "November"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:237
+#: includes/Classes/Builder/Render.php:238
 msgid "December"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:242
+#: includes/Classes/Builder/Render.php:243
 msgid "Sunday"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:243
+#: includes/Classes/Builder/Render.php:244
 msgid "Monday"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:244
+#: includes/Classes/Builder/Render.php:245
 msgid "Tuesday"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:245
+#: includes/Classes/Builder/Render.php:246
 msgid "Wednesday"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:246
+#: includes/Classes/Builder/Render.php:247
 msgid "Thursday"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:247
+#: includes/Classes/Builder/Render.php:248
 msgid "Friday"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:248
+#: includes/Classes/Builder/Render.php:249
 msgid "Saturday"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:251
+#: includes/Classes/Builder/Render.php:252
 msgid "Sun"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:252
+#: includes/Classes/Builder/Render.php:253
 msgid "Mon"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:253
+#: includes/Classes/Builder/Render.php:254
 msgid "Tue"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:254
+#: includes/Classes/Builder/Render.php:255
 msgid "Wed"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:255
+#: includes/Classes/Builder/Render.php:256
 msgid "Thu"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:256
+#: includes/Classes/Builder/Render.php:257
 msgid "Fri"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:257
+#: includes/Classes/Builder/Render.php:258
 msgid "Sat"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:274
+#: includes/Classes/Builder/Render.php:275
 msgid " to "
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:275
+#: includes/Classes/Builder/Render.php:276
 msgid "Wk"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:276
+#: includes/Classes/Builder/Render.php:277
 msgid "Scroll to increment"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:277
+#: includes/Classes/Builder/Render.php:278
 msgid "Click to toggle"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:279
+#: includes/Classes/Builder/Render.php:280
 msgid "AM"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:280
+#: includes/Classes/Builder/Render.php:281
 msgid "PM"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:282
+#: includes/Classes/Builder/Render.php:283
 msgid "Year"
 msgstr ""
 
@@ -709,6 +709,10 @@ msgstr ""
 
 #: includes/views/templates/job_list.php:31
 msgid "No Expiration Date"
+msgstr ""
+
+#. Name of the plugin
+msgid "Ninja Job Board"
 msgstr ""
 
 #. Description of the plugin
