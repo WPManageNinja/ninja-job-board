@@ -68,14 +68,14 @@ class EmailCampaign
 
         if (!$count) {
             wp_send_json_error([
-                'message' => __('No Applicant found based on your selection')
+                'message' => __('No Applicant found based on your selection', 'wpjobboard')
             ], 423);
             die();
         }
 
         if (!ArrayHelper::get($campaign, 'body') || !ArrayHelper::get($campaign, 'subject') || !ArrayHelper::get($campaign, 'title')) {
             wp_send_json_error([
-                'message' => __('Email subject, title, body required')
+                'message' => __('Email subject, title, body required', 'wpjobboard')
             ], 423);
             die();
         }
@@ -139,7 +139,7 @@ class EmailCampaign
 
         wp_send_json_success([
             'campaign_id' => $campaignId,
-            'message'     => __('Campaign created and email will be start sending now...')
+            'message'     => __('Campaign created and email will be start sending now...', 'wpjobboard')
         ], 200);
     }
 
