@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP Job Board\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-22 06:15+0000\n"
+"POT-Creation-Date: 2019-07-23 13:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -15,15 +15,15 @@ msgstr ""
 "X-Generator: Loco https://localise.biz/\n"
 "X-Loco-Version: 2.3.0; wp-5.2.2"
 
-#: wp-job-board.php:122
+#: wp-job-board.php:126
 msgid "Job List"
 msgstr ""
 
-#: wp-job-board.php:142
+#: wp-job-board.php:146
 msgid "Sorry, no submission confirmation found, Please check your URL"
 msgstr ""
 
-#: wp-job-board.php:145
+#: wp-job-board.php:149
 msgid "Sorry, no submission conirmation found, Please check your URL"
 msgstr ""
 
@@ -31,7 +31,7 @@ msgstr ""
 msgid "Sorry, You do not have permission to do this action: "
 msgstr ""
 
-#: includes/Classes/Activator.php:122
+#: includes/Classes/Activator.php:174
 msgid "Job Application Confirmation"
 msgstr ""
 
@@ -600,6 +600,18 @@ msgstr ""
 
 #: includes/Classes/Builder/Render.php:283
 msgid "Year"
+msgstr ""
+
+#: includes/Classes/EmailCampaigns/EmailCampaign.php:71
+msgid "No Applicant found based on your selection"
+msgstr ""
+
+#: includes/Classes/EmailCampaigns/EmailCampaign.php:78
+msgid "Email subject, title, body required"
+msgstr ""
+
+#: includes/Classes/EmailCampaigns/EmailCampaign.php:142
+msgid "Campaign created and email will be start sending now..."
 msgstr ""
 
 #: includes/Classes/FormComponents/ApplicantEmailComponent.php:74
