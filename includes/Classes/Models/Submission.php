@@ -39,7 +39,13 @@ class Submission
         }
 
         foreach ($wheres as $whereKey => $where) {
-            $resultQuery->where('wjb_applications.' . $whereKey, $where);
+            if($where) {
+                if(is_array($where)) {
+                    $resultQuery->whereIn('wjb_applications.' . $whereKey, $where);
+                } else {
+                    $resultQuery->where('wjb_applications.' . $whereKey, $where);
+                }
+            }
         }
 
         if ($searchString) {

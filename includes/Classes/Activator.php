@@ -39,13 +39,20 @@ class Activator
     {
         $this->createSubmissionsTable();
         $this->createSubmissionActivitiesTable();
-        $this->createPages();
 
+        $this->createCampaignDB();
+
+        $this->createPages();
 
         include 'PostType.php';
         $postTypeClass = new PostType();
         $postTypeClass->register();
         flush_rewrite_rules(true);
+    }
+
+    public function createCampaignDB() {
+        $this->createCampaignsTable();
+        $this->createCampaignEmails();
     }
 
     public function createSubmissionsTable()
@@ -99,6 +106,51 @@ class Activator
         return $this->runSQL($sql, $table_name);
     }
 
+    public function createCampaignsTable()
+    {
+        global $wpdb;
+        $charset_collate = $wpdb->get_charset_collate();
+        $table_name = $wpdb->prefix . 'wjb_email_campaigns';
+
+        $sql = "CREATE TABLE $table_name (
+				id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+				form_id int(11) NOT NULL,
+				status varchar(255) default 'draft',
+				title varchar(255),
+				subject varchar(255),
+				body longtext,
+				campaign_settings text,
+				email_type varchar (255) DEFAULT 'html',
+				total_sent int(11) default 0,
+				created_by_user_id int(11),
+				created_at timestamp NULL,
+				updated_at timestamp NULL
+			) $charset_collate;";
+        return $this->runSQL($sql, $table_name);
+    }
+
+
+    public function createCampaignEmails()
+    {
+        global $wpdb;
+        $charset_collate = $wpdb->get_charset_collate();
+        $table_name = $wpdb->prefix . 'wjb_campaign_emails';
+
+        $sql = "CREATE TABLE $table_name (
+				id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+				campaign_id int(11) NOT NULL,
+				submission_id int(11) NOT NULL,
+				status varchar(255) default 'draft',
+				email_to varchar(255),
+				subject varchar(255),
+				body longtext,
+				email_type varchar (255) DEFAULT 'html',
+				sent_at timestamp NULL,
+				created_at timestamp NULL,
+				updated_at timestamp NULL
+			) $charset_collate;";
+        return $this->runSQL($sql, $table_name);
+    }
 
     private function runSQL($sql, $tableName)
     {

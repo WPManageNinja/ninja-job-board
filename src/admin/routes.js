@@ -8,6 +8,10 @@ import FormSettingsIndex from './Components/Form/settings/index';
 import FormConfirmationSettings from './Components/Form/settings/ConfirmationSettings'
 import FormSchedulingSetting from './Components/Form/settings/SchedulingSettings';
 import FormCustomCssJs from './Components/Form/settings/FormCustomCssJs';
+import AllCampaigns from './Components/Form/MassEmail/MassEmail'
+import NewCampaign from './Components/Form/MassEmail/NewCampaign'
+import ViewCampaign from './Components/Form/MassEmail/ViewCampaign'
+
 
 import FormEmailSettings from './Components/Form/EmailSettings/FormEmailSettings';
 import FormEntries from './Components/Form/FormEntries/FormEntries';
@@ -79,6 +83,21 @@ const formEditRoutes = window.WPJobBoard.applyFilters('wpf_edit_children_roues',
         path: 'entries/:entry_id/view',
         name: 'entry',
         component: Entry
+    },
+    {
+        path: 'email_broadcast',
+        name: 'email_campaigns',
+        component: AllCampaigns
+    },
+    {
+        path: 'email_broadcast/new',
+        name: 'new_email_campaign',
+        component: NewCampaign
+    },
+    {
+        path: 'email_broadcast/:campaign_id/view',
+        name: 'view_email_campaign',
+        component: ViewCampaign
     }
 ]);
 

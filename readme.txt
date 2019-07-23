@@ -3,7 +3,7 @@ Contributors: techjewel, wpmanageninja
 Tags: career job, job board, listing job, job manager, portal, wp job board
 Requires at least: 4.5
 Tested up to: 5.2.2
-Stable tag: trunk
+Stable tag: 1.2.2
 Requires PHP: 5.4
 License: GPLv2 or later
 
@@ -57,6 +57,10 @@ With built-in application management system, you can see the total applications 
 
 In individual application view page, you can see the complete submitted data, uploaded applicant cv. You can also change the application status and internal status easily. One of the important feature is, you can add notes to each application.
 
+#### Email Broadcast to Applicants
+Send email to Applicants as bulk and you can select filter by application status and internal status before send.
+
+
 #### Super fast and Light Weight Form
 This is a super fast form builder and it's only loads css and js if you add the form in a page. Every line of CSS and JS is useful and there has no extra css and js. For a normal form, It's loads less than 30KB css and js combined. This form builder plugin will not slow down your site. it's the fastest form builder plugin in WordPress. It has also a nice interface to give detailed information of your job post.
 
@@ -86,8 +90,8 @@ This is a super fast form builder and it's only loads css and js if you add the 
 - Filter Applications based on status *(Done)*
 - Search Applications with keywords/full text search *(Done)*
 - Email Notification System management *(Done)*
+- Send bulk emails to the applicants and filter by application status *(Done)*
 - Export Data as CSV/Excel/JSON *(On development)
-- Send bulk emails to the applicants and filter by application status (On development)
 - Application Assesment for HR Department (On development)
 
 This plugin is a very planned project, and we have a long term development plan for this. We already invested around 200 human working hours (+coffees) on it, and we have the intention to spend much more on it. Please let us know what features you want, and we are happy to add that in our development sprint.
@@ -149,6 +153,9 @@ From email setting, you can set it up who will get notified about the submission
 8. Current Active Jobs Shortcode [wp_job_list]
 
 == Changelog ==
+
+= 1.2.2 - July 23, 2019 =
+- Added Bulk email feature where you can send emails to applicants
 
 = 1.0.0 - July 22, 2019 =
 - Initial Release

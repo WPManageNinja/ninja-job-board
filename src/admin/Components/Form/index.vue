@@ -108,6 +108,11 @@
                         title: 'Email Notifications',
                         icon: 'dashicons dashicons-email-alt'
                     },
+                    {
+                        route: 'email_campaigns',
+                        title: 'Email Broadcast',
+                        icon: 'dashicons dashicons-email-alt2'
+                    },
                 ], this.form_id);
             }
         },
