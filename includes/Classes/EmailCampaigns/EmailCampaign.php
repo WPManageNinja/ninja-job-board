@@ -272,7 +272,7 @@ class EmailCampaign
         }
 
         if ($applicationStatuses) {
-            $count = $count->whereIn('application_status', $internalStatuses);
+            $count = $count->whereIn('application_status', $applicationStatuses);
         }
         return $count->count();
     }

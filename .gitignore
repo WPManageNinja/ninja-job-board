@@ -6,3 +6,4 @@ svn.php
 pro_build.php
 *.zip
 wp-job-board
+.DS_Store
