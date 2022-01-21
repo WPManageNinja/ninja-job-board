@@ -2,12 +2,12 @@
 Contributors: techjewel, wpmanageninja
 Tags: career job, job board, listing job, job manager, portal, wp job board
 Requires at least: 4.5
-Tested up to: 5.2.2
-Stable tag: 1.2.2
-Requires PHP: 5.4
+Tested up to: 5.8
+Stable tag: 1.3.0
+Requires PHP: 5.6
 License: GPLv2 or later
 
-Ninja Job Board is a light weight plugin that adds a job board along with application form to your WordPress website.
+Ninja Job Board is a light-weight plugin that adds a job board along with application form to your WordPress website.
 
 == Description ==
 
@@ -153,6 +153,13 @@ From email setting, you can set it up who will get notified about the submission
 8. Current Active Jobs Shortcode [wp_job_list]
 
 == Changelog ==
+
+= 1.3.0 - January 21, 2022 =
+- Added feature to show other job applications by same applicant
+- Added a new feature to send bulk emails to the applicants.
+- Fixed text-domain issues
+- Fixed email sending issues
+- Few other performance improvements
 
 = 1.2.2 - July 23, 2019 =
 - Added Bulk email feature where you can send emails to applicants

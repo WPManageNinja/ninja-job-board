@@ -26,7 +26,7 @@ class FormDefaultValueRenderer
     {
         $allFields = array(
             'wp'    => array(
-                'title'        => __('WordPress', 'wpjobboard'),
+                'title'        => __('WordPress', 'ninja-job-board'),
                 'placeholders' => FormPlaceholders::getWPPlaceHolders()
             ),
             'user'  => array(
@@ -34,7 +34,7 @@ class FormDefaultValueRenderer
                 'placeholders' => FormPlaceholders::getUserPlaceholders()
             ),
             'other' => array(
-                'title'        => __('Other', 'wpjobboard'),
+                'title'        => __('Other', 'ninja-job-board'),
                 'placeholders' => FormPlaceholders::getOtherPlaceholders()
             )
         );

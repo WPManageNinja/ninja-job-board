@@ -31,7 +31,7 @@ class SubmissionHandler
 
         if (!$form) {
             wp_send_json_error(array(
-                'message' => __('Invalid request. Please try again', 'wpjobboard')
+                'message' => __('Invalid request. Please try again', 'ninja-job-board')
             ), 423);
         }
 
@@ -97,7 +97,7 @@ class SubmissionHandler
         $confirmation = $this->parseConfirmation($confirmation, $submission);
         $confirmation = apply_filters('wpjobboard/form_confirmation', $confirmation, $submissionId, $formId);
         wp_send_json_success(array(
-            'message'       => __('Form is successfully submitted', 'wpjobboard'),
+            'message'       => __('Form is successfully submitted', 'ninja-job-board'),
             'submission_id' => $submissionId,
             'confirmation'  => $confirmation
         ), 200);
@@ -132,7 +132,7 @@ class SubmissionHandler
 
         if ($errors) {
             wp_send_json_error(array(
-                'message' => __('Form Validation failed', 'wpjobboard'),
+                'message' => __('Form Validation failed', 'ninja-job-board'),
                 'errors'  => $errors
             ), 423);
         }
@@ -152,7 +152,7 @@ class SubmissionHandler
                 $label = $element['id'];
             }
         }
-        $label = $label . __(' is required', 'wpjobboard');
+        $label = $label . __(' is required', 'ninja-job-board');
         return apply_filters('wpjobboard/error_label_text', $label, $element, $formId);
     }
 

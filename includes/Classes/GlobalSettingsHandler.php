@@ -44,7 +44,7 @@ class GlobalSettingsHandler
     {
         update_option('wpjobboard_ip_logging_status', sanitize_text_field($_REQUEST['ip_logging_status']), false);
         wp_send_json_success(array(
-            'message' => __('Settings successfully updated', 'wpjobboard')
+            'message' => __('Settings successfully updated', 'ninja-job-board')
         ), 200);
     }
 
@@ -61,7 +61,7 @@ class GlobalSettingsHandler
         );
 
         if (!in_array($uploadedfile['type'], $acceptedFilles)) {
-            wp_send_json(__('Please upload only jpg/png format files', 'wpjobboard'), 423);
+            wp_send_json(__('Please upload only jpg/png format files', 'ninja-job-board'), 423);
         }
 
         $upload_overrides = array('test_form' => false);
@@ -71,7 +71,7 @@ class GlobalSettingsHandler
                 'file' => $movefile
             ), 200);
         } else {
-            wp_send_json(__('Something is wrong when uploading the file', 'wpjobboard'), 423);
+            wp_send_json(__('Something is wrong when uploading the file', 'ninja-job-board'), 423);
         }
     }
 }

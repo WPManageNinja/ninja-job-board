@@ -114,7 +114,7 @@ class EmailCampaign
             $body = $campaignData['body'];
 
             $relaces = [
-                '{applicant_name}' => $application->applicant_name,
+                '{applicant_name}'  => $application->applicant_name,
                 '{applicant_email}' => $application->applicant_email
             ];
 
@@ -188,31 +188,22 @@ class EmailCampaign
 
             $this->broadCast($email_to, $subject, $emailBody);
 
-            $result = wpJobBoardDB()->table('wjb_campaign_emails')
+            wpJobBoardDB()->table('wjb_campaign_emails')
                 ->where('id', $pendingEmail->id)
                 ->update([
-                    'status'  => 'failed',
+                    'status'  => 'sent',
                     'sent_at' => date('Y-m-d H:i:s')
                 ]);
 
-            if($result) {
-                SubmissionActivity::createActivity(array(
-                    'form_id'       => $formId,
-                    'submission_id' => $pendingEmail->submission_id,
-                    'type'          => 'activity',
-                    'created_by'    => 'WPJobBoard BOT',
-                    'content'       => "Email Notification sent to {$email_to} and the subject: {$subject}."
-                ));
-            } else {
-                SubmissionActivity::createActivity(array(
-                    'form_id'       => $formId,
-                    'submission_id' => $pendingEmail->submission_id,
-                    'type'          => 'activity',
-                    'created_by'    => 'WPJobBoard BOT',
-                    'content'       => "Maybe email sending failed to {$email_to} and the subject: {$subject}., You may check wp_mail fuction and probably you should use smtp"
-                ));
-            }
+            SubmissionActivity::createActivity(array(
+                'form_id'       => $formId,
+                'submission_id' => $pendingEmail->submission_id,
+                'type'          => 'activity',
+                'created_by'    => 'WPJobBoard BOT',
+                'content'       => "Email Notification sent to {$email_to} and the subject: {$subject}."
+            ));
         }
+
         $stats = $this->getCampaignStat($campaignId);
 
         wp_send_json_success([

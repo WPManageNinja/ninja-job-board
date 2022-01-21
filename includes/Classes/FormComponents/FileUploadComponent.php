@@ -30,7 +30,7 @@ class FileUploadComponent extends BaseComponent
     {
         return array(
             'type'            => $this->componentName,
-            'editor_title'    => __('File Upload', 'wpjobboard'),
+            'editor_title'    => __('File Upload', 'ninja-job-board'),
             'group'           => 'input',
             'postion_group'   => 'general',
             'editor_elements' => array(
@@ -162,7 +162,13 @@ class FileUploadComponent extends BaseComponent
         if (!$dataName) {
             return array();
         }
+
         $files = ArrayHelper::get($data, $dataName);
+
+        if(!$files) {
+            return [];
+        }
+
         $fullPathFiles = array();
         $uploadDir = get_option('wpjobboard_upload_dir');
         foreach ($files as $file) {

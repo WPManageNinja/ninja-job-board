@@ -18,7 +18,7 @@ class Forms
     public static function getForms($args = array(), $with = array())
     {
         $whereArgs = array(
-            'post_type'   => 'wp_job_board'
+            'post_type' => 'wp_job_board'
         );
 
         $whereArgs = apply_filters('wpjobboard/all_forms_where_args', $whereArgs);
@@ -88,7 +88,7 @@ class Forms
     public static function create($data)
     {
         $data['post_type'] = 'wp_job_board';
-        if(!isset($data['post_status'])) {
+        if (!isset($data['post_status'])) {
             $data['post_status'] = 'draft';
         }
 
@@ -100,7 +100,7 @@ class Forms
     {
         $data['ID'] = $formId;
         $data['post_type'] = 'wp_job_board';
-        if(!isset($data['post_status'])) {
+        if (!isset($data['post_status'])) {
             $data['post_status'] = 'publish';
         }
         return wp_update_post($data);
@@ -113,8 +113,8 @@ class Forms
             $settings = array();
         }
         $buttonDefault = array(
-            'button_text'     => __('Apply', 'wpjobboard'),
-            'processing_text' => __('Please Wait…', 'wpjobboard'),
+            'button_text'     => __('Apply', 'ninja-job-board'),
+            'processing_text' => __('Please Wait…', 'ninja-job-board'),
             'button_style'    => 'wpjb_default_btn',
             'css_class'       => ''
         );
@@ -135,7 +135,7 @@ class Forms
     {
         $elements = Forms::getBuilderSettings($formId);
         $formattedElements = array(
-            'input'                  => array()
+            'input' => array()
         );
         foreach ($elements as $element) {
             $formattedElements[$element['group']][$element['id']] = array(
@@ -180,8 +180,8 @@ class Forms
         $defaultSettings = array(
             'confirmation_type'    => 'custom',
             'redirectTo'           => 'samePage',
-            'customUrl' => '',
-            'messageToShow'        => __('Form has been successfully submitted', 'wpjobboard'),
+            'customUrl'            => '',
+            'messageToShow'        => __('Form has been successfully submitted', 'ninja-job-board'),
             'samePageFormBehavior' => 'hide_form',
         );
         return wp_parse_args($confirmationSettings, $defaultSettings);
@@ -194,7 +194,7 @@ class Forms
             return array();
         }
         $formattedShortcodes = array(
-            'input'   => array(
+            'input' => array(
                 'title'      => 'Custom Input Items',
                 'shortcodes' => array()
             )
@@ -208,20 +208,20 @@ class Forms
             }
         }
 
-        $items = $formattedShortcodes['input'];
+        $items = [$formattedShortcodes['input']];
 
         $submissionItem = array(
             'title'      => 'Submission Fields',
             'shortcodes' => array(
-                '{submission.id}'              => __('Submission ID', 'wpjobboard'),
-                '{submission.submission_hash}' => __('Submission Hash ID', 'wpjobboard'),
-                '{submission.applicant_name}'   => __('Applicant Name', 'wpjobboard'),
-                '{submission.applicant_email}'  => __('Applicant Email', 'wpjobboard'),
+                '{submission.id}'              => __('Submission ID', 'ninja-job-board'),
+                '{submission.submission_hash}' => __('Submission Hash ID', 'ninja-job-board'),
+                '{submission.applicant_name}'  => __('Applicant Name', 'ninja-job-board'),
+                '{submission.applicant_email}' => __('Applicant Email', 'ninja-job-board'),
             )
         );
 
         if ($html) {
-            $submissionItem['shortcodes']['{submission.all_input_field_html}'] = __('All input field html', 'wpjobboard');
+            $submissionItem['shortcodes']['{submission.all_input_field_html}'] = __('All input field html', 'ninja-job-board');
         }
 
 
@@ -299,22 +299,22 @@ class Forms
         }
         $defaults = array(
             'limitNumberOfEntries'     => array(
-                'status'                 => 'no',
-                'limit_type'             => 'total',
-                'number_of_entries'      => 100,
+                'status'                     => 'no',
+                'limit_type'                 => 'total',
+                'number_of_entries'          => 100,
                 'limit_application_statuses' => array(),
-                'limit_exceeds_message'  => __('Number of entry has been exceeds, Please check back later', 'wpjobboard')
+                'limit_exceeds_message'      => __('Number of entry has been exceeds, Please check back later', 'ninja-job-board')
             ),
             'scheduleForm'             => array(
                 'status'               => 'no',
                 'start_date'           => gmdate('Y-m-d H:i:s'),
                 'end_date'             => '',
-                'before_start_message' => __('Form submission time schedule is not started yet. Please check back later', 'wpjobboard'),
+                'before_start_message' => __('Form submission time schedule is not started yet. Please check back later', 'ninja-job-board'),
                 'expire_message'       => __('Form submission time has been expired.')
             ),
             'requireLogin'             => array(
                 'status'  => 'no',
-                'message' => __('You need to login to submit this form', 'wpjobboard')
+                'message' => __('You need to login to submit this form', 'ninja-job-board')
             ),
             'restriction_applied_type' => 'hide_form'
         );
@@ -330,8 +330,8 @@ class Forms
 
         if (ArrayHelper::get($settings, 'scheduleForm.status') == 'yes') {
             $timeSchedule = ArrayHelper::get($settings, 'scheduleForm');
-            if($timeSchedule['end_date']) {
-               return $timeSchedule['end_date'];
+            if ($timeSchedule['end_date']) {
+                return $timeSchedule['end_date'];
             }
         }
 

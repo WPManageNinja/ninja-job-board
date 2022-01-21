@@ -104,9 +104,12 @@ class SubmissionView
 
         $parsedEntry = (object)$submissionModel->getParsedSubmission($submission);
 
+        $otherSubmissions = $submissionModel->getOtherSubmission($submission);
+
         wp_send_json_success(array(
             'submission' => $submission,
-            'entry'      => $parsedEntry
+            'entry'      => $parsedEntry,
+            'other_entries' => $otherSubmissions
         ), 200);
     }
 

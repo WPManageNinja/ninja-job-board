@@ -71,7 +71,7 @@ class ApplicantEmailComponent extends BaseComponent
         if($value) {
             // We have to check if it's a valid email address or not
             if(!is_email($value)) {
-                return __('Valid email address is required for field:', 'wpjobboard').' '.ArrayHelper::get($element, 'label');
+                return __('Valid email address is required for field:', 'ninja-job-board').' '.ArrayHelper::get($element, 'label');
             }
         }
 
@@ -79,7 +79,7 @@ class ApplicantEmailComponent extends BaseComponent
         if(ArrayHelper::get($element, 'options.confirm_email') == 'yes') {
             $confirmEmailvalue = ArrayHelper::get($data, '__confirm_'.$elementId);
             if($confirmEmailvalue != $value) {
-                return ArrayHelper::get($element, 'label') .' & '.ArrayHelper::get($element, 'options.confirm_email_label') .__(' does not match', 'wpjobboard');
+                return ArrayHelper::get($element, 'label') .' & '.ArrayHelper::get($element, 'options.confirm_email_label') .__(' does not match', 'ninja-job-board');
             }
         }
 

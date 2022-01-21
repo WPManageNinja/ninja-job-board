@@ -46,7 +46,7 @@ class HiddenInputComponent extends BaseComponent
     public function validateOnSave($error, $element, $formId)
     {
         if (!ArrayHelper::get($element, 'field_options.default_value')) {
-            $error = __('Value is required for item:', 'wpjobboard') . ' ' . ArrayHelper::get($element, 'field_options.label');
+            $error = __('Value is required for item:', 'ninja-job-board') . ' ' . ArrayHelper::get($element, 'field_options.label');
         }
         return $error;
     }

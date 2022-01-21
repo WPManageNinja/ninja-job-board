@@ -25,6 +25,7 @@
 
                             <el-form-item label="Email Body">
                                 <wp-editor v-model="campaign.body" />
+                                <p>You can use {applicant_name} and {applicant_email} as dynamic applicant data</p>
                             </el-form-item>
 
                             <el-form-item label="Select Email Recivers">

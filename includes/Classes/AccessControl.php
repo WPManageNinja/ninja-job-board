@@ -47,7 +47,7 @@ class AccessControl
             return true;
         }
         wp_send_json_error(array(
-            'message' => ($message) ? $message : __('Sorry, You do not have permission to do this action: ', 'wpjobboard').$endpoint,
+            'message' => ($message) ? $message : __('Sorry, You do not have permission to do this action: ', 'ninja-job-board').$endpoint,
             'action' => $endpoint
         ), 423);
     }

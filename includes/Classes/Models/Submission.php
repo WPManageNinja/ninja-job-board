@@ -203,4 +203,29 @@ class Submission
 
         return $query->count();
     }
+
+    public function getOtherSubmission($submission)
+    {
+        $applicantEmail = $submission->applicant_email;
+
+
+        if(!$applicantEmail) {
+            return array();
+        }
+
+        $entries = wpJobBoardDB()->table('wjb_applications')
+            ->where('wjb_applications.id', '!=', $submission->id)
+            ->where('wjb_applications.applicant_email', $applicantEmail)
+            ->select(array('wjb_applications.id', 'wjb_applications.created_at', 'wjb_applications.form_id', 'wjb_applications.status',  'posts.post_title'))
+             ->join('posts', 'posts.ID', '=', 'wjb_applications.form_id')
+            ->orderBy('wjb_applications.created_at', 'DESC')
+            ->get();
+
+        foreach ($entries as $entry) {
+            $entry->permalink = admin_url('admin.php?page=wpjobboard.php&timestamp='.time().'#/edit-form/'.$entry->form_id.'/entries/'.$entry->id.'/view');
+        }
+
+        return $entries;
+
+    }
 }

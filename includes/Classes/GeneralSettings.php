@@ -39,33 +39,33 @@ class GeneralSettings
     public static function getApplicationStatuses()
     {
         return apply_filters('wpjobboard/available_application_statuses', array(
-            'applied'    => __('Applied', 'wpjobboard'),
-            'processing' => __('Processing', 'wpjobboard'),
-            'pending'    => __('Pending', 'wpjobboard'),
-            'completed'  => __('Completed', 'wpjobboard')
+            'applied'    => __('Applied', 'ninja-job-board'),
+            'processing' => __('Processing', 'ninja-job-board'),
+            'pending'    => __('Pending', 'ninja-job-board'),
+            'completed'  => __('Completed', 'ninja-job-board')
         ));
     }
 
     public static function getInternalStatuses()
     {
         return apply_filters('wpjobboard/available_internal_statuses', array(
-            'new'              => __('New', 'wpjobboard'),
-            'audited'          => __('Audited', 'wpjobboard'),
-            'initial_rejected' => __('Inital Rejected', 'wpjobboard'),
-            'interviewed'      => __('Interviewed', 'wpjobboard'),
-            'potential'        => __('Potential', 'wpjobboard'),
-            'short_listed'     => __('Short Listed', 'wpjobboard'),
-            'hired'            => __('Hired', 'wpjobboard'),
+            'new'              => __('New', 'ninja-job-board'),
+            'audited'          => __('Audited', 'ninja-job-board'),
+            'initial_rejected' => __('Inital Rejected', 'ninja-job-board'),
+            'interviewed'      => __('Interviewed', 'ninja-job-board'),
+            'potential'        => __('Potential', 'ninja-job-board'),
+            'short_listed'     => __('Short Listed', 'ninja-job-board'),
+            'hired'            => __('Hired', 'ninja-job-board'),
         ));
     }
 
     public static function getJobTypes()
     {
         return apply_filters('wpjobboard/available_job_types', array(
-            'full_time'   => __('Full Time', 'wpjobboard'),
-            'part_time'   => __('Part Time', 'wpjobboard'),
-            'remote'      => __('Remote', 'wpjobboard'),
-            'contractual' => __('Contractual', 'wpjobboard')
+            'full_time'   => __('Full Time', 'ninja-job-board'),
+            'part_time'   => __('Part Time', 'ninja-job-board'),
+            'remote'      => __('Remote', 'ninja-job-board'),
+            'contractual' => __('Contractual', 'ninja-job-board')
         ));
     }
 

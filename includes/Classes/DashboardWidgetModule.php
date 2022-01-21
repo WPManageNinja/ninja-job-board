@@ -18,7 +18,7 @@ class DashboardWidgetModule
         if (!AccessControl::hasEndPointPermission('get_sumissions', 'submissions')) {
             return false;
         }
-        wp_add_dashboard_widget('wpjb_stat_widget', __('WPJobBoard Latest Applications', 'wpjobboard'), array($this, 'showStat'), 10, 1);
+        wp_add_dashboard_widget('wpjb_stat_widget', __('WPJobBoard Latest Applications', 'ninja-job-board'), array($this, 'showStat'), 10, 1);
     }
 
     public function showStat()

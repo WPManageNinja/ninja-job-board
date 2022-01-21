@@ -134,11 +134,11 @@ class Render
         $submitButton = Forms::getButtonSettings($form->ID);
         $processingText = $submitButton['processing_text'];
         if (!$processingText) {
-            $processingText = __('Please Wait…', 'wpjobboard');
+            $processingText = __('Please Wait…', 'ninja-job-board');
         }
         $button_text = $submitButton['button_text'];
         if (!$button_text) {
-            $button_text = __('Apply', 'wpjobboard');
+            $button_text = __('Apply', 'ninja-job-board');
         }
         $buttonClasses = array(
             'wpjb_submit_button',
@@ -206,56 +206,56 @@ class Render
         wp_localize_script('wpjobboard_public', 'wp_job_board_general', array(
             'ajax_url'  => admin_url('admin-ajax.php'),
             'date_i18n' => array(
-                'previousMonth'    => __('Previous Month', 'wpjobboard'),
-                'nextMonth'        => __('Next Month', 'wpjobboard'),
+                'previousMonth'    => __('Previous Month', 'ninja-job-board'),
+                'nextMonth'        => __('Next Month', 'ninja-job-board'),
                 'months'           => [
                     'sorthand' => [
-                        __('Jan', 'wpjobboard'),
-                        __('Feb', 'wpjobboard'),
-                        __('Mar', 'wpjobboard'),
-                        __('Apr', 'wpjobboard'),
-                        __('May', 'wpjobboard'),
-                        __('Jun', 'wpjobboard'),
-                        __('Jul', 'wpjobboard'),
-                        __('Aug', 'wpjobboard'),
-                        __('Sep', 'wpjobboard'),
-                        __('Oct', 'wpjobboard'),
-                        __('Nov', 'wpjobboard'),
-                        __('Dec', 'wpjobboard')
+                        __('Jan', 'ninja-job-board'),
+                        __('Feb', 'ninja-job-board'),
+                        __('Mar', 'ninja-job-board'),
+                        __('Apr', 'ninja-job-board'),
+                        __('May', 'ninja-job-board'),
+                        __('Jun', 'ninja-job-board'),
+                        __('Jul', 'ninja-job-board'),
+                        __('Aug', 'ninja-job-board'),
+                        __('Sep', 'ninja-job-board'),
+                        __('Oct', 'ninja-job-board'),
+                        __('Nov', 'ninja-job-board'),
+                        __('Dec', 'ninja-job-board')
                     ],
                     'longhand' => [
-                        __('January', 'wpjobboard'),
-                        __('February', 'wpjobboard'),
-                        __('March', 'wpjobboard'),
-                        __('April', 'wpjobboard'),
-                        __('May', 'wpjobboard'),
-                        __('June', 'wpjobboard'),
-                        __('July', 'wpjobboard'),
-                        __('August', 'wpjobboard'),
-                        __('September', 'wpjobboard'),
-                        __('October', 'wpjobboard'),
-                        __('November', 'wpjobboard'),
-                        __('December', 'wpjobboard')
+                        __('January', 'ninja-job-board'),
+                        __('February', 'ninja-job-board'),
+                        __('March', 'ninja-job-board'),
+                        __('April', 'ninja-job-board'),
+                        __('May', 'ninja-job-board'),
+                        __('June', 'ninja-job-board'),
+                        __('July', 'ninja-job-board'),
+                        __('August', 'ninja-job-board'),
+                        __('September', 'ninja-job-board'),
+                        __('October', 'ninja-job-board'),
+                        __('November', 'ninja-job-board'),
+                        __('December', 'ninja-job-board')
                     ]
                 ],
                 'weekdays'         => [
                     'longhand'  => array(
-                        __('Sunday', 'wpjobboard'),
-                        __('Monday', 'wpjobboard'),
-                        __('Tuesday', 'wpjobboard'),
-                        __('Wednesday', 'wpjobboard'),
-                        __('Thursday', 'wpjobboard'),
-                        __('Friday', 'wpjobboard'),
-                        __('Saturday', 'wpjobboard')
+                        __('Sunday', 'ninja-job-board'),
+                        __('Monday', 'ninja-job-board'),
+                        __('Tuesday', 'ninja-job-board'),
+                        __('Wednesday', 'ninja-job-board'),
+                        __('Thursday', 'ninja-job-board'),
+                        __('Friday', 'ninja-job-board'),
+                        __('Saturday', 'ninja-job-board')
                     ),
                     'shorthand' => array(
-                        __('Sun', 'wpjobboard'),
-                        __('Mon', 'wpjobboard'),
-                        __('Tue', 'wpjobboard'),
-                        __('Wed', 'wpjobboard'),
-                        __('Thu', 'wpjobboard'),
-                        __('Fri', 'wpjobboard'),
-                        __('Sat', 'wpjobboard')
+                        __('Sun', 'ninja-job-board'),
+                        __('Mon', 'ninja-job-board'),
+                        __('Tue', 'ninja-job-board'),
+                        __('Wed', 'ninja-job-board'),
+                        __('Thu', 'ninja-job-board'),
+                        __('Fri', 'ninja-job-board'),
+                        __('Sat', 'ninja-job-board')
                     )
                 ],
                 'daysInMonth'      => [
@@ -272,15 +272,15 @@ class Render
                     30,
                     31
                 ],
-                'rangeSeparator'   => __(' to ', 'wpjobboard'),
-                'weekAbbreviation' => __('Wk', 'wpjobboard'),
-                'scrollTitle'      => __('Scroll to increment', 'wpjobboard'),
-                'toggleTitle'      => __('Click to toggle', 'wpjobboard'),
+                'rangeSeparator'   => __(' to ', 'ninja-job-board'),
+                'weekAbbreviation' => __('Wk', 'ninja-job-board'),
+                'scrollTitle'      => __('Scroll to increment', 'ninja-job-board'),
+                'toggleTitle'      => __('Click to toggle', 'ninja-job-board'),
                 'amPM'             => [
-                    __('AM', 'wpjobboard'),
-                    __('PM', 'wpjobboard')
+                    __('AM', 'ninja-job-board'),
+                    __('PM', 'ninja-job-board')
                 ],
-                'yearAriaLabel'    => __('Year', 'wpjobboard')
+                'yearAriaLabel'    => __('Year', 'ninja-job-board')
             )
         ));
     }

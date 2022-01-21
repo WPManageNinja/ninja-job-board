@@ -25,7 +25,7 @@
                     :data="paymentForms"
                     border>
 
-                    <el-table-column :label="$t('ID')" width="70">
+                    <el-table-column :label="$t('ID')" width="90">
                         <template slot-scope="scope">
                             <router-link :to="{ name: 'edit_form', params: { form_id: scope.row.ID } }">
                                 {{ scope.row.ID }}

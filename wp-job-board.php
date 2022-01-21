@@ -5,8 +5,8 @@
  * Description: Create Job Posting and Manage Jon Application In WordPress
  * Author: WPManageNinja LLC
  * Author URI:  https://wpmanageninja.com
- * Version: 1.2.2
- * Text Domain: wpjobboard
+ * Version: 1.3.0
+ * Text Domain: ninja-job-board
  *
  */
 
@@ -33,7 +33,7 @@ if (!defined('ABSPATH')) {
 }
 
 define('WPJOBBOARD_VERSION_LITE', true);
-define('WPJOBBOARD_VERSION', '1.2.2');
+define('WPJOBBOARD_VERSION', '1.3.0');
 define('WPJOBBOARD_DB_VERSION', 100);
 define('WPJOBBOARD_MAIN_FILE', __FILE__);
 define('WPJOBBOARD_URL', plugin_dir_url(__FILE__));
@@ -123,7 +123,7 @@ class WPJobBoard
             $args = shortcode_atts(array(
                 'categories'     => '',
                 'order'          => 'DESC',
-                'title'          => __('Job List', 'wpjobboard'),
+                'title'          => __('Job List', 'ninja-job-board'),
                 'show_apply'     => 'yes',
                 'current_only'   => 'yes',
                 'show_cat'       => 'yes',
@@ -143,10 +143,10 @@ class WPJobBoard
                     $receiptHandler = new \WPJobBoard\Classes\Builder\ApplicationConfirmation();
                     return $receiptHandler->render($submission->id);
                 } else {
-                    return '<p class="wpjb_no_recipt_found">' . __('Sorry, no submission confirmation found, Please check your URL', 'wpjobboard') . '</p>';
+                    return '<p class="wpjb_no_recipt_found">' . __('Sorry, no submission confirmation found, Please check your URL', 'ninja-job-board') . '</p>';
                 }
             } else {
-                return '<p class="wpjb_no_recipt_found">' . __('Sorry, no submission conirmation found, Please check your URL', 'wpjobboard') . '</p>';
+                return '<p class="wpjb_no_recipt_found">' . __('Sorry, no submission conirmation found, Please check your URL', 'ninja-job-board') . '</p>';
             }
         });
     }
@@ -181,7 +181,7 @@ class WPJobBoard
 
     public function textDomain()
     {
-        load_plugin_textdomain('wpjobboard', false, basename(dirname(__FILE__)) . '/languages');
+        load_plugin_textdomain('ninja-job-board', false, basename(dirname(__FILE__)) . '/languages');
     }
 
     public function loadDependecies()
@@ -204,6 +204,6 @@ register_activation_hook(__FILE__, function ($newWorkWide) {
 add_action('wpmu_new_blog', function ($blogId) {
     require_once(WPJOBBOARD_DIR . 'includes/Classes/Activator.php');
     switch_to_blog($blogId);
-    \WPJobBoard\Classes\Activator::migrate();
+    (new \WPJobBoard\Classes\Activator)->migrate();
     restore_current_blog();
 });

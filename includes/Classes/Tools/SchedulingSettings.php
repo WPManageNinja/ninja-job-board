@@ -69,7 +69,7 @@ class SchedulingSettings
 
         update_post_meta($formId, 'wpjb_form_scheduling_settings', $settings);
         wp_send_json_success(array(
-            'message' => __('Settings successfully updated', 'wpjobboard')
+            'message' => __('Settings successfully updated', 'ninja-job-board')
         ), 200);
     }
 
@@ -142,7 +142,7 @@ class SchedulingSettings
             if ($totalEntryCount >= intval($numberOfEntries)) {
                 return $limitEntrySettings['limit_exceeds_message']
                     ? $limitEntrySettings['limit_exceeds_message']
-                    : __('Submission limit has been excceded.', 'wpjobboard');
+                    : __('Submission limit has been exceded.', 'ninja-job-board');
             }
         }
         return false;
@@ -158,13 +158,13 @@ class SchedulingSettings
             if ($time < $start) {
                 return $timeSchedule['before_start_message']
                     ? $timeSchedule['before_start_message']
-                    : __('Form submission is not started yet.', 'wpjobboard');
+                    : __('Form submission is not started yet.', 'ninja-job-board');
 
             }
             if ($time >= $end) {
                 return $timeSchedule['expire_message']
                     ? $timeSchedule['expire_message']
-                    : __('Form submission is now closed.', 'wpjobboard');
+                    : __('Form submission is now closed.', 'ninja-job-board');
             }
         }
 
@@ -177,7 +177,7 @@ class SchedulingSettings
             if(!is_user_logged_in()) {
                 return  !empty($sheduleSettings['message'])
                     ? $sheduleSettings['message']
-                    : __('You must be logged in to submit the form.', 'wpjobboard');
+                    : __('You must be logged in to submit the form.', 'ninja-job-board');
             }
         }
 

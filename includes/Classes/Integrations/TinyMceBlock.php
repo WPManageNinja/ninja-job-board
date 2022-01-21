@@ -37,10 +37,10 @@ class TinyMceBlock
 
         // We are adding localized vars here
         wp_localize_script('jquery','wpjb_tinymce_vars', array(
-                "label" => __('Select a Form to insert', 'wpjobboard'),
-                "title" => __('Insert Form Shortcode', 'wpjobboard'),
-                "select_error" => __('Please select a Form', 'wpjobboard'),
-                "insert_text" => __('Insert Shortcode', 'wpjobboard'),
+                "label" => __('Select a Form to insert', 'ninja-job-board'),
+                "title" => __('Insert Form Shortcode', 'ninja-job-board'),
+                "select_error" => __('Please select a Form', 'ninja-job-board'),
+                "insert_text" => __('Insert Shortcode', 'ninja-job-board'),
                 "forms" => $this->getAllFormsForMce(),
         ));
 

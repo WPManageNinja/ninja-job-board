@@ -171,7 +171,7 @@ class Activator
         $options = get_option('wpjobboard_confirmation_page_id');
         if (false === $options) {
             $charge_confirmation = wp_insert_post(array(
-                'post_title'     => __('Job Application Confirmation', 'wpjobboard'),
+                'post_title'     => __('Job Application Confirmation', 'ninja-job-board'),
                 'post_content'   => '[wpjobboard_confirmation]',
                 'post_status'    => 'publish',
                 'post_author'    => 1,

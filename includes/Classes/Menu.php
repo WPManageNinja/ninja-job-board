@@ -33,8 +33,8 @@ class Menu
 
 
         add_menu_page(
-            __('WP Job Board', 'wpjobboard'),
-            __('WP Job Board', 'wpjobboard'),
+            __('WP Job Board', 'ninja-job-board'),
+            __('WP Job Board', 'ninja-job-board'),
             $menuPermission,
             'wpjobboard.php',
             array($this, 'render'),
@@ -43,23 +43,23 @@ class Menu
         );
 
         $submenu['wpjobboard.php']['all_forms'] = array(
-            __('All Jobs', 'wpjobboard'),
+            __('All Jobs', 'ninja-job-board'),
             $menuPermission,
             'admin.php?page=wpjobboard.php#/',
         );
         $submenu['wpjobboard.php']['entries'] = array(
-            __('Applications', 'wpjobboard'),
+            __('Applications', 'ninja-job-board'),
             $menuPermission,
             'admin.php?page=wpjobboard.php#/entries',
         );
         $submenu['wpjobboard.php']['settings'] = array(
-            __('Settings', 'wpjobboard'),
+            __('Settings', 'ninja-job-board'),
             $menuPermission,
             'admin.php?page=wpjobboard.php#/settings/general-settings',
         );
 
         $submenu['wpjobboard.php']['job_categories'] = array(
-            __('Job Categories', 'wpjobboard'),
+            __('Job Categories', 'ninja-job-board'),
             $menuPermission,
             'edit-tags.php?taxonomy=wpjb-job-categories&post_type=wp_job_board',
         );
@@ -100,7 +100,7 @@ class Menu
 
             $payformAdminVars = apply_filters('wpjobboard/admin_app_vars', array(
                 'i18n'                => array(
-                    'All Job Posts' => __('All Job Posts', 'wpjobboard')
+                    'All Job Posts' => __('All Job Posts', 'ninja-job-board')
                 ),
                 'applicationStatuses' => GeneralSettings::getApplicationStatuses(),
                 'internalStatuses'    => GeneralSettings::getInternalStatuses(),
