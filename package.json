@@ -32,7 +32,7 @@
     "filepond-plugin-image-preview": "^4.1.1",
     "jquery-filepond": "^1.0.0",
     "lodash": "^4.17.13",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "pikaday": "^1.8.0",
     "vue": "^2.5.22",
     "vue-html-to-paper": "^1.0.3",
