@@ -2,8 +2,8 @@
 Contributors: techjewel, wpmanageninja
 Tags: career job, job board, listing job, job manager, portal, wp job board
 Requires at least: 4.5
-Tested up to: 5.8
-Stable tag: 1.3.1
+Tested up to: 6.0
+Stable tag: 1.3.2
 Requires PHP: 5.6
 License: GPLv2 or later
 
@@ -153,6 +153,10 @@ From email setting, you can set it up who will get notified about the submission
 8. Current Active Jobs Shortcode [wp_job_list]
 
 == Changelog ==
+
+= 1.3.2 - July 19, 2022 =
+- Security Fix for File Index for NGINX indexed enabled servers
+- Fix issues for esc_* functions
 
 = 1.3.1 - January 21, 2022 =
 - Added feature to show other job applications by same applicant

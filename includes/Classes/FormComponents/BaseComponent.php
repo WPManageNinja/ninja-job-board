@@ -87,11 +87,11 @@ abstract class BaseComponent
         }
 
         ?>
-        <div data-element_type="<?php echo $this->elementName; ?>"
-             class="<?php echo $controlClass; ?>">
+        <div data-element_type="<?php echo esc_html($this->elementName); ?>"
+             class="<?php echo esc_html($controlClass); ?>">
             <?php $this->buildLabel($fieldOptions, $form, array('for' => $inputId)); ?>
             <div class="wpjb_input_content">
-                <input <?php echo $this->builtAttributes($attributes); ?> />
+                <input <?php echo wp_kses_post($this->builtAttributes($attributes)); ?> />
             </div>
         </div>
         <?php
@@ -126,12 +126,12 @@ abstract class BaseComponent
             'class'             => $controlClass
         );
         ?>
-        <div <?php echo $this->builtAttributes($controlAttributes); ?>>
+        <div <?php echo wp_kses_post($this->builtAttributes($controlAttributes)); ?>>
             <?php $this->buildLabel($fieldOptions, $form, array('for' => $inputId)); ?>
             <div class="wpjb_input_content">
-                <select <?php echo $this->builtAttributes($inputAttributes); ?>>
+                <select <?php echo wp_kses_post($this->builtAttributes($inputAttributes)); ?>>
                     <?php if ($placeholder): ?>
-                        <option data-type="placeholder" value=""><?php echo $placeholder; ?></option>
+                        <option data-type="placeholder" value=""><?php echo esc_html($placeholder); ?></option>
                     <?php endif; ?>
                     <?php foreach ($options as $option): ?>
                         <?php
@@ -142,7 +142,7 @@ abstract class BaseComponent
                             $optionAttributes['selected'] = 'true';
                         }
                         ?>
-                        <option <?php echo $this->builtAttributes($optionAttributes); ?>><?php echo $option['label']; ?></option>
+                        <option <?php echo wp_kses_post($this->builtAttributes($optionAttributes)); ?>><?php echo esc_html($option['label']); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -170,7 +170,7 @@ abstract class BaseComponent
             'class'             => $controlClass
         );
         ?>
-        <div <?php echo $this->builtAttributes($controlAttributes); ?>>
+        <div <?php wpJobBoardPrintInternal($this->builtAttributes($controlAttributes)); ?>>
             <?php $this->buildLabel($fieldOptions, $form, array('for' => $inputId)); ?>
             <div class="wpjb_multi_form_controls wpjb_input_content">
                 <?php foreach ($options as $index => $option): ?>
@@ -191,9 +191,9 @@ abstract class BaseComponent
                     }
                     ?>
                     <div class="form-check">
-                        <input <?php echo $this->builtAttributes($attributes); ?>>
-                        <label class="form-check-label" for="<?php echo $optionId; ?>">
-                            <?php echo $option['label']; ?>
+                        <input <?php wpJobBoardPrintInternal($this->builtAttributes($attributes)); ?>>
+                        <label class="form-check-label" for="<?php echo esc_html($optionId); ?>">
+                            <?php echo esc_html($option['label']); ?>
                         </label>
                     </div>
                 <?php endforeach; ?>
@@ -226,7 +226,7 @@ abstract class BaseComponent
             $controlAttributes['data-checkbox_required'] = 'yes';
         }
         ?>
-        <div <?php echo $this->builtAttributes($controlAttributes); ?>>
+        <div <?php wpJobBoardPrintInternal($this->builtAttributes($controlAttributes)); ?>>
             <?php $this->buildLabel($fieldOptions, $form, array('for' => $inputId)); ?>
             <div class="wpjb_multi_form_controls wpjb_input_content">
                 <?php foreach ($options as $index => $option): ?>
@@ -244,9 +244,9 @@ abstract class BaseComponent
                     }
                     ?>
                     <div class="form-check">
-                        <input <?php echo $this->builtAttributes($attributes); ?>>
-                        <label class="form-check-label" for="<?php echo $optionId; ?>">
-                            <?php echo $option['label']; ?>
+                        <input <?php wpJobBoardPrintInternal($this->builtAttributes($attributes)); ?>>
+                        <label class="form-check-label" for="<?php echo esc_html($optionId); ?>">
+                            <?php echo esc_html($option['label']); ?>
                         </label>
                     </div>
                 <?php endforeach; ?>
@@ -261,7 +261,7 @@ abstract class BaseComponent
         <div class="wpjb_html_content_wrapper">
             <?php
             $text = ArrayHelper::get($element, 'field_options.custom_html');
-            echo $this->parseText($text, $form->ID);
+            wpJobBoardPrintInternal($this->parseText($text, $form->ID));
             ?>
         </div>
         <?php
@@ -314,7 +314,7 @@ abstract class BaseComponent
         }
         if ($label): ?>
             <div class="wpjb_input_label">
-                <label <?php echo $this->builtAttributes($attributes); ?>><?php echo $xtra_left . $label . $xtra_right; ?></label>
+                <label <?php wpJobBoardPrintInternal($this->builtAttributes($attributes)); ?>><?php wpJobBoardPrintInternal($xtra_left . $label . $xtra_right); ?></label>
             </div>
         <?php endif;
     }

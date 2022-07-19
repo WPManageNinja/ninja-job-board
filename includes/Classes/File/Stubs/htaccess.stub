@@ -1,5 +1,4 @@
-
-# BEGIN FluentForm
+# BEGIN Ninja Job Board
 # Disable parsing of PHP for some server configurations. This file may be removed or modified on certain server configurations. Please consult your system administrator before removing this file.
 Options -Indexes
 <Files *>
@@ -11,4 +10,4 @@ Options -Indexes
 <IfModule mod_php5.c>
   php_flag engine off
 </IfModule>
-# END FluentForm
+# END Ninja Job Board

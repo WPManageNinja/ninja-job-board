@@ -110,11 +110,11 @@ class DateComponent extends BaseComponent
             $attributes['required'] = true;
         }
         ?>
-        <div id="wpjb_<?php echo $this->elementName; ?>" data-element_type="<?php echo $this->elementName; ?>"
-             class="<?php echo $controlClass; ?>">
+        <div id="wpjb_<?php echo esc_html($this->elementName); ?>" data-element_type="<?php echo esc_html($this->elementName); ?>"
+             class="<?php echo esc_html($controlClass); ?>">
             <?php $this->buildLabel($fieldOptions, $form, array('for' => $inputId)); ?>
             <div class="wpjb_input_content">
-                <input <?php echo $this->builtAttributes($attributes); ?> />
+                <input <?php wpJobBoardPrintInternal($this->builtAttributes($attributes)); ?> />
             </div>
         </div>
         <?php

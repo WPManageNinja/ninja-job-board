@@ -127,12 +127,12 @@ class FileUploadComponent extends BaseComponent
         }
         ?>
 
-        <div data-element_type="<?php echo $this->elementName; ?>"
-             class="<?php echo $controlClass; ?>">
+        <div data-element_type="<?php echo esc_html($this->elementName); ?>"
+             class="<?php echo esc_html($controlClass); ?>">
             <?php $this->buildLabel($fieldOptions, $form, array('for' => $inputId)); ?>
             <div class="wpjb_input_content wpjb_file_upload_wrapper dropzone dropzone_parent">
-                <input type="hidden" name="<?php echo $element['id']; ?>" value="<?php echo $associateKey; ?>"/>
-                <input <?php echo $this->builtAttributes($attributes); ?> />
+                <input type="hidden" name="<?php echo esc_html($element['id']); ?>" value="<?php echo esc_html($associateKey); ?>"/>
+                <input <?php wpJobBoardPrintInternal($this->builtAttributes($attributes)); ?> />
             </div>
             <div class="upload_error_message"></div>
         </div>

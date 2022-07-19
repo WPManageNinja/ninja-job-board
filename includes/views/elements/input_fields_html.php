@@ -9,7 +9,7 @@
                 <?php if(!$data['value'] || $data['type'] == 'hidden_input') { continue; } ?>
                 <div class="wpjb_each_entry">
                     <div class="wpjb_entry_label">
-                        <?php echo $data['label']; ?>
+                        <?php echo esc_html($data['label']); ?>
                     </div>
                     <div class="wpjb_entry_value"><?php echo wp_kses_post($data['value']); ?></div>
                 </div>

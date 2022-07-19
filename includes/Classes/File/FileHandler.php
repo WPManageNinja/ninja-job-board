@@ -76,6 +76,11 @@ class FileHandler
                 wp_upload_dir()['basedir'] . WPJOBBOARD_UPLOAD_DIR . '/.htaccess',
                 file_get_contents(__DIR__ . '/Stubs/htaccess.stub')
             );
+
+            file_put_contents(
+                wp_upload_dir()['basedir'] . WPJOBBOARD_UPLOAD_DIR . '/index.php',
+                file_get_contents(WPJOBBOARD_DIR.'includes/Classes/File/Stubs/index.stub')
+            );
         }
 
         return $param;

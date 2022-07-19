@@ -243,21 +243,21 @@ class PostType
         <div class="wpjb_meta_field">
             <label><?php _e('Location', 'wpjobboard');?></label>
             <div class="wpjb_input_container">
-                <input placeholder="Location" type="text" value="<?php echo $location; ?>"
+                <input placeholder="Location" type="text" value="<?php echo esc_html($location); ?>"
                        name="wpjobboard_job_meta_values[job_location]"/>
             </div>
         </div>
         <div class="wpjb_meta_field">
             <label><?php _e('Number of Vacancies', 'wpjobboard');?></label>
             <div class="wpjb_input_container">
-                <input placeholder="Number of Vacancies" type="number" value="<?php echo $vacancies; ?>"
+                <input placeholder="Number of Vacancies" type="number" value="<?php echo esc_html($vacancies); ?>"
                        name="wpjobboard_job_meta_values[job_vacancies]"/>
             </div>
         </div>
         <div class="wpjb_meta_field">
             <label><?php _e('Experince Year Requirement', 'wpjobboard');?> </label>
             <div class="wpjb_input_container">
-                <input placeholder="ex: 1-2 Years" type="text" value="<?php echo $experinceText; ?>"
+                <input placeholder="ex: 1-2 Years" type="text" value="<?php echo esc_html($experinceText); ?>"
                        name="wpjobboard_job_meta_values[job_experince_text]"/>
             </div>
         </div>
@@ -267,7 +267,7 @@ class PostType
                 <select name="wpjobboard_job_meta_values[job_type]">
                     <option value="">Select Job Type</option>
                     <?php foreach ($availableJobTypes as $type => $label): ?>
-                    <option <?php selected($jobType, $type); ?> value="<?php echo $type; ?>"><?php echo $label; ?></option>
+                    <option <?php selected($jobType, $type); ?> value="<?php echo esc_html($type); ?>"><?php echo esc_html($label); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>

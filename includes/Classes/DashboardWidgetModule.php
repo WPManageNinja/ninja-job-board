@@ -53,9 +53,9 @@ class DashboardWidgetModule
         <ul class="wpjb_dashboard_stats">
             <?php foreach ($stats as $stat): ?>
                 <li>
-                    <a title="Form: <?php echo $stat->post_title; ?>"
-                       href="<?php echo admin_url('admin.php?page=wpjobboard.php#/edit-form/' . $stat->form_id . '/entries/' . $stat->id . '/view'); ?>">
-                        #<?php echo $stat->id; ?> - <?php echo $stat->applicant_name; ?>
+                    <a title="Form: <?php echo esc_url($stat->post_title); ?>"
+                       href="<?php echo admin_url('admin.php?page=wpjobboard.php#/edit-form/' . intval($stat->form_id) . '/entries/' . $stat->id . '/view'); ?>">
+                        #<?php echo esc_html($stat->id); ?> - <?php echo esc_html($stat->applicant_name); ?>
                     </a>
                 </li>
             <?php endforeach; ?>
@@ -64,13 +64,13 @@ class DashboardWidgetModule
         <?php if (!defined('NINJA_TABLES_DIR_URL')): ?>
         <div class="wpjb_recommended_plugin">
             Recommended Plugin: <b>Ninja Tables</b> - Best Table Plugin for WP -
-            <a href="<?php echo $this->getInstallUrl('ninja-tables'); ?>">Install</a>
+            <a href="<?php echo esc_url_raw($this->getInstallUrl('ninja-tables')); ?>">Install</a>
             | <a target="_blank" rel="noopener" href="https://wordpress.org/plugins/ninja-tables/">Learn More</a>
         </div>
     <?php elseif (!defined('ENHANCED_BLOCKS_VERSION')) : ?>
         <div class="wpjb_recommended_plugin">
             Recommended Plugin: <b>Enhanced Blocks – Page Builder Blocks for Gutenberg</b> <br/>
-            <a href="<?php echo $this->getInstallUrl('enhanced-blocks'); ?>">Install</a>
+            <a href="<?php echo esc_url_raw($this->getInstallUrl('enhanced-blocks')); ?>">Install</a>
             | <a target="_blank" rel="noopener" href="https://wordpress.org/plugins/enhanced-blocks/">Learn More</a>
         </div>
     <?php endif; ?>

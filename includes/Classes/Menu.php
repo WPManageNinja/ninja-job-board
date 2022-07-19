@@ -81,6 +81,13 @@ class Menu
     {
         if (isset($_GET['page']) && $_GET['page'] == 'wpjobboard.php') {
 
+            if(is_dir(wp_upload_dir()['basedir'] . WPJOBBOARD_UPLOAD_DIR) && !file_exists(wp_upload_dir()['basedir'] . WPJOBBOARD_UPLOAD_DIR . '/index.php')) {
+                file_put_contents(
+                    wp_upload_dir()['basedir'] . WPJOBBOARD_UPLOAD_DIR . '/index.php',
+                    file_get_contents(WPJOBBOARD_DIR.'includes/Classes/File/Stubs/index.stub')
+                );
+            }
+
             if (function_exists('wp_enqueue_editor')) {
                 wp_enqueue_editor();
                 wp_enqueue_script('thickbox');
@@ -155,25 +162,25 @@ class Menu
                 </a>
             </li>
             <li role="menuitem" tabindex="1" class="el-menu-item">
-                <a href="<?php echo $urlBase; ?>form-builder">
+                <a href="<?php echo esc_url($urlBase); ?>form-builder">
                     <i class="dashicons dashicons-lightbulb"></i>
                     <span><?php _e('Application Form', 'wpjobboard');?></span>
                 </a>
             </li>
             <li role="menuitem" tabindex="2" class="el-menu-item" style="border-bottom-color: transparent;">
-                <a href="<?php echo $urlBase; ?>settings/confirmation_settings">
+                <a href="<?php echo esc_url($urlBase); ?>settings/confirmation_settings">
                     <i class="dashicons dashicons-admin-settings"></i>
                     <span><?php _e('Form Settings', 'wpjobboard');?></span>
                 </a>
             </li>
             <li role="menuitem" tabindex="3" class="el-menu-item" style="border-bottom-color: transparent;">
-                <a href="<?php echo $urlBase; ?>email_settings">
+                <a href="<?php echo esc_url($urlBase); ?>email_settings">
                     <i class="dashicons dashicons-email-alt"></i>
                     <span><?php _e('Email Notifications', 'wpjobboard');?></span>
                 </a>
             </li>
             <li role="menuitem" tabindex="4" class="el-menu-item" style="border-bottom-color: transparent;">
-                <a href="<?php echo $urlBase; ?>form_entries">
+                <a href="<?php echo esc_url($urlBase); ?>form_entries">
                     <i class="dashicons dashicons-text"></i>
                     <span><?php _e('Job Applications', 'wpjobboard');?></span>
                 </a>

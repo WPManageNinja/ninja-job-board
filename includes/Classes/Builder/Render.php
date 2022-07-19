@@ -33,7 +33,7 @@ class Render
 
         $form->asteriskPosition = $form->designSettings['asteriskPlacement'];
 
-        if(!$elements) {
+        if (!$elements) {
             return '';
         }
         $this->addAssets($form);
@@ -43,14 +43,14 @@ class Render
         ob_start();
         if ($elements):
             foreach ($elements as $element) {
-                if($element['type'] == 'step_component') {
+                if ($element['type'] == 'step_component') {
                     $step_counter += 1;
                     $element['step_counter'] = $step_counter;
                     $element['previous_step'] = $previousStep;
                     $steps[] = $element;
                 }
                 do_action('wpjobboard/render_component_' . $element['type'], $element, $form, $elements);
-                if($element['type'] == 'step_component') {
+                if ($element['type'] == 'step_component') {
                     $previousStep = $element;
                 }
             }
@@ -87,7 +87,7 @@ class Render
             'wpjb_submit_button_pos_' . $btnPosition
         );
 
-        if($steps) {
+        if ($steps) {
             $css_classes[] = 'wpjb_has_steps';
         }
         $css_classes = array_merge($css_classes, $extraCssClasses);
@@ -100,10 +100,10 @@ class Render
 
         $formAttributes = array(
             'data-wpjb_form_id' => $form->ID,
-            'class'            => implode(' ', $css_classes),
-            'method'           => 'POST',
-            'action'           => site_url(),
-            'id'               => "wpjb_form_id_" . $form->ID
+            'class'             => implode(' ', $css_classes),
+            'method'            => 'POST',
+            'action'            => site_url(),
+            'id'                => "wpjb_form_id_" . $form->ID
         );
         $formAttributes = apply_filters('wpjobboard/form_attributes', $formAttributes, $form);
 
@@ -114,17 +114,17 @@ class Render
         ?>
         <div class="<?php echo implode(' ', $formWrapperClasses); ?>">
         <?php if ($form->show_title == 'yes'): ?>
-        <h3 class="wp_form_title"><?php echo $form->post_title; ?></h3>
+        <h3 class="wp_form_title"><?php echo esc_html($form->post_title); ?></h3>
     <?php endif; ?>
         <?php do_action('wpjobboard/form_render_before', $form); ?>
-        <form <?php echo $this->builtAttributes($formAttributes); ?>>
-        <input type="hidden" name="__wpjb_form_id" value="<?php echo $form->ID; ?>"/>
-        <input type="hidden" name="__wpjb_current_url" value="<?php echo $currentUrl; ?>">
+        <form <?php echo wp_kses_post($this->builtAttributes($formAttributes)); ?>>
+        <input type="hidden" name="__wpjb_form_id" value="<?php echo intval($form->ID); ?>"/>
+        <input type="hidden" name="__wpjb_current_url" value="<?php echo esc_url($currentUrl); ?>">
         <input type="hidden" name="__wpjb_current_page_id" value="<?php echo get_the_ID(); ?>">
         <?php do_action('wpjobboard/form_render_start_form', $form); ?>
-        <?php if($steps): ?>
+        <?php if ($steps): ?>
         <?php do_action('wpjobboard/form_step_header', $steps, $form); ?>
-        <?php endif; ?>
+    <?php endif; ?>
 
         <?php
     }
@@ -152,10 +152,10 @@ class Render
         ?>
         <?php do_action('wpjobboard/form_render_before_submit_button', $form); ?>
         <div class="wpjb_form_group wpjb_form_submissions">
-            <button <?php echo $this->builtAttributes($buttonAttributes); ?>>
-                <span class="wpjb_txt_normal"><?php echo $this->parseText($button_text, $form->ID); ?></span>
+            <button <?php echo wp_kses_post($this->builtAttributes($buttonAttributes)); ?>>
+                <span class="wpjb_txt_normal"><?php wpJobBoardPrintInternal($this->parseText($button_text, $form->ID)); ?></span>
                 <span style="display: none;" class="wpjb_txt_loading">
-                    <?php echo $this->parseText($processingText, $form->ID); ?>
+                    <?php  wpJobBoardPrintInternal($this->parseText($processingText, $form->ID)); ?>
                 </span>
             </button>
             <div class="wpjb_loading_svg">
@@ -173,9 +173,9 @@ class Render
         </div>
         <?php do_action('wpjobboard/form_render_after_submit_button', $form); ?>
 
-        <?php if($steps): ?>
-            <?php do_action('wpjobboard/form_step_footer', $steps, $form); ?>
-        <?php endif; ?>
+        <?php if ($steps): ?>
+        <?php do_action('wpjobboard/form_step_footer', $steps, $form); ?>
+    <?php endif; ?>
 
         </form>
         <div style="display: none" class="wpjb_form_notices wpjb_form_errors"></div>
@@ -197,7 +197,7 @@ class Render
         wp_enqueue_style('wpjobboard_public', WPJOBBOARD_URL . 'assets/css/wp_job_board-public.css', array(), WPJOBBOARD_VERSION);
 
         wp_localize_script('wpjobboard_public', 'wp_job_board_' . $form->ID, apply_filters('wpjobboard/checkout_vars', array(
-            'form_id'              => $form->ID
+            'form_id' => $form->ID
         ), $form));
 
         wp_register_script('dropzone', WPJOBBOARD_URL . 'assets/libs/dropzone/dropzone.min.js', array('jquery'), '5.5.0', true);

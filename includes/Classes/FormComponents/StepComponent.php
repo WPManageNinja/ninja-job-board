@@ -77,8 +77,8 @@ class StepComponent extends BaseComponent
         $backBtnText = ArrayHelper::get($lastStep, 'field_options.back_button', 'Back');
         ?>
         <div class="wpjb_step_button_wrapper wpjb_last_step">
-            <button data-target_step_number="<?php echo $lastStep['step_counter'] - 1; ?>"
-                    class="wpjb_step_button wpjb_step_back"><?php echo $backBtnText; ?></button>
+            <button data-target_step_number="<?php echo intval($lastStep['step_counter']) - 1; ?>"
+                    class="wpjb_step_button wpjb_step_back"><?php echo wp_kses($backBtnText); ?></button>
         </div>
     <?php endif; ?>
         </div><!--Step end -->
@@ -104,16 +104,16 @@ class StepComponent extends BaseComponent
                 <?php
                 $backBtnText = ArrayHelper::get($element['previous_step'], 'field_options.back_button', 'Back');
                 ?>
-                <button data-target_step_number="<?php echo $element['step_counter'] - 2; ?>"
-                        class="wpjb_step_button wpjb_step_back"><?php echo $backBtnText; ?></button>
+                <button data-target_step_number="<?php echo (int) $element['step_counter'] - 2; ?>"
+                        class="wpjb_step_button wpjb_step_back"><?php echo wp_kses_post($backBtnText); ?></button>
             <?php endif; ?>
-            <button data-step_number="<?php echo $element['step_counter']; ?>"
-                    class="wpjb_step_button wpjb_step_next"><?php echo $nextBtnText; ?></button>
+            <button data-step_number="<?php echo (int) $element['step_counter']; ?>"
+                    class="wpjb_step_button wpjb_step_next"><?php echo wp_kses_post($nextBtnText); ?></button>
         </div>
         </div>
-    <div data-target_step_number="<?php echo $element['step_counter']; ?>" class="wpjb_step_start"
-         id="wpjb_step_<?php echo $element['step_counter']; ?>">
-        <h3 class="wpjb_step_title"><?php echo $stepTitle; ?></h3>
+    <div data-target_step_number="<?php echo (int) $element['step_counter']; ?>" class="wpjb_step_start"
+         id="wpjb_step_<?php echo esc_html($element['step_counter']); ?>">
+        <h3 class="wpjb_step_title"><?php echo esc_html($stepTitle); ?></h3>
         <?php
     }
 }

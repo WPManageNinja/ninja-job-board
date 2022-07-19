@@ -67,7 +67,7 @@ class HiddenInputComponent extends BaseComponent
             'id'    => $inputId
         );
         ?>
-        <input <?php echo $this->builtAttributes($attributes); ?> />
+        <input <?php wpJobBoardPrintInternal($this->builtAttributes($attributes)); ?> />
         <?php
     }
 }

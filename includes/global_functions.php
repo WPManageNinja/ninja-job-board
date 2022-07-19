@@ -7,3 +7,7 @@ function wpJobBoardDB()
     }
     return wpFluent();
 }
+
+function wpJobBoardPrintInternal( $string ) {
+    echo $string; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
