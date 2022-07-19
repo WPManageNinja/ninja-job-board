@@ -1,7 +1,7 @@
 <?php
 
 // Autoload Service Container.
-require 'libs/viocon/autoload.php';
+require_once(__DIR__.'/libs/viocon/autoload.php');
 
 spl_autoload_register(function ($class) {
 
