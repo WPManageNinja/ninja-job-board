@@ -167,8 +167,10 @@ class AdminAjaxHandler
     {
         $formId = absint($_REQUEST['form_id']);
         if (isset($_REQUEST['confirmation_settings'])) {
-            $confirmationSettings = wp_unslash($_REQUEST['confirmation_settings']);
-            update_post_meta($formId, 'jobboard_confirmation_settings', $confirmationSettings);
+
+            $formattedSettings = wpJobBoardSanitize(ArrayHelper::get($_REQUEST, 'confirmation_settings', []));
+
+            update_post_meta($formId, 'jobboard_confirmation_settings', $formattedSettings);
         }
 
         wp_send_json_success(array(
@@ -179,12 +181,13 @@ class AdminAjaxHandler
     protected function saveFormBuilderSettings()
     {
         $formId = absint($_REQUEST['form_id']);
-        $builderSettings = wp_unslash($_REQUEST['builder_settings']);
+        $builderSettings = wpJobBoardSanitize(wp_unslash($_REQUEST['builder_settings']));
+
         if (!$formId || !$builderSettings) {
             wp_send_json_error(array(
                 'message' => __('Validation Error, Please try again', 'wpjobboard'),
                 'errors'  => array(
-                    'general' => __('Please add atleast one input element', 'wpjobboard')
+                    'general' => __('Please add at least one input element', 'wpjobboard')
                 )
             ), 423);
         }
@@ -204,7 +207,7 @@ class AdminAjaxHandler
             ), 423);
         }
 
-        $submit_button_settings = wp_unslash($_REQUEST['submit_button_settings']);
+        $submit_button_settings = wpJobBoardSanitize(ArrayHelper::get($_REQUEST, 'submit_button_settings'));
         update_post_meta($formId, 'wpjobboard_application_builder_settings', $builderSettings);
         update_post_meta($formId, 'wpjobboard_submit_button_settings', $submit_button_settings);
 
@@ -249,7 +252,7 @@ class AdminAjaxHandler
     protected function updateDesignSettings()
     {
         $formId = intval($_REQUEST['form_id']);
-        $layoutSettings = wp_unslash($_REQUEST['layout_settings']);
+        $layoutSettings = wpJobBoardSanitize($_REQUEST['layout_settings']);
         update_post_meta($formId, 'wpjobboard_form_design_settings', $layoutSettings);
         wp_send_json_success(array(
             'message' => __('Settings successfully updated', 'wpjobboard')

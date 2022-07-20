@@ -40,6 +40,7 @@ class SchedulingSettings
     {
         $formId = intval($_REQUEST['form_id']);
         $settings = Forms::getSchedulingSettings($formId);
+
         wp_send_json_success(array(
             'scheduling_settings' => $settings,
             'current_date_time'   => gmdate('d M Y H:i:s')
@@ -49,7 +50,7 @@ class SchedulingSettings
     public function updateSettings()
     {
         $formId = intval($_REQUEST['form_id']);
-        $settings = wp_unslash($_REQUEST['settings']);
+        $settings = wpJobBoardSanitize(ArrayHelper::get($_REQUEST, 'settings', []));
 
         if (
             ArrayHelper::get($settings, 'limitNumberOfEntries.status') == 'no' &&
@@ -59,7 +60,7 @@ class SchedulingSettings
             $settings = false;
         }
 
-        if(ArrayHelper::get($settings, 'scheduleForm.status') == 'no') {
+        if (ArrayHelper::get($settings, 'scheduleForm.status') == 'no') {
             update_post_meta($formId, 'application_start_date', 0);
             update_post_meta($formId, 'application_end_date', 0);
         } else {
@@ -81,7 +82,7 @@ class SchedulingSettings
 
     public function validateForm($errors, $formId)
     {
-        if($errors) {
+        if ($errors) {
             return $errors;
         }
         if (!get_post_meta($formId, 'wpjb_form_scheduling_settings', true)) {
@@ -96,7 +97,7 @@ class SchedulingSettings
         } else if ($message = $this->checkLoginValidityError($formId, $sheduleSettings)) {
             $errorMessage = $message;
         }
-        if($errorMessage) {
+        if ($errorMessage) {
             $errors[] = $errorMessage;
         }
         return $errors;
@@ -123,9 +124,9 @@ class SchedulingSettings
             $this->addErrorMessage($form->ID, $message);
         }
 
-        if($extra_css_class) {
-            $wrapperCSSClasses[]  = $extra_css_class;
-            $wrapperCSSClasses[] = 'wpjb_restriction_action_'.$sheduleSettings['restriction_applied_type'];
+        if ($extra_css_class) {
+            $wrapperCSSClasses[] = $extra_css_class;
+            $wrapperCSSClasses[] = 'wpjb_restriction_action_' . $sheduleSettings['restriction_applied_type'];
         }
         return $wrapperCSSClasses;
     }
@@ -174,8 +175,8 @@ class SchedulingSettings
     private function checkLoginValidityError($formId, $sheduleSettings)
     {
         if (ArrayHelper::get($sheduleSettings, 'requireLogin.status') == 'yes') {
-            if(!is_user_logged_in()) {
-                return  !empty($sheduleSettings['message'])
+            if (!is_user_logged_in()) {
+                return !empty($sheduleSettings['message'])
                     ? $sheduleSettings['message']
                     : __('You must be logged in to submit the form.', 'ninja-job-board');
             }

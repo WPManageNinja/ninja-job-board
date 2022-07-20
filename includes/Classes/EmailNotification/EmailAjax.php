@@ -4,6 +4,7 @@ namespace WPJobBoard\Classes\EmailNotification;
 
 
 use WPJobBoard\Classes\AccessControl;
+use WPJobBoard\Classes\ArrayHelper;
 use WPJobBoard\Classes\FormPlaceholders;
 
 if (!defined('ABSPATH')) {
@@ -64,7 +65,8 @@ class EmailAjax
     public function saveNotifications()
     {
         $formId = intval($_REQUEST['form_id']);
-        $notifications = wp_unslash($_REQUEST['notifications']);
+        $notifications = wpJobBoardSanitize(wp_unslash(ArrayHelper::get($_REQUEST, 'notifications')));
+
         update_post_meta($formId, 'wpjb_email_notifications', $notifications);
 
         wp_send_json_success(array(

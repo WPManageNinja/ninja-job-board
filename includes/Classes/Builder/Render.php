@@ -111,13 +111,16 @@ class Render
             'wpjb_form_wrapper',
             'wpjb_form_wrapper_' . $form->ID
         ), $form);
+
+        $wrapperClassStr = implode(' ', $formWrapperClasses);
+
         ?>
-        <div class="<?php echo implode(' ', $formWrapperClasses); ?>">
+        <div class="<?php echo esc_html($wrapperClassStr); ?>">
         <?php if ($form->show_title == 'yes'): ?>
         <h3 class="wp_form_title"><?php echo esc_html($form->post_title); ?></h3>
     <?php endif; ?>
         <?php do_action('wpjobboard/form_render_before', $form); ?>
-        <form <?php echo wp_kses_post($this->builtAttributes($formAttributes)); ?>>
+        <form <?php wpJobBoardPrintInternal($this->builtAttributes($formAttributes)); ?>>
         <input type="hidden" name="__wpjb_form_id" value="<?php echo intval($form->ID); ?>"/>
         <input type="hidden" name="__wpjb_current_url" value="<?php echo esc_url($currentUrl); ?>">
         <input type="hidden" name="__wpjb_current_page_id" value="<?php echo get_the_ID(); ?>">

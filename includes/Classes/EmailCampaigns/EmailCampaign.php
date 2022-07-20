@@ -61,8 +61,9 @@ class EmailCampaign
     public function sendEmailCampaign()
     {
         $formId = intval($_REQUEST['form_id']);
-        $campaign = wp_unslash($_REQUEST['campaign']);
-        $settings = ArrayHelper::get($campaign, 'campaign_settings');
+        $campaign = wp_unslash(ArrayHelper::get($_REQUEST, 'campaign')); // Will be sanitized when saving
+
+        $settings = wpJobBoardSanitize(ArrayHelper::get($_REQUEST, 'campaign_settings'));
 
         $count = $this->getCount($formId, $settings);
 
@@ -83,9 +84,9 @@ class EmailCampaign
         $campaignData = [
             'form_id'            => $formId,
             'status'             => 'ready',
-            'title'              => ArrayHelper::get($campaign, 'title'),
-            'subject'            => ArrayHelper::get($campaign, 'subject'),
-            'body'               => ArrayHelper::get($campaign, 'body'),
+            'title'              => sanitize_text_field(ArrayHelper::get($campaign, 'title')),
+            'subject'            => sanitize_text_field(ArrayHelper::get($campaign, 'subject')),
+            'body'               => wp_kses_post(ArrayHelper::get($campaign, 'body')),
             'campaign_settings'  => maybe_serialize($settings),
             'email_type'         => 'html',
             'created_by_user_id' => get_current_user_id(),
@@ -250,7 +251,7 @@ class EmailCampaign
     public function getEmailCounts()
     {
         $formId = intval($_REQUEST['form_id']);
-        $settings = wp_unslash($_REQUEST['campaign_settings']);
+        $settings = wpJobBoardSanitize(ArrayHelper::get($_REQUEST, 'campaign_settings'));
 
         $count = $this->getCount($formId, $settings);
 

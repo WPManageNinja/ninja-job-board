@@ -61,11 +61,11 @@ class SubmissionView
         $wheres = array();
 
         if (isset($_REQUEST['application_status']) && $_REQUEST['application_status']) {
-            $wheres['application_status'] = sanitize_text_field($_REQUEST['application_status']);
+            $wheres['application_status'] = wpJobBoardSanitize($_REQUEST['application_status']);
         }
 
         if (isset($_REQUEST['status']) && $_REQUEST['status']) {
-            $wheres['status'] = sanitize_text_field($_REQUEST['status']);
+            $wheres['status'] = wpJobBoardSanitize($_REQUEST['status']);
         }
 
         $submissionModel = new Submission();
@@ -162,7 +162,7 @@ class SubmissionView
     {
         $formId = intval($_REQUEST['form_id']);
         $submissionId = intval($_REQUEST['submission_id']);
-        $content = esc_html($_REQUEST['note']);
+        $content = sanitize_textarea_field($_REQUEST['note']);
         $userId = get_current_user_id();
         $user = get_user_by('ID', $userId);
 
