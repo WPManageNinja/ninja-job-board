@@ -189,7 +189,7 @@ class SchedulingSettings
     {
         if ($message) {
             add_action('wpjobboard/form_render_after_' . $formId, function ($form) use ($message) {
-                echo '<div class="wpjb_form_notices wpjb_form_restrictuon_errors wpjb_form_errors">' . $message . '</div>';
+                echo '<div class="wpjb_form_notices wpjb_form_restrictuon_errors wpjb_form_errors">' . wp_kses_post($message) . '</div>';
             });
         }
     }
