@@ -368,8 +368,8 @@ class Browser
 
     /**
      * Used to determine if the browser is actually "chromeframe"
-     * @since 1.7
      * @return boolean True if the browser is using chromeframe
+     * @since 1.7
      */
     public function isChromeFrame()
     {
@@ -1728,22 +1728,19 @@ class Browser
 
     public function getIp()
     {
-        $ipaddress = '';
         if (isset($_SERVER['HTTP_CLIENT_IP']))
-            $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
-        else if(isset($_SERVER['HTTP_X_FORWARDED_FOR']))
-            $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        else if(isset($_SERVER['HTTP_X_FORWARDED']))
-            $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
-        else if(isset($_SERVER['HTTP_FORWARDED_FOR']))
-            $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
-        else if(isset($_SERVER['HTTP_FORWARDED']))
-            $ipaddress = $_SERVER['HTTP_FORWARDED'];
-        else if(isset($_SERVER['REMOTE_ADDR']))
-            $ipaddress = $_SERVER['REMOTE_ADDR'];
+            return sanitize_text_field($_SERVER['HTTP_CLIENT_IP']);
+        else if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+            return sanitize_text_field($_SERVER['HTTP_X_FORWARDED_FOR']);
+        else if (isset($_SERVER['HTTP_X_FORWARDED']))
+            return sanitize_text_field($_SERVER['HTTP_X_FORWARDED']);
+        else if (isset($_SERVER['HTTP_FORWARDED_FOR']))
+            return sanitize_text_field($_SERVER['HTTP_FORWARDED_FOR']);
+        else if (isset($_SERVER['HTTP_FORWARDED']))
+            return sanitize_text_field($_SERVER['HTTP_FORWARDED']);
+        else if (isset($_SERVER['REMOTE_ADDR']))
+            return sanitize_text_field($_SERVER['REMOTE_ADDR']);
         else
-            $ipaddress = 'UNKNOWN';
-
-        return sanitize_text_field($ipaddress);
+            return 'UNKNOWN';
     }
 }

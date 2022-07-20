@@ -9,7 +9,13 @@ function wpJobBoardDB()
 }
 
 function wpJobBoardPrintInternal( $string ) {
-    echo $string; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    /*
+     * It was supposed to just echo the string
+     * But WP Plugin review team asked to use the kses which is not ideal
+     * Many plugins can print hard coded strings but we can
+     * Not sure we why we can use the flag: phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+     */
+    echo wp_kses_post($string);
 }
 
 
