@@ -143,7 +143,7 @@ class EmailHandler
         }
 
         $css = View::make('email.default.styles');
-        $css = apply_filters('wpjobboard/email_styles', $css, submission, $notification);
+        $css = apply_filters('wpjobboard/email_styles', $css, $submission, $notification);
         $emailBody = $emailHeader . $emailBody . $emailFooter;
 
         try {

@@ -63,7 +63,7 @@ class EmailCampaign
         $formId = intval($_REQUEST['form_id']);
         $campaign = wp_unslash(ArrayHelper::get($_REQUEST, 'campaign')); // Will be sanitized when saving
 
-        $settings = wpJobBoardSanitize(ArrayHelper::get($_REQUEST, 'campaign_settings'));
+        $settings = wpJobBoardSanitize(ArrayHelper::get($campaign, 'campaign_settings'));
 
         $count = $this->getCount($formId, $settings);
 
