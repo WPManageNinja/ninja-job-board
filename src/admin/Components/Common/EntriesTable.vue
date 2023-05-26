@@ -172,6 +172,7 @@
                     .then(response => {
                         this.allEntry = response.data.submissions;
                         this.pagination.total = response.data.total;
+                        this.$emit('getEntries', response.data);
                     })
                     .always(() => {
                         this.fetching = false;

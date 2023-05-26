@@ -116,12 +116,16 @@ class Submission
         return wpJobBoardDB()->table('wjb_applications')->where('id', $submissionId)->update($data);
     }
 
-    public function getParsedSubmission($submission)
+    public function getParsedSubmission($submission, $elements = [])
     {
-        $elements = get_post_meta($submission->form_id, 'wpjobboard_application_builder_settings', true);
+        if (!$elements) {
+            $elements = get_post_meta($submission->form_id, 'wpjobboard_application_builder_settings', true);
+        }
+
         if (!$elements) {
             return array();
         }
+        
         $parsedSubmission = array();
 
         $inputValues = $submission->form_data_formatted;
@@ -150,7 +154,7 @@ class Submission
         return apply_filters('wpjobboard/parsed_entry', $parsedSubmission, $submission);
     }
 
-    private function getLabel($element)
+    public function getLabel($element)
     {
         $elementId = ArrayHelper::get($element, 'id');
         if (!$label = ArrayHelper::get($element, 'field_options.admin_label')) {

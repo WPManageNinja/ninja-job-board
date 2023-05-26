@@ -74,6 +74,10 @@ class WPJobBoard
         $submissionHandler = new \WPJobBoard\Classes\SubmissionView();
         $submissionHandler->registerEndpoints();
 
+        // Exporter Ajax Handler
+        $exoprtHandler = new \WPJobBoard\Classes\Exporter();
+        $exoprtHandler->registerEndpoints();
+
         // General Settings Handler
         $globalSettingHandler = new \WPJobBoard\Classes\GlobalSettingsHandler();
         $globalSettingHandler->registerHooks();

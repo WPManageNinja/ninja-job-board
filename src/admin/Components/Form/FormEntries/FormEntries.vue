@@ -38,16 +38,16 @@
                         <el-button @click="performSearch" size="mini" slot="append" icon="el-icon-search"></el-button>
                     </el-input>
                 </div>
-                <div v-if="false" class="wpf_entry_action">
+                <div v-if="totalEntries" class="wpf_entry_action">
                     <el-dropdown @command="exportCSV">
                         <el-button type="info" size="mini">
                             Export <i class="el-icon-arrow-down el-icon--right"></i>
                         </el-button>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item command="csv">Export as CSV</el-dropdown-item>
-                            <el-dropdown-item command="xlsx">Export as Excel (xlsv)</el-dropdown-item>
+                            <el-dropdown-item command="csv">As CSV</el-dropdown-item>
+                            <!-- <el-dropdown-item command="xlsx">Export as Excel (xlsv)</el-dropdown-item>
                             <el-dropdown-item command="ods">Export as ODS</el-dropdown-item>
-                            <el-dropdown-item command="json">Export as JSON Data</el-dropdown-item>
+                            <el-dropdown-item command="json">Export as JSON Data</el-dropdown-item> -->
                         </el-dropdown-menu>
                     </el-dropdown>
                 </div>
@@ -60,6 +60,7 @@
             :search_string="search_string"
             :application_status="selected_application_status"
             :status="selected_internal_status"
+            @getEntries="handleEntriesRefreshed"
         />
         </div>
 
@@ -100,7 +101,8 @@
                 entry_ticker: 1,
                 reports: {},
                 currencySettings: {},
-                is_payment_form: false
+                is_payment_form: false,
+                totalEntries: 0
             }
         },
         methods: {
@@ -114,17 +116,18 @@
                 this.$router.push({query: { internal_status: this.selected_internal_status }});
             },
             exportCSV(doc_type) {
-                if (!this.has_pro) {
-                    this.show_pro = true;
-                    return;
-                }
+                // if (!this.has_pro) {
+                //     this.show_pro = true;
+                //     return;
+                // }
                 let query = jQuery.param({
-                    action: 'wpf_export_endpoints',
+                    action: 'wpjb_export_endpoints',
                     route: 'export_data',
-                    doc_type: doc_type,
+                    type: doc_type,
                     search_string: this.search_string,
                     form_id: parseInt(this.form_id),
-                    application_status: this.selected_application_status
+                    application_status: this.selected_application_status,
+                    status: this.selected_internal_status,
                 });
 
                 window.location.href = window.wpJobBoardsAdmin.ajaxurl + '?' + query;
@@ -148,6 +151,10 @@
             },
             formatMoney(price) {
                 return fromatPrice(price, this.currencySettings);
+            },
+
+            handleEntriesRefreshed(response) {
+                this.totalEntries = response.total;
             }
         },
         mounted() {
