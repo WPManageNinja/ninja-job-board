@@ -1,9 +1,9 @@
 === Ninja Job Board - Ultimate WordPress Job Board Plugin ===
 Contributors: techjewel, wpmanageninja
 Tags: career job, job board, listing job, job manager, portal, wp job board
-Requires at least: 4.5
-Tested up to: 6.0
-Stable tag: 1.3.3
+Requires at least: 6.0
+Tested up to: 6.4
+Stable tag: 1.4.0
 Requires PHP: 5.6
 License: GPLv2 or later
 
@@ -153,6 +153,9 @@ From email setting, you can set it up who will get notified about the submission
 8. Current Active Jobs Shortcode [wp_job_list]
 
 == Changelog ==
+
+= 1.4.0 - December 12, 2023 =
+- Database Query Issue Fixed
 
 = 1.3.3 - July 20, 2022 =
 - Security Fix for File Index for NGINX indexed enabled servers

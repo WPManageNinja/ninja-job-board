@@ -1,9 +1,2 @@
-vendor
 node_modules
-assets
 svn
-svn.php
-pro_build.php
-*.zip
-wp-job-board
-.DS_Store

@@ -13,20 +13,19 @@ Domain Path: /resources/languages
 */
 
 // Autoload plugin.
-require_once(__DIR__.'/autoload.php');
+require __DIR__.'/autoload.php';
 
-if (! function_exists('wpFluent')) {
+if (! function_exists('wpFluentDB')) {
     /**
      * @return \WpFluent\QueryBuilder\QueryBuilderHandler
      */
-    function wpFluent()
-    {
+    function wpFluentDB() {
         static $wpFluent;
 
         if (! $wpFluent) {
             global $wpdb;
 
-            $connection = new \WpFluent\Connection($wpdb, ['prefix' => $wpdb->prefix]);
+            $connection = new WpFluent\Connection($wpdb, ['prefix' => $wpdb->prefix]);
 
             $wpFluent = new \WpFluent\QueryBuilder\QueryBuilderHandler($connection);
         }

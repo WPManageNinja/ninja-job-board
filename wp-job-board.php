@@ -5,7 +5,7 @@
  * Description: Create Job Posting and Manage Jon Application In WordPress
  * Author: WPManageNinja LLC
  * Author URI:  https://wpmanageninja.com
- * Version: 1.3.3
+ * Version: 1.4.0
  * Text Domain: ninja-job-board
  *
  */

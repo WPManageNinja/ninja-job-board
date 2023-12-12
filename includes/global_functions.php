@@ -2,10 +2,10 @@
 
 function wpJobBoardDB()
 {
-    if (!function_exists('wpFluent')) {
+    if (!function_exists('wpFluentDb')) {
         include WPJOBBOARD_DIR . 'includes/libs/wp-fluent/wp-fluent.php';
     }
-    return wpFluent();
+    return wpFluentDb();
 }
 
 function wpJobBoardPrintInternal( $string ) {
