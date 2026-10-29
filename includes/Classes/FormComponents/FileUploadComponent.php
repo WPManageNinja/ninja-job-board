@@ -3,6 +3,7 @@
 namespace WPJobBoard\Classes\FormComponents;
 
 use WPJobBoard\Classes\ArrayHelper;
+use WPJobBoard\Classes\File\FileAccess;
 use WPJobBoard\Classes\File\FileHandler;
 use WPJobBoard\Classes\Models\Forms;
 
@@ -22,6 +23,7 @@ class FileUploadComponent extends BaseComponent
         add_filter('wpjobboard/submitted_value_' . $this->componentName, array($this, 'formatUploadedValue'), 10, 3);
         add_filter('wpjobboard/validate_data_on_submission_' . $this->componentName, array($this, 'validateUploadedValue'), 10, 4);
         add_filter('wpjobboard/rendering_entry_value_' . $this->componentName, array($this, 'convertValueToHtml'), 10, 3);
+        add_filter('wpjobboard/exporting_entry_value_' . $this->componentName, array($this, 'exportValue'), 10, 3);
         add_action('wpjobboard/require_entry_html', array($this, 'registerConvertHtml'));
         add_filter('wpjobboard/require_entry_html_done', array($this, 'deRegisterConvertHtml'));
     }
@@ -233,23 +235,23 @@ class FileUploadComponent extends BaseComponent
             return '';
         }
 
-        $uploadUrl = FileHandler::getUploadDir()['url'];
+        $submissionId = (is_object($submission) && !empty($submission->id)) ? absint($submission->id) : 0;
 
         $html = '<div class="wpjb_file_list">';
-        foreach ($values as $file) {
-            if (!is_string($file) || !FileHandler::isPluginFileUrl($file, $uploadUrl)) {
-                continue;
-            }
-
-            $baseName = wp_basename(wp_parse_url($file, PHP_URL_PATH));
+        foreach (FileAccess::fileNames($values) as $baseName) {
             // Show the original name: drop the random "wpf-<hash>-wpf-" prefix
             $displayName = preg_replace('/^wpf-[a-f0-9]{32}-wpf-/', '', $baseName);
             $ext = strtolower(pathinfo($baseName, PATHINFO_EXTENSION));
-            $previewUrl = $this->getPreviewUrl($file);
 
-            $html .= '<a class="wpjb_file" href="' . esc_url($file) . '" target="_blank" rel="noopener" title="' . esc_attr__('Open file in a new tab', 'ninja-job-board') . '">';
-            if ($previewUrl) {
-                $html .= '<img class="wpjb_file_thumb" src="' . esc_url($previewUrl) . '" alt="" width="32" height="32" />';
+            // Without an application there is no permission to check, so show the name only
+            if (!$submissionId) {
+                $html .= '<span class="wpjb_file"><span class="wpjb_file_name">' . esc_html($displayName) . '</span></span>';
+                continue;
+            }
+
+            $html .= '<a class="wpjb_file" href="' . esc_url(FileAccess::downloadUrl($submissionId, $baseName, true)) . '" target="_blank" rel="noopener" title="' . esc_attr__('Open file in a new tab', 'ninja-job-board') . '">';
+            if ($this->isImage($baseName)) {
+                $html .= '<img class="wpjb_file_thumb" src="' . esc_url(FileAccess::downloadUrl($submissionId, $baseName, true)) . '" alt="" width="32" height="32" />';
             } else {
                 $html .= '<span class="wpjb_file_ext">' . esc_html($ext ? strtoupper(substr($ext, 0, 4)) : __('File', 'ninja-job-board')) . '</span>';
             }
@@ -421,14 +423,21 @@ class FileUploadComponent extends BaseComponent
      *
      * @return string The image URL, or an empty string for non-image files
      */
-    private function getPreviewUrl($file)
+    /**
+     * CSV export: one protected download link per file
+     */
+    public function exportValue($values, $submission, $element)
     {
-        $ext = strtolower(pathinfo(wp_parse_url($file, PHP_URL_PATH), PATHINFO_EXTENSION));
-        $imageExtensions = array('jpg', 'jpeg', 'gif', 'png', 'bmp');
-        if (in_array($ext, $imageExtensions, true)) {
-            return $file;
+        $links = array();
+        foreach (FileAccess::fileNames($values) as $baseName) {
+            $links[] = FileAccess::downloadUrl($submission->id, $baseName);
         }
+        return implode(' ', $links);
+    }
 
-        return '';
+    private function isImage($fileName)
+    {
+        $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        return in_array($ext, array('jpg', 'jpeg', 'gif', 'png', 'bmp'), true);
     }
 }

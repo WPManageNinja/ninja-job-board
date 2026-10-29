@@ -118,8 +118,9 @@ class FileHandler
     /**
      * Create the upload directory with the index.php and .htaccess guards
      * @param string $path
+     * @param bool   $refresh Rewrite the guards even when they exist (after a guard update)
      */
-    public static function ensureProtectedDir($path)
+    public static function ensureProtectedDir($path, $refresh = false)
     {
         if (!is_dir($path)) {
             wp_mkdir_p($path);
@@ -131,7 +132,7 @@ class FileHandler
         ];
 
         foreach ($stubs as $fileName => $stub) {
-            if (!file_exists($path . '/' . $fileName)) {
+            if ($refresh || !file_exists($path . '/' . $fileName)) {
                 copy($stub, $path . '/' . $fileName);
             }
         }

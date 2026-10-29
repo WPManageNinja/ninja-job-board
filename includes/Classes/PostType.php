@@ -211,6 +211,15 @@ class PostType
             return;
         }
 
+        // Remove the uploaded files of each application first (see Privacy::deleteApplicationFiles)
+        $applicationIds = wpJobBoardDB()->table('wjb_applications')
+            ->select(array('id'))
+            ->where('form_id', $postId)
+            ->get();
+        foreach ($applicationIds as $application) {
+            do_action('wpjobboard/before_delete_submission', $application->id, $postId);
+        }
+
         wpJobBoardDB()->table('wjb_applications')
             ->where('form_id', $postId)
             ->delete();

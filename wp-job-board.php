@@ -143,6 +143,15 @@ class WPJobBoard
         // Admin REST API (rest_api_init runs outside of is_admin())
         (new \WPJobBoard\Http\Router())->register();
 
+        // Application files are served only after a permission check
+        (new \WPJobBoard\Classes\File\FileAccess())->register();
+
+        // Personal data export/erase and the privacy policy text
+        (new \WPJobBoard\Classes\Privacy())->register();
+
+        // Honeypot and optional Cloudflare Turnstile on the public form
+        (new \WPJobBoard\Classes\SpamProtection())->register();
+
         // Form Submission Handler
         $submissionHandler = new \WPJobBoard\Classes\SubmissionHandler();
         add_action('wp_ajax_wpjb_submit_form', array($submissionHandler, 'handeSubmission'));

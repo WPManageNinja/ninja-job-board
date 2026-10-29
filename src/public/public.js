@@ -104,7 +104,10 @@
                     form.find('button.wpjb_submit_button').removeAttr('disabled');
                 })
                 .always(() => {
-
+                    // A Turnstile token works once; get a fresh one for the next attempt
+                    if (window.turnstile && form.find('.cf-turnstile').length) {
+                        window.turnstile.reset(form.find('.cf-turnstile')[0]);
+                    }
                 });
         },
         initDatePiker() {

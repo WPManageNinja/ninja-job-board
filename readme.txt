@@ -143,6 +143,34 @@ Use the shortcode <b>[wp_job_list]</b> to show the open job listings.
 = How to notify the applicants that their application is submitted successfully? =
 From email setting, you can set it up who will get notified about the submissions. You can include the HR manager and other persons as well.
 
+= Who can open uploaded CVs and other application files? =
+
+Only logged-in users who are allowed to view the application. Every file link points to `wp-admin/admin-post.php?action=wpjb_download_file`, which checks the permission before it sends the file. On Apache, the upload folder `wp-content/uploads/wpjobboard/` also blocks direct access with an `.htaccess` file.
+
+On Nginx, `.htaccess` files are ignored. Add this rule to your server block so nobody can open the folder directly:
+
+`location ^~ /wp-content/uploads/wpjobboard/ { deny all; return 403; }`
+
+= How do I stop spam applications? =
+
+A hidden honeypot field is always on. For stronger protection, turn on Cloudflare Turnstile in Settings > General and add your Turnstile site key and secret key.
+
+= Can applicants ask for their data to be exported or erased? =
+
+Yes. Ninja Job Board adds job applications to the WordPress privacy tools (Tools > Export Personal Data and Tools > Erase Personal Data). Erasing deletes the applications of that email address, their activity log and their uploaded files.
+
+= What happens to my data when I delete the plugin? =
+
+Nothing, by default. To remove all jobs, applications, uploaded files and settings when you delete the plugin, turn on "Delete all data when the plugin is deleted" in Settings > General first.
+
+== External services ==
+
+This plugin can connect to Cloudflare Turnstile, a security check that blocks spam on the public application form. It is off by default and only works after you turn it on and add your keys in Settings > General.
+
+When it is on, the application form loads the Turnstile script from `challenges.cloudflare.com`, and the visitor's browser sends Cloudflare the data it needs to tell people from bots. When an application is submitted, your site sends the Turnstile token, your secret key and the visitor's IP address to `https://challenges.cloudflare.com/turnstile/v0/siteverify` to check the token.
+
+Cloudflare Turnstile: [Terms of Use](https://www.cloudflare.com/website-terms/), [Privacy Policy](https://www.cloudflare.com/privacypolicy/).
+
 == Screenshots ==
 1. All Job Posts
 2. Form Builder for your job post
@@ -171,6 +199,11 @@ From email setting, you can set it up who will get notified about the submission
 - Fix: Turning off IP address logging now really stops storing the IP address
 - Fix: Status labels "Initial rejected" and "Shortlisted" (typo and casing)
 - Removed: The "Recommended Plugins" box on the application screen
+- Security: Uploaded application files (CVs) are served only to users who can view the application; direct access to the upload folder is blocked on Apache
+- New: Personal data export and erase for applicants (WordPress privacy tools) and suggested privacy policy text
+- New: Spam protection: a honeypot field on every form and optional Cloudflare Turnstile
+- New: Option to delete all plugin data when the plugin is deleted
+- Fix: Deleting an application or a job now also deletes its uploaded files
 - Fix: Users with only the "add form" permission can no longer edit forms of other users
 - Fix: PHP 8.2+ deprecation notices in the bundled query builder
 - Developers: `window.WPJobBoard` keeps the hooks API (applyFilters, addFilter, addAction, doAction) and now also exposes `app` and `router`

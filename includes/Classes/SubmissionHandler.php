@@ -42,6 +42,16 @@ class SubmissionHandler
             ), 423);
         }
 
+        // Honeypot and the optional Turnstile check (see SpamProtection)
+        $spamError = apply_filters('wpjobboard/spam_check', '', $form_data, $form);
+        if ($spamError) {
+            wp_send_json_error(array(
+                'message' => $spamError,
+                'errors'  => array('spam' => $spamError)
+            ), 423);
+        }
+        unset($form_data[SpamProtection::HONEYPOT_FIELD], $form_data['cf-turnstile-response']);
+
         do_action('wpjobboard/form_submission_activity_start', $formId);
 
         $formattedElements = Forms::getFormattedElements($formId);
