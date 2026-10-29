@@ -6,3 +6,11 @@
 .distignore
 node_modules
 svn
+# Development tooling (tests run against a local test site, see tests/README.md)
+vendor
+tests
+composer.json
+composer.lock
+phpunit.integration.xml
+build/.lock
+.gstack

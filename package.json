@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "node build/build.mjs",
-    "dev": "node build/build.mjs --watch"
+    "dev": "node build/build.mjs --watch",
+    "test:php": "composer test:integration"
   },
   "license": "GPL-2.0-or-later",
   "devDependencies": {

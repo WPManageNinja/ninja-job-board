@@ -16,6 +16,7 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
 /**
  * Remove all plugin data from the current site
  */
+if (!function_exists('wpjobboard_uninstall_site')) :
 function wpjobboard_uninstall_site()
 {
     global $wpdb;
@@ -73,10 +74,12 @@ function wpjobboard_uninstall_site()
 
     wp_cache_flush();
 }
+endif;
 
 /**
  * Run the cleanup on every site of a network, or on the single site
  */
+if (!function_exists('wpjobboard_uninstall')) :
 function wpjobboard_uninstall()
 {
     if (!is_multisite()) {
@@ -89,5 +92,6 @@ function wpjobboard_uninstall()
         restore_current_blog();
     }
 }
+endif;
 
 wpjobboard_uninstall();

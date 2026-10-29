@@ -1,3 +1,5 @@
 node_modules
 svn
 build/.lock
+vendor
+tests/php/.phpunit.cache

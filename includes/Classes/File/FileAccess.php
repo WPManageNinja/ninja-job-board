@@ -92,27 +92,11 @@ class FileAccess
         $inline = !empty($_GET['inline']);
         // phpcs:enable
 
-        if (!$submissionId || !$fileName || !FileHandler::isPluginFileName($fileName)) {
-            $this->deny(400);
+        $resolved = self::resolveFile($submissionId, $fileName);
+        if ($resolved['status'] !== 200) {
+            $this->deny($resolved['status']);
         }
-
-        if (!AccessControl::canAccess('get_submission', 'submissions', 0, $submissionId)) {
-            $this->deny(403);
-        }
-
-        $submission = (new Submission())->getSubmission($submissionId);
-        if (!$submission || !$this->submissionHasFile($submission, $fileName)) {
-            $this->deny(404);
-        }
-
-        $dir = FileHandler::getUploadDir()['path'];
-        $path = $dir . '/' . $fileName;
-        $realDir = realpath($dir);
-        $realPath = realpath($path);
-
-        if (!$realDir || !$realPath || strpos($realPath, $realDir . DIRECTORY_SEPARATOR) !== 0 || !is_file($realPath)) {
-            $this->deny(404);
-        }
+        $realPath = $resolved['path'];
 
         $type = wp_check_filetype($fileName);
         $mime = $type['type'] ? $type['type'] : 'application/octet-stream';
@@ -142,6 +126,43 @@ class FileAccess
     }
 
     /**
+     * The access decision for one file request, separate from the streaming so it can be tested.
+     *
+     * @param int    $submissionId
+     * @param string $fileName Sanitized base name
+     * @return array{status: int, path: string} 200 with the real path, or 400/403/404 with an empty path
+     */
+    public static function resolveFile($submissionId, $fileName)
+    {
+        $deny = function ($status) {
+            return array('status' => $status, 'path' => '');
+        };
+
+        if (!$submissionId || !$fileName || !FileHandler::isPluginFileName($fileName)) {
+            return $deny(400);
+        }
+
+        if (!AccessControl::canAccess('get_submission', 'submissions', 0, $submissionId)) {
+            return $deny(403);
+        }
+
+        $submission = (new Submission())->getSubmission($submissionId);
+        if (!$submission || !self::submissionHasFile($submission, $fileName)) {
+            return $deny(404);
+        }
+
+        $dir = FileHandler::getUploadDir()['path'];
+        $realDir = realpath($dir);
+        $realPath = realpath($dir . '/' . $fileName);
+
+        if (!$realDir || !$realPath || strpos($realPath, $realDir . DIRECTORY_SEPARATOR) !== 0 || !is_file($realPath)) {
+            return $deny(404);
+        }
+
+        return array('status' => 200, 'path' => $realPath);
+    }
+
+    /**
      * Write the .htaccess and index.php guards once per protection version (covers sites upgraded from 1.x)
      */
     public function maybeProtectUploadDir()
@@ -156,7 +177,7 @@ class FileAccess
         update_option('wpjobboard_upload_protection', self::PROTECTION_VERSION, false);
     }
 
-    private function submissionHasFile($submission, $fileName)
+    private static function submissionHasFile($submission, $fileName)
     {
         $values = is_array($submission->form_data_formatted) ? $submission->form_data_formatted : array();
         foreach ($values as $value) {
