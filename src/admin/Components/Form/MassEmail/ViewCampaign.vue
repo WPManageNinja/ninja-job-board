@@ -50,78 +50,87 @@
     </el-container>
 </template>
 
-<script type="text/babel">
+<script>
     export default {
         name: 'NinjaMassEmailView',
-        props: ['form_id'],
         data() {
             return {
+                form_id: this.$route.params.form_id,
                 loading: false,
                 campaign: {},
                 campaign_id: this.$route.params.campaign_id,
                 total: 0,
                 stats: {},
                 emails: [],
-                sending_email: false
+                sending_email: false,
+                isUnmounted: false
             }
         },
         methods: {
             getCampaign() {
                 this.loading = true;
-                this.$get({
-                    action: 'wpjobboard_email_campaigns',
-                    route: 'get_campaign',
-                    form_id: this.form_id,
-                    campaign_id: this.campaign_id
-                })
+                this.$api.get('/campaigns/' + this.campaign_id)
                     .then(response => {
-                        let campaign = response.data.campaign;
+                        if (this.isUnmounted) {
+                            return;
+                        }
+                        let campaign = response.campaign;
                         this.campaign = campaign;
-                        this.stats = response.data.stats;
+                        this.stats = response.stats;
                         if(campaign.status != 'completed') {
                             this.maybeSendEmailKnock();
                         } else {
                             this.loadEmails();
                         }
                     })
-                    .always(() => {
+                    .catch(error => {
+                        this.$showAjaxError(error);
+                    })
+                    .finally(() => {
                         this.loading = false;
                     });
             },
             maybeSendEmailKnock() {
+                if (this.isUnmounted) {
+                    return;
+                }
                 this.sending_email = true;
-                this.$post({
-                    action: 'wpjobboard_email_campaigns',
-                    route: 'send_emails',
-                    form_id: this.form_id,
-                    campaign_id: this.campaign_id
-                })
+                this.$api.post('/campaigns/' + this.campaign_id + '/send')
                     .then(response => {
-                        this.stats = response.data.stats;
-                        if(response.data.stats.remaining) {
+                        if (this.isUnmounted) {
+                            return;
+                        }
+                        this.stats = response.stats;
+                        if(response.stats.remaining) {
                             this.maybeSendEmailKnock();
                         } else {
-                           this.getCampaign();
+                            this.sending_email = false;
+                            this.getCampaign();
                         }
                     })
-                    .always(() => {
-
+                    .catch(error => {
+                        // Stop the loop on error
+                        this.sending_email = false;
+                        if (!this.isUnmounted) {
+                            this.$showAjaxError(error);
+                        }
                     });
             },
             loadEmails() {
-                this.$get({
-                    action: 'wpjobboard_email_campaigns',
-                    route: 'get_campaign_emails',
-                    form_id: this.form_id,
-                    campaign_id: this.campaign_id
-                })
+                this.$api.get('/campaigns/' + this.campaign_id + '/emails')
                     .then(response => {
-                        this.emails = response.data.emails;
+                        this.emails = response.emails;
+                    })
+                    .catch(error => {
+                        this.$showAjaxError(error);
                     });
             }
         },
         mounted() {
             this.getCampaign();
+        },
+        beforeUnmount() {
+            this.isUnmounted = true;
         }
     }
 </script>

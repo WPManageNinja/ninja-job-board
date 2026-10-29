@@ -5,7 +5,7 @@
             <el-table-column
                 width="120"
                 label="Status">
-                <template slot-scope="scope">
+                <template #default="scope">
                     <el-switch
                         v-model="scope.row.status"
                         @change="emitClick('saveNotification', scope.$index)"
@@ -28,16 +28,16 @@
             <el-table-column
                 width="180"
                 label="Sending Action">
-                <template slot-scope="scope">
+                <template #default="scope">
                     {{ humanActionName(scope.row.sending_action) }}
                 </template>
             </el-table-column>
             <el-table-column
                 width="160"
                 label="">
-                <template slot-scope="scope">
-                    <el-button @click="emitClick('editNotification', scope.$index)" type="success" size="mini" icon="el-icon-edit"></el-button>
-                    <el-button @click="emitClick('deleteNotification', scope.$index)" type="danger" size="mini" icon="el-icon-delete"></el-button>
+                <template #default="scope">
+                    <el-button @click="emitClick('editNotification', scope.$index)" type="success" size="small" :icon="Edit"></el-button>
+                    <el-button @click="emitClick('deleteNotification', scope.$index)" type="danger" size="small" :icon="Delete"></el-button>
                 </template>
             </el-table-column>
 
@@ -47,10 +47,16 @@
         <h3 class="text-center">No email notifications configured yet.</h3>
     </div>
 </template>
-<script type="text/babel">
+<script>
+    import { Edit, Delete } from '@element-plus/icons-vue';
+
     export default {
         name: 'notifications_table',
         props: ['notifications'],
+        emits: ['editNotification', 'deleteNotification', 'saveNotification'],
+        setup() {
+            return { Edit, Delete };
+        },
         methods: {
             emitClick(eventName, dataIndex) {
                 this.$emit(eventName, dataIndex);

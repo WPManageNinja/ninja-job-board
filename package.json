@@ -1,42 +1,29 @@
 {
-  "name": "wp-job-board",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "ninja-job-board",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Ninja Job Board WordPress plugin",
+  "type": "module",
   "scripts": {
-    "dev": "npm run development",
-    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "hot": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "prod": "npm run production",
-    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+    "build": "node build/build.mjs",
+    "dev": "node build/build.mjs --watch"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "license": "GPL-2.0-or-later",
   "devDependencies": {
-    "cross-env": "^5.2.0",
-    "laravel-mix": "^4.0.14",
-    "resolve-url-loader": "2.3.1",
-    "sass": "^1.16.1",
-    "sass-loader": "7.*",
-    "vue-template-compiler": "^2.5.22"
+    "@vitejs/plugin-vue": "^5.2.0",
+    "sass": "^1.80.0",
+    "unplugin-auto-import": "^0.18.0",
+    "unplugin-vue-components": "^0.27.0",
+    "vite": "^6.0.0"
   },
   "dependencies": {
-    "@wordpress/hooks": "^2.0.5",
-    "accounting-js": "^1.1.1",
-    "clipboard": "^2.0.4",
-    "element-ui": "^2.8.2",
-    "filepond": "^4.4.6",
-    "filepond-plugin-file-poster": "^2.0.3",
-    "filepond-plugin-image-preview": "^4.1.1",
-    "jquery-filepond": "^1.0.0",
-    "lodash": "^4.17.13",
-    "moment": "^2.24.0",
-    "pikaday": "^1.8.0",
-    "vue": "^2.5.22",
-    "vue-html-to-paper": "^1.0.3",
-    "vue-router": "^3.0.2",
-    "vuedraggable": "^2.17.0"
+    "@element-plus/icons-vue": "^2.3.1",
+    "@wordpress/hooks": "^4.0.0",
+    "clipboard": "^2.0.11",
+    "dayjs": "^1.11.13",
+    "element-plus": "^2.9.0",
+    "vue": "^3.5.0",
+    "vue-router": "^4.5.0",
+    "vuedraggable": "^4.1.0"
   }
 }

@@ -28,14 +28,16 @@
 
                             <div class="payform_builder_items">
                                 <draggable
-                                    :options="{handle:'.handler', animation: 0, ghostClass: 'ghost', group:'components'}"
                                     :list="builder_elements"
-                                    :element="'div'"
+                                    :item-key="getElementKey"
+                                    tag="div"
+                                    handle=".handler"
+                                    :animation="0"
+                                    ghost-class="ghost"
+                                    group="components"
                                 >
-                                    <template v-if="builder_elements.length">
-                                        <div v-for="element in builder_elements"
-                                             :key="element.id"
-                                             :class="'payform_builder_'+element.type"
+                                    <template #item="{ element }">
+                                        <div :class="'payform_builder_'+element.type"
                                              class="payform_builder_item"
                                         >
                                             <div class="payform_builder_header">
@@ -67,16 +69,18 @@
                                             </transition>
                                         </div>
                                     </template>
-                                    <div v-else class="empty_builder_items">
-                                        <img style="max-width: 100%; max-height: 300px;" :src="empty_form_image"/>
-                                    </div>
+                                    <template #footer>
+                                        <div v-if="!builder_elements.length" class="empty_builder_items">
+                                            <img style="max-width: 100%; max-height: 300px;" :src="empty_form_image"/>
+                                        </div>
+                                    </template>
                                 </draggable>
                                 <div v-if="builder_elements.length"
                                      class="payform_submit_button_settings payform_builder_item">
                                     <div class="payform_builder_header">
                                         <div class="payform_head_left">
                                             <div class="payform_inline_item">
-                                                <span class="el-icon-setting"></span>
+                                                <el-icon><Setting /></el-icon>
                                             </div>
                                             <div class="element_title payform_inline_item">
                                                 Submit Button Settings
@@ -105,29 +109,31 @@
                 </div>
             </el-main>
             <el-aside width="250px">
-                <div v-for="(componentGroup,componentGroupIndex) in fieldGroups" class="wpf_field_group" :class="isActiveGroup(componentGroupIndex)">
+                <div v-for="(componentGroup,componentGroupIndex) in fieldGroups" :key="componentGroupIndex" class="wpf_field_group" :class="isActiveGroup(componentGroupIndex)">
                     <div @click="toggleActiveGroup(componentGroupIndex)" class="field_group_header">
                         <i :class="componentGroup.icon"></i> {{componentGroup.title}}
-                        <span v-if="isActiveGroup(componentGroupIndex)" class="field_group_icon_nav"><i class="el-icon-caret-top"></i></span>
-                        <span v-else class="field_group_icon_nav"><i class="el-icon-caret-bottom"></i></span>
+                        <span v-if="isActiveGroup(componentGroupIndex)" class="field_group_icon_nav"><el-icon><CaretTop /></el-icon></span>
+                        <span v-else class="field_group_icon_nav"><el-icon><CaretBottom /></el-icon></span>
                     </div>
-                    <div style="min-height: 50px" element-loading-spinner="el-icon-loading" v-loading="fetching" class="field_group_body">
-                        <draggable v-model="fieldGroups[componentGroupIndex].elements"
+                    <div style="min-height: 50px" v-loading="fetching" class="field_group_body">
+                        <draggable :list="componentGroup.elements"
+                                   item-key="type"
                                    class="dragArea"
                                    :clone="cloneItem"
-                                   :options="{ draggable:'.item_active', group:{ name:'components',  pull:'clone', put:false }, sort: false }">
-                            <el-button
-                                v-for="(component,componentIndex) in componentGroup.elements"
-                                :key="'item_'+componentIndex"
-                                size="mini"
-                                :data-item_name="component.type"
-                                type="plain"
-                                class="wpf_element_items"
-                                :class="getItemClasses(component)"
-                                @click="addComponent(component)"
-                            >
-                                {{ component.editor_title }}
-                            </el-button>
+                                   draggable=".item_active"
+                                   :group="{ name:'components',  pull:'clone', put:false }"
+                                   :sort="false">
+                            <template #item="{ element: component }">
+                                <el-button
+                                    size="small"
+                                    :data-item_name="component.type"
+                                    class="wpf_element_items"
+                                    :class="getItemClasses(component)"
+                                    @click="addComponent(component)"
+                                >
+                                    {{ component.editor_title }}
+                                </el-button>
+                            </template>
                         </draggable>
                     </div>
                 </div>
@@ -137,13 +143,20 @@
 
 </template>
 
-<script type="text/babel">
-    import each from 'lodash/each'
-    import findIndex from 'lodash/findIndex'
-    import ElementEditor from './editor/_ElementEditor';
+<script>
+    // Iterate an array or an object like lodash/each
+    const each = (collection, callback) => {
+        Object.keys(collection || {}).forEach((key) => callback(collection[key], key));
+    };
+    import { Setting, CaretTop, CaretBottom } from '@element-plus/icons-vue';
+    import ElementEditor from './editor/_ElementEditor.vue';
     import draggable from 'vuedraggable'
-    import SubmitButtonSettings from './editor/_SubmitButtonSettings';
-    import WpEditor from '../Common/_wp_editor_ext'
+    import SubmitButtonSettings from './editor/_SubmitButtonSettings.vue';
+    import WpEditor from '../Common/_wp_editor_ext.vue'
+
+    // Fallback keys for builder elements that have no id (should not happen)
+    const fallbackKeys = new WeakMap();
+    let fallbackCounter = 0;
 
     export default {
         name: 'form_builder',
@@ -151,9 +164,15 @@
             ElementEditor,
             draggable,
             SubmitButtonSettings,
-            WpEditor
+            WpEditor,
+            CaretBottom,
+            CaretTop,
+            Setting
         },
         props: ['form_id'],
+        setup() {
+            return { Setting, CaretTop, CaretBottom };
+        },
         data() {
             return {
                 app_ready: false,
@@ -161,6 +180,7 @@
                 job_post: [],
                 builder_elements: [],
                 fetching: false,
+                saving: false,
                 components: {},
                 adding_component: '',
                 submit_button_settings: {},
@@ -233,6 +253,35 @@
             }
         },
         methods: {
+            getElementKey(element) {
+                if (element && element.id) {
+                    return element.id;
+                }
+                if (!fallbackKeys.has(element)) {
+                    fallbackCounter++;
+                    fallbackKeys.set(element, '_wpjb_el_' + fallbackCounter);
+                }
+                return fallbackKeys.get(element);
+            },
+            setStoreData(key, value) {
+                if (window.localStorage) {
+                    localStorage.setItem('wppayforms_' + key, value);
+                }
+            },
+            deleteStoreData(key) {
+                if (window.localStorage) {
+                    localStorage.removeItem('wppayforms_' + key);
+                }
+            },
+            getFromStore(key, defaultValue) {
+                if (window.localStorage) {
+                    let itemValue = localStorage.getItem('wppayforms_' + key);
+                    if (itemValue) {
+                        return itemValue;
+                    }
+                }
+                return defaultValue;
+            },
             isActiveGroup(index) {
                 if(this.collapsedGroups[index]) {
                     return 'wpf_collapsed';
@@ -251,20 +300,17 @@
             },
             getSettings() {
                 this.fetching = true;
-                this.$adminGet({
-                    route: 'get_custom_form_settings',
-                    form_id: this.form_id
-                })
+                this.$api.get('/forms/' + this.form_id + '/builder')
                     .then(response => {
-                        this.job_post = response.data.job_post;
-                        this.builder_elements = response.data.builder_settings;
-                        this.components = response.data.components;
-                        this.submit_button_settings = response.data.form_button_settings;
+                        this.job_post = response.job_post;
+                        this.builder_elements = response.builder_settings || [];
+                        this.components = response.components;
+                        this.submit_button_settings = response.form_button_settings;
                     })
-                    .fail(error => {
-
+                    .catch(error => {
+                        this.$showAjaxError(error);
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.fetching = false;
                         this.app_ready = true;
                     })
@@ -343,32 +389,29 @@
                     this.deleteStoreData('hide_form_' + this.form_id);
                 }
 
-                this.$adminPost({
-                    action: 'wpjobboard_forms_admin_ajax',
-                    form_id: this.form_id,
+                this.$api.post('/forms/' + this.form_id + '/builder', {
                     builder_settings: this.builder_elements,
-                    submit_button_settings: this.submit_button_settings,
-                    route: 'save_form_builder_settings'
+                    submit_button_settings: this.submit_button_settings
                 })
                     .then(response => {
                         this.$message({
-                            message: response.data.message,
+                            message: response.message,
                             type: 'success'
                         });
                     })
-                    .fail(error => {
+                    .catch(error => {
                         this.$message({
-                            message: error.responseJSON.data.message,
+                            message: error.message,
                             type: 'error'
                         });
-                        if (error.responseJSON.data.errors) {
-                            this.validationErrors = error.responseJSON.data.errors;
+                        if (error.data && error.data.errors) {
+                            this.validationErrors = error.data.errors;
                             jQuery([document.documentElement, document.body]).animate({
                                 scrollTop: jQuery('#payform_builder').offset().top - 100
                             }, 200);
                         }
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.saving = false;
                     })
             },
@@ -380,7 +423,10 @@
                 }
             },
             deleteItem(element) {
-                this.builder_elements.splice(findIndex(this.builder_elements, element), 1);
+                const elementIndex = this.builder_elements.indexOf(element);
+                if (elementIndex !== -1) {
+                    this.builder_elements.splice(elementIndex, 1);
+                }
             },
             getItemClasses(component) {
                 let isActive = '';
@@ -396,7 +442,7 @@
         mounted() {
             this.getSettings();
             this.showNotice = this.getFromStore('hide_form_' + this.form_id) != 'yes';
-            window.WPJobBoardBus.$emit('site_title', 'Form Builder');
+            this.$setTitle('Form Builder');
         }
     }
 </script>

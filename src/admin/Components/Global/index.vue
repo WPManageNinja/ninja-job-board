@@ -2,7 +2,7 @@
     <div class="wppaymform_global">
         <div class="wpjobboard_main_nav">
             <span class="plugin-name">WPJobBoard</span>
-            <router-link v-for="menuItem in topMenus" :key="menuItem.route" active-class="ninja-tab-active" exact :class="['ninja-tab']" :to="{ name: menuItem.route }">
+            <router-link v-for="menuItem in topMenus" :key="menuItem.route" exact-active-class="ninja-tab-active" :class="['ninja-tab']" :to="{ name: menuItem.route }">
                 {{ menuItem.title }}
             </router-link>
         </div>
@@ -10,7 +10,7 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
     export default {
         name: 'global_wrapper',
         data() {

@@ -2,7 +2,6 @@
 
 namespace WPJobBoard\Classes\Tools;
 
-use WPJobBoard\Classes\AccessControl;
 use WPJobBoard\Classes\ArrayHelper;
 use WPJobBoard\Classes\Models\Forms;
 use WPJobBoard\Classes\Models\Submission;
@@ -17,70 +16,6 @@ if (!defined('ABSPATH')) {
  */
 class SchedulingSettings
 {
-    // phpcs:disable WordPress.Security.NonceVerification.Recommended -- every route passes AccessControl::checkAndPresponseError() first, which verifies the nonce
-
-    public function register()
-    {
-        add_action('wp_ajax_wpjb_scheduling_endpoints', array($this, 'schedulingAjaxHandler'));
-    }
-
-    public function schedulingAjaxHandler()
-    {
-        $route = isset($_REQUEST['route']) ? sanitize_text_field(wp_unslash($_REQUEST['route'])) : '';
-        $validRoutes = array(
-            'get_settings'    => 'getSettings',
-            'update_settings' => 'updateSettings'
-        );
-        if (isset($validRoutes[$route])) {
-            AccessControl::checkAndPresponseError('save_form_settings', 'forms');
-            do_action('wpjobboard/doing_ajax_forms_' . $route);
-            return $this->{$validRoutes[$route]}();
-        }
-    }
-
-    public function getSettings()
-    {
-        $formId = isset($_REQUEST['form_id']) ? absint($_REQUEST['form_id']) : 0;
-        $settings = Forms::getSchedulingSettings($formId);
-
-        wp_send_json_success(array(
-            'scheduling_settings' => $settings,
-            'current_date_time'   => gmdate('d M Y H:i:s')
-        ), 200);
-    }
-
-    public function updateSettings()
-    {
-        $formId = isset($_REQUEST['form_id']) ? absint($_REQUEST['form_id']) : 0;
-        if (!Forms::getForm($formId)) {
-            wp_send_json_error(array(
-                'message' => __('Job post not found', 'ninja-job-board')
-            ), 404);
-        }
-        $settings = wpJobBoardSanitize(wp_unslash(ArrayHelper::get($_REQUEST, 'settings', []))); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized by wpJobBoardSanitize()
-
-        if (
-            ArrayHelper::get($settings, 'limitNumberOfEntries.status') == 'no' &&
-            ArrayHelper::get($settings, 'scheduleForm.status') == 'no' &&
-            ArrayHelper::get($settings, 'requireLogin.status') == 'no'
-        ) {
-            $settings = false;
-        }
-
-        if (ArrayHelper::get($settings, 'scheduleForm.status') == 'no') {
-            update_post_meta($formId, 'application_start_date', 0);
-            update_post_meta($formId, 'application_end_date', 0);
-        } else {
-            update_post_meta($formId, 'application_start_timestamp', strtotime(ArrayHelper::get($settings, 'scheduleForm.start_date')));
-            update_post_meta($formId, 'application_end_timestamp', strtotime(ArrayHelper::get($settings, 'scheduleForm.end_date')));
-        }
-
-        update_post_meta($formId, 'wpjb_form_scheduling_settings', $settings);
-        wp_send_json_success(array(
-            'message' => __('Settings successfully updated', 'ninja-job-board')
-        ), 200);
-    }
-
     public function checkRestrictionHooks()
     {
         add_filter('wpjobboard/form_wrapper_css_classes', array($this, 'checkRestrictionOnRender'), 10, 2);

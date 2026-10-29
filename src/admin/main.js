@@ -1,89 +1,89 @@
-import moment from 'moment';
-window.WPJobBoardBus = new window.WPJobBoard.Vue();
+import { createApp } from 'vue';
+import { createRouter, createWebHashHistory } from 'vue-router';
+// Per-component paths: the package root would bundle all of Element Plus
+import { ElLoading } from 'element-plus/es/components/loading/index.mjs';
+import { ElMessage } from 'element-plus/es/components/message/index.mjs';
+import { ElMessageBox } from 'element-plus/es/components/message-box/index.mjs';
+import { ElNotification } from 'element-plus/es/components/notification/index.mjs';
+import dayjs from 'dayjs';
 
-window.WPJobBoard.Vue.mixin({
-    methods: {
-        $t(str) {
-            let transString = wpJobBoardsAdmin.i18n[str];
-            if(transString) {
-                return transString;
-            }
-            return str;
-        },
-        setStoreData(key, value) {
-            if(window.localStorage) {
-                localStorage.setItem("wppayforms_"+key, value);
-            }
-        },
-        deleteStoreData(key) {
-            if(window.localStorage) {
-                localStorage.removeItem("wppayforms_"+key);
-            }
-        },
-        $showAjaxError(error) {
-            if(error.responseJSON && error.responseJSON.message) {
-                this.$notify.error(error.responseJSON.message);
-            } else if(error.responseText) {
-                this.$notify.error(error.responseText);
-            } else {
-                this.$notify.error('Something is wrong when doing ajax request! Please try again');
-            }
-        },
-        getFromStore(key, defaultValue) {
-            if(window.localStorage) {
-                let itemValue = localStorage.getItem('wppayforms_'+key);
-                if(itemValue) {
-                    return itemValue;
-                }
-            }
-            return defaultValue;
-        },
-        applyFilters: window.WPJobBoard.applyFilters,
-        addFilter: window.WPJobBoard.addFilter,
-        addAction: window.WPJobBoard.addFilter,
-        doAction: window.WPJobBoard.doAction,
-        $get: window.WPJobBoard.$get,
-        $adminGet: window.WPJobBoard.$adminGet,
-        $adminPost: window.WPJobBoard.$adminPost,
-        $post: window.WPJobBoard.$post
-    },
-    data(){
-        return {
-            has_pro: window.wpJobBoardsAdmin.has_pro,
-            pro_purchase_url: 'https://wpmanageninja.com/wppayform-pro-wordpress-payments-form-builder/?utm_source=upgrade&utm_medium=url&utm_campaign=wpjobboard_upgrade'
-        }
-    },
-    filters: {
-        ucFirst(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
-        },
-        dateFormat(date, format) {
-            if(!format) {
-                format = 'MMM DD, YYYY';
-            }
-            let dateString = (date === undefined) ? null : date;
-            let dateObj = moment(dateString);
-            return dateObj.isValid() ? dateObj.format(format) : null;
-        }
-    }
-});
+import 'element-plus/theme-chalk/base.css';
+import 'element-plus/theme-chalk/el-loading.css';
+import 'element-plus/theme-chalk/el-message.css';
+import 'element-plus/theme-chalk/el-message-box.css';
+import 'element-plus/theme-chalk/el-notification.css';
+import '../scss/admin/app.scss';
 
-import {routes} from './routes'
+import api from './utils/api';
+import { printElement } from './utils/print';
+import { getRoutes } from './routes';
+import App from './App.vue';
 
-const router = new window.WPJobBoard.Router({
-    routes: window.WPJobBoard.applyFilters('wpf_global_vue_routes', routes),
+const WPJobBoard = window.WPJobBoard;
+
+const router = createRouter({
+    history: createWebHashHistory(),
+    routes: WPJobBoard.applyFilters('wpf_global_vue_routes', getRoutes()),
     linkActiveClass: 'active'
 });
 
-import App from './App';
+const app = createApp(App);
 
-new window.WPJobBoard.Vue({
-    el: '#wpjobboardsapp',
-    render: h => h(App),
-    router: router,
-    mounted() {
-        window.WPJobBoardBus.$on('site_title', (title) => {
-            jQuery(document).attr("title", title + ' :: WPPayFrom');
-        });
-    }
+/*
+ * Helpers that every component can use as this.$name
+ */
+Object.assign(app.config.globalProperties, {
+    $api: api,
+    $notify: ElNotification,
+    $message: ElMessage,
+    $confirm: ElMessageBox.confirm,
+    $msgbox: ElMessageBox,
+    $printElement: printElement,
+    $t(str) {
+        const transString = window.wpJobBoardsAdmin.i18n[str];
+        return transString ? transString : str;
+    },
+    $showAjaxError(error) {
+        const message = (error && error.message) ? error.message : 'Something is wrong when doing ajax request! Please try again';
+        ElNotification.error({ title: 'Error', message });
+    },
+    $setTitle(title) {
+        document.title = title + ' :: Ninja Job Board';
+    },
+    $ucFirst(string) {
+        return string ? string.charAt(0).toUpperCase() + string.slice(1) : '';
+    },
+    // Per-browser UI preferences. Storage can be blocked, so failures are ignored.
+    setStoreData(key, value) {
+        try {
+            window.localStorage.setItem('wpjobboard_' + key, value);
+        } catch (e) {
+            // Ignore
+        }
+    },
+    getFromStore(key, defaultValue) {
+        try {
+            const value = window.localStorage.getItem('wpjobboard_' + key);
+            return value ? value : defaultValue;
+        } catch (e) {
+            return defaultValue;
+        }
+    },
+    $dateFormat(date, format = 'MMM DD, YYYY') {
+        const dateObj = dayjs(date === undefined ? null : date);
+        return dateObj.isValid() ? dateObj.format(format) : null;
+    },
+    applyFilters: WPJobBoard.applyFilters,
+    addFilter: WPJobBoard.addFilter,
+    addAction: WPJobBoard.addAction,
+    doAction: WPJobBoard.doAction
 });
+
+app.directive('loading', ElLoading.directive);
+app.use(router);
+
+WPJobBoard.app = app;
+WPJobBoard.router = router;
+WPJobBoard.doAction('wpjobboard_admin_app_init', app, router);
+
+app.mount('#wpjobboardsapp');

@@ -3,7 +3,7 @@ Contributors: techjewel, wpmanageninja
 Tags: job board, career, job listing, job manager, recruitment
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 1.5.0
+Stable tag: 2.0.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -154,6 +154,18 @@ From email setting, you can set it up who will get notified about the submission
 8. Current Active Jobs Shortcode [wp_job_list]
 
 == Changelog ==
+
+= 2.0.0 - October 29, 2026 =
+- New: The admin app is rebuilt with Vue 3 and Element Plus
+- New: The admin app uses the WordPress REST API (namespace `ninja-job-board/v1`) instead of admin-ajax
+- New: Every admin REST route checks the user's capability and, for "own forms" permissions, the form owner
+- New: Build tooling moved from Laravel Mix to Vite
+- Improvement: Smaller admin bundle; removed unused libraries (Spout, Ace editor, vue-html-to-paper, lodash)
+- Improvement: Campaign emails are claimed before sending, so an email is never sent twice
+- Fix: Form scheduling "off" now clears the start and end timestamps
+- Fix: Users with only the "add form" permission can no longer edit forms of other users
+- Fix: PHP 8.2+ deprecation notices in the bundled query builder
+- Developers: `window.WPJobBoard` keeps the hooks API (applyFilters, addFilter, addAction, doAction) and now also exposes `app` and `router`
 
 = 1.5.0 - October 29, 2026 =
 - Security: Fixed stored XSS through file upload values in the application details view

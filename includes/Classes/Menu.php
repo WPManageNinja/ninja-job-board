@@ -97,11 +97,12 @@ class Menu
             if (function_exists('wp_enqueue_editor')) {
                 wp_enqueue_editor();
             }
-            wp_enqueue_script('wpjobboard_boot', WPJOBBOARD_URL . 'assets/js/jobboard-boot.js', array('jquery'), WPJOBBOARD_VERSION, true);
-            // 3rd party developers can now add their scripts here
+            wp_enqueue_script('wpjobboard_boot', WPJOBBOARD_URL . 'assets/admin/boot.js', array(), WPJOBBOARD_VERSION, true);
+            // 3rd party developers can now add their scripts here (they can use window.WPJobBoard)
             do_action('wpjobboard/booting_admin_app');
-            wp_enqueue_script('wpjobboard_admin_app', WPJOBBOARD_URL . 'assets/js/jobboard-admin.js', array('wpjobboard_boot'), WPJOBBOARD_VERSION, true);
-            wp_enqueue_style('wpjobboard_admin_app', WPJOBBOARD_URL . 'assets/css/jobboard-admin.css', array(), WPJOBBOARD_VERSION);
+            wp_enqueue_script('wpjobboard_admin_app', WPJOBBOARD_URL . 'assets/admin/app.js', array('wpjobboard_boot'), WPJOBBOARD_VERSION, true);
+            wp_enqueue_style('wpjobboard_admin_app', WPJOBBOARD_URL . 'assets/admin/app.css', array(), WPJOBBOARD_VERSION);
+            add_filter('script_loader_tag', array($this, 'loadAsModule'), 10, 2);
 
             $payformAdminVars = apply_filters('wpjobboard/admin_app_vars', array(
                 'i18n'                => array(
@@ -109,20 +110,16 @@ class Menu
                 ),
                 'applicationStatuses' => GeneralSettings::getApplicationStatuses(),
                 'internalStatuses'    => GeneralSettings::getInternalStatuses(),
-                'image_upload_url'    => add_query_arg(array(
-                    'action'     => 'wpjb_global_settings_handler',
-                    'route'      => 'wpjb_upload_image',
-                    'wpjb_nonce' => wp_create_nonce('wpjobboard_admin_nonce')
-                ), admin_url('admin-ajax.php')),
-                'nonce'               => wp_create_nonce('wpjobboard_admin_nonce'),
+                'rest'                => array(
+                    'root'  => esc_url_raw(rest_url(\WPJobBoard\Http\Router::NAMESPACE_V1)),
+                    'nonce' => wp_create_nonce('wp_rest')
+                ),
                 'forms_count'         => Forms::getTotalCount(),
                 'assets_url'          => WPJOBBOARD_URL . 'assets/',
-                'ajaxurl'             => admin_url('admin-ajax.php'),
                 'printStyles'         => apply_filters('wpjobboard/print_styles', [
-                    WPJOBBOARD_URL . 'assets/css/jobboard-admin.css',
+                    WPJOBBOARD_URL . 'assets/admin/app.css',
                     WPJOBBOARD_URL . 'assets/css/jobboard-print.css',
                 ]),
-                'ace_path_url'        => WPJOBBOARD_URL . 'assets/libs/ace'
             ));
 
             wp_localize_script('wpjobboard_boot', 'wpJobBoardsAdmin', $payformAdminVars);
@@ -135,6 +132,18 @@ class Menu
 
         wp_enqueue_style('wpjobboard_admin_edit_app', WPJOBBOARD_URL . 'assets/css/jobboard-edit.css', array(), WPJOBBOARD_VERSION);
 
+    }
+
+    /**
+     * The admin app is an ES module
+     */
+    public function loadAsModule($tag, $handle)
+    {
+        if ($handle === 'wpjobboard_admin_app' && strpos($tag, 'type="module"') === false) {
+            $tag = preg_replace('/<script(?![^>]*type=)/', '<script type="module"', $tag, 1);
+            $tag = str_replace(array("type='text/javascript'", 'type="text/javascript"'), 'type="module"', $tag);
+        }
+        return $tag;
     }
 
     public function getIcon()

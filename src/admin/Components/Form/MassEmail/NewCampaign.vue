@@ -33,26 +33,26 @@
                                     Application Statuses
                                     <el-select @change="getCount" multiple size="small" v-model="campaign.campaign_settings.application_statuses"
                                                placeholder="All Application Statuses">
-                                        <el-option
-                                            v-for="(status, status_key) in application_statuses"
-                                            :key="status_key"
-                                            v-if="status_key"
-                                            :label="status"
-                                            :value="status_key">
-                                        </el-option>
+                                        <template v-for="(status, status_key) in application_statuses" :key="status_key">
+                                            <el-option
+                                                v-if="status_key"
+                                                :label="status"
+                                                :value="status_key">
+                                            </el-option>
+                                        </template>
                                     </el-select>
                                 </label>
                                 <label>
                                     Internal Statuses
                                     <el-select @change="getCount" multiple size="small" v-model="campaign.campaign_settings.internal_statuses"
                                                placeholder="All Internal Statuses">
-                                        <el-option
-                                            v-for="(status, status_key) in internal_statuses"
-                                            v-if="status_key"
-                                            :key="status_key"
-                                            :label="status"
-                                            :value="status_key">
-                                        </el-option>
+                                        <template v-for="(status, status_key) in internal_statuses" :key="status_key">
+                                            <el-option
+                                                v-if="status_key"
+                                                :label="status"
+                                                :value="status_key">
+                                            </el-option>
+                                        </template>
                                     </el-select>
                                 </label>
 
@@ -60,7 +60,7 @@
                             </el-form-item>
 
                             <el-form-item style="text-align: right">
-                                <el-button @click="sendEmail()" type="success">Send Email</el-button>
+                                <el-button @click="sendEmail()" :loading="sending" type="success">Send Email</el-button>
                             </el-form-item>
                         </el-form>
                     </div>
@@ -70,18 +70,19 @@
     </el-container>
 </template>
 
-<script type="text/babel">
-    import wpEditor from '../../Common/_wp_editor_ext';
+<script>
+    import wpEditor from '../../Common/_wp_editor_ext.vue';
 
     export default {
         name: 'NewNinjaMassEmail',
-        props: ['form_id'],
         components: {
             wpEditor
         },
         data() {
             return {
+                form_id: this.$route.params.form_id,
                 loading: false,
+                sending: false,
                 campaign: {
                     title: '',
                     subject: '',
@@ -99,35 +100,32 @@
         methods: {
             sendEmail() {
                 this.sending = true;
-                this.$post({
-                    action: 'wpjobboard_email_campaigns',
-                    route: 'send_email_campaign',
-                    form_id: this.form_id,
+                this.$api.post('/forms/' + this.form_id + '/campaigns', {
                     campaign: this.campaign
                 })
                     .then(response => {
-                        this.$message.success(response.data.message);
-                        this.$router.push( { name: 'view_email_campaign', params: { campaign_id: response.data.campaign_id, form_id: this.form_id } })
+                        this.$message.success(response.message);
+                        this.$router.push( { name: 'view_email_campaign', params: { campaign_id: response.campaign_id, form_id: this.form_id } })
                     })
-                    .fail(error => {
-                        this.$message.error(error.responseJSON.data.message);
+                    .catch(error => {
+                        this.$message.error(error.message);
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.sending = false;
                     });
             },
             getCount() {
                 this.loading = true;
-                this.$get({
-                    action: 'wpjobboard_email_campaigns',
-                    route: 'get_email_counts',
-                    form_id: this.form_id,
+                this.$api.get('/forms/' + this.form_id + '/campaigns/count', {
                     campaign_settings: this.campaign.campaign_settings
                 })
                     .then(response => {
-                        this.total = response.data.count;
+                        this.total = response.count;
                     })
-                    .always(() => {
+                    .catch(error => {
+                        this.$showAjaxError(error);
+                    })
+                    .finally(() => {
                         this.loading = false;
                     });
             }

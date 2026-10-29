@@ -11,34 +11,41 @@
             </tr>
             </thead>
             <draggable
-                :options="{handle:'.handle'}"
                 :list="item"
-                :element="'tbody'"
+                :item-key="getItemKey"
+                tag="tbody"
+                handle=".handle"
             >
-                <tr v-for="(filter, index) in item">
-                    <td>
-                        <span style="margin-top: 10px" class="dashicons dashicons-editor-justify handle"></span>
-                    </td>
-                    <td>
-                        <el-input @blur="changeFilterLabel(filter)" size="mini" v-model="filter.label"
-                                  type="text"></el-input>
-                    </td>
-                    <td v-show="value_option">
-                        <el-input size="mini" v-model="filter.value" type="text"></el-input>
-                    </td>
-                    <td>
-                        <el-button :disabled="item.length == 1" @click="deleteItem(index)" type="danger" size="mini">-
-                        </el-button>
-                        <el-button @click="add()" v-show="(index + 1) == item.length" type="success" size="mini">+
-                        </el-button>
-                    </td>
-                </tr>
+                <template #item="{ element: filter, index }">
+                    <tr>
+                        <td>
+                            <span style="margin-top: 10px" class="dashicons dashicons-editor-justify handle"></span>
+                        </td>
+                        <td>
+                            <el-input @blur="changeFilterLabel(filter)" size="small" v-model="filter.label"
+                                      type="text"></el-input>
+                        </td>
+                        <td v-show="value_option">
+                            <el-input size="small" v-model="filter.value" type="text"></el-input>
+                        </td>
+                        <td>
+                            <el-button :disabled="item.length == 1" @click="deleteItem(index)" type="danger" size="small">-
+                            </el-button>
+                            <el-button @click="add()" v-show="(index + 1) == item.length" type="success" size="small">+
+                            </el-button>
+                        </td>
+                    </tr>
+                </template>
             </draggable>
         </table>
     </div>
 </template>
-<script type="text/babel">
+<script>
     import draggable from 'vuedraggable'
+
+    // Options have no id, so give each option object a stable key for vuedraggable
+    const optionKeys = new WeakMap();
+    let optionCounter = 0;
 
     export default {
         name: 'key_pair_options',
@@ -59,6 +66,13 @@
             }
         },
         methods: {
+            getItemKey(option) {
+                if (!optionKeys.has(option)) {
+                    optionCounter++;
+                    optionKeys.set(option, 'kp_' + optionCounter);
+                }
+                return optionKeys.get(option);
+            },
             deleteItem(index) {
                 this.item.splice(index, 1);
             },

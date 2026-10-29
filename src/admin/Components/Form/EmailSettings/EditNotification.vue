@@ -7,33 +7,39 @@
             <div class="payform_form_item_wrapper">
                 <el-form-item prop="email_to" class="payform_item_half" label="Email To">
                     <el-input size="small" placeholder="Email To" v-model="form.email_to">
-                        <popover
-                            @command="(code) => { form.email_to += code }"
-                            slot="suffix" :data="merge_tags"
-                            btnType="text"
-                            buttonText='<i class="el-icon-menu"></i>'>
-                        </popover>
+                        <template #suffix>
+                            <popover
+                                @command="(code) => { form.email_to += code }"
+                                :data="merge_tags"
+                                btnType="text"
+                                buttonText="">
+                            </popover>
+                        </template>
                     </el-input>
                 </el-form-item>
                 <el-form-item class="payform_item_half" label="Reply To">
                     <el-input size="small" placeholder="Reply To" v-model="form.reply_to">
-                        <popover
-                            @command="(code) => { form.reply_to += code }"
-                            slot="suffix" :data="merge_tags"
-                            btnType="text"
-                            buttonText='<i class="el-icon-menu"></i>'>
-                        </popover>
+                        <template #suffix>
+                            <popover
+                                @command="(code) => { form.reply_to += code }"
+                                :data="merge_tags"
+                                btnType="text"
+                                buttonText="">
+                            </popover>
+                        </template>
                     </el-input>
                 </el-form-item>
             </div>
             <el-form-item prop="email_subject" label="Email Subject">
                 <el-input size="small" placeholder="Email Subject" v-model="form.email_subject">
-                    <popover
-                        @command="(code) => { form.email_subject += code }"
-                        slot="suffix" :data="merge_tags"
-                        btnType="text"
-                        buttonText='<i class="el-icon-menu"></i>'>
-                    </popover>
+                    <template #suffix>
+                        <popover
+                            @command="(code) => { form.email_subject += code }"
+                            :data="merge_tags"
+                            btnType="text"
+                            buttonText="">
+                        </popover>
+                    </template>
                 </el-input>
             </el-form-item>
             <el-form-item prop="email_body" label="Email Body">
@@ -48,7 +54,7 @@
                 <p>Please Select when the email will be sent</p>
                 <el-radio-group v-model="form.sending_action">
                     <el-radio v-for="sending_hook in notification_actions" :key="sending_hook.hook_name"
-                              :label="sending_hook.hook_name">
+                              :value="sending_hook.hook_name">
                         {{sending_hook.hook_title}}
                     </el-radio>
                 </el-radio-group>
@@ -58,44 +64,52 @@
                     <div class="payform_form_item_wrapper">
                         <el-form-item class="payform_item_half" label="From Name">
                             <el-input size="small" placeholder="From Name" v-model="form.from_name">
-                                <popover
-                                    @command="(code) => { form.from_name += code }"
-                                    slot="suffix" :data="merge_tags"
-                                    btnType="text"
-                                    buttonText='<i class="el-icon-menu"></i>'>
-                                </popover>
+                                <template #suffix>
+                                    <popover
+                                        @command="(code) => { form.from_name += code }"
+                                        :data="merge_tags"
+                                        btnType="text"
+                                        buttonText="">
+                                    </popover>
+                                </template>
                             </el-input>
                         </el-form-item>
                         <el-form-item class="payform_item_half" label="From Email">
                             <el-input size="small" placeholder="From Email" v-model="form.from_email">
-                                <popover
-                                    @command="(code) => { form.from_email += code }"
-                                    slot="suffix" :data="merge_tags"
-                                    btnType="text"
-                                    buttonText='<i class="el-icon-menu"></i>'>
-                                </popover>
+                                <template #suffix>
+                                    <popover
+                                        @command="(code) => { form.from_email += code }"
+                                        :data="merge_tags"
+                                        btnType="text"
+                                        buttonText="">
+                                    </popover>
+                                </template>
                             </el-input>
                         </el-form-item>
                     </div>
                     <div class="payform_form_item_wrapper">
                         <el-form-item class="payform_item_half" label="CC">
                             <el-input size="small" placeholder="CC" v-model="form.cc_to">
-                                <popover
-                                    @command="(code) => { form.cc_to += code }"
-                                    slot="suffix" :data="merge_tags"
-                                    btnType="text"
-                                    buttonText='<i class="el-icon-menu"></i>'>
-                                </popover>
+                                <template #suffix>
+                                    <popover
+                                        @command="(code) => { form.cc_to += code }"
+                                        :data="merge_tags"
+                                        btnType="text"
+                                        buttonText="">
+                                    </popover>
+                                </template>
                             </el-input>
                         </el-form-item>
                         <el-form-item class="payform_item_half" label="BCC">
                             <el-input size="small" placeholder="BCC" v-model="form.bcc_to">
-                                <popover
-                                    @command="(code) => { form.bcc_to += code }"
-                                    slot="suffix" :data="merge_tags"
-                                    btnType="text"
-                                    buttonText='<i class="el-icon-menu"></i>'>
-                                </popover>
+                                <template #suffix>
+                                    <popover
+                                        @command="(code) => { form.bcc_to += code }"
+                                        :data="merge_tags"
+                                        btnType="text"
+                                        buttonText="">
+                                    </popover>
+                                </template>
                             </el-input>
                         </el-form-item>
                     </div>
@@ -109,8 +123,8 @@
     </div>
 </template>
 
-<script type="text/babel">
-    import wpEditor from '../../Common/_wp_editor';
+<script>
+    import wpEditor from '../../Common/_wp_editor.vue';
     import popover from '../../Common/input-popover-dropdown.vue'
 
     export default {
@@ -120,6 +134,7 @@
             popover
         },
         props: ['notification', 'editingNotificationIndex', 'merge_tags', 'notification_actions'],
+        emits: ['update:notification', 'saveNotifications'],
         data() {
             return {
                 form: {},

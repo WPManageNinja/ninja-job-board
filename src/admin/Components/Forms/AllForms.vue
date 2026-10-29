@@ -9,8 +9,10 @@
                 </h1>
                 <div class="payform_section_actions">
                     <div class="payform_action search_action">
-                        <el-input @keyup.enter.native="fetchForms()" size="small" placeholder="Search" v-model="search_string" class="input-with-select">
-                            <el-button @click="fetchForms()" slot="append" icon="el-icon-search"></el-button>
+                        <el-input @keyup.enter="fetchForms()" size="small" placeholder="Search" v-model="search_string" class="input-with-select">
+                            <template #append>
+                                <el-button @click="fetchForms()" :icon="Search"></el-button>
+                            </template>
                         </el-input>
                     </div>
                     <el-button class="payform_action" @click="createFormModal = true" size="small" type="primary">
@@ -26,7 +28,7 @@
                     border>
 
                     <el-table-column :label="$t('ID')" width="90">
-                        <template slot-scope="scope">
+                        <template #default="scope">
                             <router-link :to="{ name: 'edit_form', params: { form_id: scope.row.ID } }">
                                 {{ scope.row.ID }}
                             </router-link>
@@ -34,7 +36,7 @@
                     </el-table-column>
 
                     <el-table-column :label="$t('Title')">
-                        <template slot-scope="scope">
+                        <template #default="scope">
                             <strong>
                                 {{ scope.row.post_title }}
                             </strong>
@@ -57,21 +59,21 @@
                         </template>
                     </el-table-column>
                     <el-table-column label="Status" width="120">
-                        <template slot-scope="scope">
+                        <template #default="scope">
                             {{scope.row.post_status}}
                         </template>
                     </el-table-column>
                     <el-table-column label="Applications" width="120">
-                        <template slot-scope="scope">
+                        <template #default="scope">
                             <router-link :to="{ name: 'form_entries', params: { form_id: scope.row.ID } }">
                                 {{scope.row.entries_count}}
                             </router-link>
 
                         </template>
                     </el-table-column>
-                    <el-table-column label="Craete Date" width="120">
-                        <template slot-scope="scope">
-                            {{scope.row.post_date_gmt | dateFormat}}
+                    <el-table-column label="Create Date" width="120">
+                        <template #default="scope">
+                            {{ $dateFormat(scope.row.post_date_gmt) }}
                         </template>
                     </el-table-column>
                 </el-table>
@@ -90,12 +92,12 @@
             </div>
         </div>
         <!-- Load Modals-->
-        <create-form v-if="createFormModal" :modalVisible.sync="createFormModal"/>
+        <create-form v-if="createFormModal" v-model:modalVisible="createFormModal"/>
 
         <!--Delete form Confimation Modal-->
         <el-dialog
             title="Are You Sure, You want to delete this job?"
-            :visible.sync="deleteDialogVisible"
+            v-model="deleteDialogVisible"
             :before-close="handleDeleteClose"
             width="60%">
             <div class="modal_body">
@@ -104,23 +106,26 @@
                 <p>You are deleting form id: <b>{{ deleteingForm.ID }}</b>. <br/>Job Title: <b>{{
                     deleteingForm.post_title }}</b></p>
             </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="deleteDialogVisible = false">Cancel</el-button>
-                <el-button type="primary" @click="deleteFormNow()">Confirm</el-button>
-            </span>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="deleteDialogVisible = false">Cancel</el-button>
+                    <el-button type="primary" @click="deleteFormNow()">Confirm</el-button>
+                </span>
+            </template>
         </el-dialog>
     </div>
 </template>
 
-<script type="text/babel">
-    import Welcome from '../Common/Welcome';
-    import CreateForm from './CreateForm';
+<script>
+    import { Search } from '@element-plus/icons-vue';
+    import Welcome from '../Common/Welcome.vue';
+    import CreateForm from './CreateForm.vue';
 
     export default {
         name: 'AllForms',
         components: { CreateForm, Welcome },
-        comments: {
-            Welcome
+        setup() {
+            return { Search };
         },
         data() {
             return {
@@ -142,21 +147,20 @@
         methods: {
             fetchForms() {
                 this.loading = true;
-                this.$adminGet({
-                    route: 'get_forms',
+                this.$api.get('/forms', {
                     per_page: this.per_page,
-                    page_number: this.page_number,
-                    search_string: this.search_string
+                    page: this.page_number,
+                    search: this.search_string
                 })
                     .then(response => {
-                        this.paymentForms = response.data.forms;
-                        this.hasForms = !!response.data.total;
-                        this.total = response.data.total;
+                        this.paymentForms = response.forms;
+                        this.hasForms = !!response.total;
+                        this.total = response.total;
                     })
-                    .fail(error => {
+                    .catch(error => {
                         this.$showAjaxError(error);
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.loading = false;
                     });
             },
@@ -165,54 +169,47 @@
                 this.deleteDialogVisible = true;
             },
             restorePost(id) {
-                this.$adminPost({
-                    action: 'wpjobboard_forms_admin_ajax',
-                    route: 'restore_form',
-                    form_id: id
-                })
+                this.$api.post(`/forms/${id}/restore`)
                     .then(response => {
                         this.$message.success({
-                            message: response.data.message
+                            message: response.message
                         });
                         this.fetchForms();
                     })
-                    .fail(error => {
+                    .catch(error => {
                         this.$message.error({
-                            message: error.responseJSON.data.message
+                            message: error.message
                         });
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.deleteDialogVisible = false;
                         this.deleteingForm = {};
                     });
             },
             escUrl(url) {
-                return url.replace('&amp;', '&');
+                return (url || '').replace(/&amp;/g, '&');
             },
             deleteFormNow() {
-                this.$adminPost({
-                    action: 'wpjobboard_forms_admin_ajax',
-                    route: 'delete_form',
-                    form_id: this.deleteingForm.ID
-                })
+                this.$api.delete(`/forms/${this.deleteingForm.ID}`)
                     .then(response => {
                         this.$message.success({
-                            message: response.data.message
+                            message: response.message
                         });
                         this.fetchForms();
                     })
-                    .fail(error => {
+                    .catch(error => {
                         this.$message.error({
-                            message: error.responseJSON.data.message
+                            message: error.message
                         });
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.deleteDialogVisible = false;
                         this.deleteingForm = {};
                     });
             },
-            handleDeleteClose() {
-                this.this.deleteingForm = {};
+            handleDeleteClose(done) {
+                this.deleteingForm = {};
+                done();
             },
             handleCurrentChange(val) {
                 this.page_number = val;
@@ -224,35 +221,31 @@
             },
             duplicateForm(formId) {
                 this.duplicatingForm = true;
-                this.$post({
-                    action: 'wpjobboard_forms_admin_ajax',
-                    route: 'duplicate_form',
-                    form_id: formId
-                })
+                this.$api.post(`/forms/${formId}/duplicate`)
                     .then(response => {
-                        if(response.data.form.ID) {
-                            this.$notify.success(response.data.message);
+                        if(response.form && response.form.ID) {
+                            this.$notify.success(response.message);
                             this.$router.push({
                                 name: 'edit_form',
                                 params: {
-                                    form_id: response.data.form.ID
+                                    form_id: response.form.ID
                                 }
                             });
                         } else {
                             this.$notify.error('Something is wrong! Please try again');
                         }
                     })
-                    .fail((error) => {
+                    .catch((error) => {
                         this.$showAjaxError(error);
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.duplicatingForm = false;
                     });
             }
         },
         mounted() {
             this.fetchForms();
-            window.WPJobBoardBus.$emit('site_title', 'All Jobs');
+            this.$setTitle('All Jobs');
         }
     }
 </script>

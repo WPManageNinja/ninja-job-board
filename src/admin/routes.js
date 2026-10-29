@@ -1,29 +1,29 @@
-import SupportAndDocumentation from './Components/SupportAndDocumentation';
-import GlobalView from './Components/Global/index';
-import AllForms from './Components/Forms/AllForms';
+import SupportAndDocumentation from './Components/SupportAndDocumentation.vue';
+import GlobalView from './Components/Global/index.vue';
+import AllForms from './Components/Forms/AllForms.vue';
 
-import EditFormView from './Components/Form/index';
-import FormBuilder from './Components/Form/FormBuilder';
-import FormSettingsIndex from './Components/Form/settings/index';
-import FormConfirmationSettings from './Components/Form/settings/ConfirmationSettings'
-import FormSchedulingSetting from './Components/Form/settings/SchedulingSettings';
-import FormCustomCssJs from './Components/Form/settings/FormCustomCssJs';
-import AllCampaigns from './Components/Form/MassEmail/MassEmail'
-import NewCampaign from './Components/Form/MassEmail/NewCampaign'
-import ViewCampaign from './Components/Form/MassEmail/ViewCampaign'
-
-
-import FormEmailSettings from './Components/Form/EmailSettings/FormEmailSettings';
-import FormEntries from './Components/Form/FormEntries/FormEntries';
-
-import Entries from './Components/Entries/Entries';
-import Entry from './Components/Form/FormEntries/Entry';
-import SettingView from './Components/Settings/index'
-import GeneralSettings from './Components/Settings/GeneralSettings'
-import FormDesignSettings from './Components/Form/settings/FormDesignSettings'
-import GlobalTools from './Components/Settings/GlobalTools'
+import EditFormView from './Components/Form/index.vue';
+import FormBuilder from './Components/Form/FormBuilder.vue';
+import FormSettingsIndex from './Components/Form/settings/index.vue';
+import FormConfirmationSettings from './Components/Form/settings/ConfirmationSettings.vue'
+import FormSchedulingSetting from './Components/Form/settings/SchedulingSettings.vue';
+import AllCampaigns from './Components/Form/MassEmail/MassEmail.vue'
+import NewCampaign from './Components/Form/MassEmail/NewCampaign.vue'
+import ViewCampaign from './Components/Form/MassEmail/ViewCampaign.vue'
 
 
+import FormEmailSettings from './Components/Form/EmailSettings/FormEmailSettings.vue';
+import FormEntries from './Components/Form/FormEntries/FormEntries.vue';
+
+import Entries from './Components/Entries/Entries.vue';
+import Entry from './Components/Form/FormEntries/Entry.vue';
+import SettingView from './Components/Settings/index.vue'
+import GeneralSettings from './Components/Settings/GeneralSettings.vue'
+import FormDesignSettings from './Components/Form/settings/FormDesignSettings.vue'
+import GlobalTools from './Components/Settings/GlobalTools.vue'
+
+
+export function getRoutes() {
 const globalSettingsViewChilderRoutes = window.WPJobBoard.applyFilters('wpf_global_settings_childern_routes', [
     {
         name: 'general_settings',
@@ -51,11 +51,6 @@ const formEditorChildrenRoutes = window.WPJobBoard.applyFilters('wpf_main_childr
         path: 'scheduling_settings',
         name: 'scheduling_settings',
         component: FormSchedulingSetting
-    },
-    {
-        path: 'custom-css-js',
-        name: 'custom_css_js',
-        component: FormCustomCssJs
     }
 ]);
 const formEditRoutes = window.WPJobBoard.applyFilters('wpf_edit_children_roues',[
@@ -101,14 +96,14 @@ const formEditRoutes = window.WPJobBoard.applyFilters('wpf_edit_children_roues',
     }
 ]);
 
-export const routes = [
+return [
     {
         path: '/',
         component: GlobalView,
         props: true,
         children: [
             {
-                path: '/',
+                path: '',
                 name: 'forms',
                 component: AllForms
             },
@@ -118,21 +113,22 @@ export const routes = [
                 component: Entries
             },
             {
-                path: '/settings/',
+                path: 'settings',
                 component: SettingView,
                 children: globalSettingsViewChilderRoutes
             },
             {
-                path: '/support',
+                path: 'support',
                 name: 'support',
                 component: SupportAndDocumentation
             }
         ]
     },
     {
-        path: '/edit-form/:form_id/',
+        path: '/edit-form/:form_id',
         component: EditFormView,
         props: true,
         children: formEditRoutes
     }
 ];
+}

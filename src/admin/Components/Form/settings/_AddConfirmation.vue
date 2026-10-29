@@ -2,20 +2,20 @@
     <div>
         <!--Confirmation Type-->
         <el-form-item>
-            <template slot="label">
+            <template #label>
                 Confirmation Type
                 <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <div slot="content">
+                    <template #content><div>
                         <h3>Confirmation Type</h3>
                         <p>
                             After submit, where the page will redirect to.
                         </p>
-                    </div>
-                    <i class="el-icon-info el-text-info" />
+                    </div></template>
+                    <el-icon class="el-text-info"><InfoFilled /></el-icon>
                 </el-tooltip>
             </template>
             <el-radio v-for="(redirectOption, optionName) in redirectToOptions"
-                      v-model="confirmation.redirectTo" :label="optionName" border :key="optionName"
+                      v-model="confirmation.redirectTo" :value="optionName" border :key="optionName"
             >
                 {{ redirectOption }}
             </el-radio>
@@ -26,18 +26,18 @@
         <div v-if="confirmation.redirectTo === 'samePage'" class="conditional-items">
             <!--Message to show-->
             <el-form-item>
-                <template slot="label">
+                <template #label>
                     Message to show
                     <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
+                        <template #content><div>
                             <h3>Confirmation Message Text</h3>
                             <p>
                                 Enter the text you would like the user to <br>
                                 see on the confirmation page of this form.
                             </p>
-                        </div>
+                        </div></template>
 
-                        <i class="el-icon-info el-text-info" />
+                        <el-icon class="el-text-info"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </template>
 
@@ -46,26 +46,26 @@
 
             <!--After form submisssion behavior-->
             <el-form-item>
-                <template slot="label">
+                <template #label>
                     After Form Submission
                     <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
+                        <template #content><div>
                             <h3>After Form Submission Behavior</h3>
                             <p>
                                 Select the behavior after form submission, <br>
                                 whether you want to hide or reset the form.
                             </p>
-                        </div>
-                        <i class="el-icon-info el-text-info"></i>
+                        </div></template>
+                        <el-icon class="el-text-info"><InfoFilled /></el-icon>
                     </el-tooltip>
                 </template>
 
                 <el-radio v-model="confirmation.samePageFormBehavior"
-                          label="hide_form" border>Hide Form
+                          value="hide_form" border>Hide Form
                 </el-radio>
 
                 <el-radio v-model="confirmation.samePageFormBehavior"
-                          label="reset_form" border>Reset Form
+                          value="reset_form" border>Reset Form
                 </el-radio>
             </el-form-item>
         </div>
@@ -74,20 +74,20 @@
         <el-form-item v-else-if="confirmation.redirectTo === 'customPage'"
                       class="conditional-items"
         >
-            <template slot="label">
+            <template #label>
                 Select Page
 
                 <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <div slot="content">
+                    <template #content><div>
                         <h3>Redirect Form to Page</h3>
 
                         <p>
                             Select the page you would like the user to be <br>
                             redirected to after they have submitted the form.
                         </p>
-                    </div>
+                    </div></template>
 
-                    <i class="el-icon-info el-text-info" />
+                    <el-icon class="el-text-info"><InfoFilled /></el-icon>
                 </el-tooltip>
             </template>
 
@@ -104,28 +104,30 @@
 
         <!--Custom URL-->
         <el-form-item class="conditional-items" v-else-if="confirmation.redirectTo == 'customUrl'">
-            <template slot="label">
+            <template #label>
                 Custom URL
                 <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <div slot="content">
+                    <template #content><div>
                         <h3>Redirect Form to URL</h3>
                         <p>
                             Enter the URL of the webpage you would <br>
                             like the user to be redirected to after <br>
                             they have submitted the form.
                         </p>
-                    </div>
-                    <i class="el-icon-info el-text-info" />
+                    </div></template>
+                    <el-icon class="el-text-info"><InfoFilled /></el-icon>
                 </el-tooltip>
             </template>
 
             <el-input size="small" placeholder="Redirect URL" v-model="confirmation.customUrl">
-                <popover
-                    @command="(code) => { confirmation.customUrl += code }"
-                    slot="suffix" :data="editorShortcodes"
-                    btnType="text"
-                    buttonText='<i class="el-icon-menu"></i>'>
-                </popover>
+                <template #suffix>
+                    <popover
+                        @command="(code) => { confirmation.customUrl += code }"
+                        :data="editorShortcodes"
+                        btnType="text"
+                        buttonText="">
+                    </popover>
+                </template>
             </el-input>
             <p>Add the following shortcode to the page to show Submission Confirmation: <code>[wpjobboard_confirmation]</code></p>
         </el-form-item>
@@ -133,16 +135,21 @@
 </template>
 
 <script>
-    import wpEditor from '../../Common/_wp_editor';
+    import { InfoFilled } from '@element-plus/icons-vue';
+    import wpEditor from '../../Common/_wp_editor.vue';
     import popover from '../../Common/input-popover-dropdown.vue';
 
     export default {
         name: 'AddConfirmation',
         components: {
             wpEditor,
-            popover
+            popover,
+            InfoFilled
         },
         props: ['pages', 'editorShortcodes', 'confirmation'],
+        setup() {
+            return { InfoFilled };
+        },
         computed: {
             inputsFirstShortcodes() {
                 return this.editorShortcodes;

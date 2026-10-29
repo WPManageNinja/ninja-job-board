@@ -1,0 +1,8 @@
+# Files that do not go into the WordPress.org SVN release.
+# The Vue/SCSS source (src/), build script (build/) and package.json stay in the release
+# so reviewers and users can read and rebuild the source of the compiled assets.
+.git
+.gitignore
+.distignore
+node_modules
+svn

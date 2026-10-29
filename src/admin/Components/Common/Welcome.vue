@@ -37,6 +37,7 @@
 <script>
     export default {
         name: "Welcome",
+        emits: ['create'],
         data() {
             return {
                 docs: []

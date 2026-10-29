@@ -5,11 +5,11 @@
         </div>
     </div>
 </template>
-<script type="text/babel">
+<script>
     export default {
         name: 'WPJobBoardApp',
         mounted() {
-            jQuery('.update-nag,.notice, #wpbody-content > .updated, #wpbody-content > .error').remove();
+            document.querySelectorAll('.update-nag, .notice, #wpbody-content > .updated, #wpbody-content > .error').forEach((el) => el.remove());
         }
     }
 </script>

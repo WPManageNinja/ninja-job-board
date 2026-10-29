@@ -24,11 +24,21 @@
                                 <el-table-column width="120" label="Email Count" prop="total_sent"></el-table-column>
                                 <el-table-column label="Subject" prop="subject"></el-table-column>
                                 <el-table-column  width="120" label="Action">
-                                    <template slot-scope="scope">
+                                    <template #default="scope">
                                         <router-link class="el-button payform_action el-button--primary el-button--small" :to="{name: 'view_email_campaign', params: { campaign_id: scope.row.id, form_id: form_id }}">Detail</router-link>
                                     </template>
                                 </el-table-column>
                             </el-table>
+                            <div class="payform_pagination" v-if="total > per_page" style="margin-top: 20px; text-align: right;">
+                                <el-pagination
+                                    background
+                                    layout="total, prev, pager, next"
+                                    @current-change="getCampaigns"
+                                    v-model:current-page="page"
+                                    :page-size="per_page"
+                                    :total="total"
+                                />
+                            </div>
                         </template>
                     </div>
                 </div>
@@ -37,30 +47,34 @@
     </el-container>
 </template>
 
-<script type="text/babel">
+<script>
     export default {
         name: 'NinjaMassEmail',
-        props: ['form_id'],
         data() {
             return {
+                form_id: this.$route.params.form_id,
                 loading: false,
                 campaigns: [],
-                total: 0
+                total: 0,
+                page: 1,
+                per_page: 20
             }
         },
         methods: {
             getCampaigns() {
                 this.loading = true;
-                this.$get({
-                    action: 'wpjobboard_email_campaigns',
-                    route: 'get_campaigns',
-                    form_id: this.form_id
+                this.$api.get('/forms/' + this.form_id + '/campaigns', {
+                    page: this.page,
+                    per_page: this.per_page
                 })
                     .then(response => {
-                        this.campaigns = response.data.campaigns.data;
-                        this.total = response.data.campaigns.total;
+                        this.campaigns = response.campaigns.data;
+                        this.total = Number(response.campaigns.total);
                     })
-                    .always(() => {
+                    .catch(error => {
+                        this.$showAjaxError(error);
+                    })
+                    .finally(() => {
                         this.loading = false;
                     });
             }

@@ -28,8 +28,8 @@
     </el-container>
 </template>
 
-<script type="text/babel">
-    import ConfirmationSettings from './_AddConfirmation';
+<script>
+    import ConfirmationSettings from './_AddConfirmation.vue';
     export default {
         name: 'confirmation_settings',
         props: ['form_id'],
@@ -44,56 +44,52 @@
                 editorShortcodes: [],
                 confirmation_settings: {},
                 app_ready: false,
+                saving: false,
                 labelPosition: 'right'
             }
         },
         methods: {
             getSettings() {
                 this.fetching = true;
-                this.$adminGet({
-                    route: 'get_form_settings',
-                    form_id: this.form_id
-                })
+                this.$api.get('/forms/' + this.form_id + '/confirmation')
                     .then(response => {
-                        this.confirmation_settings = response.data.confirmation_settings;
-                        this.editorShortcodes = Object.values(response.data.editor_shortcodes);
-                        this.pages = response.data.pages;
+                        this.confirmation_settings = response.confirmation_settings;
+                        this.editorShortcodes = Object.values(response.editor_shortcodes);
+                        this.pages = response.pages;
                     })
-                    .fail(error => {
-
+                    .catch(error => {
+                        this.$showAjaxError(error);
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.fetching = false;
                         this.app_ready = true;
                     })
             },
             saveSettings() {
                 this.saving = true;
-                this.$adminPost({
-                    form_id: this.form_id,
-                    confirmation_settings: this.confirmation_settings,
-                    route: 'save_form_settings'
+                this.$api.post('/forms/' + this.form_id + '/confirmation', {
+                    confirmation_settings: this.confirmation_settings
                 })
                     .then(response => {
                         this.$message({
-                            message: response.data.message,
+                            message: response.message,
                             type: 'success'
                         });
                     })
-                    .fail(error => {
+                    .catch(error => {
                         this.$message({
-                            message: error.responseJSON.data.message,
+                            message: error.message,
                             type: 'error'
                         });
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.saving = false;
                     })
             }
         },
         mounted() {
             this.getSettings();
-            window.WPJobBoardBus.$emit('site_title', 'Form Confirmation Settings');
+            this.$setTitle('Form Confirmation Settings');
             if(window.outerWidth < 500) {
                 this.labelPosition = "top";
             }

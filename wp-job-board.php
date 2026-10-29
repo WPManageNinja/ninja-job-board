@@ -5,7 +5,7 @@
  * Description: Create Job Posting and Manage Job Application In WordPress
  * Author: WPManageNinja LLC
  * Author URI:  https://wpmanageninja.com
- * Version: 1.5.0
+ * Version: 2.0.0
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * License: GPLv2 or later
@@ -37,7 +37,7 @@ if (!defined('ABSPATH')) {
 }
 
 define('WPJOBBOARD_VERSION_LITE', true);
-define('WPJOBBOARD_VERSION', '1.5.0');
+define('WPJOBBOARD_VERSION', '2.0.0');
 define('WPJOBBOARD_DB_VERSION', 100);
 define('WPJOBBOARD_MAIN_FILE', __FILE__);
 define('WPJOBBOARD_URL', plugin_dir_url(__FILE__));
@@ -70,29 +70,6 @@ class WPJobBoard
             $adminApp->bootView();
         });
 
-        // Top Level Ajax Handlers
-        $ajaxHandler = new \WPJobBoard\Classes\AdminAjaxHandler();
-        $ajaxHandler->registerEndpoints();
-
-        // Submission Ajax Handler
-        $submissionHandler = new \WPJobBoard\Classes\SubmissionView();
-        $submissionHandler->registerEndpoints();
-
-        // Exporter Ajax Handler
-        $exoprtHandler = new \WPJobBoard\Classes\Exporter();
-        $exoprtHandler->registerEndpoints();
-
-        // General Settings Handler
-        $globalSettingHandler = new \WPJobBoard\Classes\GlobalSettingsHandler();
-        $globalSettingHandler->registerHooks();
-
-        // Handle Globla Tools
-        $globalTools = new \WPJobBoard\Classes\Tools\GlobalTools();
-        $globalTools->registerEndpoints();
-
-        $scheduleSettings = new \WPJobBoard\Classes\Tools\SchedulingSettings();
-        $scheduleSettings->register();
-
         // init tinymce
         $tinyMCE = new \WPJobBoard\Classes\Integrations\TinyMceBlock();
         $tinyMCE->register();
@@ -100,14 +77,6 @@ class WPJobBoard
         // Dashboard Widget Here
         $dashboardWidget = new \WPJobBoard\Classes\DashboardWidgetModule();
         $dashboardWidget->register();
-
-        // Email Notification Handler
-        $emailAjaxEndpoints = new \WPJobBoard\Classes\EmailNotification\EmailAjax();
-        $emailAjaxEndpoints->register();
-
-        // Email Campaigns
-        $emailCampaigns = new \WPJobBoard\Classes\EmailCampaigns\EmailCampaign();
-        $emailCampaigns->boot();
 
     }
 
@@ -171,6 +140,9 @@ class WPJobBoard
 
     public function commonActions()
     {
+        // Admin REST API (rest_api_init runs outside of is_admin())
+        (new \WPJobBoard\Http\Router())->register();
+
         // Form Submission Handler
         $submissionHandler = new \WPJobBoard\Classes\SubmissionHandler();
         add_action('wp_ajax_wpjb_submit_form', array($submissionHandler, 'handeSubmission'));

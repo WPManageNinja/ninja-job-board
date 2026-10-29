@@ -44,8 +44,10 @@
                 </label>
             </div>
             <div class="wpf_entry_action">
-                <el-input @keyup.enter.native="performSearch" size="mini" placeholder="Search" v-model="search_string">
-                    <el-button @click="performSearch" size="mini" slot="append" icon="el-icon-search"></el-button>
+                <el-input @keyup.enter="performSearch" size="small" placeholder="Search" v-model="search_string">
+                    <template #append>
+                        <el-button @click="performSearch" size="small" :icon="Search"></el-button>
+                    </template>
                 </el-input>
             </div>
             <div v-if="form_id && form_id != '0'" class="wpf_entry_action">
@@ -67,12 +69,16 @@
 </template>
 
 <script>
-    import formEntriesTable from '../Common/EntriesTable';
+    import { Search } from '@element-plus/icons-vue';
+    import formEntriesTable from '../Common/EntriesTable.vue';
 
     export default {
         name: "Entries",
         components: {
             formEntriesTable
+        },
+        setup() {
+            return { Search };
         },
         data() {
             return {
@@ -100,12 +106,12 @@
                 this.$router.push({query: { internal_status: this.selected_internal_status }});
             },
             getFormTitles() {
-                this.$get({
-                    action: 'wpjb_submission_endpoints',
-                    route: 'get_available_forms'
-                })
+                this.$api.get('/forms/available')
                     .then(response => {
-                        this.available_forms = response.data.available_forms;
+                        this.available_forms = response.forms;
+                    })
+                    .catch(error => {
+                        this.$showAjaxError(error);
                     });
             }
         },
@@ -120,7 +126,7 @@
                 this.selected_internal_status = this.$route.query.internal_status;
             }
             this.getFormTitles();
-            window.WPJobBoardBus.$emit('site_title', 'Form Entries');
+            this.$setTitle('Form Entries');
         }
     }
 </script>

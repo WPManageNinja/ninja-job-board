@@ -12,7 +12,7 @@
                                        class="payform_action" size="small" type="primary">
                                 {{ $t( 'Add New Notification' ) }}
                             </el-button>
-                            <el-button @click="editingNotificationIndex = null" type="text" size="small" v-else>
+                            <el-button @click="editingNotificationIndex = null" link type="primary" size="small" v-else>
                                 Back
                             </el-button>
                         </div>
@@ -44,7 +44,7 @@
                                     :notification_actions="notification_actions"
                                     @saveNotifications="saveNotifications"
                                     :editingNotificationIndex="editingNotificationIndex"
-                                    :notification.sync="notifications[editingNotificationIndex]"
+                                    v-model:notification="notifications[editingNotificationIndex]"
                                     :merge_tags="merge_tags"
                                 />
                             </el-main>
@@ -55,9 +55,9 @@
         </el-main>
     </el-container>
 </template>
-<script type="text/babel">
-    import NotificationTable from './Notifications';
-    import EditNotification from './EditNotification'
+<script>
+    import NotificationTable from './Notifications.vue';
+    import EditNotification from './EditNotification.vue'
 
     export default {
         name: 'FormEmailSettings',
@@ -72,7 +72,8 @@
                 loading: false,
                 merge_tags: [],
                 notification_actions: [],
-                editingNotificationIndex: null
+                editingNotificationIndex: null,
+                saving: false
             }
         },
         computed: {
@@ -88,19 +89,16 @@
         methods: {
             getEmailNotifications() {
                 this.loading = true;
-                this.$adminGet({
-                    route: 'get_email_notifications',
-                    form_id: this.form_id
-                })
+                this.$api.get('/forms/' + this.form_id + '/notifications')
                     .then(response => {
-                        this.notifications = response.data.notifications;
-                        this.merge_tags = Object.values(response.data.merge_tags);
-                        this.notification_actions = response.data.notification_actions;
+                        this.notifications = response.notifications;
+                        this.merge_tags = Object.values(response.merge_tags);
+                        this.notification_actions = response.notification_actions;
                     })
-                    .fail(error => {
-
+                    .catch(error => {
+                        this.$showAjaxError(error);
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.loading = false;
                     });
             },
@@ -135,19 +133,16 @@
             },
             saveNotifications() {
                 this.saving = true;
-                this.$adminPost({
-                    route: 'save_email_notifications',
-                    form_id: this.form_id,
+                this.$api.post('/forms/' + this.form_id + '/notifications', {
                     notifications: this.notifications
                 })
                     .then(response => {
-                        this.$notify.success(response.data.message);
-                        // this.notifications = response.data.notifications;
+                        this.$notify.success(response.message);
                     })
-                    .fail(error => {
-
+                    .catch(error => {
+                        this.$showAjaxError(error);
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.saving = false;
                     });
             }

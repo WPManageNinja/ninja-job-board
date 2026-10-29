@@ -15,13 +15,12 @@
                     </div>
                     <div class="wpf_header_actions">
                         <el-button-group>
-                            <el-button size="mini" @click="handleNavClick('next')" type="info"
-                                       icon="el-icon-d-arrow-left">
+                            <el-button size="small" @click="handleNavClick('next')" type="info"
+                                       :icon="DArrowLeft">
                                 Prev
                             </el-button>
-                            <el-button readonly size="mini" disabled type="plain">{{ submission.id }}</el-button>
-                            <el-button size="mini" @click="handleNavClick('prev')" type="info">Next <i
-                                class="el-icon-d-arrow-right el-icon-right"></i></el-button>
+                            <el-button readonly size="small" disabled>{{ submission.id }}</el-button>
+                            <el-button size="small" @click="handleNavClick('prev')" type="info">Next <el-icon style="margin-left: 5px"><DArrowRight /></el-icon></el-button>
                         </el-button-group>
                     </div>
                 </div>
@@ -79,7 +78,7 @@
                             <div class="entry_info_header">
                                 <div class="info_box_header">Application Data</div>
                                 <div class="info_box_header_actions">
-                                    <el-checkbox true-label="yes" false-label="no" v-model="show_empty">Show empty
+                                    <el-checkbox true-value="yes" false-value="no" v-model="show_empty">Show empty
                                         fields
                                     </el-checkbox>
                                 </div>
@@ -102,7 +101,7 @@
                             <div class="entry_info_header">
                                 <div class="info_box_header">Application Activity Events</div>
                                 <div class="info_box_header_actions">
-                                    <el-button @click="add_note_box = !add_note_box" size="mini" type="info">Add Note
+                                    <el-button @click="add_note_box = !add_note_box" size="small" type="info">Add Note
                                     </el-button>
                                 </div>
                             </div>
@@ -144,7 +143,7 @@
                                 <label>
                                     Application Status
                                     <div class="wpjb_field">
-                                        <el-select v-model="submission.application_status" size="mini">
+                                        <el-select v-model="submission.application_status" size="small">
                                             <el-option
                                                 v-for="(status, status_value) in available_application_statuses"
                                                 :key="status_value"
@@ -157,7 +156,7 @@
                                 <label>
                                     Internal Status
                                     <div class="wpjb_field">
-                                        <el-select v-model="submission.status" size="mini">
+                                        <el-select v-model="submission.status" size="small">
                                             <el-option
                                                 v-for="(status, status_value) in available_internal_statuses"
                                                 :key="status_value"
@@ -168,7 +167,7 @@
                                     </div>
                                 </label>
                                 <br/>
-                                <el-button size="mini" type="primary" @click="updateStatuses()">Update</el-button>
+                                <el-button size="small" type="primary" @click="updateStatuses()">Update</el-button>
                             </div>
                         </div>
                         <div v-if="other_entries && other_entries.length" class="entry_info_box">
@@ -177,10 +176,10 @@
                             </div>
                             <div class="entry_info_body wpf_meta_info">
                                 <ul>
-                                    <li v-for="other_entry in other_entries">
+                                    <li v-for="other_entry in other_entries" :key="other_entry.id">
                                         <a :href="other_entry.permalink">{{other_entry.post_title}}</a>
                                         <span class="wpf_card_badge">{{other_entry.status}}</span>
-                                        <span>{{other_entry.created_at | dateFormat}}</span>
+                                        <span>{{ $dateFormat(other_entry.created_at) }}</span>
                                     </li>
                                 </ul>
                             </div>
@@ -231,24 +230,25 @@
             </template>
 
             <div class="print_button_controls">
-                <el-button @click="print" type="info" size="mini" icon="el-icon-printer">Print this entry</el-button>
-                <el-button @click="exportJSON()" type="info" size="mini" icon="el-icon-document-copy">Export JSON
+                <el-button @click="print" type="info" size="small" :icon="Printer">Print this entry</el-button>
+                <el-button @click="exportJSON()" type="info" size="small" :icon="DocumentCopy">Export JSON
                 </el-button>
-                <el-button v-if="hide_sidebar == 'yes'" @click="hide_sidebar = 'no'" size="mini">Show Meta Info
+                <el-button v-if="hide_sidebar == 'yes'" @click="hide_sidebar = 'no'" size="small">Show Meta Info
                 </el-button>
             </div>
         </div>
     </div>
 </template>
 
-<script type="text/babel">
-import each from 'lodash/each';
-import fromatPrice from '../../../../common/formatPrice';
-import omit from 'lodash/omit';
+<script>
+import { DArrowLeft, DArrowRight, Printer, DocumentCopy } from '@element-plus/icons-vue';
 
 export default {
     name: "Entry",
-    components: {},
+    components: { DArrowRight },
+    setup() {
+        return { DArrowLeft, DArrowRight, Printer, DocumentCopy };
+    },
     data() {
         return {
             submission: {},
@@ -293,63 +293,44 @@ export default {
     methods: {
         getEntry() {
             this.fething = true;
-            const query = {
-                action: 'wpjb_submission_endpoints',
-                route: 'get_submission',
-                form_id: parseInt(this.form_id),
-                submission_id: parseInt(this.entry_id)
-            }
-            this.$get(query)
+            this.$api.get(`/applications/${parseInt(this.entry_id)}`)
                 .then(response => {
-                    this.submission = response.data.submission;
-                    this.entry_items = response.data.entry;
-                    this.other_entries = response.data.other_entries;
-                    window.WPJobBoardBus.$emit('site_title', 'Entry#' + response.data.submission.id);
+                    this.submission = response.submission;
+                    this.entry_items = response.entry;
+                    this.other_entries = response.other_entries;
+                    this.$setTitle('Entry#' + response.submission.id);
                 })
-                .always(() => {
+                .catch(error => {
+                    this.$showAjaxError(error);
+                })
+                .finally(() => {
                     this.fething = false;
                 });
         },
-        getApplicationStatusIcon(status) {
-            if (status == 'pending') {
-                return 'el-icon-time';
-            } else if (status == 'paid') {
-                return 'el-icon-check';
-            } else if (status == 'failed') {
-                return 'el-icon-error';
-            } else if (status == 'refunded') {
-                return 'el-icon-warning';
-            }
-            return '';
-        },
         handleNavClick(type) {
             this.loading = true;
-            const query = {
-                action: 'wpjb_submission_endpoints',
-                route: 'get_next_prev_submission',
+            this.$api.get(`/applications/${parseInt(this.entry_id)}/adjacent`, {
                 form_id: parseInt(this.form_id),
-                type: type,
-                current_submission_id: parseInt(this.entry_id)
-            }
-            this.$get(query)
+                direction: type
+            })
                 .then(response => {
-                    this.submission = response.data.submission;
-                    this.entry_items = response.data.entry;
-                    this.entry_id = response.data.submission.id;
-                    this.other_entries = response.data.other_entries;
-                    window.WPJobBoardBus.$emit('site_title', 'Entry#' + response.data.submission.id);
+                    this.submission = response.submission;
+                    this.entry_items = response.entry;
+                    this.entry_id = response.submission.id;
+                    this.other_entries = response.other_entries;
+                    this.$setTitle('Entry#' + response.submission.id);
                     this.$router.push({
                         name: 'entry',
-                        params: {entry_id: response.data.submission.id},
+                        params: {entry_id: response.submission.id},
                         query: {form_id: this.form_id}
                     })
                 })
-                .fail(error => {
+                .catch(error => {
                     this.$message.error({
-                        message: error.responseJSON.data.message
+                        message: error.message
                     });
                 })
-                .always(() => {
+                .finally(() => {
                     this.loading = false;
                 });
         },
@@ -362,27 +343,23 @@ export default {
                 return;
             }
             this.adding_note = true;
-            this.$post({
-                action: 'wpjb_submission_endpoints',
-                route: 'add_submission_note',
-                form_id: this.submission.form_id,
-                submission_id: this.submission.id,
+            this.$api.post(`/applications/${this.submission.id}/notes`, {
                 note: this.new_note_content
             })
                 .then(response => {
-                    this.submission.activities = response.data.activities;
+                    this.submission.activities = response.activities;
                     this.$message({
-                        message: response.data.message,
+                        message: response.message,
                         type: 'success'
                     });
                 })
-                .fail(error => {
+                .catch(error => {
                     this.$message({
-                        message: error.responseJSON.data.message,
+                        message: error.message,
                         type: 'error'
                     });
                 })
-                .always(() => {
+                .finally(() => {
                     this.new_note_content = '';
                     this.adding_note = false;
                 });
@@ -395,68 +372,70 @@ export default {
             }
         },
         changeApplicationStatus() {
-            this.$post({
-                action: 'wpjb_submission_endpoints',
-                route: 'change_application_status',
-                form_id: this.submission.form_id,
-                submission_id: this.submission.id,
-                new_application_status: this.application_status_edit_model.status,
-                status_change_note: this.application_status_edit_model.note
+            this.$api.post(`/applications/${this.submission.id}/status`, {
+                application_status: this.application_status_edit_model.status,
+                note: this.application_status_edit_model.note
             })
                 .then(response => {
                     this.editApplicationStatusModal = false;
-                    this.$message.success(response.data.message);
+                    this.$message.success(response.message);
                     this.application_status_edit_model = {
                         status: '',
                         note: ''
                     };
                     this.getEntry();
                 })
-                .fail(error => {
-                    this.$message.error(error.responseJSON.data.message);
-                })
-                .always(() => {
-
+                .catch(error => {
+                    this.$message.error(error.message);
                 });
         },
         changeInternalStatus() {
-            this.$post({
-                action: 'wpjb_submission_endpoints',
-                route: 'change_internal_status',
-                form_id: this.submission.form_id,
-                submission_id: this.submission.id,
-                new_internal_status: this.internal_status_edit_model.status,
-                status_change_note: this.internal_status_edit_model.note
+            this.$api.post(`/applications/${this.submission.id}/status`, {
+                status: this.internal_status_edit_model.status,
+                note: this.internal_status_edit_model.note
             })
                 .then(response => {
                     this.editInternalStatusModal = false;
-                    this.$message.success(response.data.message);
+                    this.$message.success(response.message);
                     this.internal_status_edit_model = {
                         status: '',
                         note: ''
                     };
                     this.getEntry();
                 })
-                .fail(error => {
-                    this.$message.error(error.responseJSON.data.message);
-                })
-                .always(() => {
-
+                .catch(error => {
+                    this.$message.error(error.message);
                 });
+        },
+        // Small localStorage helpers (the old global mixin had these)
+        setStoreData(key, value) {
+            try {
+                window.localStorage.setItem('wppayforms_' + key, value);
+            } catch (e) {
+                // storage is not available
+            }
+        },
+        getFromStore(key, defaultValue) {
+            try {
+                const itemValue = window.localStorage.getItem('wppayforms_' + key);
+                if (itemValue) {
+                    return itemValue;
+                }
+            } catch (e) {
+                // storage is not available
+            }
+            return defaultValue;
         },
         isUrl(maybeUrl) {
             var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
             return regexp.test(maybeUrl);
         },
         print() {
-            this.$htmlToPaper('print_view');
+            this.$printElement(document.getElementById('print_view'));
         },
         exportJSON() {
-            if (!this.has_pro) {
-                this.$notify.error('Export JSON is a pro feature. Please upgrade');
-            }
             let submission = JSON.parse(JSON.stringify(this.submission));
-            submission = omit(submission, 'currencySetting');
+            delete submission.currencySetting;
             this.downloadObjectAsJson(submission, 'entry_' + submission.id);
         },
         downloadObjectAsJson(exportObj, exportName) {
@@ -469,23 +448,16 @@ export default {
             downloadAnchorNode.remove();
         },
         updateStatuses() {
-            this.$post({
-                action: 'wpjb_submission_endpoints',
-                route: 'update_application_statuses',
-                form_id: this.submission.form_id,
-                submission_id: this.submission.id,
+            this.$api.post(`/applications/${this.submission.id}/status`, {
                 application_status: this.submission.application_status,
                 status: this.submission.status
             })
                 .then(response => {
-                    this.$message.success(response.data.message);
+                    this.$message.success(response.message);
                     this.getEntry();
                 })
-                .fail(error => {
-                    this.$message.error(error.responseJSON.data.message);
-                })
-                .always(() => {
-
+                .catch(error => {
+                    this.$message.error(error.message);
                 });
         }
     },

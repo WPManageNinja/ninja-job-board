@@ -19,7 +19,7 @@
                             <h3>{{ $t('Other Settings') }}</h3>
                         </div>
                         <div class="sub_section_body">
-                            <el-checkbox true-label="no" false-label="yes" v-model="ip_logging_status">Disable IP Address Logging (If you check this then advanced analytics can not be performed)</el-checkbox>
+                            <el-checkbox true-value="no" false-value="yes" v-model="ip_logging_status">Disable IP Address Logging (If you check this then advanced analytics can not be performed)</el-checkbox>
                         </div>
                     </div>
                 </el-form>
@@ -31,7 +31,7 @@
         </div>
     </div>
 </template>
-<script type="text/babel">
+<script>
     export default {
         name: 'global_currency_settings',
         data() {
@@ -46,41 +46,36 @@
         methods: {
             getSettings() {
                 this.fetching = true;
-                this.$get({
-                    action: 'wpjb_global_settings_handler',
-                    route: 'get_global_settings'
-                })
+                this.$api.get('/settings')
                     .then(response => {
-                        this.ip_logging_status = response.data.ip_logging_status
+                        this.ip_logging_status = response.ip_logging_status
                     })
-                    .fail(error => {
-                        this.$message.error(error.responseJSON.data.message);
+                    .catch(error => {
+                        this.$message.error(error.message);
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.fetching = false;
                     })
             },
             saveSettings() {
                 this.saving = true;
-                this.$post({
-                    action: 'wpjb_global_settings_handler',
-                    route: 'update_global_settings',
+                this.$api.post('/settings', {
                     ip_logging_status: this.ip_logging_status
                 })
                     .then(response => {
-                        this.$message.success(response.data.message);
+                        this.$message.success(response.message);
                     })
-                    .fail(error => {
-                        this.$message(error.responseJSON.data.message);
+                    .catch(error => {
+                        this.$message.error(error.message);
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.saving = false;
                     });
             },
         },
         mounted() {
             this.getSettings();
-            window.WPJobBoardBus.$emit('site_title', 'General Settings');
+            this.$setTitle('General Settings');
             if(window.outerWidth < 500) {
                 this.labelPosition = "top";
             }

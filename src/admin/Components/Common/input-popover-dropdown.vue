@@ -1,16 +1,17 @@
 <template>
     <div>
         <el-popover
-            ref="input-popover1"
             placement="right"
             popper-class="el-dropdown-list-wrapper"
-            v-model="visible"
+            :width="'auto'"
+            ref="shortcodePopover"
             trigger="click">
             <div class="el_pop_data_group">
                 <div  class="el_pop_data_headings">
                     <ul>
                         <li
                             v-for="(item,item_index) in data"
+                            :key="item_index"
                             :data-item_index="item_index"
                             :class="(activeIndex == item_index) ? 'active_item_selected' : ''"
                             @click="activeIndex = item_index">
@@ -19,24 +20,39 @@
                     </ul>
                 </div>
                 <div class="el_pop_data_body">
-                    <ul v-for="(item,current_index) in data" v-show="activeIndex == current_index" :class="'el_pop_body_item_'+current_index">
-                        <li @click="insertShortcode(code.tag)" v-for="code in item.placeholders">{{code.label}} <span>{{code.tag}}</span></li>
+                    <ul v-for="(item,current_index) in data" :key="current_index" v-show="activeIndex == current_index" :class="'el_pop_body_item_'+current_index">
+                        <li @click="insertShortcode(code.tag)" v-for="(code, codeIndex) in item.placeholders" :key="codeIndex">{{code.label}} <span>{{code.tag}}</span></li>
                     </ul>
                 </div>
             </div>
+            <template #reference>
+                <el-button class="editor-add-shortcode"
+                           size="small"
+                           :type="buttonType"
+                           :link="btnType == 'text'">
+                    <template v-if="buttonText">
+                        <span v-html="buttonText"></span>
+                        <el-icon style="margin-left: 5px;"><ArrowDown /></el-icon>
+                    </template>
+                    <el-icon v-else><MenuIcon /></el-icon>
+                </el-button>
+            </template>
         </el-popover>
-        <el-button class="editor-add-shortcode"
-                   size="mini"
-                   v-popover:input-popover1
-                   :type="btnType"
-                   v-html="buttonText"
-        />
     </div>
 </template>
 
 <script>
+    // Menu is renamed: <Menu> would render the native HTML <menu> element
+    import { ArrowDown, Menu as MenuIcon } from '@element-plus/icons-vue';
+
     export default {
         name: 'inputPopoverDropdown',
+        // Icons used as tags in the template must be registered here
+        components: { ArrowDown, MenuIcon },
+        emits: ['command'],
+        setup() {
+            return { ArrowDown, MenuIcon };
+        },
         props: {
             data: Array,
             close_on_insert: {
@@ -48,7 +64,7 @@
             buttonText: {
                 type: String,
                 default() {
-                    return 'Add Shortcodes <i class="el-icon-arrow-down el-icon--right"></i>';
+                    return 'Add Shortcodes';
                 }
             },
             btnType: {
@@ -58,17 +74,22 @@
                 }
             }
         },
+        computed: {
+            // Element Plus has no type="text" button; it is a link button now
+            buttonType() {
+                return this.btnType == 'text' ? '' : this.btnType;
+            }
+        },
         data() {
           return {
-              activeIndex: 0,
-              visible: false
+              activeIndex: 0
           }
         },
         methods: {
             insertShortcode(code) {
                 this.$emit('command', code);
-                if(this.close_on_insert) {
-                    this.visible = false;
+                if(this.close_on_insert && this.$refs.shortcodePopover) {
+                    this.$refs.shortcodePopover.hide();
                 }
             }
         },

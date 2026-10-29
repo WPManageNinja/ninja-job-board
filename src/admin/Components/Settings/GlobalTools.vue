@@ -19,7 +19,7 @@
                         <br/>
                         <el-form label-position="top">
                             <el-form-item label="Select the form to export">
-                                <el-select size="mini" v-model="export_id" placeholder="Select Form">
+                                <el-select size="small" v-model="export_id" placeholder="Select Form">
                                     <el-option
                                         v-for="item in forms"
                                         :key="item.ID"
@@ -27,7 +27,7 @@
                                         :value="item.ID">
                                     </el-option>
                                 </el-select>
-                                <el-button @click="exportForm" :disabled="!export_id" type="primary" size="mini">
+                                <el-button @click="exportForm" :disabled="!export_id" type="primary" size="small">
                                     Export
                                 </el-button>
                             </el-form-item>
@@ -42,14 +42,12 @@
                     <hr/>
                     <div class="sub_section_body">
                         <br/>
-                        <form enctype="multipart/form-data" id="upload_json_form">
-                            <input type="hidden" name="action" value="wpjobboard_global_tools"/>
-                            <input type="hidden" name="route" value="upload_form"/>
+                        <form enctype="multipart/form-data" ref="upload_json_form">
                             <label>
                                 Upload .json file
-                                <input required type="file" name="import_file"/>
+                                <input required type="file" name="import_file" ref="import_file"/>
                             </label>
-                            <el-button v-loading="uploadingForm" @click="importForm" type="primary" size="mini">Import Form</el-button>
+                            <el-button v-loading="uploadingForm" @click="importForm" type="primary" size="small">Import Form</el-button>
                         </form>
 
                         <div v-if="last_uploaded_form">
@@ -63,7 +61,7 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
     export default {
         name: 'global_tools',
         data() {
@@ -80,56 +78,43 @@
         methods: {
             getForms() {
                 this.fetching_forms = true;
-                this.$get({
-                    action: 'wpjobboard_global_tools',
-                    route: 'get_forms'
-                })
+                this.$api.get('/forms/available')
                     .then(response => {
-                        this.forms = response.data.forms;
+                        this.forms = response.forms;
                     })
-                    .fail(error => {
+                    .catch(error => {
                         this.$showAjaxError(error);
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.fetching_forms = false;
                     });
             },
             exportForm() {
-                let query = jQuery.param({
-                    action: 'wpjobboard_global_tools',
-                    route: 'export_form',
-                    form_id: this.export_id,
-                    wpjb_nonce: window.wpJobBoardsAdmin.nonce
-                });
-                window.location.href = window.wpJobBoardsAdmin.ajaxurl + '?' + query;
+                window.location.href = this.$api.downloadUrl('/forms/' + this.export_id + '/export');
                 this.$notify.success('Exporting form');
                 this.export_id = '';
             },
             importForm() {
-                var that = this;
-                let formData = new FormData(jQuery('#upload_json_form')[0]);
-                formData.append('wpjb_nonce', window.wpJobBoardsAdmin.nonce);
-                jQuery.ajax({
-                    url: window.wpJobBoardsAdmin.ajaxurl,
-                    type: "POST",
-                    data: formData,
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    beforeSend() {
-                        that.uploadingForm = true;
-                    },
-                    success(response) {
-                        that.$notify.success(response.data.message);
-                        that.last_uploaded_form = response.data.form;
-                        jQuery('#upload_json_form')[0].reset();
-                        that.uploadingForm = false;
-                    },
-                    error (error) {
-                        that.$showAjaxError(error);
-                        that.uploadingForm = false;
-                    }
-                });
+                const file = this.$refs.import_file.files[0];
+                if (!file) {
+                    this.$message.error('Please select a .json file');
+                    return;
+                }
+                const formData = new FormData();
+                formData.append('import_file', file);
+                this.uploadingForm = true;
+                this.$api.upload('/forms/import', formData)
+                    .then(response => {
+                        this.$notify.success(response.message);
+                        this.last_uploaded_form = response.form;
+                        this.$refs.upload_json_form.reset();
+                    })
+                    .catch(error => {
+                        this.$showAjaxError(error);
+                    })
+                    .finally(() => {
+                        this.uploadingForm = false;
+                    });
             }
         },
         mounted() {

@@ -1,42 +1,44 @@
 <template>
     <div class="element_editor">
         <el-form ref="element_form" :model="element" label-width="220px">
-            <div v-for="(item, itemName) in element.editor_elements" :class="item.wrapper_class"
+            <div v-for="(item, itemName) in element.editor_elements" :key="itemName" :class="item.wrapper_class"
                  class="editor_form_item">
                 <template v-if="item.type == 'text'">
                     <el-form-item :label="item.label">
                         <template v-if="itemName == 'default_value'">
-                            <el-input :placeholder="item.label" size="mini" v-model="element.field_options[itemName]">
-                                <popover
-                                    @command="(code) => { element.field_options[itemName] += code }"
-                                    slot="suffix" :data="merge_tags"
-                                    btnType="text"
-                                    buttonText='<i class="el-icon-menu"></i>'>
-                                </popover>
+                            <el-input :placeholder="item.label" size="small" v-model="element.field_options[itemName]">
+                                <template #suffix>
+                                    <popover
+                                        @command="(code) => { element.field_options[itemName] += code }"
+                                        :data="merge_tags"
+                                        btnType="text"
+                                        buttonText="">
+                                    </popover>
+                                </template>
                             </el-input>
                         </template>
                         <template v-else>
-                            <el-input :placeholder="item.label" size="mini"
+                            <el-input :placeholder="item.label" size="small"
                                       v-model="element.field_options[itemName]"></el-input>
                         </template>
                     </el-form-item>
                 </template>
                 <template v-else-if="item.type == 'number'">
                     <el-form-item :label="item.label">
-                        <el-input-number :placeholder="item.label" size="mini"
+                        <el-input-number :placeholder="item.label" size="small"
                                          v-model="element.field_options[itemName]"></el-input-number>
                     </el-form-item>
                 </template>
                 <template v-else-if="item.type == 'textarea'">
                     <el-form-item :label="item.label">
-                        <el-input type="textarea" :placeholder="item.label" size="mini"
+                        <el-input type="textarea" :placeholder="item.label" size="small"
                                   v-model="element.field_options[itemName]"></el-input>
                     </el-form-item>
                 </template>
                 <template v-else-if="item.type == 'checkbox'">
                     <el-form-item :label="item.label">
                         <el-checkbox-group v-model="element.field_options[itemName]">
-                            <el-checkbox v-for="(option,optionName) in item.options" :label="optionName"
+                            <el-checkbox v-for="(option,optionName) in item.options" :value="optionName"
                                          :key="optionName">{{option}}
                             </el-checkbox>
                         </el-checkbox-group>
@@ -54,7 +56,7 @@
                 </template>
                 <template v-else-if="item.type == 'key_pair'">
                     <el-form-item :label="item.label">
-                        <key-pair-options :value.sync="element.field_options[itemName]"/>
+                        <key-pair-options v-model:value="element.field_options[itemName]"/>
                     </el-form-item>
                 </template>
                 <template v-else-if="item.type == 'html'">
@@ -90,7 +92,7 @@
                         <p v-if="item.info" v-html="item.info"></p>
                     </el-form-item>
                     <el-form-item v-if="element.field_options[itemName] == 'yes'" label="Confirm Email Label">
-                        <el-input placeholder="Confirm Email Label" size="mini"
+                        <el-input placeholder="Confirm Email Label" size="small"
                                   v-model="element.field_options.confirm_email_label"></el-input>
                     </el-form-item>
                 </template>
@@ -99,13 +101,13 @@
                 {{ element.id }}
             </el-form-item>
             <div class="action_right">
-                <el-button @click="deleteItem()" size="mini">Delete</el-button>
-                <el-button @click="updateItem()" type="success" size="mini">Update</el-button>
+                <el-button @click="deleteItem()" size="small">Delete</el-button>
+                <el-button @click="updateItem()" type="success" size="small">Update</el-button>
             </div>
         </el-form>
         <el-dialog
             title="Default Value is a Pro Feature"
-            :visible.sync="showDevaultValuePro"
+            v-model="showDevaultValuePro"
             :append-to-body="true"
             width="60%">
             <div v-if="showDevaultValuePro" class="modal_body wpf_default_value_modal">
@@ -118,8 +120,8 @@
     </div>
 </template>
 
-<script type="text/babel">
-    import KeyPairOptions from './_key_pair_options';
+<script>
+    import KeyPairOptions from './_key_pair_options.vue';
     import popover from '../../Common/input-popover-dropdown.vue';
 
     export default {
@@ -134,9 +136,10 @@
         },
         data() {
             return {
-                merge_tags: Object.values(window.wpJobBoardsAdmin.value_placeholders),
+                merge_tags: Object.values(window.wpJobBoardsAdmin.value_placeholders || {}),
                 showDevaultValuePro: false,
-                assets_url: window.wpJobBoardsAdmin.assets_url
+                assets_url: window.wpJobBoardsAdmin.assets_url,
+                pro_purchase_url: 'https://wpmanageninja.com/wppayform-pro-wordpress-payments-form-builder/?utm_source=upgrade&utm_medium=url&utm_campaign=wpjobboard_upgrade'
             }
         },
         methods: {
@@ -149,7 +152,7 @@
         },
         mounted() {
             if (!this.element.field_options) {
-                this.$set(this.element, 'field_options', {});
+                this.element.field_options = {};
             }
         }
     }

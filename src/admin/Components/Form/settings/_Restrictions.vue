@@ -2,20 +2,20 @@
     <el-form ref="form-bottom" label-width="220px" label-position="left">
         <!--Limit Number of Entries-->
         <el-form-item>
-            <div slot="label">
+            <template #label>
                 Maximum Number of Entries
                 <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <div slot="content">
+                    <template #content><div>
                         <h3>Maximum Number of Entries</h3>
                         <p>
                             Enter a number in the input box below to limit <br>
                             the number of entries allowed for this form. The <br>
                             form will become inactive when that number is reached.
                         </p>
-                    </div>
-                    <i class="el-icon-info el-text-info"></i>
+                    </div></template>
+                    <el-icon class="el-text-info"><InfoFilled /></el-icon>
                 </el-tooltip>
-            </div>
+            </template>
             <el-switch active-value="yes" inactive-value="no" v-model="form.limitNumberOfEntries.status"></el-switch>
         </el-form-item>
 
@@ -52,19 +52,19 @@
 
         <!--Schedule Form-->
         <el-form-item>
-            <div slot="label">
+            <template #label>
                 Form Scheduling
                 <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <div slot="content">
+                    <template #content><div>
                         <h3>Form Scheduling</h3>
                         <p>
                             Schedule a time period the form is active.
                         </p>
-                    </div>
+                    </div></template>
 
-                    <i class="el-icon-info el-text-info"></i>
+                    <el-icon class="el-text-info"><InfoFilled /></el-icon>
                 </el-tooltip>
-            </div>
+            </template>
             <el-switch  active-value="yes" inactive-value="no" v-model="form.scheduleForm.status"></el-switch>
         </el-form-item>
 
@@ -77,7 +77,7 @@
                         <el-form-item label="Submission Starts Date">
                             <el-date-picker
                                     class="el-fluid"
-                                    value-format="yyyy-MM-dd HH:mm:ss"
+                                    value-format="YYYY-MM-DD HH:mm:ss"
                                     style="width: 100%;"
                                     v-model="form.scheduleForm.start_date"
                                     type="datetime"
@@ -92,11 +92,11 @@
                             <el-date-picker
                                 class="el-fluid"
                                 style="width: 100%;"
-                                value-format="yyyy-MM-dd HH:mm:ss"
+                                value-format="YYYY-MM-DD HH:mm:ss"
                                 v-model="form.scheduleForm.end_date"
                                 type="datetime"
                                 placeholder="Select date and time"
-                                :picker-options="datePickerOptions">
+                                :shortcuts="dateShortcuts">
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
@@ -116,22 +116,22 @@
         <!--Require user to be logged in-->
         <h4>Login Requirement Settings</h4>
         <el-form-item>
-            <div slot="label">
+            <template #label>
                 Require user to be logged in
 
                 <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <div slot="content">
+                    <template #content><div>
                         <h3>Require user to be logged in</h3>
 
                         <p>
                             Check this option to require a user to be <br>
                             logged in to view this form.
                         </p>
-                    </div>
+                    </div></template>
 
-                    <i class="el-icon-info el-text-info"></i>
+                    <el-icon class="el-text-info"><InfoFilled /></el-icon>
                 </el-tooltip>
-            </div>
+            </template>
 
             <el-switch  active-value="yes" inactive-value="no" v-model="form.requireLogin.status"></el-switch>
         </el-form-item>
@@ -140,17 +140,17 @@
         <transition name="slide-down">
             <div v-if="form.requireLogin.status == 'yes'" class="conditional-items">
                 <el-form-item>
-                    <template slot="label">
+                    <template #label>
                         Require Login Message
                         <el-tooltip class="item" placement="bottom-start" effect="light">
-                            <div slot="content">
+                            <template #content><div>
                                 <h3>Require Login Message</h3>
                                 <p>
                                     Enter a message to be displayed to users who <br>
                                     are not logged in (shortcodes and HTML are supported).
                                 </p>
-                            </div>
-                            <i class="el-icon-info el-text-info"></i>
+                            </div></template>
+                            <el-icon class="el-text-info"><InfoFilled /></el-icon>
                         </el-tooltip>
                     </template>
                     <el-input type="textarea" v-model="form.requireLogin.message"></el-input>
@@ -161,22 +161,22 @@
         <template v-if="hasAnyRestriction">
             <h4>Form Display option when restriction met</h4>
             <el-form-item>
-                <div slot="label">
+                <template #label>
                     Restricted Form Status
                     <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
+                        <template #content><div>
                             <h3>Restricted Form Status</h3>
                             <p>
                                 You can show / hide the form inputs if any restriction mate
                             </p>
-                        </div>
-                        <i class="el-icon-info el-text-info"></i>
+                        </div></template>
+                        <el-icon class="el-text-info"><InfoFilled /></el-icon>
                     </el-tooltip>
-                </div>
+                </template>
                 <el-radio-group v-model="form.restriction_applied_type">
-                    <el-radio label="hide_form">Hide Form</el-radio>
-                    <el-radio label="hide_submit_button">Hide Submit Button</el-radio>
-                    <el-radio label="validation_failed">Make validation failed after submit</el-radio>
+                    <el-radio value="hide_form">Hide Form</el-radio>
+                    <el-radio value="hide_submit_button">Hide Submit Button</el-radio>
+                    <el-radio value="validation_failed">Make validation failed after submit</el-radio>
                 </el-radio-group>
             </el-form-item>
         </template>
@@ -184,8 +184,15 @@
 </template>
 
 <script>
+    import { InfoFilled } from '@element-plus/icons-vue';
+
     export default {
         name: 'FormRestrictions',
+        // Icons used as tags in the template must be registered here
+        components: { InfoFilled },
+        setup() {
+            return { InfoFilled };
+        },
         props: {
             data: {
                 required: true
@@ -205,32 +212,28 @@
                     year: 'Per Year',
                 },
                 applicationStatuses: window.wpJobBoardsAdmin.applicationStatuses,
-                datePickerOptions: {
-                    shortcuts: [
-                        {
-                            text: 'Today',
-                            onClick(picker) {
-                                picker.$emit('pick', new Date());
-                            }
-                        },
-                        {
-                            text: 'Yesterday',
-                            onClick(picker) {
-                                const date = new Date();
-                                date.setTime(date.getTime() - 3600 * 1000 * 24);
-                                picker.$emit('pick', date);
-                            }
-                        },
-                        {
-                            text: 'A week ago',
-                            onClick(picker) {
-                                const date = new Date();
-                                date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                                picker.$emit('pick', date);
-                            }
+                dateShortcuts: [
+                    {
+                        text: 'Today',
+                        value: () => new Date()
+                    },
+                    {
+                        text: 'Yesterday',
+                        value: () => {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24);
+                            return date;
                         }
-                    ]
-                }
+                    },
+                    {
+                        text: 'A week ago',
+                        value: () => {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                            return date;
+                        }
+                    }
+                ]
             }
         },
         computed: {

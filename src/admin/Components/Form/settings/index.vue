@@ -15,7 +15,8 @@
                             :key="formMenu.route"
                             :route="{ name: formMenu.route }"
                             :index="formMenu.route">
-                            <i :class="formMenu.icon"></i>
+                            <el-icon v-if="typeof formMenu.icon !== 'string'"><component :is="formMenu.icon" /></el-icon>
+                            <i v-else :class="formMenu.icon"></i>
                             <span>{{  formMenu.title }}</span>
                         </el-menu-item>
                     </el-menu>
@@ -28,20 +29,23 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
+    import { markRaw } from 'vue';
+    import { SuccessFilled } from '@element-plus/icons-vue';
+
     export default {
         name: 'global_settings',
         data() {
             return {
                 current_route: this.$route.name,
                 form_id: this.$route.params.form_id,
-                sidebarWidth: "200",
+                sidebarWidth: "200px",
                 isCollapse: false,
                 form_menus: [
                     {
                         route: 'confirmation_settings',
                         title: 'Confirmation Settings',
-                        icon: 'el-icon-success'
+                        icon: markRaw(SuccessFilled)
                     },
                     {
                         route: 'design_options',
@@ -52,12 +56,7 @@
                         route: 'scheduling_settings',
                         title: 'Scheduling Settings',
                         icon: 'dashicons dashicons-calendar-alt'
-                    },
-                    // {
-                    //     route: 'custom_css_js',
-                    //     title: 'Custom CSS/JS',
-                    //     icon: 'dashicons dashicons-media-code'
-                    // }
+                    }
                 ]
             }
         },

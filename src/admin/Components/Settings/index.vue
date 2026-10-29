@@ -16,7 +16,8 @@
                             :key="formMenu.route"
                             :route="{ name: formMenu.route }"
                             :index="formMenu.route">
-                            <i :class="formMenu.icon"></i>
+                            <el-icon v-if="typeof formMenu.icon !== 'string'"><component :is="formMenu.icon" /></el-icon>
+                            <i v-else :class="formMenu.icon"></i>
                             <span>{{  formMenu.title }}</span>
                         </el-menu-item>
                     </el-menu>
@@ -29,7 +30,10 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
+    import { markRaw } from 'vue';
+    import { Tools } from '@element-plus/icons-vue';
+
     export default {
         name: 'global_settings',
         data() {
@@ -60,7 +64,7 @@
                     {
                         route: 'tools',
                         title: 'Tools',
-                        icon: 'el-icon-s-cooperation'
+                        icon: markRaw(Tools)
                     }
                 ];
                 this.form_menus = this.applyFilters('global_settings_menu', menu);

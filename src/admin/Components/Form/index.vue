@@ -32,8 +32,8 @@
     </div>
 </template>
 
-<script type="text/babel">
-    import WpEditor from '../Common/_wp_editor';
+<script>
+    import WpEditor from '../Common/_wp_editor.vue';
     import Clipboard from 'clipboard';
     export default {
         name: 'global_wrapper',
@@ -52,17 +52,14 @@
         methods: {
             getForm() {
                 this.fetching = true;
-                this.$adminGet({
-                    route: 'get_form',
-                    form_id: this.form_id
-                })
+                this.$api.get('/forms/' + this.form_id)
                     .then(response => {
-                        this.form = response.data.form;
+                        this.form = response.form;
                     })
-                    .fail(error => {
-
+                    .catch(error => {
+                        this.$showAjaxError(error);
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.fetching = false;
                     })
             },
@@ -73,21 +70,19 @@
                     return;
                 }
                 this.saving = true;
-                this.$adminPost({
-                    route: 'update_form',
-                    form_id: this.form.ID,
+                this.$api.post('/forms/' + this.form.ID, {
                     post_title: this.form.post_title,
                     post_content: this.form.post_content,
                     show_title_description: this.form.show_title_description
                 })
                     .then(response => {
-                        this.$message.success(response.data.message);
+                        this.$message.success(response.message);
                         this.editFormModalShow = false;
                     })
-                    .fail(error => {
-                        this.$message.error(error.responseJSON.data.message);
+                    .catch(error => {
+                        this.$message.error(error.message);
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.saving = false;
                     });
             },
@@ -119,13 +114,18 @@
         mounted() {
             this.setFormMenu();
             this.getForm();
-            var clipboard = new Clipboard('.copy');
-            clipboard.on('success', (e) => {
+            this.clipboard = new Clipboard('.copy');
+            this.clipboard.on('success', (e) => {
                 this.$message({
                     message: 'Copied to Clipboard!',
                     type: 'success'
                 });
             });
+        },
+        beforeUnmount() {
+            if (this.clipboard) {
+                this.clipboard.destroy();
+            }
         }
     }
 </script>
