@@ -1,7 +1,7 @@
 === Ninja Job Board ===
 Contributors: techjewel, wpmanageninja
 Tags: job board, career, job listing, job manager, recruitment
-Requires at least: 6.0
+Requires at least: 6.3
 Tested up to: 7.1
 Stable tag: 2.0.0
 Requires PHP: 7.4
@@ -125,7 +125,9 @@ e.g.
 Go to Ninja Job Board from WordPress admin panel. Create 'Add new job' and give it a 'Title'. Describe the job and add other information: no. of vacancies, years of experience, etc.
 
 = How to display the job posts on the website? =
-Each Job post will have it's own permalink to show.
+Each job post has its own page. To list your jobs on any page, add the **Job List** block (or the `[wp_job_list]` shortcode). To show an application form anywhere, add the **Job Application Form** block (or `[wp_job_form id="123"]`). The **Job Details** block shows a job's type, location, vacancies and experience.
+
+On a job post, the job details and the application form are added automatically. If you place the Job Details or Job Application Form block in the job post yourself, the automatic copy is left out.
 
 =  How to customize job applications? =
 You can easily customize the application process from the dashboard.
@@ -181,6 +183,8 @@ Cloudflare Turnstile: [Terms of Use](https://www.cloudflare.com/website-terms/),
 6. Single application with status, details and activity
 7. Job post editor with job details
 8. Job list shortcode [wp_job_list]
+9. Job List block with its settings in the block editor
+10. Job post in the block editor with the Job details panel
 
 == Changelog ==
 
@@ -209,6 +213,8 @@ New
 - Personal data export and erase for applicants (WordPress privacy tools) and suggested privacy policy text
 - Spam protection: a honeypot field on every form and optional Cloudflare Turnstile
 - Option to delete all plugin data when the plugin is deleted
+- Gutenberg blocks: Job List (with categories, filter, number of jobs and order), Job Application Form and Job Details, with live previews in the editor
+- Job posts use the block editor, with a Job details panel (job type, location, vacancies, experience) and links to the job's applications and form
 
 Improvements
 - Admin app rebuilt with Vue 3, Element Plus and Vite
@@ -228,7 +234,7 @@ Removed
 - The "Recommended Plugins" box on the application screen
 
 Requirements
-- PHP 7.4 or newer; tested with WordPress 7.1
+- WordPress 6.3 or newer, PHP 7.4 or newer; tested with WordPress 7.1
 
 Developers
 - `window.WPJobBoard` keeps the hooks API (applyFilters, addFilter, addAction, doAction) and now also exposes `app` and `router`
@@ -258,4 +264,4 @@ Developers
 == Upgrade Notice ==
 
 = 2.0.0 =
-Security release with a redesigned admin. Fixes a stored XSS issue and protects uploaded CVs. Requires PHP 7.4. On Nginx, add the rule from the FAQ to block direct access to uploaded files.
+Security release with a redesigned admin and Gutenberg blocks. Fixes a stored XSS issue and protects uploaded CVs. Requires WordPress 6.3 and PHP 7.4. On Nginx, add the rule from the FAQ to block direct access to uploaded files.

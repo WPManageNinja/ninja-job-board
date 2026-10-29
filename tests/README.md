@@ -45,11 +45,17 @@ composer test:integration     # or: npm run test:php
 | `FileAccessTest` | CV download decisions (permission, ownership, file belongs to the application, path traversal, name pattern) and the upload folder guards |
 | `SpamProtectionTest` | Honeypot, Turnstile without token / failed / unreachable (fails closed) / confirmed, secret never returned and kept when left empty |
 | `PrivacyTest` | Personal data exporter and eraser (only that email; rows, activity and files), file deletion with the application, IP logging setting respected |
+| `BlocksTest` | The three Gutenberg blocks render in PHP (category filter, filter toggle, published jobs only, chosen detail fields, escaped title), a job page never shows the form or details twice, job fields in the block editor are sanitized and need edit rights |
 | `UninstallTest` | Uninstall keeps everything without the opt-in and removes tables, options, jobs and files with it |
 
 ### Proof of catch
 
-Every test was watched failing against injected faults (break, run, restore). Mutations run and caught: 29. Equivalent mutant, not counted: removing `esc_url()` on the protected download link changes nothing, because the link is built from a name that already passed the strict file-name pattern and `rawurlencode()`. The escaping stays as defense in depth.
+Every test was watched failing against injected faults (break, run, restore). Mutations run and caught: 36.
+
+Equivalent mutants (no behavior change, so no test can catch them; the code stays as defense in depth):
+- Removing `esc_url()` on the protected download link: the link is built from a name that already passed the strict file-name pattern and `rawurlencode()`.
+- Removing `sanitize_text_field()` on the Job list block title: the list template also runs it through `wp_kses_post()`.
+- Making the job meta `auth_callback` always true: the REST post endpoint already refuses users who can not edit the post, and the default meta check for these keys is the same `edit_post` capability.
 
 When you add a test: break the code it protects, watch it go red for the right reason, restore, watch it go green. A test that can not fail asserts nothing.
 

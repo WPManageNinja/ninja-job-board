@@ -6,7 +6,7 @@
  * Author: WPManageNinja LLC
  * Author URI:  https://wpmanageninja.com
  * Version: 2.0.0
- * Requires at least: 6.0
+ * Requires at least: 6.3
  * Requires PHP: 7.4
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -151,6 +151,9 @@ class WPJobBoard
 
         // Honeypot and optional Cloudflare Turnstile on the public form
         (new \WPJobBoard\Classes\SpamProtection())->register();
+
+        // Gutenberg blocks: Job list, Application form, Job details
+        (new \WPJobBoard\Classes\Blocks())->register();
 
         // Form Submission Handler
         $submissionHandler = new \WPJobBoard\Classes\SubmissionHandler();

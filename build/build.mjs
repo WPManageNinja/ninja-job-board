@@ -64,11 +64,20 @@ async function buildAdminApp() {
     });
 }
 
-async function buildClassicScript(entry, outFile, name) {
+/**
+ * @param {object} options jsx: compile JSX to wp.element (block editor scripts);
+ *                         minify: false keeps __() calls readable for translation tools
+ */
+async function buildClassicScript(entry, outFile, name, options = {}) {
     await build({
         root,
         configFile: false,
         logLevel: 'warn',
+        esbuild: options.jsx ? {
+            jsx: 'transform',
+            jsxFactory: 'wp.element.createElement',
+            jsxFragment: 'wp.element.Fragment'
+        } : {},
         // Library mode keeps process.env as is; @wordpress/hooks reads it
         define: {
             'process.env.NODE_ENV': JSON.stringify('production')
@@ -77,6 +86,7 @@ async function buildClassicScript(entry, outFile, name) {
             outDir: path(dirname(outFile)),
             emptyOutDir: false,
             sourcemap: false,
+            minify: options.minify === false ? false : 'esbuild',
             target: 'es2019',
             lib: {
                 entry: path(entry),
@@ -119,6 +129,15 @@ await buildClassicScript('src/admin/boot.js', 'assets/admin/boot.js', 'WPJobBoar
 await buildClassicScript('src/public/public.js', 'assets/js/jobboard-public.js', 'WPJobBoardPublic');
 await buildClassicScript('src/public/fileupload.js', 'assets/js/fileupload.js', 'WPJobBoardFileUpload');
 await buildClassicScript('src/integrations/tinymce.js', 'assets/js/tinymce.js', 'WPJobBoardTinyMce');
+
+// Gutenberg blocks (WordPress provides React and the editor packages as wp.* globals)
+await buildClassicScript('src/blocks/index.jsx', 'assets/blocks/blocks.js', 'WPJobBoardBlocks', { jsx: true, minify: false });
+await buildClassicScript('src/blocks/job-editor.jsx', 'assets/blocks/job-editor.js', 'WPJobBoardJobEditor', { jsx: true, minify: false });
+buildStylesheet('src/blocks/editor.scss', 'assets/blocks/editor.css');
+for (const block of ['job-list', 'application-form', 'job-details']) {
+    mkdirSync(path('assets/blocks/' + block), { recursive: true });
+    cpSync(path('src/blocks/' + block + '/block.json'), path('assets/blocks/' + block + '/block.json'));
+}
 
 buildStylesheet('src/scss/admin/app_edit.scss', 'assets/css/jobboard-edit.css');
 buildStylesheet('src/scss/admin/jobboard-print.scss', 'assets/css/jobboard-print.css');

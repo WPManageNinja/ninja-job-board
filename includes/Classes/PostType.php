@@ -19,9 +19,6 @@ class PostType
     {
         add_action('init', array($this, 'register'));
 
-        // Disable Gutenber for this post type
-        add_filter('use_block_editor_for_post_type', array($this, 'maybeDisableGutenberg'), 10, 2);
-
         add_filter('the_content', array($this, 'pushApplicationForm'), 10, 2);
 
         add_action('delete_post', array($this, 'maybeDeleteAssociateData'));
@@ -29,14 +26,6 @@ class PostType
         add_action('add_meta_boxes', array($this, 'registerMetaBox'));
         add_action('save_post_' . $this->postTypeName, array($this, 'saveMetaData'));
 
-    }
-
-    public function maybeDisableGutenberg($status, $postType)
-    {
-        if ($postType == $this->postTypeName) {
-            return false;
-        }
-        return $status;
     }
 
     public function register()
@@ -65,7 +54,9 @@ class PostType
             'supports'           => [
                 'title',
                 'editor',
-                'thumbnail'
+                'thumbnail',
+                // Needed for the job fields (registered post meta) to reach the block editor over REST
+                'custom-fields'
             ],
             'show_in_rest'       => true,
             'rewrite'            => array('slug' => $postSlug),
@@ -73,6 +64,7 @@ class PostType
         register_post_type($this->postTypeName, $args);
 
         $this->registerJobCategories();
+        $this->registerJobMeta();
     }
 
     public function registerJobCategories()
@@ -100,10 +92,42 @@ class PostType
             'show_ui'           => true,
             'show_admin_column' => false,
             'query_var'         => true,
+            'show_in_rest'      => true,
             'rewrite'           => array('slug' => $categorySlug),
         );
 
         register_taxonomy('wpjb-job-categories', array($this->postTypeName), $args);
+    }
+
+    /**
+     * The job fields editable in the block editor (Job details panel) and the classic meta box
+     */
+    public function registerJobMeta()
+    {
+        $fields = array(
+            'job_location'       => 'sanitize_text_field',
+            'job_vacancies'      => function ($value) {
+                return ($value === '' || $value === null) ? '' : (string)absint($value);
+            },
+            'job_experince_text' => 'sanitize_text_field',
+            'job_type'           => function ($value) {
+                $value = sanitize_key($value);
+                return ($value && isset(GeneralSettings::getJobTypes()[$value])) ? $value : '';
+            }
+        );
+
+        foreach ($fields as $key => $sanitize) {
+            register_post_meta($this->postTypeName, $key, array(
+                'type'              => 'string',
+                'single'            => true,
+                'default'           => '',
+                'show_in_rest'      => true,
+                'sanitize_callback' => $sanitize,
+                'auth_callback'     => function ($allowed, $metaKey, $postId) {
+                    return current_user_can('edit_post', $postId);
+                }
+            ));
+        }
     }
 
     public function pushApplicationForm($content)
@@ -111,15 +135,22 @@ class PostType
         if (!is_singular('wp_job_board')) {
             return $content;
         }
-        $formRenderer = new \WPJobBoard\Classes\Builder\Render();
         global $post;
-        $form = $formRenderer->render($post->ID, false);
 
-        $jobMetaHtml = $this->getMetaData($post);
-
-        if($jobMetaHtml) {
-            $content = $jobMetaHtml.$content;
+        // A job that places the blocks (or the shortcode) itself does not get the automatic copies
+        if (!has_block('ninja-job-board/job-details', $post)) {
+            $jobMetaHtml = self::renderJobMeta($post);
+            if ($jobMetaHtml) {
+                $content = $jobMetaHtml . $content;
+            }
         }
+
+        if (has_block('ninja-job-board/application-form', $post) || has_shortcode($post->post_content, 'wp_job_form')) {
+            return $content;
+        }
+
+        $formRenderer = new \WPJobBoard\Classes\Builder\Render();
+        $form = $formRenderer->render($post->ID, false);
 
         if (!$form) {
             return $content;
@@ -131,8 +162,17 @@ class PostType
         return $content . $contentBtn;
     }
 
-    private function getMetaData($post)
+    /**
+     * The job details list (type, location, vacancies, experience, posted date)
+     * @param \WP_Post   $post
+     * @param array|null $fields Which items to show: type, location, vacancies, experience, posted. Null = all
+     * @return string HTML
+     */
+    public static function renderJobMeta($post, $fields = null)
     {
+        $show = function ($field) use ($fields) {
+            return $fields === null || in_array($field, (array)$fields, true);
+        };
         $postId  = $post->ID;
         $location = get_post_meta($postId, 'job_location', true);
         $vacancies = get_post_meta($postId, 'job_vacancies', true);
@@ -145,32 +185,34 @@ class PostType
         $display_date = sprintf( esc_html__( '%s ago', 'ninja-job-board' ), human_time_diff( get_post_time( 'U', true, $post ), time() ) );
 
         $html = '<ul class="wpjb_job_meta">';
-        if($jobType) {
+        if($jobType && $show('type')) {
             $html .= '<li class="wpjb_job_type">' . esc_html($jobType) . '</li>';
         }
-        if($location) {
+        if($location && $show('location')) {
             $html .= '<li class="wpjb_job_location"><img alt="" class="wpjb_meta_icon" src="' . esc_url(WPJOBBOARD_URL . 'assets/images/map.svg') . '" />' . esc_html($location) . '</li>';
         }
-        if($vacancies) {
+        if($vacancies && $show('vacancies')) {
             $vacanciesText = __('No. of Vacancies:', 'ninja-job-board');
             if(intval($vacancies) == 1) {
                 $vacanciesText = __('No. of Vacancy:', 'ninja-job-board');
             }
             $html .= '<li class="wpjb_job_vacancies"><img alt="" class="wpjb_meta_icon" src="' . esc_url(WPJOBBOARD_URL . 'assets/images/people.svg') . '" />' . esc_html($vacanciesText . ' ' . $vacancies) . '</li>';
         }
-        if($experinceText) {
+        if($experinceText && $show('experience')) {
             $html .= '<li class="wpjb_job_exp_text"><img alt="" class="wpjb_meta_icon" src="' . esc_url(WPJOBBOARD_URL . 'assets/images/exp.svg') . '" />' . esc_html($experinceText) . '</li>';
         }
 
-        $html .= '<li class="wpjb_job_time"><img alt="" class="wpjb_meta_icon" src="' . esc_url(WPJOBBOARD_URL . 'assets/images/time.svg') . '" /><time datetime="' . esc_attr( get_post_time( 'Y-m-d', false, $post ) ) . '">' . wp_kses_post( $display_date ) . '</time></li>';
+        if ($show('posted')) {
+            $html .= '<li class="wpjb_job_time"><img alt="" class="wpjb_meta_icon" src="' . esc_url(WPJOBBOARD_URL . 'assets/images/time.svg') . '" /><time datetime="' . esc_attr( get_post_time( 'Y-m-d', false, $post ) ) . '">' . wp_kses_post( $display_date ) . '</time></li>';
+        }
 
         $html .= '</ul>';
 
-        $html .= $this->getMetaCSS();
+        $html .= self::getMetaCSS();
         return $html;
     }
 
-    private function getMetaCSS()
+    private static function getMetaCSS()
     {
         ob_start();
         ?>
@@ -237,7 +279,9 @@ class PostType
             array($this, 'renderJobMetaBox'),
             $this->postTypeName,
             'normal',
-            'core'
+            'core',
+            // The block editor shows these fields in its own Job details panel
+            array('__back_compat_meta_box' => true)
         );
     }
 

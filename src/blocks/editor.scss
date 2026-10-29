@@ -1,0 +1,41 @@
+// Editor-only styles for the Ninja Job Board blocks
+
+// Previews are not interactive in the editor
+.wp-block[data-type^="ninja-job-board/"] {
+    .wpjb_form_wrapper form,
+    .wpjb_job_list_wrapper a {
+        pointer-events: none;
+    }
+}
+
+.wpjb_block_notice {
+    padding: 16px;
+    border: 1px dashed #cacfd8;
+    border-radius: 8px;
+    color: #525866;
+    font-size: 13px;
+}
+
+.wpjb_block_fields {
+    margin: 16px 0 0;
+    padding: 0;
+    border: 0;
+
+    legend {
+        margin-bottom: 8px;
+        font-size: 11px;
+        font-weight: 500;
+    }
+
+    .components-checkbox-control {
+        margin-bottom: 8px;
+    }
+}
+
+.wpjb_job_links {
+    margin: 0;
+
+    li {
+        margin-bottom: 8px;
+    }
+}

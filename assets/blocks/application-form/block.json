@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "ninja-job-board/application-form",
+    "title": "Job Application Form",
+    "category": "widgets",
+    "icon": "feedback",
+    "description": "The application form of a job. In a job post it uses that job.",
+    "keywords": ["apply", "application", "form", "jobs"],
+    "textdomain": "ninja-job-board",
+    "usesContext": ["postId", "postType"],
+    "attributes": {
+        "jobId": { "type": "number", "default": 0 },
+        "showTitle": { "type": "boolean", "default": false }
+    },
+    "supports": {
+        "html": false,
+        "align": ["wide", "full"],
+        "spacing": { "margin": true, "padding": true }
+    },
+    "editorScript": "wpjobboard-blocks",
+    "editorStyle": "wpjobboard-blocks-editor",
+    "style": "wpjobboard_public"
+}
