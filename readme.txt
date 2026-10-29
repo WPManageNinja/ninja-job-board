@@ -172,14 +172,15 @@ When it is on, the application form loads the Turnstile script from `challenges.
 Cloudflare Turnstile: [Terms of Use](https://www.cloudflare.com/website-terms/), [Privacy Policy](https://www.cloudflare.com/privacypolicy/).
 
 == Screenshots ==
-1. All Job Posts
-2. Form Builder for your job post
-3. Email Notification Settings
-4. Frontend Job posting details
-5. Submitted Job Applications Table
-6. Single Job Application Data Details
-7. Job Details Edit Screen
-8. Current Active Jobs Shortcode [wp_job_list]
+
+1. All jobs, with status and application counts
+2. Application form builder
+3. Email notification editor
+4. Job details page with the apply button
+5. All applications, filtered by status
+6. Single application with status, details and activity
+7. Job post editor with job details
+8. Job list shortcode [wp_job_list]
 
 == Changelog ==
 
