@@ -183,47 +183,55 @@ Cloudflare Turnstile: [Terms of Use](https://www.cloudflare.com/website-terms/),
 
 == Changelog ==
 
-= 2.0.0 - October 29, 2026 =
-- New: Redesigned admin that matches the Fluent plugins (FluentCRM, Fluent Support): one app header, job tabs, settings sidebar, clean tables and cards
-- New: Applications lists filter by status with tabs that show the count for each status
-- New: Color-coded status badges for job posts, application status and internal status
-- New: Application view with an activity timeline, a status panel and compact file attachments
-- New: A job now opens on its applications
-- New: The admin app is rebuilt with Vue 3 and Element Plus
-- New: The admin app uses the WordPress REST API (namespace `ninja-job-board/v1`) instead of admin-ajax
-- New: Every admin REST route checks the user's capability and, for "own forms" permissions, the form owner
-- New: Build tooling moved from Laravel Mix to Vite
-- Improvement: Smaller admin bundle; removed unused libraries (Spout, Ace editor, vue-html-to-paper, lodash)
-- Improvement: Campaign emails are claimed before sending, so an email is never sent twice
-- Fix: Form scheduling "off" now clears the start and end timestamps
-- Fix: Turning off IP address logging now really stops storing the IP address
-- Fix: Status labels "Initial rejected" and "Shortlisted" (typo and casing)
-- Removed: The "Recommended Plugins" box on the application screen
-- Security: Uploaded application files (CVs) are served only to users who can view the application; direct access to the upload folder is blocked on Apache
-- New: Personal data export and erase for applicants (WordPress privacy tools) and suggested privacy policy text
-- New: Spam protection: a honeypot field on every form and optional Cloudflare Turnstile
-- New: Option to delete all plugin data when the plugin is deleted
-- Fix: Deleting an application or a job now also deletes its uploaded files
-- Fix: Users with only the "add form" permission can no longer edit forms of other users
-- Fix: PHP 8.2+ deprecation notices in the bundled query builder
-- Developers: `window.WPJobBoard` keeps the hooks API (applyFilters, addFilter, addAction, doAction) and now also exposes `app` and `router`
+= 2.0.0 - October 30, 2026 =
 
-= 1.5.0 - October 29, 2026 =
-- Security: Fixed stored XSS through file upload values in the application details view
-- Security: All submitted field values are now sanitized on save and escaped on display
-- Security: File uploads are validated against a server-side record of uploaded files
-- Security: Added nonce verification to all admin and public AJAX requests
-- Security: Added form ownership checks for users with "own forms" permissions
-- Security: Email notification placeholders are now escaped and email headers are sanitized
-- Security: Confirmation page links now use an unguessable hash
-- Security: Job meta box now saves only the known job fields, with nonce and capability checks
-- Security: Form import now accepts only known form settings
-- Security: CSV export protects against spreadsheet formula injection
-- Removed the bundled Spout library; CSV export no longer needs it
-- Fixed fatal errors in multi-step forms and the `{other.user_ip}` default value on PHP 8
-- Fixed email notification headers (From and Reply-To) that used the unparsed template values
-- Requires PHP 7.4 or newer
-- Tested with WordPress 7.1
+Security
+- Fixed stored XSS through file upload values in the application view
+- All submitted field values are sanitized on save and escaped on display
+- File uploads are checked against a server-side record of uploaded files
+- Uploaded files (CVs) are served only to users who can view the application; direct access to the upload folder is blocked on Apache (see the FAQ for Nginx)
+- The admin uses the WordPress REST API; every route checks the user's capability and, for "own forms" permissions, the form owner
+- Nonce checks on the public form and file upload
+- Users with only the "add form" permission can no longer edit forms of other users
+- Email notification placeholders are escaped and email headers are sanitized
+- Confirmation page links use an unguessable hash
+- The job meta box saves only the known job fields, with nonce and capability checks
+- Form import accepts only known form settings
+- CSV export protects against spreadsheet formula injection
+
+New
+- Redesigned admin that matches the Fluent plugins (FluentCRM, Fluent Support): one app header, job tabs, settings sidebar, clean tables and cards
+- Applications filter by status with tabs that show the count for each status
+- Color-coded status badges for job posts, application status and internal status
+- Application view with an activity timeline, a status panel and compact file attachments
+- A job opens on its applications
+- Personal data export and erase for applicants (WordPress privacy tools) and suggested privacy policy text
+- Spam protection: a honeypot field on every form and optional Cloudflare Turnstile
+- Option to delete all plugin data when the plugin is deleted
+
+Improvements
+- Admin app rebuilt with Vue 3, Element Plus and Vite
+- Smaller admin bundle; removed unused libraries (Spout, Ace editor, vue-html-to-paper, lodash)
+- Campaign emails are claimed before sending, so an email is never sent twice
+
+Fixes
+- Turning off IP address logging now really stops storing the IP address
+- Deleting an application or a job also deletes its uploaded files
+- Form scheduling "off" clears the start and end timestamps
+- Fatal errors in multi-step forms and the `{other.user_ip}` default value on PHP 8
+- Email notification From and Reply-To headers used the unparsed template values
+- Status labels "Initial rejected" and "Shortlisted"
+- PHP 8.2+ deprecation notices
+
+Removed
+- The "Recommended Plugins" box on the application screen
+
+Requirements
+- PHP 7.4 or newer; tested with WordPress 7.1
+
+Developers
+- `window.WPJobBoard` keeps the hooks API (applyFilters, addFilter, addAction, doAction) and now also exposes `app` and `router`
+- New filters: `wpjobboard/spam_check`, `wpjobboard/verify_public_nonce`, `wpjobboard/client_ip`
 
 = 1.4.0 - December 12, 2023 =
 - Database Query Issue Fixed
@@ -244,3 +252,8 @@ Cloudflare Turnstile: [Terms of Use](https://www.cloudflare.com/website-terms/),
 
 = 1.0.0 - July 22, 2019 =
 - Initial Release
+
+== Upgrade Notice ==
+
+= 2.0.0 =
+Security release with a redesigned admin. Fixes a stored XSS issue and protects uploaded CVs. Requires PHP 7.4. On Nginx, add the rule from the FAQ to block direct access to uploaded files.
