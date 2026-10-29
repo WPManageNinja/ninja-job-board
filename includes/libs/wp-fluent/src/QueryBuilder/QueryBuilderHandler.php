@@ -46,14 +46,14 @@ class QueryBuilderHandler
      *
      * @var array
      */
-    protected $fetchParameters = array(\PDO::FETCH_OBJ);
+    protected $fetchParameters = array(5); // PDO::FETCH_OBJ; kept as a value, the builder runs on $wpdb
 
     /**
      * @param null|\WpFluent\Connection $connection
      *
      * @throws \WpFluent\Exception
      */
-    public function __construct(Connection $connection = null)
+    public function __construct(?Connection $connection = null)
     {
         if (is_null($connection)) {
             if (! $connection = Connection::getStoredConnection()) {
@@ -100,9 +100,7 @@ class QueryBuilderHandler
      */
     public function asObject($className, $constructorArgs = array())
     {
-        var_dump('need to implement this'); die();
-
-        return $this->setFetchMode(\PDO::FETCH_CLASS, $className, $constructorArgs);
+        return $this->setFetchMode(8, $className, $constructorArgs); // PDO::FETCH_CLASS
     }
 
     /**
@@ -110,7 +108,7 @@ class QueryBuilderHandler
      *
      * @return static
      */
-    public function newQuery(Connection $connection = null)
+    public function newQuery(?Connection $connection = null)
     {
         if (is_null($connection)) {
             $connection = $this->connection;
@@ -278,7 +276,7 @@ class QueryBuilderHandler
         $allowedTypes = array('select', 'insert', 'insertignore', 'replace', 'delete', 'update', 'criteriaonly');
 
         if (! in_array(strtolower($type), $allowedTypes)) {
-            throw new Exception($type . ' is not a known type.', 2);
+            throw new Exception(esc_html($type) . ' is not a known type.', 2);
         }
 
         $queryArr = $this->adapterInstance->$type($this->statements, $dataToBePassed);
@@ -1104,9 +1102,12 @@ class QueryBuilderHandler
      */
     public function paginate($perPage = null, $columns = array('*'))
     {
-        $currentPage = intval($_GET['page']) ?: 1;
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended -- pagination numbers only; callers verify the request
+        $currentPage = isset($_GET['page']) ? absint($_GET['page']) : 1;
+        $currentPage = $currentPage ?: 1;
 
-        $perPage = $perPage ?: intval($_REQUEST['per_page']) ?: 15;
+        $perPage = $perPage ?: (isset($_REQUEST['per_page']) ? absint($_REQUEST['per_page']) : 0) ?: 15;
+        // phpcs:enable
 
         $skip = $perPage * ($currentPage - 1);
 

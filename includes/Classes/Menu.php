@@ -66,7 +66,7 @@ class Menu
 
 
 //        $submenu['wpjobboard.php']['support'] = array(
-//            __('Support', 'wpjobboard'),
+//            __('Support', 'ninja-job-board'),
 //            $menuPermission,
 //            'admin.php?page=wpjobboard.php#/support',
 //        );
@@ -79,13 +79,11 @@ class Menu
 
     public function enqueueAssets()
     {
-        if (isset($_GET['page']) && $_GET['page'] == 'wpjobboard.php') {
+        if (isset($_GET['page']) && sanitize_text_field(wp_unslash($_GET['page'])) === 'wpjobboard.php') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- page detection only
 
-            if(is_dir(wp_upload_dir()['basedir'] . WPJOBBOARD_UPLOAD_DIR) && !file_exists(wp_upload_dir()['basedir'] . WPJOBBOARD_UPLOAD_DIR . '/index.php')) {
-                file_put_contents(
-                    wp_upload_dir()['basedir'] . WPJOBBOARD_UPLOAD_DIR . '/index.php',
-                    file_get_contents(WPJOBBOARD_DIR.'includes/Classes/File/Stubs/index.stub')
-                );
+            $uploadDir = \WPJobBoard\Classes\File\FileHandler::getUploadDir();
+            if (is_dir($uploadDir['path'])) {
+                \WPJobBoard\Classes\File\FileHandler::ensureProtectedDir($uploadDir['path']);
             }
 
             if (function_exists('wp_enqueue_editor')) {
@@ -111,7 +109,12 @@ class Menu
                 ),
                 'applicationStatuses' => GeneralSettings::getApplicationStatuses(),
                 'internalStatuses'    => GeneralSettings::getInternalStatuses(),
-                'image_upload_url'    => admin_url('admin-ajax.php?action=wpjb_global_settings_handler&route=wpjb_upload_image'),
+                'image_upload_url'    => add_query_arg(array(
+                    'action'     => 'wpjb_global_settings_handler',
+                    'route'      => 'wpjb_upload_image',
+                    'wpjb_nonce' => wp_create_nonce('wpjobboard_admin_nonce')
+                ), admin_url('admin-ajax.php')),
+                'nonce'               => wp_create_nonce('wpjobboard_admin_nonce'),
                 'forms_count'         => Forms::getTotalCount(),
                 'assets_url'          => WPJOBBOARD_URL . 'assets/',
                 'ajaxurl'             => admin_url('admin-ajax.php'),
@@ -148,7 +151,7 @@ class Menu
 
 
         add_action('admin_footer', function () {
-            echo '<script type="text/javascript">jQuery("#toplevel_page_wpjobboard").addClass("wp-has-current-submenu wp-menu-open");</script>';
+            wp_print_inline_script_tag('jQuery("#toplevel_page_wpjobboard").addClass("wp-has-current-submenu wp-menu-open");');
         });
 
         wp_enqueue_style('wpjobboard_admin_edit_app', WPJOBBOARD_URL . 'assets/css/jobboard-edit.css', array(), WPJOBBOARD_VERSION);
@@ -158,31 +161,31 @@ class Menu
             <li role="menuitem" class="el-menu-item  is-active" tabindex="0">
                 <a href="#">
                     <i class="dashicons dashicons-edit"></i>
-                    <span><?php _e('Post Details', 'wpjobboard'); ?></span>
+                    <span><?php esc_html_e('Post Details', 'ninja-job-board'); ?></span>
                 </a>
             </li>
             <li role="menuitem" tabindex="1" class="el-menu-item">
                 <a href="<?php echo esc_url($urlBase); ?>form-builder">
                     <i class="dashicons dashicons-lightbulb"></i>
-                    <span><?php _e('Application Form', 'wpjobboard');?></span>
+                    <span><?php esc_html_e('Application Form', 'ninja-job-board');?></span>
                 </a>
             </li>
             <li role="menuitem" tabindex="2" class="el-menu-item" style="border-bottom-color: transparent;">
                 <a href="<?php echo esc_url($urlBase); ?>settings/confirmation_settings">
                     <i class="dashicons dashicons-admin-settings"></i>
-                    <span><?php _e('Form Settings', 'wpjobboard');?></span>
+                    <span><?php esc_html_e('Form Settings', 'ninja-job-board');?></span>
                 </a>
             </li>
             <li role="menuitem" tabindex="3" class="el-menu-item" style="border-bottom-color: transparent;">
                 <a href="<?php echo esc_url($urlBase); ?>email_settings">
                     <i class="dashicons dashicons-email-alt"></i>
-                    <span><?php _e('Email Notifications', 'wpjobboard');?></span>
+                    <span><?php esc_html_e('Email Notifications', 'ninja-job-board');?></span>
                 </a>
             </li>
             <li role="menuitem" tabindex="4" class="el-menu-item" style="border-bottom-color: transparent;">
                 <a href="<?php echo esc_url($urlBase); ?>form_entries">
                     <i class="dashicons dashicons-text"></i>
-                    <span><?php _e('Job Applications', 'wpjobboard');?></span>
+                    <span><?php esc_html_e('Job Applications', 'ninja-job-board');?></span>
                 </a>
             </li>
         </ul>
@@ -191,7 +194,7 @@ class Menu
 
     public function maybeMenuExpand()
     {
-        if (isset($_GET['taxonomy']) && $_GET['taxonomy'] == 'wpjb-job-categories') {
+        if (isset($_GET['taxonomy']) && sanitize_key(wp_unslash($_GET['taxonomy'])) == 'wpjb-job-categories') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- menu highlight only
             ?>
             <script type="text/javascript">
                 jQuery(document).ready(function ($) {
@@ -200,7 +203,7 @@ class Menu
                     $element.addClass('current');
                     $element.parent().addClass('current');
                 });
-            </script>';
+            </script>
 <?php
         }
     }

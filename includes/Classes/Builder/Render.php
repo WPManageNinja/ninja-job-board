@@ -70,7 +70,10 @@ class Render
     public function renderFormHeader($form, $steps = [])
     {
         global $wp;
-        $currentUrl = home_url(add_query_arg($_GET, $wp->request));;
+        $currentUrl = home_url(add_query_arg(array(), $wp->request));
+        if (!empty($_SERVER['QUERY_STRING'])) {
+            $currentUrl .= '?' . sanitize_text_field(wp_unslash($_SERVER['QUERY_STRING']));
+        }
         $labelPlacement = $form->designSettings['labelPlacement'];
         $btnPosition = ArrayHelper::get($form->designSettings, 'submit_button_position');
 
@@ -115,15 +118,15 @@ class Render
         $wrapperClassStr = implode(' ', $formWrapperClasses);
 
         ?>
-        <div class="<?php echo esc_html($wrapperClassStr); ?>">
+        <div class="<?php echo esc_attr($wrapperClassStr); ?>">
         <?php if ($form->show_title == 'yes'): ?>
         <h3 class="wp_form_title"><?php echo esc_html($form->post_title); ?></h3>
     <?php endif; ?>
         <?php do_action('wpjobboard/form_render_before', $form); ?>
-        <form <?php wpJobBoardPrintInternal($this->builtAttributes($formAttributes)); ?>>
+        <form <?php echo $this->builtAttributes($formAttributes); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in builtAttributes() ?>>
         <input type="hidden" name="__wpjb_form_id" value="<?php echo intval($form->ID); ?>"/>
         <input type="hidden" name="__wpjb_current_url" value="<?php echo esc_url($currentUrl); ?>">
-        <input type="hidden" name="__wpjb_current_page_id" value="<?php echo get_the_ID(); ?>">
+        <input type="hidden" name="__wpjb_current_page_id" value="<?php echo intval(get_the_ID()); ?>">
         <?php do_action('wpjobboard/form_render_start_form', $form); ?>
         <?php if ($steps): ?>
         <?php do_action('wpjobboard/form_step_header', $steps, $form); ?>
@@ -155,7 +158,7 @@ class Render
         ?>
         <?php do_action('wpjobboard/form_render_before_submit_button', $form); ?>
         <div class="wpjb_form_group wpjb_form_submissions">
-            <button <?php echo wp_kses_post($this->builtAttributes($buttonAttributes)); ?>>
+            <button <?php echo $this->builtAttributes($buttonAttributes); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in builtAttributes() ?>>
                 <span class="wpjb_txt_normal"><?php wpJobBoardPrintInternal($this->parseText($button_text, $form->ID)); ?></span>
                 <span style="display: none;" class="wpjb_txt_loading">
                     <?php  wpJobBoardPrintInternal($this->parseText($processingText, $form->ID)); ?>
@@ -208,6 +211,7 @@ class Render
 
         wp_localize_script('wpjobboard_public', 'wp_job_board_general', array(
             'ajax_url'  => admin_url('admin-ajax.php'),
+            'nonce'     => wp_create_nonce('wpjobboard_public_nonce'),
             'date_i18n' => array(
                 'previousMonth'    => __('Previous Month', 'ninja-job-board'),
                 'nextMonth'        => __('Next Month', 'ninja-job-board'),
@@ -297,7 +301,7 @@ class Render
     {
         $atts = ' ';
         foreach ($attributes as $attributeKey => $attribute) {
-            $atts .= $attributeKey . "='" . $attribute . "' ";
+            $atts .= sanitize_key($attributeKey) . '="' . esc_attr($attribute) . '" ';
         }
         return $atts;
     }

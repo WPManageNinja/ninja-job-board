@@ -2,12 +2,16 @@
 /**
  * Plugin Name: Ninja Job Board
  * Plugin URI:  https://github.com/WPManageNinja/wp-job-board
- * Description: Create Job Posting and Manage Jon Application In WordPress
+ * Description: Create Job Posting and Manage Job Application In WordPress
  * Author: WPManageNinja LLC
  * Author URI:  https://wpmanageninja.com
- * Version: 1.4.0
+ * Version: 1.5.0
+ * Requires at least: 6.0
+ * Requires PHP: 7.4
+ * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: ninja-job-board
- *
+ * Domain Path: /languages
  */
 
 /**
@@ -33,7 +37,7 @@ if (!defined('ABSPATH')) {
 }
 
 define('WPJOBBOARD_VERSION_LITE', true);
-define('WPJOBBOARD_VERSION', '1.3.3');
+define('WPJOBBOARD_VERSION', '1.5.0');
 define('WPJOBBOARD_DB_VERSION', 100);
 define('WPJOBBOARD_MAIN_FILE', __FILE__);
 define('WPJOBBOARD_URL', plugin_dir_url(__FILE__));
@@ -116,12 +120,18 @@ class WPJobBoard
                 'show_title' => false
             ), $args);
 
-            if (!$args['id']) {
-                return;
+            $formId = absint($args['id']);
+            if (!$formId) {
+                return '';
+            }
+
+            $form = get_post($formId);
+            if (!$form || $form->post_type !== 'wp_job_board' || $form->post_status !== 'publish') {
+                return '';
             }
 
             $builder = new \WPJobBoard\Classes\Builder\Render();
-            return $builder->render($args['id'], $args['show_title'], $args['show_description']);
+            return $builder->render($formId, sanitize_text_field($args['show_title']));
         });
         add_shortcode('wp_job_list', function ($args) {
             $args = shortcode_atts(array(
@@ -134,12 +144,16 @@ class WPJobBoard
                 'show_filter'    => 'yes',
                 'posts_per_page' => 200
             ), $args);
+            $args['categories'] = sanitize_text_field($args['categories']);
+            $args['posts_per_page'] = absint($args['posts_per_page']);
             $builder = new \WPJobBoard\Classes\Builder\RenderJobList();
             return $builder->render($args);
         });
         add_shortcode('wpjobboard_confirmation', function () {
-            if (isset($_REQUEST['wpjb_submission']) && $_REQUEST['wpjb_submission']) {
-                $submissionHash = sanitize_text_field($_REQUEST['wpjb_submission']);
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- the unguessable hash is the access key for this read-only page
+            $submissionHash = isset($_REQUEST['wpjb_submission']) ? sanitize_text_field(wp_unslash($_REQUEST['wpjb_submission'])) : '';
+            // Hashes made before 1.5.0 were predictable, so only the random format can open a confirmation
+            if ($submissionHash && preg_match('/^wpjb_[a-f0-9]{32}$/', $submissionHash)) {
                 $submission = wpJobBoardDB()->table('wjb_applications')
                     ->where('submission_hash', '=', $submissionHash)
                     ->first();
@@ -147,10 +161,10 @@ class WPJobBoard
                     $receiptHandler = new \WPJobBoard\Classes\Builder\ApplicationConfirmation();
                     return $receiptHandler->render($submission->id);
                 } else {
-                    return '<p class="wpjb_no_recipt_found">' . __('Sorry, no submission confirmation found, Please check your URL', 'ninja-job-board') . '</p>';
+                    return '<p class="wpjb_no_recipt_found">' . esc_html__('Sorry, no submission confirmation found, Please check your URL', 'ninja-job-board') . '</p>';
                 }
             } else {
-                return '<p class="wpjb_no_recipt_found">' . __('Sorry, no submission conirmation found, Please check your URL', 'ninja-job-board') . '</p>';
+                return '<p class="wpjb_no_recipt_found">' . esc_html__('Sorry, no submission confirmation found, Please check your URL', 'ninja-job-board') . '</p>';
             }
         });
     }
@@ -185,7 +199,7 @@ class WPJobBoard
 
     public function textDomain()
     {
-        load_plugin_textdomain('ninja-job-board', false, basename(dirname(__FILE__)) . '/languages');
+        // WordPress.org loads translations for this plugin automatically (WP 4.6+).
     }
 
     public function loadDependecies()

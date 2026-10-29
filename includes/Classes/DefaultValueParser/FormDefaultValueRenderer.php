@@ -30,7 +30,7 @@ class FormDefaultValueRenderer
                 'placeholders' => FormPlaceholders::getWPPlaceHolders()
             ),
             'user'  => array(
-                'title'        => __('Current User Info'),
+                'title'        => __('Current User Info', 'ninja-job-board'),
                 'placeholders' => FormPlaceholders::getUserPlaceholders()
             ),
             'other' => array(

@@ -41,15 +41,68 @@ class AccessControl
         return false;
     }
 
+    /**
+     * Gate for every admin AJAX route: CSRF nonce, actor capability and form ownership.
+     * Sends a JSON error and stops the request when any check fails.
+     */
     public static function checkAndPresponseError($endpoint = false, $group = false, $message = '')
     {
-        if(self::hasEndPointPermission($endpoint, $group)) {
+        if (!check_ajax_referer('wpjobboard_admin_nonce', 'wpjb_nonce', false)) {
+            wp_send_json_error(array(
+                'message' => __('Security check failed. Please reload the page and try again.', 'ninja-job-board'),
+                'action'  => $endpoint
+            ), 403);
+        }
+
+        $permission = self::hasEndPointPermission($endpoint, $group);
+
+        if ($permission && self::canAccessRequestedForm($permission, $endpoint)) {
             return true;
         }
+
         wp_send_json_error(array(
-            'message' => ($message) ? $message : __('Sorry, You do not have permission to do this action: ', 'ninja-job-board').$endpoint,
-            'action' => $endpoint
-        ), 423);
+            'message' => ($message) ? $message : __('Sorry, You do not have permission to do this action: ', 'ninja-job-board') . $endpoint,
+            'action'  => $endpoint
+        ), 403);
+    }
+
+    /**
+     * A user who has only an "own" permission can act only on forms they created.
+     *
+     * @param string $permission The capability that granted the access
+     * @param string $endpoint
+     * @return bool
+     */
+    private static function canAccessRequestedForm($permission, $endpoint)
+    {
+        if (!is_string($permission) || strpos($permission, '_own') === false) {
+            return true;
+        }
+
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended -- nonce verified in checkAndPresponseError()
+        $formId = isset($_REQUEST['form_id']) ? absint($_REQUEST['form_id']) : 0;
+        $submissionId = isset($_REQUEST['submission_id']) ? absint($_REQUEST['submission_id']) : 0;
+        // phpcs:enable
+
+        if ($submissionId) {
+            $submission = wpJobBoardDB()->table('wjb_applications')
+                ->select(array('form_id'))
+                ->where('id', $submissionId)
+                ->first();
+            if (!$submission || ($formId && intval($submission->form_id) !== $formId)) {
+                return false;
+            }
+            $formId = intval($submission->form_id);
+        }
+
+        if (!$formId) {
+            // Routes that do not touch a single form
+            return in_array($endpoint, array('get_forms', 'create_form', 'get_available_forms'), true);
+        }
+
+        $form = get_post($formId);
+
+        return $form && $form->post_type === 'wp_job_board' && intval($form->post_author) === get_current_user_id();
     }
 
     public static function hasEndPointPermission($endpoint = false, $group = false)

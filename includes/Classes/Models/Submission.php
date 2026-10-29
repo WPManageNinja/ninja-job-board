@@ -86,6 +86,10 @@ class Submission
             ->where('wjb_applications.id', $submissionId)
             ->first();
 
+        if (!$result) {
+            return false;
+        }
+
         $result->form_data_raw = maybe_unserialize($result->form_data_raw);
         $result->form_data_formatted = maybe_unserialize($result->form_data_formatted);
         if ($result->user_id) {
@@ -122,31 +126,39 @@ class Submission
             $elements = get_post_meta($submission->form_id, 'wpjobboard_application_builder_settings', true);
         }
 
-        if (!$elements) {
+        if (!$elements || !is_array($elements)) {
             return array();
         }
-        
+
         $parsedSubmission = array();
 
-        $inputValues = $submission->form_data_formatted;
+        $inputValues = is_array($submission->form_data_formatted) ? $submission->form_data_formatted : array();
 
         foreach ($elements as $element) {
             if ($element['group'] == 'input') {
                 $elementId = ArrayHelper::get($element, 'id');
-                $elementValue = apply_filters(
-                    'wpjobboard/rendering_entry_value_' . $element['type'],
-                    ArrayHelper::get($inputValues, $elementId),
-                    $submission,
-                    $element
-                );
+                $rawValue = ArrayHelper::get($inputValues, $elementId);
+                $filterName = 'wpjobboard/rendering_entry_value_' . $element['type'];
 
-                if (is_array($elementValue)) {
-                    $elementValue = implode(', ', $elementValue);
+                if (has_filter($filterName)) {
+                    // The component builds HTML from the value; it must escape it. kses is the safety net.
+                    $elementValue = apply_filters($filterName, $rawValue, $submission, $element);
+                    if (is_array($elementValue)) {
+                        $elementValue = esc_html(implode(', ', array_filter($elementValue, 'is_scalar')));
+                    }
+                    $elementValue = wp_kses_post((string)$elementValue);
+                } else {
+                    if (is_array($rawValue)) {
+                        $rawValue = implode(', ', array_filter($rawValue, 'is_scalar'));
+                    }
+                    $elementValue = is_scalar($rawValue) ? esc_html((string)$rawValue) : '';
                 }
+
+                // The admin app renders this value as HTML (v-html), so it must be safe HTML here.
                 $parsedSubmission[$elementId] = array(
                     'label' => $this->getLabel($element),
                     'value' => $elementValue,
-                    'type'  => $element['type']
+                    'type'  => sanitize_key($element['type'])
                 );
             }
         }

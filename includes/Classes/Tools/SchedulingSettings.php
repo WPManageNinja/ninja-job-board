@@ -17,6 +17,8 @@ if (!defined('ABSPATH')) {
  */
 class SchedulingSettings
 {
+    // phpcs:disable WordPress.Security.NonceVerification.Recommended -- every route passes AccessControl::checkAndPresponseError() first, which verifies the nonce
+
     public function register()
     {
         add_action('wp_ajax_wpjb_scheduling_endpoints', array($this, 'schedulingAjaxHandler'));
@@ -24,7 +26,7 @@ class SchedulingSettings
 
     public function schedulingAjaxHandler()
     {
-        $route = sanitize_text_field($_REQUEST['route']);
+        $route = isset($_REQUEST['route']) ? sanitize_text_field(wp_unslash($_REQUEST['route'])) : '';
         $validRoutes = array(
             'get_settings'    => 'getSettings',
             'update_settings' => 'updateSettings'
@@ -38,7 +40,7 @@ class SchedulingSettings
 
     public function getSettings()
     {
-        $formId = intval($_REQUEST['form_id']);
+        $formId = isset($_REQUEST['form_id']) ? absint($_REQUEST['form_id']) : 0;
         $settings = Forms::getSchedulingSettings($formId);
 
         wp_send_json_success(array(
@@ -49,8 +51,13 @@ class SchedulingSettings
 
     public function updateSettings()
     {
-        $formId = intval($_REQUEST['form_id']);
-        $settings = wpJobBoardSanitize(ArrayHelper::get($_REQUEST, 'settings', []));
+        $formId = isset($_REQUEST['form_id']) ? absint($_REQUEST['form_id']) : 0;
+        if (!Forms::getForm($formId)) {
+            wp_send_json_error(array(
+                'message' => __('Job post not found', 'ninja-job-board')
+            ), 404);
+        }
+        $settings = wpJobBoardSanitize(wp_unslash(ArrayHelper::get($_REQUEST, 'settings', []))); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized by wpJobBoardSanitize()
 
         if (
             ArrayHelper::get($settings, 'limitNumberOfEntries.status') == 'no' &&
@@ -126,7 +133,7 @@ class SchedulingSettings
 
         if ($extra_css_class) {
             $wrapperCSSClasses[] = $extra_css_class;
-            $wrapperCSSClasses[] = 'wpjb_restriction_action_' . $sheduleSettings['restriction_applied_type'];
+            $wrapperCSSClasses[] = 'wpjb_restriction_action_' . sanitize_html_class(ArrayHelper::get($sheduleSettings, 'restriction_applied_type'));
         }
         return $wrapperCSSClasses;
     }

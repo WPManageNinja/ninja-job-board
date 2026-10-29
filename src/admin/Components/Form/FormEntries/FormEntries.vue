@@ -128,6 +128,7 @@
                     form_id: parseInt(this.form_id),
                     application_status: this.selected_application_status,
                     status: this.selected_internal_status,
+                    wpjb_nonce: window.wpJobBoardsAdmin.nonce
                 });
 
                 window.location.href = window.wpJobBoardsAdmin.ajaxurl + '?' + query;

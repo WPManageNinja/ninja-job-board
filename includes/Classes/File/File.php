@@ -939,7 +939,7 @@ class File extends \SplFileInfo
         $content = file_get_contents($this->getPathname());
         if (false === $content) {
             $error = error_get_last();
-            throw new \RuntimeException($error['message']);
+            throw new \RuntimeException(esc_html($error['message']));
         }
 
         return $content;

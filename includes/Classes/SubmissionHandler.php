@@ -20,20 +20,29 @@ class SubmissionHandler
 
     public function handeSubmission()
     {
-        parse_str($_REQUEST['form_data'], $form_data);
-        // Now Validate the form please
-        $formId = absint($_REQUEST['form_id']);
-        // Get Original Form Elements Now
+        if (!wpJobBoardVerifyPublicNonce()) {
+            wp_send_json_error(array(
+                'message' => __('Security check failed. Please reload the page and try again.', 'ninja-job-board')
+            ), 403);
+        }
 
-        do_action('wpjobboard/form_submission_activity_start', $formId);
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended -- verified in wpJobBoardVerifyPublicNonce()
+        $formId = isset($_REQUEST['form_id']) ? absint($_REQUEST['form_id']) : 0;
+        $rawFormData = isset($_REQUEST['form_data']) && is_string($_REQUEST['form_data']) ? wp_unslash($_REQUEST['form_data']) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- parsed below, then every value is sanitized by field type
+        // phpcs:enable
+
+        $form_data = array();
+        parse_str($rawFormData, $form_data);
 
         $form = Forms::getForm($formId);
 
-        if (!$form) {
+        if (!$form || $form->post_status !== 'publish') {
             wp_send_json_error(array(
                 'message' => __('Invalid request. Please try again', 'ninja-job-board')
             ), 423);
         }
+
+        do_action('wpjobboard/form_submission_activity_start', $formId);
 
         $formattedElements = Forms::getFormattedElements($formId);
         $this->validate($form_data, $formattedElements, $form);
@@ -41,7 +50,7 @@ class SubmissionHandler
         // Extract Input Items Here
         $inputItems = array();
         foreach ($formattedElements['input'] as $inputName => $inputElement) {
-            $value = ArrayHelper::get($form_data, $inputName);
+            $value = $this->sanitizeValue(ArrayHelper::get($form_data, $inputName), $inputElement['type']);
             $inputItems[$inputName] = apply_filters('wpjobboard/submitted_value_' . $inputElement['type'], $value, $inputElement, $form_data);
         }
 
@@ -63,10 +72,10 @@ class SubmissionHandler
         $submission = array(
             'form_id'             => $formId,
             'user_id'             => $currentUserId,
-            'applicant_name'       => $this->customerName,
-            'applicant_email'      => $this->customerEmail,
-            'form_data_raw'       => maybe_serialize($form_data),
-            'form_data_formatted' => maybe_serialize(wp_unslash($inputItems)),
+            'applicant_name'      => sanitize_text_field($this->applicantName),
+            'applicant_email'     => sanitize_email($this->applicantEmail),
+            'form_data_raw'       => maybe_serialize(wpJobBoardSanitizeText($form_data)),
+            'form_data_formatted' => maybe_serialize($inputItems),
             'application_status'      => 'applied',
             'submission_hash'     => $this->getHash(),
             'status'              => 'new',
@@ -137,8 +146,8 @@ class SubmissionHandler
             ), 423);
         }
 
-        $this->customerName = $applicantName;
-        $this->customerEmail = $applicantEmail;
+        $this->applicantName = is_string($applicantName) ? $applicantName : '';
+        $this->applicantEmail = is_string($applicantEmail) ? $applicantEmail : '';
 
         return;
     }
@@ -170,22 +179,51 @@ class SubmissionHandler
             }
             $confirmation['redirectTo'] = 'customUrl';
             $url = add_query_arg('wpjb_submission', $submission->submission_hash, $url);
-            $confirmation['customUrl'] = PlaceholderParser::parse($url, $submission);
+            $confirmation['customUrl'] = esc_url_raw(PlaceholderParser::parse($url, $submission, 'url'));
         } else if ($confirmation['redirectTo'] == 'samePage') {
             do_action('wpjobboard/require_entry_html');
-            $confirmation['messageToShow'] = PlaceholderParser::parse($confirmation['messageToShow'], $submission);
+            $confirmation['messageToShow'] = wpJobBoardKsesWithStyle(PlaceholderParser::parse($confirmation['messageToShow'], $submission));
             do_action('wpjobboard/require_entry_html_done');
         }
         return $confirmation;
     }
 
+    /**
+     * Sanitize a submitted value by the field type
+     * @param mixed  $value
+     * @param string $type
+     * @return mixed
+     */
+    private function sanitizeValue($value, $type)
+    {
+        if (is_array($value)) {
+            return array_map(function ($item) use ($type) {
+                return $this->sanitizeValue($item, $type);
+            }, $value);
+        }
+
+        if (!is_scalar($value)) {
+            return '';
+        }
+
+        $value = (string)$value;
+
+        switch ($type) {
+            case 'textarea':
+                return sanitize_textarea_field($value);
+            case 'applicant_email':
+                return sanitize_email($value);
+            default:
+                return sanitize_text_field($value);
+        }
+    }
+
+    /**
+     * Unguessable hash. It is the only key that opens the public confirmation page.
+     * @return string
+     */
     private function getHash()
     {
-        $prefix = 'wpjb_' . time();
-        $uid = uniqid($prefix);
-        // now let's make a unique number from 1 to 999
-        $uid .= mt_rand(1, 999);
-        $uid = str_replace(array("'", '/', '?', '#', "\\"), '', $uid);
-        return $uid;
+        return 'wpjb_' . bin2hex(random_bytes(16));
     }
 }

@@ -98,7 +98,8 @@
                 let query = jQuery.param({
                     action: 'wpjobboard_global_tools',
                     route: 'export_form',
-                    form_id: this.export_id
+                    form_id: this.export_id,
+                    wpjb_nonce: window.wpJobBoardsAdmin.nonce
                 });
                 window.location.href = window.wpJobBoardsAdmin.ajaxurl + '?' + query;
                 this.$notify.success('Exporting form');
@@ -106,10 +107,12 @@
             },
             importForm() {
                 var that = this;
+                let formData = new FormData(jQuery('#upload_json_form')[0]);
+                formData.append('wpjb_nonce', window.wpJobBoardsAdmin.nonce);
                 jQuery.ajax({
                     url: window.wpJobBoardsAdmin.ajaxurl,
                     type: "POST",
-                    data: new FormData(jQuery('#upload_json_form')[0]),
+                    data: formData,
                     contentType: false,
                     cache: false,
                     processData: false,

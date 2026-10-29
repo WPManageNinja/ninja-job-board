@@ -42,15 +42,14 @@
             $.post(this.general.ajax_url, {
                 action: 'wpjb_submit_form',
                 form_id: formId,
+                wpjb_nonce: this.general.nonce,
                 form_data: $(form).serialize()
             })
                 .then(response => {
                     if (!response || !response.data || !response.data.confirmation) {
                         let $errorDiv = form.parent().find('.wpjb_form_errors');
                         $errorDiv.html('<p class="wpjb_form_error_heading">Something is wrong when submitting the form</p>').show();
-                        $errorDiv.append('<div class="wpjb_error_items">Server Response: ');
-                        $errorDiv.append('<p>' + response + '</p>');
-                        $errorDiv.append('</div>');
+                        $errorDiv.append($('<div class="wpjb_error_items"></div>').text('Server Response: ' + response));
                         form.parent().addClass('wpjb_form_has_errors');
                         form.trigger('wpjb_form_fail_submission', response);
                         form.removeClass('wpjb_submitting_form');
@@ -90,14 +89,15 @@
                 })
                 .fail(error => {
                     let $errorDiv = form.parent().find('.wpjb_form_errors');
-                    $errorDiv.html('<p class="wpjb_form_error_heading">' + error.responseJSON.data.message + '</p>').show();
-                    $errorDiv.append('<ul class="wpjb_error_items">');
-                    $.each(error.responseJSON.data.errors, (errorId, errorText) => {
-                        $errorDiv.append('<li class="error_item_' + errorId + '">' + errorText + '</li>');
+                    let errorData = (error.responseJSON && error.responseJSON.data) ? error.responseJSON.data : {};
+                    $errorDiv.html('').append($('<p class="wpjb_form_error_heading"></p>').text(errorData.message || 'Something is wrong when submitting the form')).show();
+                    let $errorList = $('<ul class="wpjb_error_items"></ul>');
+                    $.each(errorData.errors || {}, (errorId, errorText) => {
+                        $errorList.append($('<li></li>').addClass('error_item_' + String(errorId).replace(/[^\w-]/g, '')).text(errorText));
                     });
-                    $errorDiv.append('</ul>');
+                    $errorDiv.append($errorList);
                     form.parent().addClass('wpjb_form_has_errors');
-                    form.trigger('wpjb_form_fail_submission', error.responseJSON.data);
+                    form.trigger('wpjb_form_fail_submission', errorData);
                     form.removeClass('wpjb_submitting_form');
 
                     form.removeClass('wpjb_submitting_form');

@@ -35,7 +35,7 @@ class RenderJobList
             $categoryQuery = [
                 'taxonomy' => 'wpjb-job-categories',
                 'field'    => 'slug',
-                'terms'    => $cats
+                'terms'    => array_map('sanitize_title', $formattedCats)
             ];
         }
 
@@ -66,9 +66,10 @@ class RenderJobList
         }
 
         $postsArg = [
-            'post_type' => 'wp_job_board',
-            'posts_per_page' => $args['posts_per_page'],
-            'order' => $args['order'],
+            'post_type'      => 'wp_job_board',
+            'post_status'    => 'publish',
+            'posts_per_page' => min(500, max(1, intval($args['posts_per_page']))),
+            'order'          => (strtoupper($args['order']) === 'ASC') ? 'ASC' : 'DESC',
         ];
 
         if($categoryQuery) {
@@ -86,7 +87,7 @@ class RenderJobList
         if($jobs) {
             $this->addAssets();
         } else {
-            return 'No Current Job Found';
+            return esc_html__('No Current Job Found', 'ninja-job-board');
         }
 
         $categories = array();
@@ -94,7 +95,7 @@ class RenderJobList
             $expDate = '—';
             $expDateTime = Forms::getExpirationDateTime($job->ID);
             if($expDateTime) {
-                $expDate = date('d M, Y', strtotime($expDateTime));
+                $expDate = date_i18n('d M, Y', strtotime($expDateTime));
             }
             $experinceText = get_post_meta($job->ID, 'job_experince_text', true);
             $category = $this->getFirstCategory($job->ID);
@@ -133,6 +134,7 @@ class RenderJobList
 
     private function pushJS()
     {
+        wp_enqueue_script('jquery');
         add_action('wp_footer', function () {
             ?>
             <script type="text/javascript">

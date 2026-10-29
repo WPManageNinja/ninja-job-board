@@ -2,19 +2,12 @@
 
 namespace WPJobBoard\Classes;
 
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 class View
 {
-
-    /**
-     * Generate and echo/print a view file
-     * @param  string $path
-     * @param  array  $data
-     * @return void
-     */
-    public static function render($path, $data = [])
-    {
-        echo self::make($path, $data);
-    }
 
     /**
      * Generate a view file

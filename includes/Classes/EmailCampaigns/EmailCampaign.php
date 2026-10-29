@@ -8,9 +8,41 @@ use WPJobBoard\Classes\Emogrifier\Emogrifier;
 use WPJobBoard\Classes\Models\Submission;
 use WPJobBoard\Classes\Models\SubmissionActivity;
 use WPJobBoard\Classes\View;
+use WPJobBoard\Classes\GeneralSettings;
+use WPJobBoard\Classes\Models\Forms;
+
+if (!defined('ABSPATH')) {
+    exit;
+}
 
 class EmailCampaign
 {
+    // phpcs:disable WordPress.Security.NonceVerification.Recommended -- every route passes AccessControl::checkAndPresponseError() first, which verifies the nonce
+
+    /**
+     * Campaign filter settings with only known status keys
+     */
+    private function sanitizeCampaignSettings($settings)
+    {
+        $settings = is_array($settings) ? wpJobBoardSanitizeText($settings) : array();
+        $internal = (array)ArrayHelper::get($settings, 'internal_statuses', array());
+        $application = (array)ArrayHelper::get($settings, 'application_statuses', array());
+        $settings['internal_statuses'] = array_values(array_intersect($internal, array_keys(GeneralSettings::getInternalStatuses())));
+        $settings['application_statuses'] = array_values(array_intersect($application, array_keys(GeneralSettings::getApplicationStatuses())));
+        return $settings;
+    }
+
+    private function requestFormId()
+    {
+        $formId = isset($_REQUEST['form_id']) ? absint($_REQUEST['form_id']) : 0;
+        if (!$formId || !Forms::getForm($formId)) {
+            wp_send_json_error(array(
+                'message' => __('Job post not found', 'ninja-job-board')
+            ), 404);
+        }
+        return $formId;
+    }
+
     public function boot()
     {
         add_action('wp_ajax_wpjobboard_email_campaigns', array($this, 'ajaxHandler'));
@@ -18,7 +50,7 @@ class EmailCampaign
 
     public function ajaxHandler()
     {
-        $route = sanitize_text_field($_REQUEST['route']);
+        $route = isset($_REQUEST['route']) ? sanitize_text_field(wp_unslash($_REQUEST['route'])) : '';
 
         $validEndpoints = array(
             'get_campaigns'       => 'getCampaigns',
@@ -42,12 +74,12 @@ class EmailCampaign
         // Check if table created or not
         global $wpdb;
         $table_name = $wpdb->prefix . 'wjb_email_campaigns';
-        if ($wpdb->get_var("SHOW TABLES LIKE '" . $wpdb->prefix . "wjb_email_campaigns'") != $table_name) {
+        if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table_name)) != $table_name) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- schema check
             $activator = new \WPJobBoard\Classes\Activator();
             $activator->createCampaignDB();
         }
 
-        $formId = intval($_REQUEST['form_id']);
+        $formId = $this->requestFormId();
         $campaigns = wpJobBoardDB()->table('wjb_email_campaigns')
             ->orderBy('id', 'DESC')
             ->where('form_id', $formId)
@@ -60,23 +92,24 @@ class EmailCampaign
 
     public function sendEmailCampaign()
     {
-        $formId = intval($_REQUEST['form_id']);
-        $campaign = wp_unslash(ArrayHelper::get($_REQUEST, 'campaign')); // Will be sanitized when saving
+        $formId = $this->requestFormId();
+        $campaign = wp_unslash(ArrayHelper::get($_REQUEST, 'campaign', array())); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- each field is sanitized below
+        $campaign = is_array($campaign) ? $campaign : array();
 
-        $settings = wpJobBoardSanitize(ArrayHelper::get($campaign, 'campaign_settings'));
+        $settings = $this->sanitizeCampaignSettings(ArrayHelper::get($campaign, 'campaign_settings'));
 
         $count = $this->getCount($formId, $settings);
 
         if (!$count) {
             wp_send_json_error([
-                'message' => __('No Applicant found based on your selection', 'wpjobboard')
+                'message' => __('No Applicant found based on your selection', 'ninja-job-board')
             ], 423);
             die();
         }
 
         if (!ArrayHelper::get($campaign, 'body') || !ArrayHelper::get($campaign, 'subject') || !ArrayHelper::get($campaign, 'title')) {
             wp_send_json_error([
-                'message' => __('Email subject, title, body required', 'wpjobboard')
+                'message' => __('Email subject, title, body required', 'ninja-job-board')
             ], 423);
             die();
         }
@@ -90,8 +123,8 @@ class EmailCampaign
             'campaign_settings'  => maybe_serialize($settings),
             'email_type'         => 'html',
             'created_by_user_id' => get_current_user_id(),
-            'created_at'         => date('Y-m-d H:i:s'),
-            'updated_at'         => date('Y-m-d H:i:s')
+            'created_at'         => gmdate('Y-m-d H:i:s'),
+            'updated_at'         => gmdate('Y-m-d H:i:s')
         ];
 
         $campaignId = wpJobBoardDB()->table('wjb_email_campaigns')
@@ -99,11 +132,11 @@ class EmailCampaign
 
         $wheres = [];
 
-        if ($settings['internal_statuses']) {
+        if (!empty($settings['internal_statuses'])) {
             $wheres['status'] = $settings['internal_statuses'];
         }
 
-        if ($settings['application_statuses']) {
+        if (!empty($settings['application_statuses'])) {
             $wheres['application_status'] = $settings['application_statuses'];
         }
 
@@ -114,24 +147,32 @@ class EmailCampaign
             $subject = $campaignData['subject'];
             $body = $campaignData['body'];
 
-            $relaces = [
-                '{applicant_name}'  => $application->applicant_name,
-                '{applicant_email}' => $application->applicant_email
-            ];
+            $emailTo = sanitize_email($application->applicant_email);
+            if (!is_email($emailTo)) {
+                continue;
+            }
 
-            $subject = str_replace(array_keys($relaces), array_values($relaces), $subject);
-            $body = str_replace(array_keys($relaces), array_values($relaces), $body);
+            $subject = str_replace(
+                array('{applicant_name}', '{applicant_email}'),
+                array(sanitize_text_field($application->applicant_name), $emailTo),
+                $subject
+            );
+            $body = str_replace(
+                array('{applicant_name}', '{applicant_email}'),
+                array(esc_html($application->applicant_name), esc_html($emailTo)),
+                $body
+            );
 
             $data = [
                 'campaign_id'   => $campaignId,
                 'submission_id' => $application->id,
                 'status'        => 'pending',
-                'email_to'      => $application->applicant_email,
+                'email_to'      => $emailTo,
                 'subject'       => $subject,
                 'body'          => $body,
                 'email_type'    => 'html',
-                'created_at'    => date('Y-m-d H:i:s'),
-                'updated_at'    => date('Y-m-d H:i:s')
+                'created_at'    => gmdate('Y-m-d H:i:s'),
+                'updated_at'    => gmdate('Y-m-d H:i:s')
             ];
 
             wpJobBoardDB()->table('wjb_campaign_emails')
@@ -140,13 +181,13 @@ class EmailCampaign
 
         wp_send_json_success([
             'campaign_id' => $campaignId,
-            'message'     => __('Campaign created and email will be start sending now...', 'wpjobboard')
+            'message'     => __('Campaign created and email will be start sending now...', 'ninja-job-board')
         ], 200);
     }
 
     public function getCampaign()
     {
-        $campaignId = intval($_REQUEST['campaign_id']);
+        $campaignId = isset($_REQUEST['campaign_id']) ? absint($_REQUEST['campaign_id']) : 0;
         $campaign = wpJobBoardDB()->table('wjb_email_campaigns')
             ->where('id', $campaignId)
             ->first();
@@ -160,8 +201,8 @@ class EmailCampaign
 
     public function sendEmails()
     {
-        $campaignId = intval($_REQUEST['campaign_id']);
-        $formId = intval($_REQUEST['form_id']);
+        $campaignId = isset($_REQUEST['campaign_id']) ? absint($_REQUEST['campaign_id']) : 0;
+        $formId = $this->requestFormId();
         $pendingEmails = wpJobBoardDB()->table('wjb_campaign_emails')
             ->where('campaign_id', $campaignId)
             ->where('status', 'pending')
@@ -193,7 +234,7 @@ class EmailCampaign
                 ->where('id', $pendingEmail->id)
                 ->update([
                     'status'  => 'sent',
-                    'sent_at' => date('Y-m-d H:i:s')
+                    'sent_at' => gmdate('Y-m-d H:i:s')
                 ]);
 
             SubmissionActivity::createActivity(array(
@@ -201,7 +242,8 @@ class EmailCampaign
                 'submission_id' => $pendingEmail->submission_id,
                 'type'          => 'activity',
                 'created_by'    => 'WPJobBoard BOT',
-                'content'       => "Email Notification sent to {$email_to} and the subject: {$subject}."
+                /* translators: 1: recipient email, 2: email subject */
+                'content'       => sprintf(__('Email Notification sent to %1$s and the subject: %2$s.', 'ninja-job-board'), esc_html($email_to), esc_html($subject))
             ));
         }
 
@@ -214,7 +256,7 @@ class EmailCampaign
 
     public function getCampaignEmails()
     {
-        $campaignId = intval($_REQUEST['campaign_id']);
+        $campaignId = isset($_REQUEST['campaign_id']) ? absint($_REQUEST['campaign_id']) : 0;
         $emails = wpJobBoardDB()->table('wjb_campaign_emails')
             ->where('campaign_id', $campaignId)
             ->get();
@@ -228,7 +270,7 @@ class EmailCampaign
     public function getCampaignStat($campaignId)
     {
         if (!$campaignId) {
-            $campaignId = intval($_REQUEST['campaign_id']);
+            $campaignId = isset($_REQUEST['campaign_id']) ? absint($_REQUEST['campaign_id']) : 0;
         }
 
         $sentEmails = wpJobBoardDB()->table('wjb_campaign_emails')
@@ -250,8 +292,8 @@ class EmailCampaign
 
     public function getEmailCounts()
     {
-        $formId = intval($_REQUEST['form_id']);
-        $settings = wpJobBoardSanitize(ArrayHelper::get($_REQUEST, 'campaign_settings'));
+        $formId = $this->requestFormId();
+        $settings = $this->sanitizeCampaignSettings(wp_unslash(ArrayHelper::get($_REQUEST, 'campaign_settings', array()))); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized in sanitizeCampaignSettings()
 
         $count = $this->getCount($formId, $settings);
 
@@ -263,8 +305,8 @@ class EmailCampaign
 
     private function getCount($formId, $settings)
     {
-        $internalStatuses = $settings['internal_statuses'];
-        $applicationStatuses = $settings['application_statuses'];
+        $internalStatuses = ArrayHelper::get($settings, 'internal_statuses', array());
+        $applicationStatuses = ArrayHelper::get($settings, 'application_statuses', array());
 
         $count = wpJobBoardDB()->table('wjb_applications')
             ->where('form_id', $formId);
@@ -299,8 +341,8 @@ class EmailCampaign
             // apply CSS styles inline for picky email clients
             $emogrifier = new Emogrifier($emailBody, $css);
             $emailBody = $emogrifier->emogrify();
-        } catch (Exception $e) {
-
+        } catch (\Exception $e) {
+            // Send the email without inlined CSS
         }
 
         return $emailBody;

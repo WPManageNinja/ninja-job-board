@@ -1,5 +1,9 @@
 <?php
 
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 function wpJobBoardDB()
 {
     if (!function_exists('wpFluentDb')) {
@@ -9,13 +13,55 @@ function wpJobBoardDB()
 }
 
 function wpJobBoardPrintInternal( $string ) {
-    /*
-     * It was supposed to just echo the string
-     * But WP Plugin review team asked to use the kses which is not ideal
-     * Many plugins can print hard coded strings but we can
-     * Not sure we why we can use the flag: phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-     */
     echo wp_kses_post($string);
+}
+
+/**
+ * Verify the nonce of a public (front-end) form request.
+ *
+ * Sites with full-page caching can serve an expired nonce to visitors. Such sites can turn the check off
+ * with the `wpjobboard/verify_public_nonce` filter. Submissions still pass all server-side validation.
+ *
+ * @return bool
+ */
+function wpJobBoardVerifyPublicNonce() {
+    if (!apply_filters('wpjobboard/verify_public_nonce', true)) {
+        return true;
+    }
+    $nonce = isset($_REQUEST['wpjb_nonce']) ? sanitize_text_field(wp_unslash($_REQUEST['wpjb_nonce'])) : '';
+    return (bool) wp_verify_nonce($nonce, 'wpjobboard_public_nonce');
+}
+
+/**
+ * wp_kses_post() that also keeps <style> blocks. The entry table template has its own CSS.
+ *
+ * @param string $html
+ * @return string
+ */
+function wpJobBoardKsesWithStyle($html) {
+    $allowed = wp_kses_allowed_html('post');
+    $allowed['style'] = array('type' => true);
+    return wp_kses((string)$html, $allowed);
+}
+
+/**
+ * Sanitize nested request data as plain text. Keeps the array structure.
+ *
+ * @param mixed $values
+ * @return mixed
+ */
+function wpJobBoardSanitizeText($values) {
+    if (is_array($values)) {
+        $sanitized = [];
+        foreach ($values as $key => $value) {
+            $sanitized[sanitize_text_field((string)$key)] = wpJobBoardSanitizeText($value);
+        }
+        return $sanitized;
+    }
+    if (is_scalar($values)) {
+        return sanitize_text_field((string)$values);
+    }
+    return '';
 }
 
 
@@ -27,8 +73,10 @@ function wpJobBoardSanitize($values) {
         }
         return $sanitizedValues;
     } else if(is_string($values)) {
-        return wp_kses_post_deep($values);
+        return wp_kses_post($values);
+    } else if (is_bool($values) || is_int($values) || is_float($values) || is_null($values)) {
+        return $values;
     }
 
-    return $values;
+    return '';
 }

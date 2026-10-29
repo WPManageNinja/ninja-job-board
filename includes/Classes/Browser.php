@@ -161,7 +161,7 @@ class Browser
      */
     public function reset()
     {
-        $this->_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "";
+        $this->_agent = isset($_SERVER['HTTP_USER_AGENT']) ? sanitize_text_field(wp_unslash($_SERVER['HTTP_USER_AGENT'])) : "";
         $this->_browser_name = self::BROWSER_UNKNOWN;
         $this->_version = self::VERSION_UNKNOWN;
         $this->_platform = self::PLATFORM_UNKNOWN;
@@ -1726,21 +1726,14 @@ class Browser
         }
     }
 
+    /**
+     * The visitor IP. Proxy headers can be forged by the client, so only REMOTE_ADDR is used.
+     * Sites behind a trusted proxy can change this with the `wpjobboard/client_ip` filter.
+     */
     public function getIp()
     {
-        if (isset($_SERVER['HTTP_CLIENT_IP']))
-            return sanitize_text_field($_SERVER['HTTP_CLIENT_IP']);
-        else if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
-            return sanitize_text_field($_SERVER['HTTP_X_FORWARDED_FOR']);
-        else if (isset($_SERVER['HTTP_X_FORWARDED']))
-            return sanitize_text_field($_SERVER['HTTP_X_FORWARDED']);
-        else if (isset($_SERVER['HTTP_FORWARDED_FOR']))
-            return sanitize_text_field($_SERVER['HTTP_FORWARDED_FOR']);
-        else if (isset($_SERVER['HTTP_FORWARDED']))
-            return sanitize_text_field($_SERVER['HTTP_FORWARDED']);
-        else if (isset($_SERVER['REMOTE_ADDR']))
-            return sanitize_text_field($_SERVER['REMOTE_ADDR']);
-        else
-            return 'UNKNOWN';
+        $ip = isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'])) : '';
+        $ip = apply_filters('wpjobboard/client_ip', $ip);
+        return filter_var($ip, FILTER_VALIDATE_IP) ? $ip : 'UNKNOWN';
     }
 }

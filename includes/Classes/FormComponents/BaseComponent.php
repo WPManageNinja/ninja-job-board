@@ -87,11 +87,11 @@ abstract class BaseComponent
         }
 
         ?>
-        <div data-element_type="<?php echo esc_html($this->elementName); ?>"
-             class="<?php echo esc_html($controlClass); ?>">
+        <div data-element_type="<?php echo esc_attr($this->elementName); ?>"
+             class="<?php echo esc_attr($controlClass); ?>">
             <?php $this->buildLabel($fieldOptions, $form, array('for' => $inputId)); ?>
             <div class="wpjb_input_content">
-                <input <?php echo wp_kses_post($this->builtAttributes($attributes)); ?> />
+                <input <?php echo $this->builtAttributes($attributes); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in builtAttributes() ?> />
             </div>
         </div>
         <?php
@@ -126,10 +126,10 @@ abstract class BaseComponent
             'class'             => $controlClass
         );
         ?>
-        <div <?php echo wp_kses_post($this->builtAttributes($controlAttributes)); ?>>
+        <div <?php echo $this->builtAttributes($controlAttributes); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in builtAttributes() ?>>
             <?php $this->buildLabel($fieldOptions, $form, array('for' => $inputId)); ?>
             <div class="wpjb_input_content">
-                <select <?php echo wp_kses_post($this->builtAttributes($inputAttributes)); ?>>
+                <select <?php echo $this->builtAttributes($inputAttributes); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in builtAttributes() ?>>
                     <?php if ($placeholder): ?>
                         <option data-type="placeholder" value=""><?php echo esc_html($placeholder); ?></option>
                     <?php endif; ?>
@@ -142,7 +142,7 @@ abstract class BaseComponent
                             $optionAttributes['selected'] = 'true';
                         }
                         ?>
-                        <option <?php echo wp_kses_post($this->builtAttributes($optionAttributes)); ?>><?php echo esc_html($option['label']); ?></option>
+                        <option <?php echo $this->builtAttributes($optionAttributes); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in builtAttributes() ?>><?php echo esc_html($option['label']); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -170,7 +170,7 @@ abstract class BaseComponent
             'class'             => $controlClass
         );
         ?>
-        <div <?php wpJobBoardPrintInternal($this->builtAttributes($controlAttributes)); ?>>
+        <div <?php echo $this->builtAttributes($controlAttributes); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in builtAttributes() ?>>
             <?php $this->buildLabel($fieldOptions, $form, array('for' => $inputId)); ?>
             <div class="wpjb_multi_form_controls wpjb_input_content">
                 <?php foreach ($options as $index => $option): ?>
@@ -191,8 +191,8 @@ abstract class BaseComponent
                     }
                     ?>
                     <div class="form-check">
-                        <input <?php wpJobBoardPrintInternal($this->builtAttributes($attributes)); ?>>
-                        <label class="form-check-label" for="<?php echo esc_html($optionId); ?>">
+                        <input <?php echo $this->builtAttributes($attributes); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in builtAttributes() ?>>
+                        <label class="form-check-label" for="<?php echo esc_attr($optionId); ?>">
                             <?php echo esc_html($option['label']); ?>
                         </label>
                     </div>
@@ -226,7 +226,7 @@ abstract class BaseComponent
             $controlAttributes['data-checkbox_required'] = 'yes';
         }
         ?>
-        <div <?php wpJobBoardPrintInternal($this->builtAttributes($controlAttributes)); ?>>
+        <div <?php echo $this->builtAttributes($controlAttributes); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in builtAttributes() ?>>
             <?php $this->buildLabel($fieldOptions, $form, array('for' => $inputId)); ?>
             <div class="wpjb_multi_form_controls wpjb_input_content">
                 <?php foreach ($options as $index => $option): ?>
@@ -244,8 +244,8 @@ abstract class BaseComponent
                     }
                     ?>
                     <div class="form-check">
-                        <input <?php wpJobBoardPrintInternal($this->builtAttributes($attributes)); ?>>
-                        <label class="form-check-label" for="<?php echo esc_html($optionId); ?>">
+                        <input <?php echo $this->builtAttributes($attributes); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in builtAttributes() ?>>
+                        <label class="form-check-label" for="<?php echo esc_attr($optionId); ?>">
                             <?php echo esc_html($option['label']); ?>
                         </label>
                     </div>
@@ -267,14 +267,18 @@ abstract class BaseComponent
         <?php
     }
 
+    /**
+     * Build an HTML attribute string. Every value is escaped, so the result is safe to echo.
+     */
     public function builtAttributes($attributes)
     {
         $atts = ' ';
         foreach ($attributes as $attributeKey => $attribute) {
             if (is_array($attribute)) {
-                $attribute = json_encode($attribute);
+                $attribute = wp_json_encode($attribute);
             }
-            $atts .= $attributeKey . "='" . htmlspecialchars($attribute, ENT_QUOTES) . "' ";
+            $attributeKey = preg_replace('/[^a-zA-Z0-9_\-]/', '', (string)$attributeKey);
+            $atts .= $attributeKey . '="' . esc_attr((string)$attribute) . '" ';
         }
         return $atts;
     }
@@ -314,7 +318,7 @@ abstract class BaseComponent
         }
         if ($label): ?>
             <div class="wpjb_input_label">
-                <label <?php wpJobBoardPrintInternal($this->builtAttributes($attributes)); ?>><?php wpJobBoardPrintInternal($xtra_left . $label . $xtra_right); ?></label>
+                <label <?php echo $this->builtAttributes($attributes); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in builtAttributes() ?>><?php wpJobBoardPrintInternal($xtra_left . $label . $xtra_right); ?></label>
             </div>
         <?php endif;
     }

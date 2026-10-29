@@ -1,11 +1,12 @@
-=== Ninja Job Board - Ultimate WordPress Job Board Plugin ===
+=== Ninja Job Board ===
 Contributors: techjewel, wpmanageninja
-Tags: career job, job board, listing job, job manager, portal, wp job board
+Tags: job board, career, job listing, job manager, recruitment
 Requires at least: 6.0
-Tested up to: 6.4
-Stable tag: 1.4.0
-Requires PHP: 5.6
+Tested up to: 7.1
+Stable tag: 1.5.0
+Requires PHP: 7.4
 License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Ninja Job Board is a light-weight plugin that adds a job board along with application form to your WordPress website.
 
@@ -153,6 +154,23 @@ From email setting, you can set it up who will get notified about the submission
 8. Current Active Jobs Shortcode [wp_job_list]
 
 == Changelog ==
+
+= 1.5.0 - October 29, 2026 =
+- Security: Fixed stored XSS through file upload values in the application details view
+- Security: All submitted field values are now sanitized on save and escaped on display
+- Security: File uploads are validated against a server-side record of uploaded files
+- Security: Added nonce verification to all admin and public AJAX requests
+- Security: Added form ownership checks for users with "own forms" permissions
+- Security: Email notification placeholders are now escaped and email headers are sanitized
+- Security: Confirmation page links now use an unguessable hash
+- Security: Job meta box now saves only the known job fields, with nonce and capability checks
+- Security: Form import now accepts only known form settings
+- Security: CSV export protects against spreadsheet formula injection
+- Removed the bundled Spout library; CSV export no longer needs it
+- Fixed fatal errors in multi-step forms and the `{other.user_ip}` default value on PHP 8
+- Fixed email notification headers (From and Reply-To) that used the unparsed template values
+- Requires PHP 7.4 or newer
+- Tested with WordPress 7.1
 
 = 1.4.0 - December 12, 2023 =
 - Database Query Issue Fixed

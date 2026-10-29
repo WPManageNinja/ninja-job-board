@@ -91,8 +91,45 @@ class MetaData
         }
     }
 
+    /**
+     * User fields that placeholders can read. Never the password hash or activation key.
+     * @return array
+     */
+    public static function allowedUserFields()
+    {
+        return apply_filters('wpjobboard/placeholder_user_fields', array(
+            'ID', 'user_login', 'user_nicename', 'user_email', 'user_url', 'user_registered',
+            'display_name', 'first_name', 'last_name', 'nickname', 'description'
+        ));
+    }
+
+    /**
+     * Placeholders can not read protected ("_" prefixed) or sensitive meta
+     * @param string $key
+     * @param string $type post|user
+     * @return bool
+     */
+    public static function isAllowedMetaKey($key, $type)
+    {
+        global $wpdb;
+        $key = (string)$key;
+        if ($key === '' || is_protected_meta($key, $type)) {
+            return false;
+        }
+
+        $blocked = array('session_tokens', 'user_pass', 'user_activation_key', 'wp_capabilities', 'wp_user_level');
+        if (in_array($key, $blocked, true) || strpos($key, $wpdb->prefix) === 0 || stripos($key, 'pass') !== false || stripos($key, 'token') !== false || stripos($key, 'secret') !== false) {
+            return false;
+        }
+
+        return (bool)apply_filters('wpjobboard/placeholder_meta_key_allowed', true, $key, $type);
+    }
+
     public function getPostMeta($key)
     {
+        if (!self::isAllowedMetaKey($key, 'post')) {
+            return '';
+        }
         $meta = get_post_meta($this->postId, $key, true);
         if(is_array($meta)) {
             return implode(', ', $meta);
@@ -102,6 +139,9 @@ class MetaData
 
     public function getuserMeta($key)
     {
+        if (!self::isAllowedMetaKey($key, 'user')) {
+            return '';
+        }
         $meta = get_user_meta($this->userId, $key, true);
         if(is_array($meta)) {
             return implode(', ', $meta);
@@ -112,16 +152,17 @@ class MetaData
     public function getFromUrlQuery($key)
     {
         if($this->queryVars == null) {
+            $this->queryVars = array();
             $submissionUrl = $this->entry->getRawInput('__wpjb_current_url');
-            $parts = parse_url($submissionUrl);
+            $parts = wp_parse_url((string)$submissionUrl);
             if (isset($parts['query'])) {
                 parse_str($parts['query'], $query);
                 $this->queryVars = $query;
             }
         }
 
-        if(isset($this->queryVars[$key])) {
-            return esc_attr($this->queryVars[$key]);
+        if (isset($this->queryVars[$key]) && is_string($this->queryVars[$key])) {
+            return sanitize_text_field($this->queryVars[$key]);
         }
         return '';
     }
@@ -130,12 +171,12 @@ class MetaData
     {
         if($key == 'date') {
             $dateFormat = get_option('date_format');
-            return gmdate($dateFormat, time());
+            return wp_date($dateFormat);
         }
 
         if($key == 'time') {
             $dateFormat = get_option('time_format');
-            return gmdate($dateFormat, time());
+            return wp_date($dateFormat);
         }
         if($key == 'user_ip') {
             return $this->entry->ip_address;

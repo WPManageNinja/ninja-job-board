@@ -33,7 +33,8 @@ jQuery(document).ready(function ($) {
                 let formData = {
                     form_id: $theForm.data('wpjb_form_id'),
                     element_name: elementName,
-                    action: 'wpjb_file_upload_process'
+                    action: 'wpjb_file_upload_process',
+                    wpjb_nonce: window.wp_job_board_general.nonce
                 }
                 let uploadUrl = window.wp_job_board_general.ajax_url;
                 uploadUrl = addQueryString(uploadUrl, $.param(formData));

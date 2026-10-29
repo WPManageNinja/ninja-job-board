@@ -68,7 +68,7 @@ class TinyMceBlock
             'orderby' => 'date',
             'order' => 'DESC',
             'post_type' => 'wp_job_board',
-            'post_status' => 'any'
+            'post_status' => 'publish'
         );
 
         $tables = get_posts($args);

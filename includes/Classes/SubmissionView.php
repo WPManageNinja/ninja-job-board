@@ -5,7 +5,6 @@ namespace WPJobBoard\Classes;
 use WPJobBoard\Classes\Models\Forms;
 use WPJobBoard\Classes\Models\Submission;
 use WPJobBoard\Classes\Models\SubmissionActivity;
-use WPJobBoard\Classes\Models\Transaction;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -17,6 +16,58 @@ if (!defined('ABSPATH')) {
  */
 class SubmissionView
 {
+    // phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing -- every route passes AccessControl::checkAndPresponseError() first, which verifies the nonce
+
+    /**
+     * Read a request value as plain text
+     */
+    private function input($key, $default = '')
+    {
+        if (!isset($_REQUEST[$key])) {
+            return $default;
+        }
+        return wpJobBoardSanitizeText(wp_unslash($_REQUEST[$key])); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized by wpJobBoardSanitizeText()
+    }
+
+    /**
+     * Keep only known status keys
+     */
+    private function filterStatuses($value, $statuses)
+    {
+        $allowed = array_keys($statuses);
+        if (is_array($value)) {
+            return array_values(array_intersect($value, $allowed));
+        }
+        return in_array($value, $allowed, true) ? $value : '';
+    }
+
+    /**
+     * Load a submission or stop with an error
+     */
+    private function getSubmissionOrFail($submissionId)
+    {
+        $submissionModel = new Submission();
+        $submission = $submissionModel->getSubmission($submissionId);
+        if (!$submission) {
+            wp_send_json_error(array(
+                'message' => __('Sorry, No Submission found', 'ninja-job-board')
+            ), 404);
+        }
+        return $submission;
+    }
+
+    /**
+     * Activity text for a status change. All parts are escaped.
+     */
+    private function statusChangeText($label, $oldStatus, $newStatus, $note = '')
+    {
+        $content = esc_html($label) . ' <b>' . esc_html($oldStatus) . '</b> &rarr; <b>' . esc_html($newStatus) . '</b>';
+        if ($note) {
+            $content .= '<br />' . esc_html__('Note:', 'ninja-job-board') . ' ' . wp_kses_post($note);
+        }
+        return $content;
+    }
+
     public function registerEndpoints()
     {
         add_action('wp_ajax_wpjb_submission_endpoints', array($this, 'routeAjaxMaps'));
@@ -36,7 +87,7 @@ class SubmissionView
             'get_form_report'             => 'getFormReport',
             'update_application_statuses' => 'updateApplicationStatuses'
         );
-        $route = sanitize_text_field($_REQUEST['route']);
+        $route = isset($_REQUEST['route']) ? sanitize_text_field(wp_unslash($_REQUEST['route'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- nonce verified in AccessControl::checkAndPresponseError()
 
         if (isset($routes[$route])) {
             AccessControl::checkAndPresponseError($route, 'submissions');
@@ -48,24 +99,22 @@ class SubmissionView
 
     public function getSubmissions()
     {
-        $formId = false;
-        if (isset($_REQUEST['form_id']) && $_REQUEST['form_id']) {
-            $formId = absint($_REQUEST['form_id']);
-        }
-        $searchString = sanitize_text_field($_REQUEST['search_string']);
+        $formId = absint($this->input('form_id', 0));
+        $searchString = $this->input('search_string');
+        $searchString = is_string($searchString) ? $searchString : '';
 
-        $page = absint($_REQUEST['page_number']);
-        $perPage = absint($_REQUEST['per_page']);
+        $page = max(1, absint($this->input('page_number', 1)));
+        $perPage = min(100, max(1, absint($this->input('per_page', 20))));
         $skip = ($page - 1) * $perPage;
 
         $wheres = array();
 
-        if (isset($_REQUEST['application_status']) && $_REQUEST['application_status']) {
-            $wheres['application_status'] = wpJobBoardSanitize($_REQUEST['application_status']);
+        if ($applicationStatus = $this->input('application_status')) {
+            $wheres['application_status'] = $this->filterStatuses($applicationStatus, GeneralSettings::getApplicationStatuses());
         }
 
-        if (isset($_REQUEST['status']) && $_REQUEST['status']) {
-            $wheres['status'] = wpJobBoardSanitize($_REQUEST['status']);
+        if ($status = $this->input('status')) {
+            $wheres['status'] = $this->filterStatuses($status, GeneralSettings::getInternalStatuses());
         }
 
         $submissionModel = new Submission();
@@ -82,13 +131,18 @@ class SubmissionView
 
     public function getSubmission($submissionId = false)
     {
-        $formId = absint($_REQUEST['form_id']);
         if (!$submissionId) {
-            $submissionId = absint($_REQUEST['submission_id']);
+            $submissionId = absint($this->input('submission_id', 0));
         }
 
         $submissionModel = new Submission();
-        $submission = $submissionModel->getSubmission($submissionId, array('transactions', 'order_items', 'tax_items', 'activities'));
+        $submission = $submissionModel->getSubmission($submissionId, array('activities'));
+
+        if (!$submission) {
+            wp_send_json_error(array(
+                'message' => __('Sorry, No Submission found', 'ninja-job-board')
+            ), 404);
+        }
 
         if ($submission->user_id) {
             $user = get_user_by('ID', $submission->user_id);
@@ -115,13 +169,10 @@ class SubmissionView
 
     public function getNextPrevSubmission()
     {
-        $formId = false;
-        if (isset($_REQUEST['form_id'])) {
-            $formId = absint($_REQUEST['form_id']);
-        }
+        $formId = absint($this->input('form_id', 0));
 
-        $currentSubmissionId = absint($_REQUEST['current_submission_id']);
-        $queryType = sanitize_text_field($_REQUEST['type']);
+        $currentSubmissionId = absint($this->input('current_submission_id', 0));
+        $queryType = $this->input('type');
 
         $whereOperator = '<';
         $orderBy = 'DESC';
@@ -144,7 +195,7 @@ class SubmissionView
 
         if (!$submission) {
             wp_send_json_error(array(
-                'message' => __('Sorry, No Submission found', 'wpjobboard')
+                'message' => __('Sorry, No Submission found', 'ninja-job-board')
             ), 423);
         }
 
@@ -160,9 +211,15 @@ class SubmissionView
 
     public function addSubmissionNote()
     {
-        $formId = intval($_REQUEST['form_id']);
-        $submissionId = intval($_REQUEST['submission_id']);
-        $content = sanitize_textarea_field($_REQUEST['note']);
+        $submission = $this->getSubmissionOrFail(absint($this->input('submission_id', 0)));
+        $formId = intval($submission->form_id);
+        $submissionId = intval($submission->id);
+        $content = isset($_REQUEST['note']) ? esc_html(sanitize_textarea_field(wp_unslash($_REQUEST['note']))) : '';
+        if (!$content) {
+            wp_send_json_error(array(
+                'message' => __('Please provide note content', 'ninja-job-board')
+            ), 423);
+        }
         $userId = get_current_user_id();
         $user = get_user_by('ID', $userId);
 
@@ -181,20 +238,25 @@ class SubmissionView
         do_action('wpjobboard/after_create_note_by_user', $note);
 
         wp_send_json_success(array(
-            'message'    => __('Note successfully added', 'wpjobboard'),
+            'message'    => __('Note successfully added', 'ninja-job-board'),
             'activities' => SubmissionActivity::getSubmissionActivity($submissionId)
         ), 200);
     }
 
     public function changeApplicationStatus()
     {
-        $submissionId = intval($_REQUEST['submission_id']);
-        $newStatus = sanitize_text_field($_REQUEST['new_application_status']);
+        $submissionId = absint($this->input('submission_id', 0));
+        $newStatus = $this->filterStatuses($this->input('new_application_status'), GeneralSettings::getApplicationStatuses());
         $submissionModel = new Submission();
-        $submission = $submissionModel->getSubmission($submissionId);
+        $submission = $this->getSubmissionOrFail($submissionId);
+        if (!$newStatus) {
+            wp_send_json_error(array(
+                'message' => __('Please Provide a valid status', 'ninja-job-board')
+            ), 423);
+        }
         if ($submission->application_status == $newStatus) {
             wp_send_json_error(array(
-                'message' => __('The submission have the same status', 'wpjobboard')
+                'message' => __('The submission have the same status', 'ninja-job-board')
             ), 423);
         }
 
@@ -204,12 +266,8 @@ class SubmissionView
         ));
         do_action('wpjobboard/after_application_status_change_manually', $submissionId, $newStatus, $submission->application_status);
 
-        $activityContent = 'Application status changed from <b>' . $submission->application_status . '</b> to <b>' . $newStatus . '</b>';
-
-        if (isset($_REQUEST['status_change_note']) && $_REQUEST['status_change_note']) {
-            $note = wp_kses_post($_REQUEST['status_change_note']);
-            $activityContent .= '<br />Note: ' . $note;
-        }
+        $note = isset($_REQUEST['status_change_note']) ? wp_kses_post(wp_unslash($_REQUEST['status_change_note'])) : '';
+        $activityContent = $this->statusChangeText(__('Application status changed:', 'ninja-job-board'), $submission->application_status, $newStatus, $note);
 
         $userId = get_current_user_id();
         $user = get_user_by('ID', $userId);
@@ -223,26 +281,26 @@ class SubmissionView
         ));
 
         wp_send_json_success(array(
-            'message' => __('Application status successfully changed', 'wpjobboard')
+            'message' => __('Application status successfully changed', 'ninja-job-board')
         ), 200);
     }
 
     public function changeInternalStatus()
     {
-        $submissionId = intval($_REQUEST['submission_id']);
-        $newStatus = sanitize_text_field($_REQUEST['new_internal_status']);
+        $submissionId = absint($this->input('submission_id', 0));
+        $newStatus = $this->filterStatuses($this->input('new_internal_status'), GeneralSettings::getInternalStatuses());
         $submissionModel = new Submission();
-        $submission = $submissionModel->getSubmission($submissionId);
+        $submission = $this->getSubmissionOrFail($submissionId);
 
         if (!$newStatus) {
             wp_send_json_error(array(
-                'message' => __('Please Provide a status', 'wpjobboard')
+                'message' => __('Please Provide a status', 'ninja-job-board')
             ), 423);
         }
 
         if ($submission->status == $newStatus) {
             wp_send_json_error(array(
-                'message' => __('The submission have the same status', 'wpjobboard')
+                'message' => __('The submission have the same status', 'ninja-job-board')
             ), 423);
         }
 
@@ -252,12 +310,8 @@ class SubmissionView
         ));
         do_action('wpjobboard/after_application_status_change_manually', $submissionId, $newStatus, $submission->application_status);
 
-        $activityContent = 'Internal status changed from <b>' . $submission->status . '</b> to <b>' . $newStatus . '</b>';
-
-        if (isset($_REQUEST['status_change_note']) && $_REQUEST['status_change_note']) {
-            $note = wp_kses_post($_REQUEST['status_change_note']);
-            $activityContent .= '<br />Note: ' . $note;
-        }
+        $note = isset($_REQUEST['status_change_note']) ? wp_kses_post(wp_unslash($_REQUEST['status_change_note'])) : '';
+        $activityContent = $this->statusChangeText(__('Internal status changed:', 'ninja-job-board'), $submission->status, $newStatus, $note);
 
         $userId = get_current_user_id();
         $user = get_user_by('ID', $userId);
@@ -271,27 +325,28 @@ class SubmissionView
         ));
 
         wp_send_json_success(array(
-            'message' => __('Internal status successfully changed', 'wpjobboard')
+            'message' => __('Internal status successfully changed', 'ninja-job-board')
         ), 200);
     }
 
     public function deleteSubmission()
     {
-        $submissionId = intval($_REQUEST['submission_id']);
-        $formId = intval($_REQUEST['form_id']);
+        $submission = $this->getSubmissionOrFail(absint($this->input('submission_id', 0)));
+        $submissionId = intval($submission->id);
+        $formId = intval($submission->form_id);
         do_action('wpjobboard/before_delete_submission', $submissionId, $formId);
         $submissionModel = new Submission();
         $submissionModel->deleteSubmission($submissionId);
         do_action('wpjobboard/after_delete_submission', $submissionId, $formId);
 
         wp_send_json_success(array(
-            'message' => __('Selected submission successfully deleted', 'wpjobboard')
+            'message' => __('Selected submission successfully deleted', 'ninja-job-board')
         ), 200);
     }
 
     public function getFormReport()
     {
-        $formId = absint($_REQUEST['form_id']);
+        $formId = absint($this->input('form_id', 0));
         $applicationStatuses = GeneralSettings::getApplicationStatuses();
 
         $submissionModel = new Submission();
@@ -315,16 +370,15 @@ class SubmissionView
 
     public function updateApplicationStatuses()
     {
-        $submissionId = intval($_REQUEST['submission_id']);
+        $submissionId = absint($this->input('submission_id', 0));
         $submissionModel = new Submission();
-        $submission = $submissionModel->getSubmission($submissionId);
-
+        $submission = $this->getSubmissionOrFail($submissionId);
 
         $userId = get_current_user_id();
         $user = get_user_by('ID', $userId);
 
-        $newApplicationStatus = sanitize_text_field($_REQUEST['application_status']);
-        if ($submission->application_status != $newApplicationStatus) {
+        $newApplicationStatus = $this->filterStatuses($this->input('application_status'), GeneralSettings::getApplicationStatuses());
+        if ($newApplicationStatus && $submission->application_status != $newApplicationStatus) {
 
             do_action('wpjobboard/before_application_status_change_manually', $submission, $newApplicationStatus, $submission->application_status);
             $submissionModel->update($submissionId, array(
@@ -338,13 +392,13 @@ class SubmissionView
                 'type'               => 'info',
                 'created_by'         => $user->display_name,
                 'created_by_user_id' => $userId,
-                'content'            => 'Application status changed from <b>'.$submission->application_status.'</b> to <b>'.$newApplicationStatus.'</b>'
+                'content'            => $this->statusChangeText(__('Application status changed:', 'ninja-job-board'), $submission->application_status, $newApplicationStatus)
             ));
 
         }
 
-        $newStatus = sanitize_text_field($_REQUEST['status']);
-        if ($submission->status != $newStatus) {
+        $newStatus = $this->filterStatuses($this->input('status'), GeneralSettings::getInternalStatuses());
+        if ($newStatus && $submission->status != $newStatus) {
             do_action('wpjobboard/before_internal_status_change_manually', $submission, $newStatus, $submission->status);
             $submissionModel->update($submissionId, array(
                 'status' => $newStatus
@@ -357,13 +411,13 @@ class SubmissionView
                 'type'               => 'info',
                 'created_by'         => $user->display_name,
                 'created_by_user_id' => $userId,
-                'content'            => 'Internal status changed from <b>'.$submission->status.'</b> to <b>'.$newStatus.'</b>'
+                'content'            => $this->statusChangeText(__('Internal status changed:', 'ninja-job-board'), $submission->status, $newStatus)
             ));
 
         }
 
         wp_send_json_success([
-           'message' => __('Status has been changed successfully', 'wpjobboard')
+           'message' => __('Status has been changed successfully', 'ninja-job-board')
         ]);
 
     }

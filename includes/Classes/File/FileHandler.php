@@ -2,8 +2,14 @@
 
 namespace WPJobBoard\Classes\File;
 
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 class FileHandler
 {
+    const FILE_PREFIX_PATTERN = '/^wpf-[a-f0-9]{32}-wpf-[^\/\\\\]+$/';
+
     private $originalFile;
     private $validations;
     private $file;
@@ -21,13 +27,15 @@ class FileHandler
         foreach ($rules as $ruleName => $ruleValue) {
             if ($ruleName == 'extensions') {
                 $fileExtension = $this->file->guessExtension();
-                if (!in_array('.' . $fileExtension, $ruleValue)) {
-                    $errors[$ruleName] = __('Invalid File Extension');
+                $nameExtension = strtolower(pathinfo($this->originalFile['name'], PATHINFO_EXTENSION));
+                if (!in_array('.' . $fileExtension, $ruleValue, true) || !in_array('.' . $nameExtension, $ruleValue, true)) {
+                    $errors[$ruleName] = __('Invalid File Extension', 'ninja-job-board');
                 }
             } else if ($ruleName == 'max_file_size' && $ruleValue) {
                 $valueInBytes = $ruleValue * 1024 * 1024;
                 if ($this->file->getSize() > $valueInBytes) {
-                    $errors[$ruleName] = __('File size needs to be less than ' . $ruleValue . 'MB');
+                    /* translators: %s: max file size in MB */
+                    $errors[$ruleName] = sprintf(__('File size needs to be less than %sMB', 'ninja-job-board'), $ruleValue);
                 }
             }
         }
@@ -36,9 +44,14 @@ class FileHandler
 
     public function upload()
     {
+        if (!function_exists('wp_handle_upload')) {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+        }
+
+        // test_type stays on: WordPress checks the real file type against the allowed mime list.
         $uploadedFile = wp_handle_upload(
             $this->originalFile,
-            ['test_form' => false]
+            ['test_form' => false, 'test_type' => true]
         );
         return $uploadedFile;
     }
@@ -70,18 +83,8 @@ class FileHandler
     {
         $param['url'] = $param['baseurl'] . WPJOBBOARD_UPLOAD_DIR;
         $param['path'] = $param['basedir'] . WPJOBBOARD_UPLOAD_DIR;
-        if (!is_dir($param['path'])) {
-            mkdir($param['path'], 0755);
-            file_put_contents(
-                wp_upload_dir()['basedir'] . WPJOBBOARD_UPLOAD_DIR . '/.htaccess',
-                file_get_contents(__DIR__ . '/Stubs/htaccess.stub')
-            );
-
-            file_put_contents(
-                wp_upload_dir()['basedir'] . WPJOBBOARD_UPLOAD_DIR . '/index.php',
-                file_get_contents(WPJOBBOARD_DIR.'includes/Classes/File/Stubs/index.stub')
-            );
-        }
+        $param['subdir'] = WPJOBBOARD_UPLOAD_DIR;
+        self::ensureProtectedDir($param['path']);
 
         return $param;
     }
@@ -94,9 +97,87 @@ class FileHandler
      */
     public function renameFileName($file)
     {
-        $prefix = 'wpf-' . md5(uniqid(rand())) . '-wpf-';
-        $file['name'] = $prefix . $file['name'];
+        $prefix = 'wpf-' . bin2hex(random_bytes(16)) . '-wpf-';
+        $file['name'] = $prefix . sanitize_file_name($file['name']);
         return $file;
+    }
+
+    /**
+     * The plugin's upload directory (path and URL)
+     * @return array
+     */
+    public static function getUploadDir()
+    {
+        $uploadDir = wp_upload_dir(null, false);
+        return [
+            'path' => $uploadDir['basedir'] . WPJOBBOARD_UPLOAD_DIR,
+            'url'  => $uploadDir['baseurl'] . WPJOBBOARD_UPLOAD_DIR
+        ];
+    }
+
+    /**
+     * Create the upload directory with the index.php and .htaccess guards
+     * @param string $path
+     */
+    public static function ensureProtectedDir($path)
+    {
+        if (!is_dir($path)) {
+            wp_mkdir_p($path);
+        }
+
+        $stubs = [
+            '.htaccess' => __DIR__ . '/Stubs/htaccess.stub',
+            'index.php' => __DIR__ . '/Stubs/index.stub'
+        ];
+
+        foreach ($stubs as $fileName => $stub) {
+            if (!file_exists($path . '/' . $fileName)) {
+                copy($stub, $path . '/' . $fileName);
+            }
+        }
+    }
+
+    /**
+     * Check that a file name has the random prefix that renameFileName() adds
+     * @param string $fileName
+     * @return bool
+     */
+    public static function isPluginFileName($fileName)
+    {
+        return (bool)preg_match(self::FILE_PREFIX_PATTERN, $fileName);
+    }
+
+    /**
+     * Check that a URL points to a file directly inside the plugin's upload directory
+     * @param string $url
+     * @param string $uploadUrl
+     * @return bool
+     */
+    public static function isPluginFileUrl($url, $uploadUrl)
+    {
+        $stripScheme = function ($value) {
+            return preg_replace('#^https?:#i', '', $value);
+        };
+
+        $url = $stripScheme($url);
+        $base = trailingslashit($stripScheme($uploadUrl));
+
+        if (strpos($url, $base) !== 0) {
+            return false;
+        }
+
+        $fileName = substr($url, strlen($base));
+        return $fileName === sanitize_file_name($fileName) && self::isPluginFileName($fileName);
+    }
+
+    /**
+     * Transient key for the server-side record of an upload
+     * @param string $fileName
+     * @return string
+     */
+    public static function uploadRecordKey($fileName)
+    {
+        return 'wpjb_upl_' . md5($fileName);
     }
 
 }

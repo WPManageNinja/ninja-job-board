@@ -78,7 +78,7 @@ class StepComponent extends BaseComponent
         ?>
         <div class="wpjb_step_button_wrapper wpjb_last_step">
             <button data-target_step_number="<?php echo intval($lastStep['step_counter']) - 1; ?>"
-                    class="wpjb_step_button wpjb_step_back"><?php echo wp_kses($backBtnText); ?></button>
+                    class="wpjb_step_button wpjb_step_back"><?php echo wp_kses_post($backBtnText); ?></button>
         </div>
     <?php endif; ?>
         </div><!--Step end -->

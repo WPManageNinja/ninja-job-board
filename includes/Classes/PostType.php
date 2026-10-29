@@ -79,17 +79,17 @@ class PostType
     {
         // Add new taxonomy, make it hierarchical (like categories)
         $labels = array(
-            'name'              => _x('Job Category', 'taxonomy general name', 'textdomain'),
-            'singular_name'     => _x('Job Category', 'taxonomy singular name', 'textdomain'),
-            'search_items'      => __('Search Job Categories', 'textdomain'),
-            'all_items'         => __('All Job Categories', 'textdomain'),
-            'parent_item'       => __('Parent Job Category', 'textdomain'),
-            'parent_item_colon' => __('Parent Job Category:', 'textdomain'),
-            'edit_item'         => __('Edit Job Category', 'textdomain'),
-            'update_item'       => __('Update Job Category', 'textdomain'),
-            'add_new_item'      => __('Add New Job Category', 'textdomain'),
-            'new_item_name'     => __('New Job Category Name', 'textdomain'),
-            'menu_name'         => __('Job Category', 'textdomain'),
+            'name'              => _x('Job Category', 'taxonomy general name', 'ninja-job-board'),
+            'singular_name'     => _x('Job Category', 'taxonomy singular name', 'ninja-job-board'),
+            'search_items'      => __('Search Job Categories', 'ninja-job-board'),
+            'all_items'         => __('All Job Categories', 'ninja-job-board'),
+            'parent_item'       => __('Parent Job Category', 'ninja-job-board'),
+            'parent_item_colon' => __('Parent Job Category:', 'ninja-job-board'),
+            'edit_item'         => __('Edit Job Category', 'ninja-job-board'),
+            'update_item'       => __('Update Job Category', 'ninja-job-board'),
+            'add_new_item'      => __('Add New Job Category', 'ninja-job-board'),
+            'new_item_name'     => __('New Job Category Name', 'ninja-job-board'),
+            'menu_name'         => __('Job Category', 'ninja-job-board'),
         );
 
         $categorySlug = apply_filters('wpjobboard/job_category_slug', 'wpjb-job-categories');
@@ -125,8 +125,8 @@ class PostType
             return $content;
         }
 
-        $applyText = __('Apply for this position', 'wpjobboard');
-        $contentBtn = '<div class="wpjb_job_application_wrapper"><div class="wpjb_job_apply"><button class="btn wpjb_job_apply_btn">' . $applyText . '</button></div><div style="display: none;" class="wpjb_job_form_wrapper">' . $form . '</div></div>';
+        $applyText = __('Apply for this position', 'ninja-job-board');
+        $contentBtn = '<div class="wpjb_job_application_wrapper"><div class="wpjb_job_apply"><button class="btn wpjb_job_apply_btn">' . esc_html($applyText) . '</button></div><div style="display: none;" class="wpjb_job_form_wrapper">' . $form . '</div></div>';
 
         return $content . $contentBtn;
     }
@@ -141,27 +141,28 @@ class PostType
         $jobType = GeneralSettings::getJobTypeName(get_post_meta($postId, 'job_type', true));
 
 
-        $display_date = sprintf( esc_html__( '%s ago', 'wpjobboard' ), human_time_diff( get_post_time( 'U', false, $post ), current_time( 'timestamp' ) ) );
+        /* translators: %s: human readable time difference */
+        $display_date = sprintf( esc_html__( '%s ago', 'ninja-job-board' ), human_time_diff( get_post_time( 'U', true, $post ), time() ) );
 
         $html = '<ul class="wpjb_job_meta">';
         if($jobType) {
-            $html .= '<li class="wpjb_job_type">'.$jobType.'</li>';
+            $html .= '<li class="wpjb_job_type">' . esc_html($jobType) . '</li>';
         }
         if($location) {
-            $html .= '<li class="wpjb_job_location"><img class="wpjb_meta_icon" src="'.WPJOBBOARD_URL.'assets/images/map.svg" />'.$location.'</li>';
+            $html .= '<li class="wpjb_job_location"><img alt="" class="wpjb_meta_icon" src="' . esc_url(WPJOBBOARD_URL . 'assets/images/map.svg') . '" />' . esc_html($location) . '</li>';
         }
         if($vacancies) {
-            $vacanciesText = __('No. of Vacancies:', 'wpjobboard');
+            $vacanciesText = __('No. of Vacancies:', 'ninja-job-board');
             if(intval($vacancies) == 1) {
-                $vacanciesText = __('No. of Vacancy:', 'wpjobboard');
+                $vacanciesText = __('No. of Vacancy:', 'ninja-job-board');
             }
-            $html .= '<li class="wpjb_job_vacancies"><img class="wpjb_meta_icon" src="'.WPJOBBOARD_URL.'assets/images/people.svg" />'.$vacanciesText.' '.$vacancies.'</li>';
+            $html .= '<li class="wpjb_job_vacancies"><img alt="" class="wpjb_meta_icon" src="' . esc_url(WPJOBBOARD_URL . 'assets/images/people.svg') . '" />' . esc_html($vacanciesText . ' ' . $vacancies) . '</li>';
         }
         if($experinceText) {
-            $html .= '<li class="wpjb_job_exp_text"><img class="wpjb_meta_icon" src="'.WPJOBBOARD_URL.'assets/images/exp.svg" />'.$experinceText.'</li>';
+            $html .= '<li class="wpjb_job_exp_text"><img alt="" class="wpjb_meta_icon" src="' . esc_url(WPJOBBOARD_URL . 'assets/images/exp.svg') . '" />' . esc_html($experinceText) . '</li>';
         }
 
-        $html .= '<li class="wpjb_job_time"><img class="wpjb_meta_icon" src="'.WPJOBBOARD_URL.'assets/images/time.svg" /><time datetime="' . esc_attr( get_post_time( 'Y-m-d', false, $post ) ) . '">' . wp_kses_post( $display_date ) . '</time></li>';
+        $html .= '<li class="wpjb_job_time"><img alt="" class="wpjb_meta_icon" src="' . esc_url(WPJOBBOARD_URL . 'assets/images/time.svg') . '" /><time datetime="' . esc_attr( get_post_time( 'Y-m-d', false, $post ) ) . '">' . wp_kses_post( $display_date ) . '</time></li>';
 
         $html .= '</ul>';
 
@@ -223,7 +224,7 @@ class PostType
     {
         add_meta_box(
             'wpjobboard_metabox_job_info',
-            esc_html__('Job Info', 'wpjobboard'),
+            esc_html__('Job Info', 'ninja-job-board'),
             array($this, 'renderJobMetaBox'),
             $this->postTypeName,
             'normal',
@@ -240,34 +241,35 @@ class PostType
         $availableJobTypes = GeneralSettings::getJobTypes();
         ?>
         <input type="hidden" name="wpjobboard_job_meta" value="1"/>
+        <?php wp_nonce_field('wpjobboard_save_job_meta', 'wpjobboard_job_meta_nonce'); ?>
         <div class="wpjb_meta_field">
-            <label><?php _e('Location', 'wpjobboard');?></label>
+            <label><?php esc_html_e('Location', 'ninja-job-board');?></label>
             <div class="wpjb_input_container">
-                <input placeholder="Location" type="text" value="<?php echo esc_html($location); ?>"
+                <input placeholder="Location" type="text" value="<?php echo esc_attr($location); ?>"
                        name="wpjobboard_job_meta_values[job_location]"/>
             </div>
         </div>
         <div class="wpjb_meta_field">
-            <label><?php _e('Number of Vacancies', 'wpjobboard');?></label>
+            <label><?php esc_html_e('Number of Vacancies', 'ninja-job-board');?></label>
             <div class="wpjb_input_container">
-                <input placeholder="Number of Vacancies" type="number" value="<?php echo esc_html($vacancies); ?>"
+                <input placeholder="Number of Vacancies" type="number" value="<?php echo esc_attr($vacancies); ?>"
                        name="wpjobboard_job_meta_values[job_vacancies]"/>
             </div>
         </div>
         <div class="wpjb_meta_field">
-            <label><?php _e('Experince Year Requirement', 'wpjobboard');?> </label>
+            <label><?php esc_html_e('Experience Year Requirement', 'ninja-job-board');?> </label>
             <div class="wpjb_input_container">
-                <input placeholder="ex: 1-2 Years" type="text" value="<?php echo esc_html($experinceText); ?>"
+                <input placeholder="ex: 1-2 Years" type="text" value="<?php echo esc_attr($experinceText); ?>"
                        name="wpjobboard_job_meta_values[job_experince_text]"/>
             </div>
         </div>
         <div class="wpjb_meta_field">
-            <label><?php _e('Job Type', 'wpjobboard');?> </label>
+            <label><?php esc_html_e('Job Type', 'ninja-job-board');?> </label>
             <div class="wpjb_input_container">
                 <select name="wpjobboard_job_meta_values[job_type]">
-                    <option value="">Select Job Type</option>
+                    <option value=""><?php esc_html_e('Select Job Type', 'ninja-job-board'); ?></option>
                     <?php foreach ($availableJobTypes as $type => $label): ?>
-                    <option <?php selected($jobType, $type); ?> value="<?php echo esc_html($type); ?>"><?php echo esc_html($label); ?></option>
+                    <option <?php selected($jobType, $type); ?> value="<?php echo esc_attr($type); ?>"><?php echo esc_html($label); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -277,11 +279,35 @@ class PostType
 
     public function saveMetaData($postId)
     {
-        if(isset($_REQUEST['wpjobboard_job_meta']) && $_REQUEST['wpjobboard_job_meta']) {
-            $metaValues = $_REQUEST['wpjobboard_job_meta_values'];
-            foreach ($metaValues as $metaKey => $metaValue) {
-                update_post_meta($postId, $metaKey, sanitize_text_field($metaValue) );
+        if (empty($_POST['wpjobboard_job_meta']) || empty($_POST['wpjobboard_job_meta_nonce'])) {
+            return;
+        }
+
+        if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['wpjobboard_job_meta_nonce'])), 'wpjobboard_save_job_meta')) {
+            return;
+        }
+
+        if ((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || !current_user_can('edit_post', $postId)) {
+            return;
+        }
+
+        $metaValues = isset($_POST['wpjobboard_job_meta_values']) ? wpJobBoardSanitizeText(wp_unslash($_POST['wpjobboard_job_meta_values'])) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized by wpJobBoardSanitizeText()
+        if (!is_array($metaValues)) {
+            return;
+        }
+
+        $allowedKeys = array('job_location', 'job_vacancies', 'job_experince_text', 'job_type');
+        foreach ($allowedKeys as $metaKey) {
+            if (!isset($metaValues[$metaKey]) || !is_string($metaValues[$metaKey])) {
+                continue;
             }
+            $value = $metaValues[$metaKey];
+            if ($metaKey == 'job_vacancies') {
+                $value = ($value === '') ? '' : absint($value);
+            } else if ($metaKey == 'job_type' && $value && !isset(GeneralSettings::getJobTypes()[$value])) {
+                continue;
+            }
+            update_post_meta($postId, $metaKey, $value);
         }
     }
 }

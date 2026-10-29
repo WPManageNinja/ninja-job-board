@@ -19,6 +19,9 @@ class SubmissionActivity
             ->orderBy('id', 'DESC')
             ->get();
         foreach ($activities as $activitiy) {
+            // The admin app renders the content as HTML (v-html)
+            $activitiy->content = wp_kses_post($activitiy->content);
+            $activitiy->created_by = sanitize_text_field($activitiy->created_by);
             if($activitiy->created_by_user_id) {
                 $activitiy->user_profile_url = get_edit_user_link($activitiy->created_by_user_id);
             }

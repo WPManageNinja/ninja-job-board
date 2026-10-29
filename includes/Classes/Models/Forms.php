@@ -310,7 +310,7 @@ class Forms
                 'start_date'           => gmdate('Y-m-d H:i:s'),
                 'end_date'             => '',
                 'before_start_message' => __('Form submission time schedule is not started yet. Please check back later', 'ninja-job-board'),
-                'expire_message'       => __('Form submission time has been expired.')
+                'expire_message'       => __('Form submission time has been expired.', 'ninja-job-board')
             ),
             'requireLogin'             => array(
                 'status'  => 'no',

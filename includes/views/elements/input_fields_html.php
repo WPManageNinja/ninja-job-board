@@ -1,12 +1,17 @@
+<?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+?>
 <?php if($items): ?>
 <div class="wpjb_conf_view">
     <div class="entry_info_box">
         <div class="entry_info_header">
-            <div class="info_box_header"><?php _e('Application Details', 'wpjobboard'); ?></div>
+            <div class="info_box_header"><?php esc_html_e('Application Details', 'ninja-job-board'); ?></div>
         </div>
         <div class="entry_info_body">
             <?php foreach ($items as $data): ?>
-                <?php if(!$data['value'] || $data['type'] == 'hidden_input') { continue; } ?>
+                <?php if(!$data['value'] || (isset($data['type']) && $data['type'] == 'hidden_input')) { continue; } ?>
                 <div class="wpjb_each_entry">
                     <div class="wpjb_entry_label">
                         <?php echo esc_html($data['label']); ?>

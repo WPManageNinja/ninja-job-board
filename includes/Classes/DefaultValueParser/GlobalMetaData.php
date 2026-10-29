@@ -2,7 +2,8 @@
 
 namespace WPJobBoard\Classes\DefaultValueParser;
 
-use WPPayForm\Classes\Browser;
+use WPJobBoard\Classes\Browser;
+use WPJobBoard\Classes\Entry\MetaData;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -24,7 +25,7 @@ class GlobalMetaData
     {
         $this->postId = get_the_ID();
         $this->userId = get_current_user_id();
-        $this->queryVars = $_REQUEST;
+        $this->queryVars = wpJobBoardSanitizeText(wp_unslash($_GET)); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only default values for a public form
     }
 
     public function getWPValues($key)
@@ -100,6 +101,9 @@ class GlobalMetaData
 
     public function getPostMeta($key)
     {
+        if (!MetaData::isAllowedMetaKey($key, 'post')) {
+            return '';
+        }
         $meta = get_post_meta($this->postId, $key, true);
         if (is_array($meta)) {
             return implode(', ', $meta);
@@ -113,7 +117,7 @@ class GlobalMetaData
         if(!$user) {
             return '';
         }
-        if($user->exists($key)) {
+        if (in_array($key, MetaData::allowedUserFields(), true)) {
             $value = $user->{$key};
             if(is_array($value)) {
                 $value = implode(', ', $value);
@@ -125,6 +129,9 @@ class GlobalMetaData
 
     public function getuserMeta($key)
     {
+        if (!MetaData::isAllowedMetaKey($key, 'user')) {
+            return '';
+        }
         $meta = get_user_meta($this->userId, $key, true);
         if (is_array($meta)) {
             return implode(', ', $meta);
@@ -134,8 +141,8 @@ class GlobalMetaData
 
     public function getFromUrlQuery($key)
     {
-        if (isset($this->queryVars[$key])) {
-            return esc_attr($this->queryVars[$key]);
+        if (isset($this->queryVars[$key]) && is_string($this->queryVars[$key])) {
+            return $this->queryVars[$key];
         }
         return '';
     }

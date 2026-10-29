@@ -71,11 +71,11 @@ class TextAreaComponent extends BaseComponent
         $defaultValue = apply_filters('wpjobboard/input_default_value', ArrayHelper::get($fieldOptions, 'default_value'), $element, $form);
 
         ?>
-        <div data-element_type="<?php echo esc_html($this->elementName); ?>"
-             class="<?php echo esc_html($controlClass); ?>">
+        <div data-element_type="<?php echo esc_attr($this->elementName); ?>"
+             class="<?php echo esc_attr($controlClass); ?>">
             <?php $this->buildLabel($fieldOptions, $form, array('for' => $inputId)); ?>
             <div class="wpjb_input_content">
-                <textarea <?php wpJobBoardPrintInternal($this->builtAttributes($attributes)); ?>><?php echo esc_html($defaultValue); ?></textarea>
+                <textarea <?php echo $this->builtAttributes($attributes); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in builtAttributes() ?>><?php echo esc_html($defaultValue); ?></textarea>
             </div>
         </div>
         <?php

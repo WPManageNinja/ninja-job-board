@@ -31,10 +31,15 @@ class PlaceholderParser
      * Possible Input Item Parameters [can be found on submission.form_data_formatted.INPUTNAME]
      * {input.INPUTNAME}
      *
-     *
+     * @param string $context Where the result goes: 'html' (values are HTML-escaped), 'url' (values are URL-encoded)
+     *                        or 'text' (raw values; the caller must sanitize the result for its own context).
      */
-    public static function parse($string, $submission)
+    public static function parse($string, $submission, $context = 'html')
     {
+        if (!is_string($string) || $string === '') {
+            return '';
+        }
+
         $parsables = self::parseShortcode($string);
         if (!$parsables) {
             return $string;
@@ -53,13 +58,16 @@ class PlaceholderParser
         $sunmissionPlaceholders = ArrayHelper::only($formattedParsables, array(
             'input', 'submission'
         ));
-        $submissionParseItems = self::parseInpuFields($sunmissionPlaceholders, $entry);
+        $submissionParseItems = self::parseInpuFields($sunmissionPlaceholders, $entry, $context);
 
         $wpPlaceholders = ArrayHelper::only($formattedParsables, array(
             'wp', 'post_meta', 'user_meta', 'querystring', 'other'
         ));
 
         $wpParseItems = self::parseWPFields($wpPlaceholders, $entry);
+        $wpParseItems = array_map(function ($value) use ($context) {
+            return self::escapeValue($value, $context);
+        }, $wpParseItems);
 
         $parseItems = array_merge($submissionParseItems, $wpParseItems);
 
@@ -76,20 +84,57 @@ class PlaceholderParser
         return str_replace(array_keys($formatedParsedItems), array_values($formatedParsedItems), $string);
     }
 
-    public static function parseInpuFields($placeholders, $entry)
+    public static function parseInpuFields($placeholders, $entry, $context = 'html')
     {
         $parsedData = array();
 
         foreach ($placeholders as $groupKey => $values) {
             foreach ($values as $placeholder => $targetItem) {
                 if ($groupKey == 'input') {
-                    $parsedData[$placeholder] = $entry->getInput($targetItem);
+                    if ($context == 'html') {
+                        $parsedData[$placeholder] = $entry->getInputHtml($targetItem);
+                    } else {
+                        $parsedData[$placeholder] = self::escapeValue($entry->getRawFormattedInput($targetItem), $context);
+                    }
                 } else if ($groupKey == 'submission') {
-                    $parsedData[$placeholder] = $entry->{$targetItem};
+                    $value = $entry->{$targetItem};
+                    if ($context == 'html' && substr($targetItem, -5) === '_html') {
+                        // Built by the plugin from escaped values
+                        $parsedData[$placeholder] = wpJobBoardKsesWithStyle($value);
+                    } else {
+                        $parsedData[$placeholder] = self::escapeValue($value, $context);
+                    }
                 }
             }
         }
         return $parsedData;
+    }
+
+    /**
+     * Escape a placeholder value for the target context
+     * @param mixed  $value
+     * @param string $context
+     * @return string
+     */
+    public static function escapeValue($value, $context)
+    {
+        if (is_array($value)) {
+            $value = implode(', ', array_filter($value, 'is_scalar'));
+        } else if (!is_scalar($value)) {
+            $value = '';
+        }
+
+        $value = (string)$value;
+
+        if ($context == 'html') {
+            return esc_html($value);
+        }
+
+        if ($context == 'url') {
+            return rawurlencode($value);
+        }
+
+        return $value;
     }
 
     public static function parseWPFields($placeHolders, $entry)

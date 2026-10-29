@@ -15,6 +15,22 @@ if (!defined('ABSPATH')) {
  */
 class AdminAjaxHandler
 {
+    // phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing -- every route passes AccessControl::checkAndPresponseError() first, which verifies the nonce
+
+    /**
+     * Get the requested form ID. Stops with an error when the ID is not a job form.
+     */
+    private function requireFormId()
+    {
+        $formId = isset($_REQUEST['form_id']) ? absint($_REQUEST['form_id']) : 0;
+        if (!$formId || !Forms::getForm($formId)) {
+            wp_send_json_error(array(
+                'message' => __('Job post not found', 'ninja-job-board')
+            ), 404);
+        }
+        return $formId;
+    }
+
     public function registerEndpoints()
     {
         add_action('wp_ajax_wpjobboard_forms_admin_ajax', array($this, 'handeEndPoint'));
@@ -22,7 +38,7 @@ class AdminAjaxHandler
 
     public function handeEndPoint()
     {
-        $route = sanitize_text_field($_REQUEST['route']);
+        $route = isset($_REQUEST['route']) ? sanitize_text_field(wp_unslash($_REQUEST['route'])) : '';
 
         $validRoutes = array(
             'get_forms'                  => 'getForms',
@@ -50,9 +66,9 @@ class AdminAjaxHandler
 
     protected function getForms()
     {
-        $perPage = absint($_REQUEST['per_page']);
-        $pageNumber = absint($_REQUEST['page_number']);
-        $searchString = sanitize_text_field($_REQUEST['search_string']);
+        $perPage = isset($_REQUEST['per_page']) ? min(100, max(1, absint($_REQUEST['per_page']))) : 20;
+        $pageNumber = isset($_REQUEST['page_number']) ? max(1, absint($_REQUEST['page_number'])) : 1;
+        $searchString = isset($_REQUEST['search_string']) ? sanitize_text_field(wp_unslash($_REQUEST['search_string'])) : '';
         $args = array(
             'posts_per_page' => $perPage,
             'offset'         => $perPage * ($pageNumber - 1)
@@ -70,10 +86,10 @@ class AdminAjaxHandler
 
     protected function createForm()
     {
-        $postTitle = sanitize_text_field($_REQUEST['post_title']);
+        $postTitle = isset($_REQUEST['post_title']) ? sanitize_text_field(wp_unslash($_REQUEST['post_title'])) : '';
         if (!$postTitle) {
             wp_send_json_error(array(
-                'message' => __('Please Provide a job title', 'wpjobboard')
+                'message' => __('Please Provide a job title', 'ninja-job-board')
             ), 423);
             return;
         }
@@ -87,14 +103,9 @@ class AdminAjaxHandler
 
         $formId = Forms::create($data);
 
-        wp_update_post([
-            'ID'         => $formId,
-            'post_title' => $data['post_title']
-        ]);
-
-        if (is_wp_error($formId)) {
+        if (is_wp_error($formId) || !$formId) {
             wp_send_json_error(array(
-                'message' => __('Something is wrong when createding the form. Please try again', 'wpjobboard')
+                'message' => __('Something is wrong when createding the form. Please try again', 'ninja-job-board')
             ), 423);
             return;
         }
@@ -104,7 +115,7 @@ class AdminAjaxHandler
         $this->createDemoApplicationForm($formId);
 
         wp_send_json_success(array(
-            'message'      => __('Please wait, You are redirecting to the next page', 'wpjobboard'),
+            'message'      => __('Please wait, You are redirecting to the next page', 'ninja-job-board'),
             'form_id'      => $formId,
             'redirect_url' => get_edit_post_link($formId)
         ), 200);
@@ -113,32 +124,34 @@ class AdminAjaxHandler
     protected function updateForm()
     {
         // validate first
-        $formId = intval($_REQUEST['form_id']);
-        $title = sanitize_text_field($_REQUEST['post_title']);
-        if (!$formId || !$title) {
+        $formId = $this->requireFormId();
+        $title = isset($_REQUEST['post_title']) ? sanitize_text_field(wp_unslash($_REQUEST['post_title'])) : '';
+        if (!$title) {
             wp_send_json_error(array(
-                'message' => __('Please provide form title', 'wpjobboard')
+                'message' => __('Please provide form title', 'ninja-job-board')
             ), 423);
         }
 
         $formData = array(
             'post_title'   => $title,
-            'post_content' => wp_kses_post($_REQUEST['post_content'])
+            'post_content' => isset($_REQUEST['post_content']) ? wp_kses_post(wp_unslash($_REQUEST['post_content'])) : ''
+
         );
 
         do_action('wpjobboard/before_update_form', $formId, $formData);
         Forms::update($formId, $formData);
         do_action('wpjobboard/after_update_form', $formId, $formData);
 
-        update_post_meta($formId, 'wpjobboard_show_title_description', sanitize_text_field($_REQUEST['show_title_description']));
+        $showTitle = isset($_REQUEST['show_title_description']) ? sanitize_text_field(wp_unslash($_REQUEST['show_title_description'])) : '';
+        update_post_meta($formId, 'wpjobboard_show_title_description', $showTitle);
         wp_send_json_success(array(
-            'message' => __('Form successfully updated', 'wpjobboard')
+            'message' => __('Form successfully updated', 'ninja-job-board')
         ), 200);
     }
 
     protected function getForm()
     {
-        $formId = absint($_REQUEST['form_id']);
+        $formId = $this->requireFormId();
         $form = Forms::getForm($formId);
         $form->edit_url = admin_url('post.php?post=' . $form->ID . '&action=edit');
         wp_send_json_success(array(
@@ -154,7 +167,7 @@ class AdminAjaxHandler
             ->where('post_status', 'publish')
             ->get();
 
-        $formId = absint($_REQUEST['form_id']);
+        $formId = $this->requireFormId();
 
         wp_send_json_success(array(
             'confirmation_settings' => Forms::getConfirmationSettings($formId),
@@ -165,35 +178,45 @@ class AdminAjaxHandler
 
     protected function saveFormSettings()
     {
-        $formId = absint($_REQUEST['form_id']);
+        $formId = $this->requireFormId();
         if (isset($_REQUEST['confirmation_settings'])) {
 
-            $formattedSettings = wpJobBoardSanitize(ArrayHelper::get($_REQUEST, 'confirmation_settings', []));
+            $formattedSettings = wpJobBoardSanitize(wp_unslash(ArrayHelper::get($_REQUEST, 'confirmation_settings', []))); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized by wpJobBoardSanitize()
+            if (isset($formattedSettings['customUrl'])) {
+                $formattedSettings['customUrl'] = esc_url_raw($formattedSettings['customUrl']);
+            }
 
             update_post_meta($formId, 'jobboard_confirmation_settings', $formattedSettings);
         }
 
         wp_send_json_success(array(
-            'message' => __('Settings successfully updated', 'wpjobboard')
+            'message' => __('Settings successfully updated', 'ninja-job-board')
         ), 200);
     }
 
     protected function saveFormBuilderSettings()
     {
-        $formId = absint($_REQUEST['form_id']);
-        $builderSettings = wpJobBoardSanitize(wp_unslash($_REQUEST['builder_settings']));
+        $formId = $this->requireFormId();
+        $builderSettings = isset($_REQUEST['builder_settings']) ? wpJobBoardSanitize(wp_unslash($_REQUEST['builder_settings'])) : []; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized by wpJobBoardSanitize()
 
-        if (!$formId || !$builderSettings) {
+        if (!$builderSettings || !is_array($builderSettings)) {
             wp_send_json_error(array(
-                'message' => __('Validation Error, Please try again', 'wpjobboard'),
+                'message' => __('Validation Error, Please try again', 'ninja-job-board'),
                 'errors'  => array(
-                    'general' => __('Please add at least one input element', 'wpjobboard')
+                    'general' => __('Please add at least one input element', 'ninja-job-board')
                 )
             ), 423);
         }
         $errors = array();
 
-        foreach ($builderSettings as $builderSetting) {
+        foreach ($builderSettings as $index => $builderSetting) {
+            if (!is_array($builderSetting) || empty($builderSetting['type']) || empty($builderSetting['id'])) {
+                unset($builderSettings[$index]);
+                continue;
+            }
+            $builderSettings[$index]['type'] = sanitize_key($builderSetting['type']);
+            $builderSettings[$index]['id'] = sanitize_key($builderSetting['id']);
+            $builderSetting = $builderSettings[$index];
             $error = apply_filters('wpjobboard/validate_component_on_save_' . $builderSetting['type'], false, $builderSetting, $formId);
             if ($error) {
                 $errors[$builderSetting['id']] = $error;
@@ -202,23 +225,30 @@ class AdminAjaxHandler
 
         if ($errors) {
             wp_send_json_error(array(
-                'message' => __('Validation failed when saving the form', 'wpjobboard'),
+                'message' => __('Validation failed when saving the form', 'ninja-job-board'),
                 'errors'  => $errors
             ), 423);
         }
 
-        $submit_button_settings = wpJobBoardSanitize(ArrayHelper::get($_REQUEST, 'submit_button_settings'));
-        update_post_meta($formId, 'wpjobboard_application_builder_settings', $builderSettings);
+        $submit_button_settings = wpJobBoardSanitize(wp_unslash(ArrayHelper::get($_REQUEST, 'submit_button_settings', []))); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized by wpJobBoardSanitize()
+        if (is_array($submit_button_settings)) {
+            foreach (array('css_class', 'button_style') as $classKey) {
+                if (isset($submit_button_settings[$classKey])) {
+                    $submit_button_settings[$classKey] = implode(' ', array_map('sanitize_html_class', explode(' ', $submit_button_settings[$classKey])));
+                }
+            }
+        }
+        update_post_meta($formId, 'wpjobboard_application_builder_settings', array_values($builderSettings));
         update_post_meta($formId, 'wpjobboard_submit_button_settings', $submit_button_settings);
 
         wp_send_json_success(array(
-            'message' => __('Settings successfully updated', 'wpjobboard')
+            'message' => __('Settings successfully updated', 'ninja-job-board')
         ), 200);
     }
 
     protected function getFormBuilderSettings()
     {
-        $formId = absint($_REQUEST['form_id']);
+        $formId = $this->requireFormId();
         $jobPost = Forms::getForm($formId);
         $builderSettings = Forms::getBuilderSettings($formId);
 
@@ -232,18 +262,18 @@ class AdminAjaxHandler
 
     protected function deleteForm()
     {
-        $formId = intval($_REQUEST['form_id']);
+        $formId = $this->requireFormId();
         do_action('wpjobboard/before_form_delete', $formId);
         Forms::deleteForm($formId);
         do_action('wpjobboard/after_form_delete', $formId);
         wp_send_json_success(array(
-            'message' => __('Selected form successfully deleted', 'wpjobboard')
+            'message' => __('Selected form successfully deleted', 'ninja-job-board')
         ), 200);
     }
 
     protected function getDesignSettings()
     {
-        $formId = intval($_REQUEST['form_id']);
+        $formId = $this->requireFormId();
         wp_send_json_success(array(
             'layout_settings' => Forms::getDesignSettings($formId)
         ), 200);
@@ -251,43 +281,45 @@ class AdminAjaxHandler
 
     protected function updateDesignSettings()
     {
-        $formId = intval($_REQUEST['form_id']);
-        $layoutSettings = wpJobBoardSanitize($_REQUEST['layout_settings']);
+        $formId = $this->requireFormId();
+        $layoutSettings = isset($_REQUEST['layout_settings']) ? wpJobBoardSanitize(wp_unslash($_REQUEST['layout_settings'])) : []; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized by wpJobBoardSanitize()
         update_post_meta($formId, 'wpjobboard_form_design_settings', $layoutSettings);
         wp_send_json_success(array(
-            'message' => __('Settings successfully updated', 'wpjobboard')
+            'message' => __('Settings successfully updated', 'ninja-job-board')
         ), 200);
     }
 
     protected function duplicateForm()
     {
-        $formId = absint($_POST['form_id']);
+        $formId = $this->requireFormId();
         $globalTools = new GlobalTools();
         $oldForm = $globalTools->getForm($formId);
-        $oldForm['post_title'] = '(Duplicate) ' . $oldForm['post_title'];
+        if ($oldForm) {
+            $oldForm['post_title'] = '(Duplicate) ' . $oldForm['post_title'];
+        }
         $oldForm = apply_filters('wpjobboard/form_duplicate', $oldForm);
 
         if (!$oldForm) {
             wp_send_json_error(array(
-                'message' => __('No form found when duplicating the form', 'wpjobboard')
+                'message' => __('No form found when duplicating the form', 'ninja-job-board')
             ), 423);
         }
         $newForm = $globalTools->createFormFromData($oldForm);
         wp_send_json_success(array(
-            'message' => __('Form successfully duplicated', 'wpjobboard'),
+            'message' => __('Form successfully duplicated', 'ninja-job-board'),
             'form'    => $newForm
         ), 200);
     }
 
     private function restoreForm()
     {
-        $formId = intval($_REQUEST['form_id']);
+        $formId = $this->requireFormId();
         wp_update_post([
             'ID' => $formId,
             'post_status' => 'publish'
         ]);
         wp_send_json_success(array(
-            'message' => 'Job post successfully restored'
+            'message' => __('Job post successfully restored', 'ninja-job-board')
         ));
     }
 
@@ -298,7 +330,7 @@ class AdminAjaxHandler
 
         $builderSettings  = ArrayHelper::get($defaltForm, 'form_meta.wpjobboard_application_builder_settings');
         if($builderSettings) {
-            update_post_meta($formId, 'wpjobboard_application_builder_settings', $builderSettings);
+            update_post_meta($formId, 'wpjobboard_application_builder_settings', array_values($builderSettings));
         }
 
         $submitButton = ArrayHelper::get($defaltForm, 'form_meta.wpjobboard_submit_button_settings');
