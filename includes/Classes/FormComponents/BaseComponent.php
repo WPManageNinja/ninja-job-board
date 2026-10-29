@@ -285,7 +285,7 @@ abstract class BaseComponent
 
     public function elementControlClass($element)
     {
-        return apply_filters('wppayfrom/element_control_class', 'wpjb_form_group wpjb_item_' . $element['type'], $element);
+        return apply_filters('wpjobboard/element_control_class', 'wpjb_form_group wpjb_item_' . $element['type'], $element);
     }
 
     public function elementInputClass($element)
@@ -294,7 +294,7 @@ abstract class BaseComponent
         if (isset($element['extra_input_class'])) {
             $extraClasses = ' ' . $element['extra_input_class'];
         }
-        return apply_filters('wppayfrom/element_input_class', 'wpjb_form_control' . $extraClasses, $element);
+        return apply_filters('wpjobboard/element_input_class', 'wpjb_form_control' . $extraClasses, $element);
     }
 
     public function parseText($text, $formId)

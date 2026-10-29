@@ -349,7 +349,7 @@ class Emogrifier
         $xPath = new \DOMXPath($xmlDocument);
         $this->clearAllCaches();
         $this->purgeVisitedNodes();
-        \set_error_handler([$this, 'handleXpathQueryWarnings'], E_WARNING);
+        \set_error_handler([$this, 'handleXpathQueryWarnings'], E_WARNING); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_set_error_handler -- bundled Emogrifier library: turns XPath warnings into exceptions; restored right after
 
         $this->normalizeStyleAttributesOfAllNodes($xPath);
 

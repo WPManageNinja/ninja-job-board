@@ -73,13 +73,13 @@ class RenderJobList
         ];
 
         if($categoryQuery) {
-            $postsArg['tax_query'] = [
+            $postsArg['tax_query'] = [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- the [wp_job_list categories=""] filter needs it
                 $categoryQuery
             ];
         }
 
         if($metaQuery) {
-            $postsArg['meta_query'] = $metaQuery;
+            $postsArg['meta_query'] = $metaQuery; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- hides expired jobs (application end date)
         }
 
         $jobs = get_posts($postsArg);

@@ -19,7 +19,8 @@ class SpamProtection
 {
     const HONEYPOT_FIELD = '__wpjb_hp';
     const OPTION = 'wpjobboard_spam_settings';
-    const SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+    // Server-side API call to check a token, not an asset loaded in the browser
+    const SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'; // phpcs:ignore PluginCheck.CodeAnalysis.Offloading.OffloadedContent -- API endpoint, see readme "External services"
 
     public function register()
     {

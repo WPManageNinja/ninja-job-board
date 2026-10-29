@@ -74,12 +74,20 @@ function wpjobboard_uninstall_site()
     wp_cache_flush();
 }
 
-if (is_multisite()) {
+/**
+ * Run the cleanup on every site of a network, or on the single site
+ */
+function wpjobboard_uninstall()
+{
+    if (!is_multisite()) {
+        wpjobboard_uninstall_site();
+        return;
+    }
     foreach (get_sites(array('fields' => 'ids', 'number' => 0)) as $siteId) {
         switch_to_blog($siteId);
         wpjobboard_uninstall_site();
         restore_current_blog();
     }
-} else {
-    wpjobboard_uninstall_site();
 }
+
+wpjobboard_uninstall();

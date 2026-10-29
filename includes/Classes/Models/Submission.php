@@ -138,11 +138,9 @@ class Submission
             if ($element['group'] == 'input') {
                 $elementId = ArrayHelper::get($element, 'id');
                 $rawValue = ArrayHelper::get($inputValues, $elementId);
-                $filterName = 'wpjobboard/rendering_entry_value_' . $element['type'];
-
-                if (has_filter($filterName)) {
+                if (has_filter('wpjobboard/rendering_entry_value_' . $element['type'])) {
                     // The component builds HTML from the value; it must escape it. kses is the safety net.
-                    $elementValue = apply_filters($filterName, $rawValue, $submission, $element);
+                    $elementValue = apply_filters('wpjobboard/rendering_entry_value_' . $element['type'], $rawValue, $submission, $element);
                     if (is_array($elementValue)) {
                         $elementValue = esc_html(implode(', ', array_filter($elementValue, 'is_scalar')));
                     }

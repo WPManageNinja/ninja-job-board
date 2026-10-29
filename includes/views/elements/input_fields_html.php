@@ -10,13 +10,13 @@ if (!defined('ABSPATH')) {
             <div class="info_box_header"><?php esc_html_e('Application Details', 'ninja-job-board'); ?></div>
         </div>
         <div class="entry_info_body">
-            <?php foreach ($items as $data): ?>
-                <?php if(!$data['value'] || (isset($data['type']) && $data['type'] == 'hidden_input')) { continue; } ?>
+            <?php foreach ($items as $wpjobboard_data): ?>
+                <?php if(!$wpjobboard_data['value'] || (isset($wpjobboard_data['type']) && $wpjobboard_data['type'] == 'hidden_input')) { continue; } ?>
                 <div class="wpjb_each_entry">
                     <div class="wpjb_entry_label">
-                        <?php echo esc_html($data['label']); ?>
+                        <?php echo esc_html($wpjobboard_data['label']); ?>
                     </div>
-                    <div class="wpjb_entry_value"><?php echo wp_kses_post($data['value']); ?></div>
+                    <div class="wpjb_entry_value"><?php echo wp_kses_post($wpjobboard_data['value']); ?></div>
                 </div>
             <?php endforeach; ?>
         </div>

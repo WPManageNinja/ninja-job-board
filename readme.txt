@@ -233,6 +233,7 @@ Requirements
 Developers
 - `window.WPJobBoard` keeps the hooks API (applyFilters, addFilter, addAction, doAction) and now also exposes `app` and `router`
 - New filters: `wpjobboard/spam_check`, `wpjobboard/verify_public_nonce`, `wpjobboard/client_ip`
+- Renamed filters: `wppayfrom/element_control_class` is now `wpjobboard/element_control_class`, and `wppayfrom/element_input_class` is now `wpjobboard/element_input_class`
 
 = 1.4.0 - December 12, 2023 =
 - Database Query Issue Fixed
