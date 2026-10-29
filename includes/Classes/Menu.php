@@ -165,39 +165,30 @@ class Menu
 
         wp_enqueue_style('wpjobboard_admin_edit_app', WPJOBBOARD_URL . 'assets/css/jobboard-edit.css', array(), WPJOBBOARD_VERSION);
         $urlBase = admin_url('admin.php?page=wpjobboard.php#/edit-form/' . $post->ID . '/');
+        $editUrl = get_edit_post_link($post->ID);
         ?>
-        <ul role="menubar" class="el-menu--horizontal el-menu">
-            <li role="menuitem" class="el-menu-item  is-active" tabindex="0">
-                <a href="#">
-                    <i class="dashicons dashicons-edit"></i>
-                    <span><?php esc_html_e('Post Details', 'ninja-job-board'); ?></span>
-                </a>
-            </li>
-            <li role="menuitem" tabindex="1" class="el-menu-item">
-                <a href="<?php echo esc_url($urlBase); ?>form-builder">
-                    <i class="dashicons dashicons-lightbulb"></i>
-                    <span><?php esc_html_e('Application Form', 'ninja-job-board');?></span>
-                </a>
-            </li>
-            <li role="menuitem" tabindex="2" class="el-menu-item" style="border-bottom-color: transparent;">
-                <a href="<?php echo esc_url($urlBase); ?>settings/confirmation_settings">
-                    <i class="dashicons dashicons-admin-settings"></i>
-                    <span><?php esc_html_e('Form Settings', 'ninja-job-board');?></span>
-                </a>
-            </li>
-            <li role="menuitem" tabindex="3" class="el-menu-item" style="border-bottom-color: transparent;">
-                <a href="<?php echo esc_url($urlBase); ?>email_settings">
-                    <i class="dashicons dashicons-email-alt"></i>
-                    <span><?php esc_html_e('Email Notifications', 'ninja-job-board');?></span>
-                </a>
-            </li>
-            <li role="menuitem" tabindex="4" class="el-menu-item" style="border-bottom-color: transparent;">
-                <a href="<?php echo esc_url($urlBase); ?>form_entries">
-                    <i class="dashicons dashicons-text"></i>
-                    <span><?php esc_html_e('Job Applications', 'ninja-job-board');?></span>
-                </a>
-            </li>
-        </ul>
+        <nav class="wpjb_edit_nav" aria-label="<?php esc_attr_e('Job sections', 'ninja-job-board'); ?>">
+            <ul class="wpjb_edit_tabs">
+                <li>
+                    <a class="wpjb_edit_tab" href="<?php echo esc_url($urlBase . 'form_entries'); ?>"><?php esc_html_e('Applications', 'ninja-job-board'); ?></a>
+                </li>
+                <li>
+                    <a class="wpjb_edit_tab" href="<?php echo esc_url($urlBase . 'form-builder'); ?>"><?php esc_html_e('Application Form', 'ninja-job-board'); ?></a>
+                </li>
+                <li>
+                    <a class="wpjb_edit_tab" href="<?php echo esc_url($urlBase . 'settings/confirmation_settings'); ?>"><?php esc_html_e('Form Settings', 'ninja-job-board'); ?></a>
+                </li>
+                <li>
+                    <a class="wpjb_edit_tab" href="<?php echo esc_url($urlBase . 'email_settings'); ?>"><?php esc_html_e('Email Notifications', 'ninja-job-board'); ?></a>
+                </li>
+                <li>
+                    <a class="wpjb_edit_tab" href="<?php echo esc_url($urlBase . 'email_broadcast'); ?>"><?php esc_html_e('Email Broadcast', 'ninja-job-board'); ?></a>
+                </li>
+                <li>
+                    <a class="wpjb_edit_tab is-active" aria-current="page" href="<?php echo esc_url($editUrl ? $editUrl : '#'); ?>"><?php esc_html_e('Edit job post', 'ninja-job-board'); ?></a>
+                </li>
+            </ul>
+        </nav>
         <?php
     }
 

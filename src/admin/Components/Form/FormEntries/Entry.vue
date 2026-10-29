@@ -1,253 +1,219 @@
 <template>
-    <div id="print_view">
-        <div style="min-height: 300px"
-             v-loading="fething"
+    <div id="print_view" class="wpjb_app wpjb_entry_print">
+        <div v-loading="fething"
              :class="print_hides"
-             element-loading-text="Loading Entry..."
-             class="wpf_payment_view">
+             element-loading-text="Loading application..."
+             class="wpjb_entry">
             <template v-if="submission.id">
-                <div class="payment_head_info">
-                    <router-link class="payhead_nav_item payhead_back_icon"
-                                 :to="{ name: 'form_entries', params: { form_id: form_id } }"><span
-                        class="dashicons dashicons-admin-home"></span></router-link>
-                    <div class="payhead_title">
-                        {{ submission.post_title }} #{{ submission.id }}
+                <router-link class="wpjb_entry_back"
+                             :to="{ name: 'form_entries', params: { form_id: form_id } }">
+                    <el-icon><ArrowLeft/></el-icon>
+                    Back to applications
+                </router-link>
+
+                <div class="wpjb_entry_header">
+                    <div class="wpjb_entry_heading">
+                        <h1 class="wpjb_entry_title">
+                            {{ submission.applicant_name || ('Application #' + submission.id) }}
+                        </h1>
+                        <p class="wpjb_entry_meta">
+                            <a v-if="submission.applicant_email"
+                               :href="'mailto:' + submission.applicant_email">{{ submission.applicant_email }}</a>
+                            <span class="wpjb_num">Submitted {{ formatDate(submission.created_at) }}</span>
+                        </p>
                     </div>
-                    <div class="wpf_header_actions">
-                        <el-button-group>
-                            <el-button size="small" @click="handleNavClick('next')" type="info"
-                                       :icon="DArrowLeft">
-                                Prev
+                    <div class="wpjb_entry_actions wpf_header_actions">
+                        <div class="wpjb_entry_nav" role="group" aria-label="Browse applications">
+                            <el-button :icon="ArrowLeft"
+                                       :loading="loading"
+                                       aria-label="Previous application"
+                                       title="Previous application"
+                                       @click="handleNavClick('next')">Prev</el-button>
+                            <el-button aria-label="Next application"
+                                       title="Next application"
+                                       :disabled="loading"
+                                       @click="handleNavClick('prev')">
+                                Next
+                                <el-icon class="wpjb_icon_after"><ArrowRight/></el-icon>
                             </el-button>
-                            <el-button readonly size="small" disabled>{{ submission.id }}</el-button>
-                            <el-button size="small" @click="handleNavClick('prev')" type="info">Next <el-icon style="margin-left: 5px"><DArrowRight /></el-icon></el-button>
-                        </el-button-group>
+                        </div>
+                        <el-button :icon="Download"
+                                   aria-label="Export as JSON"
+                                   title="Export as JSON"
+                                   @click="exportJSON()"/>
+                        <el-button :icon="Printer"
+                                   aria-label="Print application"
+                                   title="Print application"
+                                   @click="print"/>
                     </div>
                 </div>
 
-                <div class="payment_header">
-                    <div class="payment_head_bottom">
-                        <div class="info_block">
-                            <div class="info_header">Date</div>
-                            <div class="info_value">{{ submission.created_at }}</div>
-                        </div>
-                        <div class="info_block">
-                            <div class="info_header">Email</div>
-                            <div class="info_value">
-                                <span v-if="submission.applicant_email">
-                                    <a target="_blank" :href="'mailto:'+submission.applicant_email">
-                                        {{ submission.applicant_email }}
-                                    </a>
-                                </span>
-                                <span v-else>n/a</span>
-                            </div>
-                        </div>
-                        <div class="info_block">
-                            <div class="info_header">Name</div>
-                            <div class="info_value">
-                                <span class="wpf_capitalize" v-if="submission.applicant_name">
-                                    <a :href="submission.user_profile_url" target="_blank"
-                                       v-if="submission.user_profile_url">
-                                        {{ submission.applicant_name }}
-                                    </a>
-                                    <span v-else>
-                                        {{ submission.applicant_name }}
-                                    </span>
-                                </span>
-                                <span v-else>n/a</span>
-                            </div>
-                        </div>
-                        <div v-if="submission.application_status" class="info_block">
-                            <div class="info_header">Application Status</div>
-                            <div class="info_value wpf_capitalize">
-                                <span>{{ submission.application_status }}</span>
-                            </div>
-                        </div>
-                        <div v-if="submission.status" class="info_block">
-                            <div class="info_header">Internal Status</div>
-                            <div class="info_value wpf_capitalize">
-                                <span>{{ submission.status }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="wpf_submisson_body" :class="(hide_sidebar == 'yes') ? 'wpf_hide_sidebar' : ''">
-                    <div class="wpf_submission_details">
-                        <div class="entry_info_box entry_input_data">
-                            <div class="entry_info_header">
-                                <div class="info_box_header">Application Data</div>
+                <div class="wpjb_entry_grid">
+                    <div class="wpjb_entry_main">
+                        <section class="wpjb_card entry_input_data">
+                            <div class="wpjb_card_head">
+                                <h3>Application</h3>
                                 <div class="info_box_header_actions">
-                                    <el-checkbox true-value="yes" false-value="no" v-model="show_empty">Show empty
-                                        fields
-                                    </el-checkbox>
+                                    <el-switch v-model="show_empty"
+                                               active-value="yes"
+                                               inactive-value="no"
+                                               size="small"
+                                               active-text="Show empty fields"/>
                                 </div>
                             </div>
-                            <div class="entry_info_body">
-                                <div class="wpf_entry_details">
-                                    <div v-for="(entry, entry_id) in entry_items"
-                                         v-show="show_empty == 'yes' || entry.value"
-                                         :key="entry_id" class="wpf_each_entry">
-                                        <div class="wpf_entry_label">
-                                            {{ entry.label }}
-                                        </div>
-                                        <div class="wpf_entry_value" v-html="entry.value"></div>
-                                    </div>
+                            <dl class="wpjb_answers">
+                                <div v-for="(entry, entry_id) in entry_items"
+                                     v-show="show_empty == 'yes' || entry.value"
+                                     :key="entry_id"
+                                     class="wpjb_answer">
+                                    <dt>{{ entry.label }}</dt>
+                                    <dd v-if="entry.value" v-html="entry.value"></dd>
+                                    <dd v-else class="is-empty">Not provided</dd>
                                 </div>
-                            </div>
-                        </div>
+                            </dl>
+                        </section>
 
-                        <div class="entry_info_box entry_submission_activity">
-                            <div class="entry_info_header">
-                                <div class="info_box_header">Application Activity Events</div>
+                        <section class="wpjb_card entry_submission_activity">
+                            <div class="wpjb_card_head">
+                                <h3>Activity</h3>
                                 <div class="info_box_header_actions">
-                                    <el-button @click="add_note_box = !add_note_box" size="small" type="info">Add Note
-                                    </el-button>
+                                    <el-button size="small"
+                                               :icon="Plus"
+                                               :aria-expanded="add_note_box ? 'true' : 'false'"
+                                               @click="add_note_box = !add_note_box">Add note</el-button>
                                 </div>
                             </div>
-                            <div class="entry_info_body">
-                                <div class="wpf_entry_details">
-                                    <div v-if="add_note_box" class="wpf_add_note_box">
-                                        <el-input
-                                            type="textarea"
-                                            :autosize="{ minRows: 3}"
-                                            placeholder="Please Provide Note Content"
-                                            v-model="new_note_content">
-                                        </el-input>
-                                        <el-button @click="submitNote()" size="small" type="success">Submit Note
-                                        </el-button>
+                            <div class="wpjb_card_body">
+                                <div v-if="add_note_box" class="wpjb_note_box">
+                                    <el-input type="textarea"
+                                              :autosize="{ minRows: 3 }"
+                                              aria-label="Note"
+                                              placeholder="Write a note for your team"
+                                              v-model="new_note_content"/>
+                                    <div class="wpjb_note_actions">
+                                        <el-button size="small" @click="add_note_box = false">Cancel</el-button>
+                                        <el-button size="small"
+                                                   type="primary"
+                                                   :loading="adding_note"
+                                                   @click="submitNote()">Save note</el-button>
                                     </div>
-                                    <template v-if="submission.activities && submission.activities.length">
-                                        <div v-for="activity in submission.activities" :key="activity.id"
-                                             class="wpf_each_entry">
-                                            <div class="wpf_entry_label">
-                                                {{ activity.created_by }} - {{ activity.created_at }}
-                                            </div>
-                                            <div class="wpf_entry_value" v-html="activity.content"></div>
-                                        </div>
-                                    </template>
+                                </div>
 
-                                    <div class="wpf_each_entry text-center" v-else>
-                                        <p>No Activity found</p>
-                                    </div>
+                                <ol v-if="submission.activities && submission.activities.length"
+                                    class="wpjb_timeline">
+                                    <li v-for="activity in submission.activities" :key="activity.id">
+                                        <div class="wpjb_timeline_meta">
+                                            <strong>{{ activity.created_by }}</strong>
+                                            <span class="wpjb_num">{{ formatDate(activity.created_at) }}</span>
+                                        </div>
+                                        <div class="wpjb_timeline_content" v-html="activity.content"></div>
+                                    </li>
+                                </ol>
+                                <p v-else class="wpjb_entry_none">No activity yet. Status changes and notes show here.</p>
+                            </div>
+                        </section>
+                    </div>
+
+                    <aside class="wpjb_entry_side wpf_submission_sidebar">
+                        <section class="wpjb_card">
+                            <div class="wpjb_card_head">
+                                <h3>Status</h3>
+                            </div>
+                            <div class="wpjb_card_body">
+                                <div class="wpjb_status_now">
+                                    <status-badge type="application" title="Application status" :status="saved_statuses.application_status"/>
+                                    <status-badge type="internal" title="Internal status" :status="saved_statuses.status"/>
                                 </div>
+                                <div class="wpjb_status_field">
+                                    <label for="wpjb_application_status">Application status</label>
+                                    <el-select id="wpjb_application_status" v-model="submission.application_status">
+                                        <el-option
+                                            v-for="(status, status_value) in available_application_statuses"
+                                            :key="status_value"
+                                            :value="status_value"
+                                            :label="status"
+                                        ></el-option>
+                                    </el-select>
+                                </div>
+                                <div class="wpjb_status_field">
+                                    <label for="wpjb_internal_status">Internal status</label>
+                                    <el-select id="wpjb_internal_status" v-model="submission.status">
+                                        <el-option
+                                            v-for="(status, status_value) in available_internal_statuses"
+                                            :key="status_value"
+                                            :value="status_value"
+                                            :label="status"
+                                        ></el-option>
+                                    </el-select>
+                                </div>
+                                <el-button type="primary" @click="updateStatuses()">Update status</el-button>
                             </div>
-                        </div>
-                    </div>
-                    <div class="wpf_submission_sidebar">
-                        <div class="entry_info_box">
-                            <div class="entry_info_header">
-                                <div class="info_box_header">Status</div>
+                        </section>
+
+                        <section class="wpjb_card">
+                            <div class="wpjb_card_head">
+                                <h3>Details</h3>
                             </div>
-                            <div class="entry_info_body wpf_meta_info">
-                                <label>
-                                    Application Status
-                                    <div class="wpjb_field">
-                                        <el-select v-model="submission.application_status" size="small">
-                                            <el-option
-                                                v-for="(status, status_value) in available_application_statuses"
-                                                :key="status_value"
-                                                :value="status_value"
-                                                :label="status"
-                                            ></el-option>
-                                        </el-select>
+                            <dl class="wpjb_details">
+                                <div>
+                                    <dt>Submitted at</dt>
+                                    <dd class="wpjb_num wpjb_nowrap">{{ formatDate(submission.created_at) }}</dd>
+                                </div>
+                                <div v-if="submission.ip_address">
+                                    <dt>IP address</dt>
+                                    <dd class="wpjb_num">
+                                        <a target="_blank" rel="noopener"
+                                           :href="'https://ipinfo.io/' + submission.ip_address">{{ submission.ip_address }}</a>
+                                    </dd>
+                                </div>
+                                <div v-if="submission.browser">
+                                    <dt>Browser</dt>
+                                    <dd>{{ submission.browser }}</dd>
+                                </div>
+                                <div v-if="submission.device">
+                                    <dt>Platform</dt>
+                                    <dd>{{ submission.device }}</dd>
+                                </div>
+                                <div v-if="submission.user">
+                                    <dt>User</dt>
+                                    <dd>
+                                        <a target="_blank" rel="noopener"
+                                           :href="submission.user.profile_url">{{ submission.user.display_name }}</a>
+                                    </dd>
+                                </div>
+                            </dl>
+                        </section>
+
+                        <section v-if="other_entries && other_entries.length" class="wpjb_card">
+                            <div class="wpjb_card_head">
+                                <h3>Other applications by this applicant</h3>
+                            </div>
+                            <ul class="wpjb_other_apps">
+                                <li v-for="other_entry in other_entries" :key="other_entry.id">
+                                    <div class="wpjb_other_app_text">
+                                        <a :href="other_entry.permalink">{{ other_entry.post_title }}</a>
+                                        <span class="wpjb_num">{{ $dateFormat(other_entry.created_at, 'MMM D, YYYY') }}</span>
                                     </div>
-                                </label>
-                                <label>
-                                    Internal Status
-                                    <div class="wpjb_field">
-                                        <el-select v-model="submission.status" size="small">
-                                            <el-option
-                                                v-for="(status, status_value) in available_internal_statuses"
-                                                :key="status_value"
-                                                :value="status_value"
-                                                :label="status"
-                                            ></el-option>
-                                        </el-select>
-                                    </div>
-                                </label>
-                                <br/>
-                                <el-button size="small" type="primary" @click="updateStatuses()">Update</el-button>
-                            </div>
-                        </div>
-                        <div v-if="other_entries && other_entries.length" class="entry_info_box">
-                            <div class="entry_info_header">
-                                <div class="info_box_header">Other Job Applications</div>
-                            </div>
-                            <div class="entry_info_body wpf_meta_info">
-                                <ul>
-                                    <li v-for="other_entry in other_entries" :key="other_entry.id">
-                                        <a :href="other_entry.permalink">{{other_entry.post_title}}</a>
-                                        <span class="wpf_card_badge">{{other_entry.status}}</span>
-                                        <span>{{ $dateFormat(other_entry.created_at) }}</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="entry_info_box">
-                            <div class="entry_info_header">
-                                <div class="info_box_header">Meta Info</div>
-                            </div>
-                            <div class="entry_info_body wpf_meta_info">
-                                <ul>
-                                    <li>User Browser: {{ submission.browser }}</li>
-                                    <li>Platform: {{ submission.device }}</li>
-                                    <li>IP Address: <a target="_blank" rel="noopener"
-                                                       :href="'https://ipinfo.io/'+submission.ip_address">{{ submission.ip_address }}</a>
-                                    </li>
-                                    <li v-if="submission.user">User: <a target="_blank" rel="noopener"
-                                                                        :href="submission.user.profile_url">{{ submission.user.display_name }}</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="entry_info_box">
-                            <div class="entry_info_header">
-                                <div class="info_box_header">Recommended Plugins</div>
-                            </div>
-                            <div class="entry_info_body wpf_meta_info">
-                                <p>We have developed few awesome plugin that you can give a try too</p>
-                                <ul class="support_items">
-                                    <li>
-                                        <b><a target="_blank"
-                                              href="https://wordpress.org/plugins/wp-payment-form/">WPPayForm</a></b> -
-                                        WordPress Payments made simple (100% free)
-                                    </li>
-                                    <li>
-                                        <b><a target="_blank"
-                                              href="https://wpmanageninja.com/downloads/ninja-tables-pro-add-on/">Ninja
-                                            Tables Pro</a></b> - The Fastest and Most Diverse WordPress Table Plugin
-                                    </li>
-                                    <li>
-                                        <b><a target="_blank" href="https://wpmanageninja.com/wp-fluent-form/">WP
-                                            Fluent Form</a></b> - Make Effortless Contact Forms In Minutes!
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                                    <status-badge type="internal" :status="other_entry.status"/>
+                                </li>
+                            </ul>
+                        </section>
+                    </aside>
                 </div>
             </template>
-
-            <div class="print_button_controls">
-                <el-button @click="print" type="info" size="small" :icon="Printer">Print this entry</el-button>
-                <el-button @click="exportJSON()" type="info" size="small" :icon="DocumentCopy">Export JSON
-                </el-button>
-                <el-button v-if="hide_sidebar == 'yes'" @click="hide_sidebar = 'no'" size="small">Show Meta Info
-                </el-button>
-            </div>
         </div>
     </div>
 </template>
 
 <script>
-import { DArrowLeft, DArrowRight, Printer, DocumentCopy } from '@element-plus/icons-vue';
+import { ArrowLeft, ArrowRight, Printer, Download, Plus } from '@element-plus/icons-vue';
+import StatusBadge from '../../Common/StatusBadge.vue';
 
 export default {
     name: "Entry",
-    components: { DArrowRight },
+    components: { ArrowLeft, ArrowRight, StatusBadge },
     setup() {
-        return { DArrowLeft, DArrowRight, Printer, DocumentCopy };
+        return { ArrowLeft, ArrowRight, Printer, Download, Plus };
     },
     data() {
         return {
@@ -257,7 +223,7 @@ export default {
             form_id: this.$route.params.form_id,
             fething: false,
             loading: false,
-            show_empty: false,
+            show_empty: 'no',
             add_note_box: false,
             new_note_content: '',
             adding_note: false,
@@ -278,19 +244,29 @@ export default {
             ],
             show_print_settings: false,
             show_print_pro: false,
-            hide_sidebar: 'no',
-            other_entries: []
+            other_entries: [],
+            // Saved values, so the badges do not change before "Update status"
+            saved_statuses: {
+                application_status: '',
+                status: ''
+            }
         }
     },
     watch: {
         show_empty() {
             this.setStoreData('show_empty_entry_field', this.show_empty);
-        },
-        hide_sidebar() {
-            this.setStoreData('entry_sidebar_status', this.hide_sidebar);
         }
     },
     methods: {
+        setSavedStatuses(submission) {
+            this.saved_statuses = {
+                application_status: submission.application_status || '',
+                status: submission.status || ''
+            };
+        },
+        formatDate(date) {
+            return this.$dateFormat(date, 'MMM D, YYYY [at] h:mm A') || date;
+        },
         getEntry() {
             this.fething = true;
             this.$api.get(`/applications/${parseInt(this.entry_id)}`)
@@ -298,6 +274,7 @@ export default {
                     this.submission = response.submission;
                     this.entry_items = response.entry;
                     this.other_entries = response.other_entries;
+                    this.setSavedStatuses(response.submission);
                     this.$setTitle('Entry#' + response.submission.id);
                 })
                 .catch(error => {
@@ -318,6 +295,7 @@ export default {
                     this.entry_items = response.entry;
                     this.entry_id = response.submission.id;
                     this.other_entries = response.other_entries;
+                    this.setSavedStatuses(response.submission);
                     this.$setTitle('Entry#' + response.submission.id);
                     this.$router.push({
                         name: 'entry',
@@ -466,9 +444,7 @@ export default {
             this.form_id = this.$route.query.form_id;
         }
         this.getEntry();
-        this.show_empty = this.getFromStore('show_empty_entry_field', false);
-
-        this.hide_sidebar = this.getFromStore('entry_sidebar_status', 'no');
+        this.show_empty = this.getFromStore('show_empty_entry_field', 'no') === 'yes' ? 'yes' : 'no';
     }
 }
 </script>

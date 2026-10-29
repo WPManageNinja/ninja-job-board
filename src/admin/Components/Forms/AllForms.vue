@@ -1,83 +1,73 @@
 <template>
-    <div v-loading="loading" class="wppayforms">
+    <div v-loading="loading && !paymentForms.length" class="wppayforms wpjb_jobs">
         <welcome v-if="!forms_count && !hasForms" @create="createFormModal = true"/>
-        <!--We Have forms Now-->
         <div class="all_payforms_wrapper payform_section" v-else>
-            <div class="payform_section_header all_payment_form_wrapper">
+            <div class="payform_section_header">
                 <h1 class="payform_section_title">
-                    {{ $t('All Jobs') }}
+                    {{ $t('Jobs') }} <span class="wpjb_count">({{ total }})</span>
                 </h1>
                 <div class="payform_section_actions">
-                    <div class="payform_action search_action">
-                        <el-input @keyup.enter="fetchForms()" size="small" placeholder="Search" v-model="search_string" class="input-with-select">
-                            <template #append>
-                                <el-button @click="fetchForms()" :icon="Search"></el-button>
-                            </template>
-                        </el-input>
-                    </div>
-                    <el-button class="payform_action" @click="createFormModal = true" size="small" type="primary">
-                        {{ $t( 'Add New Job' ) }}
+                    <el-input
+                        v-model="search_string"
+                        class="wpjb_search"
+                        :prefix-icon="Search"
+                        :placeholder="$t('Search jobs')"
+                        :aria-label="$t('Search jobs')"
+                        clearable
+                        @keyup.enter="searchForms()"
+                        @clear="searchForms()"
+                    />
+                    <el-button type="primary" :icon="Plus" @click="createFormModal = true">
+                        {{ $t('Add job') }}
                     </el-button>
                 </div>
             </div>
-            <div v-loading.fullscreen.lock="duplicatingForm" element-loading-text="Duplicating the form.. Please wait..." class="payform_section_body">
+            <div v-loading.fullscreen.lock="duplicatingForm" :element-loading-text="$t('Duplicating the job...')" class="wpjb_card">
                 <el-table
-                    class="payform_tables"
-                    v-loading.body="loading"
+                    class="wpjb_jobs_table"
+                    v-loading="loading"
                     :data="paymentForms"
-                    border>
+                    :empty-text="$t('No jobs match your search.')">
 
-                    <el-table-column :label="$t('ID')" width="90">
+                    <el-table-column :label="$t('Job')" min-width="320">
                         <template #default="scope">
-                            <router-link :to="{ name: 'edit_form', params: { form_id: scope.row.ID } }">
-                                {{ scope.row.ID }}
+                            <router-link class="wpjb_cell_primary wpjb_cell_link" :to="{ name: 'form_entries', params: { form_id: scope.row.ID } }">
+                                {{ scope.row.post_title || $t('(no title)') }}
                             </router-link>
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column :label="$t('Title')">
-                        <template #default="scope">
-                            <strong>
-                                {{ scope.row.post_title }}
-                            </strong>
+                            <div class="wpjb_job_meta">
+                                <span class="wpjb_num">#{{ scope.row.ID }}</span>
                             <div class="row-actions">
-                                <router-link :to="{ name: 'edit_form', params: { form_id: scope.row.ID } }">
-                                    {{ $t('Edit Form') }}
-                                </router-link>
-                                |
                                 <router-link :to="{ name: 'form_entries', params: { form_id: scope.row.ID } }">
                                     {{ $t('Applications') }}
                                 </router-link>
-                                |
-                                <a v-if="scope.row.post_status != 'trash'" :href="escUrl(scope.row.edit_url)">{{ $t('Edit Post') }}</a>
-                                <a v-else @click="restorePost(scope.row.ID)" href="#">{{ $t('Restore') }}</a>
-                                |
-                                <a @click.prevent="confirmDeleteForm(scope.row)" href="#">{{ $t('Delete') }}</a>
-                                |
-                                <a href="#" @click.prevent="duplicateForm(scope.row.ID)">{{ $t('Duplicate Job Post') }}</a>
+                                <router-link :to="{ name: 'edit_form', params: { form_id: scope.row.ID } }">
+                                    {{ $t('Application form') }}
+                                </router-link>
+                                <a v-if="scope.row.post_status != 'trash'" :href="escUrl(scope.row.edit_url)">{{ $t('Edit job post') }}</a>
+                                <a v-else href="#" @click.prevent="restorePost(scope.row.ID)">{{ $t('Restore') }}</a>
+                                <a href="#" @click.prevent="duplicateForm(scope.row.ID)">{{ $t('Duplicate') }}</a>
+                                <a href="#" class="is-danger" @click.prevent="confirmDeleteForm(scope.row)">{{ $t('Delete') }}</a>
+                            </div>
                             </div>
                         </template>
                     </el-table-column>
-                    <el-table-column label="Status" width="120">
+                    <el-table-column :label="$t('Status')" width="130">
                         <template #default="scope">
-                            {{scope.row.post_status}}
+                            <status-badge type="post" :status="scope.row.post_status"/>
                         </template>
                     </el-table-column>
-                    <el-table-column label="Applications" width="120">
+                    <el-table-column :label="$t('Applications')" width="120">
                         <template #default="scope">
-                            <router-link :to="{ name: 'form_entries', params: { form_id: scope.row.ID } }">
-                                {{scope.row.entries_count}}
-                            </router-link>
-
+                            <span class="wpjb_num">{{ scope.row.entries_count || 0 }}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="Create Date" width="120">
+                    <el-table-column :label="$t('Created')" width="130">
                         <template #default="scope">
-                            {{ $dateFormat(scope.row.post_date_gmt) }}
+                            <span class="wpjb_num">{{ $dateFormat(scope.row.post_date || scope.row.post_date_gmt, 'MMM D, YYYY') }}</span>
                         </template>
                     </el-table-column>
                 </el-table>
-                <div class="wpf_pagination">
+                <div v-if="total" class="wpjb_pagination">
                     <el-pagination
                         background
                         @size-change="handleSizeChange"
@@ -91,41 +81,38 @@
                 </div>
             </div>
         </div>
-        <!-- Load Modals-->
+
         <create-form v-if="createFormModal" v-model:modalVisible="createFormModal"/>
 
-        <!--Delete form Confimation Modal-->
         <el-dialog
-            title="Are You Sure, You want to delete this job?"
+            class="wpjb_dialog"
+            :title="$t('Delete this job?')"
             v-model="deleteDialogVisible"
             :before-close="handleDeleteClose"
-            width="60%">
-            <div class="modal_body">
-                <p>All the data assoscilate with this form will be deleted, applications and other
-                    associate information</p>
-                <p>You are deleting form id: <b>{{ deleteingForm.ID }}</b>. <br/>Job Title: <b>{{
-                    deleteingForm.post_title }}</b></p>
-            </div>
+            width="480px">
+            <p>
+                <strong>{{ deleteingForm.post_title }}</strong>
+                {{ $t('and all of its applications will be deleted permanently. You cannot undo this.') }}
+            </p>
             <template #footer>
-                <span class="dialog-footer">
-                    <el-button @click="deleteDialogVisible = false">Cancel</el-button>
-                    <el-button type="primary" @click="deleteFormNow()">Confirm</el-button>
-                </span>
+                <el-button @click="deleteDialogVisible = false">{{ $t('Cancel') }}</el-button>
+                <el-button type="danger" @click="deleteFormNow()">{{ $t('Delete job') }}</el-button>
             </template>
         </el-dialog>
     </div>
 </template>
 
 <script>
-    import { Search } from '@element-plus/icons-vue';
+    import { Search, Plus } from '@element-plus/icons-vue';
     import Welcome from '../Common/Welcome.vue';
+    import StatusBadge from '../Common/StatusBadge.vue';
     import CreateForm from './CreateForm.vue';
 
     export default {
         name: 'AllForms',
-        components: { CreateForm, Welcome },
+        components: { CreateForm, Welcome, StatusBadge },
         setup() {
-            return { Search };
+            return { Search, Plus };
         },
         data() {
             return {
@@ -163,6 +150,10 @@
                     .finally(() => {
                         this.loading = false;
                     });
+            },
+            searchForms() {
+                this.page_number = 1;
+                this.fetchForms();
             },
             confirmDeleteForm(form) {
                 this.deleteingForm = form;
@@ -245,7 +236,7 @@
         },
         mounted() {
             this.fetchForms();
-            this.$setTitle('All Jobs');
+            this.$setTitle('Jobs');
         }
     }
 </script>

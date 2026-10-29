@@ -1,47 +1,4 @@
-// Element Plus component styles are imported automatically with each component
 
-.wpjobboard_main_nav {
-  display: block;
-  width: 100%;
-  overflow: hidden;
-  border-bottom: 1px solid rgb(221, 221, 221);
-  background: rgb(255, 255, 255);
-  margin: -20px -20px 0;
-  padding: 20px 20px 0px;
-
-  span.plugin-name {
-    font-size: 16px;
-    color: #6e6e6e;
-    margin-right: 30px;
-  }
-
-  .ninja-tab {
-    padding: 10px;
-    display: inline-block;
-    text-decoration: none;
-    color: rgb(0, 0, 0);
-    font-size: 15px;
-    line-height: 16px;
-    margin-right: 15px;
-    border-bottom: 2px solid transparent;
-
-    &:focus {
-      box-shadow: none;
-    }
-
-    &.ninja-tab-active {
-      font-weight: bold;
-      border-bottom: 2px solid rgb(255, 214, 91);
-    }
-
-    &.buy_pro_tab {
-      background: #e04f5e;
-      padding: 10px 25px;
-      color: white;
-    }
-  }
-
-}
 
 .wppayforms {
   * {
@@ -140,26 +97,6 @@
   }
 }
 
-.wpjobboard_nav {
-  display: block;
-  width: 100%;
-  background: rgb(226, 226, 226);
-  overflow: hidden;
-  margin: 0px -20px 0px -20px;
-  padding: 20px 20px 10px 20px;
-  border-top: 1px solid rgb(162, 162, 162);
-
-  a.payform_nav_item {
-    color: black;
-    padding: 10px;
-    text-decoration: none;
-    font-size: 15px;
-
-    &.nav-tab-active {
-    }
-  }
-}
-
 .payform_editor_wrapper {
   margin-top: 20px;
 
@@ -179,68 +116,6 @@
     margin-top: 20px;
     margin-bottom: 20px;
   }
-}
-
-.payform_builder_item {
-  padding: 10px;
-  margin: 20px 0px 10px;
-  border-bottom: 1px solid rgb(221, 221, 221);
-
-  .payform_builder_header {
-    overflow: hidden;
-    .payform_head_left {
-      width: 48%;
-      float: left;
-    }
-
-    .payform_head_right {
-      width: 48%;
-      float: right;
-      text-align: right;
-    }
-
-    .payform_inline_item {
-      display: inline-block;
-      margin-right: 10px;
-
-      &:last-child {
-        margin-right: 0;
-      }
-
-      &.element_title {
-        font-size: 16px;
-        font-weight: 500;
-      }
-
-      &.element_type {
-        font-size: 12px;
-        color: rgb(128, 128, 128);
-      }
-
-      &.element_control {
-        cursor: pointer;
-        color: gray;
-
-        &:hover {
-          color: black;
-        }
-      }
-    }
-  }
-
-  .payform_builder_item_settings {
-    display: block;
-    width: 100%;
-    border-top: 1px solid rgb(128, 128, 128);
-    margin: 15px -15px 0px;
-    padding: 10px 15px;
-    background: rgb(249, 249, 249);
-    overflow: hidden;
-  }
-}
-
-.action_right {
-  text-align: right;
 }
 
 .handler, .handle {
@@ -263,52 +138,9 @@
   width: 100%;
 }
 
-.wpf_block_items {
-  vertical-align: text-top !important;
-
-  > label {
-    display: block;
-    margin-left: 0 !important;
-    padding-right: 0 !important;
-    margin-bottom: 10px;
-  }
-}
-
 table.el-table__header thead tr th {
   background-color: rgb(245, 247, 250);
   color: rgb(93, 91, 91);
-}
-
-.wpf_entry_pagination {
-  text-align: right;
-  margin-top: 20px;
-}
-.has_payments_table {
-  .el-table {
-    .wpf_row_paid {
-      background: #f0f9eb;
-    }
-    .wpf_row_pending {
-      background: rgb(255, 250, 242);
-    }
-    .wpf_row_failed {
-      background: rgb(255, 221, 221);
-    }
-  }
-}
-
-
-.wpf_entry_actions {
-  padding: 15px 0px;
-
-  .wpf_entry_action {
-    display: inline-block;
-    margin-right: 20px;
-
-    .item_title {
-      font-weight: bold;
-    }
-  }
 }
 
 .wpf_payment_view {
@@ -519,111 +351,10 @@ a.el-button {
   text-decoration: none;
 }
 
-.payment_head_info {
-  display: block;
-  width: 100%;
-  overflow: hidden;
-  margin: 15px 0px;
-
-  .payhead_title {
-    display: inline-block;
-    font-size: 20px;
-    color: rgb(68, 68, 68);
-    margin-left: 5px;
-  }
-
-  .payhead_nav_item {
-    display: inline-block;
-  }
-
-  .payhead_back_icon {
-    font-size: 25px;
-    text-decoration: none;
-    color: rgb(90, 102, 180);
-  }
-
-  .payhead_next_prev {
-    display: inline-block;
-    float: right;
-    font-size: 16px;
-    span {
-      font-size: 14px;
-      line-height: 20px;
-    }
-    i {
-      cursor: pointer;
-      font-weight: bold;
-      :hover {
-        color: black;
-      }
-    }
-  }
-}
-
-.wpf_add_note_box {
-  padding: 20px;
-  margin: 0px -20px;
-  background: rgb(247, 250, 252);
-  overflow: hidden;
-  button {
-    float: right;
-    margin-top: 15px;
-  }
-}
-.wpf_capitalize {
-  text-transform: capitalize;
-}
-.text-center {
-  text-align: center;
-}
-
 .wpf_header_actions {
   float: right;
   text-align: right;
   display: inline-block;
-}
-
-
-.wpf_field_group {
-  display: block;
-  padding: 10px 10px 0px 10px;
-  background: rgb(255, 255, 255);
-  margin-bottom: 10px;
-  margin-left: 10px;
-  box-shadow: 0 2px 7px 0 rgba(60, 66, 87, 0.1), 0 3px 1px 0 rgba(0, 0, 0, 0.07);
-  .field_group_header {
-    margin: -10px -10px 10px;
-    overflow: hidden;
-    display: block;
-    padding: 7px 10px;
-    box-shadow: 0px 2px #e3e8ee;
-    background-color: rgb(247, 250, 252);
-    font-weight: bold;
-    color: rgb(105, 115, 134);
-    i {
-      font-size: 16px;
-      vertical-align: sub;
-    }
-  }
-  .field_group_body {
-    display: block;
-    overflow: hidden;
-    button {
-      display: block;
-      width: 100%;
-      margin-right: 0 !important;
-      margin-left: 0 !important;
-      margin-bottom: 10px !important;
-      text-align: left;
-    }
-  }
-}
-
-
-.wpf_settings_section {
-  padding: 10px;
-  background: rgb(247, 250, 252);
-  margin-bottom: 20px;
 }
 
 .el-tooltip__popper {
@@ -642,12 +373,6 @@ a.el-button {
   margin: 0px;
   padding: 10px 20px;
 }
-.empty_builder_items {
-  text-align: right;
-}
-main.el-main.no_shadow {
-  box-shadow: none;
-}
 
 //transition: slide
 .slide-down-enter-active {
@@ -661,55 +386,6 @@ main.el-main.no_shadow {
 }
 .slide-down-enter, .slide-down-leave-to {
   max-height: 0;
-}
-
-.payform_pro_message {
-  padding: 20px;
-  background: rgb(255, 245, 160);
-  text-align: center;
-  margin-bottom: 30px;
-  box-shadow: 0 7px 14px 0 rgba(60, 66, 87, 0.1), 0 3px 6px 0 rgba(0, 0, 0, 0.07);
-  h3 {
-    padding: 0;
-    margin: 0;
-  }
-  a {
-    display: inline-block;
-    background: #2196F3;
-    color: white;
-    text-decoration: none;
-    padding: 10px 30px;
-    border-radius: 5px;
-    border: 1px solid transparent;
-    &:hover {
-      border: 1px solid white;
-      box-shadow: 0 7px 14px 0 rgba(60, 66, 87, 0.1), 0 3px 6px 0 rgba(0, 0, 0, 0.07);
-    }
-  }
-}
-
-
-.method_wrapper {
-  display: block;
-  margin-bottom: 20px;
-  max-width: 100%;
-  box-shadow: -1px 4px 3px 0 rgba(60, 66, 87, 0.1), 0 3px 3px 0 rgba(0, 0, 0, 0.07);
-  overflow: hidden;
-  background-color: white;
-  .method_header {
-    background-color: rgb(247, 250, 252);
-    margin: 0px;
-    padding: 10px;
-  }
-  .method_header_title {
-    font-size: 14px;
-    font-weight: bold;
-    margin: 10px 0px;
-    color: rgb(97, 97, 97);
-  }
-  .payment_method_body {
-    padding: 10px 20px;
-  }
 }
 
 .el-dropdown-menu__item {
@@ -770,35 +446,8 @@ main.el-main.no_shadow {
   }
 }
 
-.wpf_pagination {
-  text-align: right;
-  margin-top: 20px;
-}
-
 #payform_builder {
   padding-top: 0px;
-}
-
-#email_notifications {
-  padding: 0;
-}
-
-.payform_form_item_wrapper {
-  display: block;
-  width: 100%;
-  overflow: hidden;
-  * {
-    box-sizing: border-box;
-  }
-  .payform_item_half {
-    width: 48%;
-    float: left;
-    margin-right: 2%;
-    &:last-child {
-      margin-right: 0;
-      margin-left: 2%;
-    }
-  }
 }
 label.el-form-item__label {
   line-height: 100%;
@@ -811,169 +460,16 @@ label.el-form-item__label {
 .notification_edit {
   padding: 15px 20px;
 }
-.submit_btn_right {
-  text-align: right;
-  margin-top: 30px;
-}
 .payform_hide_valdate_messages {
   .el-form-item.is-error .el-input__inner, .el-form-item.is-error .el-input__inner:focus, .el-form-item.is-error .el-textarea__inner, .el-form-item.is-error .el-textarea__inner:focus, .el-form-item.is-success .el-input__inner, .el-form-item.is-success .el-input__inner:focus, .el-form-item.is-success .el-textarea__inner, .el-form-item.is-success .el-textarea__inner:focus {
     border-color: #dcdfe6;
   }
-}
-
-.payform_upgrade_section {
-  text-align: center;
-  h1 i {
-    font-size: 120px;
-  }
-}
-
-.payform_settings_wrapper .payform_section_body {
-  padding: 20px;
-}
-
-.wpf_report_cards {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-  background: #f5f7fa;
-  .wpf_report_card {
-    flex: 1;
-    @media screen and (max-width: 769px) {
-      flex: auto;
-      margin-bottom: 20px;
-    }
-    cursor: pointer;
-    border-right: 1px solid #9ca1ac;
-    &.wpf_active_card {
-      background: white;
-      box-shadow: 0px 5px 6px 0px #c6d0d8;
-    }
-    &.card_type_ {
-      border-top: 2px solid #fff;
-    }
-
-    &.card_type_paid {
-      border-top: 2px solid #8BC34A;
-    }
-    &.card_type_pending {
-      border-top: 2px solid #FFEB3B;
-    }
-    &.card_type_processing {
-      border-top: 2px solid #03A9F4;
-    }
-
-    &.card_type_failed {
-      border-top: 2px solid #FF5722;
-    }
-    &.card_type_refunded {
-      border-top: 2px solid #000;
-    }
-
-    &:last-child {
-      border-right: 0;
-    }
-    .wpf_report_header {
-      padding: 5px 15px;
-      font-size: 15px;
-      @media screen and (max-width: 769px) {
-        padding: 0px 10px;
-        font-size: 11px;
-      }
-    }
-    .wpf_report_body {
-      padding: 15px;
-      @media screen and (max-width: 769px) {
-        padding: 5px 10px;
-      }
-    }
-    .wpf_report_line {
-      font-size: 18px;
-      line-height: 30px;
-      @media screen and (max-width: 769px) {
-        font-size: 10px;
-        line-height: 18px;
-      }
-    }
-  }
-}
-
-.wpf_min_width {
-  min-width: 500px;
 }
 @media screen and (max-width: 769px) {
   table.el-table__body .row-actions {
     display: block !important;
     color: inherit;
     left: 0;
-  }
-}
-
-.demo_form_cards {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  .demo_form_card {
-    width: 200px;
-    overflow: hidden;
-    border: 1px solid #a9bac5;
-    margin-right: 20px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: 1px 1px 10px 2px #d6d6d6;
-    position: relative;
-    .form_card_body {
-      position: relative;
-      height: 200px;
-    }
-    .demo_form_desc {
-      display: none;
-    }
-    &:hover {
-      border: 1px solid #673AB7;
-      .demo_form_desc {
-        display: block !important;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(58, 48, 48, 0.9);
-        .desc_info {
-          color: white;
-          height: 200px;
-          display: table-cell;
-          vertical-align: middle;
-          text-align: center;
-          width: 200px;
-          margin: 0 auto;
-          padding: 10px;
-          i {
-            font-size: 40px;
-            color: white;
-          }
-          p {
-            word-break: break-word;
-          }
-        }
-      }
-      .form_card_footer {
-        background: #673AB7;
-        color: white;
-        font-weight: bolder;
-        border-top: 1px solid #673AB7;
-      }
-    }
-    img {
-      width: 100%;
-    }
-    .form_card_footer {
-      background: #f7fafc;
-      padding: 10px 15px;
-      text-align: center;
-      border-top: 1px solid #a8bac4;
-    }
   }
 }
 
@@ -1000,28 +496,6 @@ label.el-form-item__label {
     img {
       max-width: 100%;
     }
-  }
-}
-
-.wpf_field_group {
-  .field_group_header {
-    cursor: pointer;
-    .field_group_icon_nav {
-      float: right;
-    }
-  }
-}
-
-.wpf_field_group.wpf_collapsed {
-  .field_group_body {
-    display: none;
-  }
-  &::after {
-    content: '...';
-    text-align: center;
-    display: block;
-    margin-top: -16px;
-    color: #687285;
   }
 }
 
@@ -1068,13 +542,6 @@ label.el-form-item__label {
   }
 }
 
-.wpf_default_value_modal {
-  text-align: center;
-  img {
-    max-width: 260px;
-  }
-}
-
 .payment_header.subscripton_item {
   margin: -15px -20px 20px;
   background-color: #f7fafc;
@@ -1089,23 +556,6 @@ label.el-form-item__label {
     background-color: #f7fafc;
   }
 }
-span.table_payment_amount {
-  font-size: 16px;
-}
-.space_left_15 {
-  margin-left: 15px;
-}
-
-.wpf_line_radios {
-  .el-radio {
-    display: block;
-    margin-bottom: 10px;
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-}
-
 
 .wpf_submisson_body:not(.wpf_hide_sidebar) {
   display: block;
@@ -1127,13 +577,6 @@ span.table_payment_amount {
   display: none;
 }
 
-.wpf_meta_info {
-  ul {
-    list-style: disc;
-    margin-left: 20px;
-  }
-}
-
 ul.wpf_no_style {
   list-style: none;
   margin-left: 0;
@@ -1142,16 +585,10 @@ ul.wpf_no_style {
   }
 }
 
-.job_details_main {
-  min-height: auto !important;
-  margin-bottom: 20px !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
+// Fluent design layer (loads last, scoped to .wpjb_app)
+@import "./fluent";
+@import "./fluent-lists";
+@import "./fluent-entry";
+@import "./fluent-settings";
+@import "./fluent-builder";
 
-.payform_builder_step_component {
-  border-top: 3px dashed #807f7e;
-  border-bottom: 3px dashed #807f7e;
-  background: whitesmoke;
-  color: black;
-}

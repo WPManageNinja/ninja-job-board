@@ -1,61 +1,59 @@
 <template>
-    <el-container>
-        <el-main>
-            <div class="edit_form_warpper">
-                <div class="all_payforms_wrapper payform_section">
-                    <div class="payform_section_header">
-                        <h3 class="payform_section_title">
-                            {{title}}
-                        </h3>
-                        <div class="payform_section_actions">
-                            <el-button v-if="editingNotificationIndex == null" @click="addNotidication()"
-                                       class="payform_action" size="small" type="primary">
-                                {{ $t( 'Add New Notification' ) }}
-                            </el-button>
-                            <el-button @click="editingNotificationIndex = null" link type="primary" size="small" v-else>
-                                Back
-                            </el-button>
-                        </div>
-                    </div>
-                    <div v-loading="loading" id="email_notifications" class="payform_section_body">
-                        <notification-table v-if="editingNotificationIndex === null"
-                                            @editNotification="editNotification"
-                                            @deleteNotification="deleteNotification"
-                                            @saveNotification="saveNotifications"
-                                            :notifications="notifications"/>
-                        <el-container class="email_notification_editing" v-else>
-                            <el-aside width="200px">
-                                <el-menu background-color="#545c64"
-                                         text-color="#fff"
-                                         :default-active="'index_'+editingNotificationIndex"
-                                         active-text-color="#ffd04b"
-                                >
-                                    <el-menu-item
-                                        v-for="(notification,notificationIndex) in notifications"
-                                        :key="notificationIndex"
-                                        @click="editNotification(notificationIndex)"
-                                        :index="'index_'+notificationIndex">
-                                        <span>{{  notification.title }}</span>
-                                    </el-menu-item>
-                                </el-menu>
-                            </el-aside>
-                            <el-main>
-                                <edit-notification
-                                    :notification_actions="notification_actions"
-                                    @saveNotifications="saveNotifications"
-                                    :editingNotificationIndex="editingNotificationIndex"
-                                    v-model:notification="notifications[editingNotificationIndex]"
-                                    :merge_tags="merge_tags"
-                                />
-                            </el-main>
-                        </el-container>
-                    </div>
-                </div>
+    <div class="wpjb_settings_page wpjb_email_page">
+        <div class="payform_section_header">
+            <h3 class="payform_section_title">
+                {{ title }}
+                <span v-if="editingNotificationIndex === null && notifications.length" class="wpjb_count wpjb_num">({{ notifications.length }})</span>
+            </h3>
+            <div class="payform_section_actions">
+                <el-button v-if="editingNotificationIndex == null" @click="addNotidication()"
+                           type="primary" :icon="Plus">
+                    {{ $t('Add notification') }}
+                </el-button>
+                <template v-else>
+                    <el-button @click="editingNotificationIndex = null" :icon="ArrowLeft">
+                        {{ $t('All notifications') }}
+                    </el-button>
+                    <el-button @click="saveCurrent()" :loading="saving" type="primary">
+                        {{ $t('Save notification') }}
+                    </el-button>
+                </template>
             </div>
-        </el-main>
-    </el-container>
+        </div>
+
+        <div v-if="editingNotificationIndex === null" v-loading="loading" class="wpjb_card">
+            <notification-table @editNotification="editNotification"
+                                @deleteNotification="deleteNotification"
+                                @saveNotification="saveNotifications"
+                                :notifications="notifications"/>
+        </div>
+        <div v-else class="wpjb_notification_layout">
+            <nav class="wpjb_card wpjb_notification_nav" :aria-label="$t('Notifications')">
+                <h3>{{ $t('Notifications') }}</h3>
+                <button
+                    v-for="(notification, notificationIndex) in notifications"
+                    :key="notificationIndex"
+                    type="button"
+                    :title="notification.title"
+                    :class="{ 'is-active': notificationIndex === editingNotificationIndex }"
+                    :aria-current="notificationIndex === editingNotificationIndex ? 'true' : null"
+                    @click="editNotification(notificationIndex)">
+                    {{ notification.title || $t('Untitled notification') }}
+                </button>
+            </nav>
+            <edit-notification
+                ref="notificationEditor"
+                :notification_actions="notification_actions"
+                @saveNotifications="saveNotifications"
+                :editingNotificationIndex="editingNotificationIndex"
+                v-model:notification="notifications[editingNotificationIndex]"
+                :merge_tags="merge_tags"
+            />
+        </div>
+    </div>
 </template>
 <script>
+    import { Plus, ArrowLeft } from '@element-plus/icons-vue';
     import NotificationTable from './Notifications.vue';
     import EditNotification from './EditNotification.vue'
 
@@ -64,6 +62,9 @@
         components: {
             NotificationTable,
             EditNotification
+        },
+        setup() {
+            return { Plus, ArrowLeft };
         },
         data() {
             return {
@@ -80,10 +81,9 @@
             title() {
                 let index = this.editingNotificationIndex;
                 if (index != null && this.notifications.length) {
-                    let serial = index + 1;
-                    return 'Editing: ' + this.notifications[this.editingNotificationIndex].title + ' (#' + serial + ')';
+                    return 'Edit notification';
                 }
-                return 'Email Notifications';
+                return 'Email notifications';
             }
         },
         methods: {
@@ -120,6 +120,13 @@
                     status: 'active'
                 });
                 this.editingNotificationIndex = this.notifications.length - 1;
+            },
+            // The save button sits in the title row; the editor validates and emits as before
+            saveCurrent() {
+                const editor = this.$refs.notificationEditor;
+                if (editor) {
+                    editor.update('notificationForm');
+                }
             },
             editNotification(notificationIndex) {
                 this.editingNotificationIndex = null;

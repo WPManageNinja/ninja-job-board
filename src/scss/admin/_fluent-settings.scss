@@ -1,0 +1,448 @@
+// Fluent design layer: Form settings, global settings, tools, email notifications, email broadcast.
+// Scope every rule under .wpjb_app (see _fluent.scss for tokens and shared primitives).
+
+// ─── Settings rows: label + help on the left, control on the right ──────────
+// Markup: <el-form class="wpjb_setting_rows" label-position="top"> with
+// <el-form-item> rows whose #label slot holds .wpjb_field_label + .wpjb_field_help.
+
+.wpjb_app .wpjb_setting_rows {
+    .el-form-item {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+        column-gap: 32px;
+        align-items: start;
+        margin: 0;
+        padding: 18px 20px;
+        border: 0;
+
+        &:last-child {
+            border-bottom: 0;
+        }
+
+        // Editor rows: label above, control full width
+        &.is-stacked {
+            display: block;
+
+            .el-form-item__label {
+                margin-bottom: 12px;
+            }
+        }
+    }
+
+    // Hairline between rows (conditional rows render as comments, so siblings stay adjacent)
+    .el-form-item + .el-form-item {
+        border-top: 1px solid var(--wpjb-border);
+    }
+
+    .el-form-item__label {
+        display: block;
+        width: auto;
+        height: auto;
+        margin: 0;
+        padding: 0 !important; // legacy label.el-form-item__label adds padding
+        color: var(--wpjb-text);
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 22px;
+        text-align: left;
+    }
+
+    .el-form-item__content {
+        min-width: 0;
+        line-height: 22px;
+    }
+
+    .wpjb_field_label {
+        color: var(--wpjb-text);
+        font-weight: 500;
+    }
+
+    .wpjb_field_help {
+        display: block;
+        margin-top: 2px;
+        color: var(--wpjb-text-secondary);
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 1.45;
+
+        code {
+            font-size: 12px;
+        }
+    }
+
+    // A muted note under a control
+    .wpjb_field_note {
+        width: 100%;
+        margin: 8px 0 0;
+        color: var(--wpjb-text-secondary);
+        font-size: 13px;
+        line-height: 1.45;
+    }
+
+    .el-input,
+    .el-select,
+    .el-textarea,
+    .el-date-editor.el-input,
+    .wp_vue_editor_wrapper {
+        width: 100%;
+    }
+
+    .el-radio-group {
+        flex-wrap: wrap;
+        row-gap: 8px;
+    }
+
+    // Plain radio lists (several long options) stack vertically
+    .wpjb_radio_list {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+
+        .el-radio {
+            height: auto;
+            margin: 0;
+            line-height: 22px;
+        }
+    }
+
+    // A control row made of several inline parts
+    .wpjb_inline_controls {
+        display: grid;
+        grid-template-columns: 120px minmax(0, 1fr);
+        gap: 8px;
+        width: 100%;
+
+        .wpjb_inline_full {
+            grid-column: 1 / -1;
+        }
+
+        .el-input-number {
+            width: 100%;
+        }
+    }
+
+    .wpjb_select_stack {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+
+        label {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--wpjb-text-secondary);
+            font-size: 13px;
+            line-height: 1.4;
+        }
+    }
+
+
+    // Merge-tag popover inside an input suffix
+    .el-input__suffix .el-button {
+        color: var(--wpjb-text-muted);
+
+        &:hover {
+            color: var(--wpjb-text);
+        }
+    }
+
+    // Validation messages are hidden on these forms; keep the red border readable
+    .el-form-item.is-error .el-input__wrapper {
+        box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+    }
+}
+
+// Cards that hold setting rows have no body padding (rows bring it)
+.wpjb_app .wpjb_setting_card {
+    .wpjb_card_head {
+        flex-wrap: wrap;
+        row-gap: 2px;
+
+        p {
+            flex-basis: 100%;
+            margin: 2px 0 0;
+            color: var(--wpjb-text-secondary);
+            font-size: 13px;
+        }
+    }
+}
+
+.wpjb_app .wpjb_setting_rows > .wpjb_setting_card + .wpjb_setting_card {
+    margin-top: 16px;
+}
+
+// ─── Pages ──────────────────────────────────────────────────────────────────
+
+
+.wpjb_app .wpjb_settings_page {
+    .payform_section_header {
+        min-height: 36px;
+    }
+}
+
+// Router links styled as buttons keep the button colors, not the link color
+.wpjb_app .wpjb_settings_page a.el-button {
+    color: var(--el-button-text-color);
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+        color: var(--el-button-hover-text-color);
+        text-decoration: none;
+    }
+}
+
+// ─── Import & export ────────────────────────────────────────────────────────
+
+.wpjb_app .wpjb_tool_row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+
+    .el-select {
+        flex: 1 1 280px;
+        max-width: 420px;
+    }
+
+    input[type="file"] {
+        flex: 1 1 280px;
+        max-width: 420px;
+        padding: 6px 8px;
+        border: 1px dashed var(--wpjb-border-strong);
+        border-radius: var(--wpjb-radius);
+        background: var(--wpjb-surface-weak);
+        color: var(--wpjb-text-secondary);
+        font-size: 13px;
+
+        &:focus-visible {
+            outline: 2px solid var(--wpjb-link);
+            outline-offset: 2px;
+        }
+    }
+}
+
+.wpjb_app .wpjb_tool_result {
+    margin: 16px 0 0;
+    padding: 10px 12px;
+    border-radius: var(--wpjb-radius);
+    background: var(--wpjb-badge-green-bg);
+    color: var(--wpjb-badge-green);
+    font-size: 13px;
+}
+
+// ─── Email notifications ────────────────────────────────────────────────────
+
+.wpjb_app .wpjb_notification_table {
+    .row-actions {
+        button {
+            padding: 0;
+            border: 0;
+            background: none;
+            color: var(--wpjb-text-secondary);
+            font: inherit;
+            cursor: pointer;
+
+            &:hover {
+                color: var(--wpjb-text);
+                text-decoration: underline;
+            }
+
+            &.is-danger {
+                color: var(--el-color-danger);
+            }
+        }
+    }
+
+    .wpjb_status_cell {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--wpjb-text-secondary);
+        font-size: 13px;
+    }
+}
+
+// Editor: list of notifications on the left, form on the right
+.wpjb_app .wpjb_notification_layout {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+
+    .wpjb_notification_nav {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding: 8px;
+
+        h3 {
+            margin: 4px 8px 8px;
+            color: var(--wpjb-text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 8px 10px;
+            overflow: hidden;
+            border: 0;
+            border-radius: var(--wpjb-radius-sm);
+            background: transparent;
+            color: var(--wpjb-text-secondary);
+            font: inherit;
+            font-weight: 500;
+            text-align: left;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: pointer;
+
+            &:hover {
+                color: var(--wpjb-text);
+            }
+
+            &.is-active {
+                background: var(--wpjb-bg);
+                color: var(--wpjb-text);
+            }
+        }
+    }
+
+    // The editor component brings its own cards
+    .notification_edit {
+        padding: 0;
+    }
+}
+
+// ─── Email broadcast ────────────────────────────────────────────────────────
+
+.wpjb_app .wpjb_campaign_stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    > div {
+        padding: 18px 20px;
+
+        + div {
+            border-left: 1px solid var(--wpjb-border);
+        }
+    }
+
+    dt {
+        margin: 0 0 4px;
+        color: var(--wpjb-text-secondary);
+        font-size: 13px;
+    }
+
+    dd {
+        margin: 0;
+        color: var(--wpjb-text);
+        font-size: 24px;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+        line-height: 1.2;
+    }
+}
+
+.wpjb_app .wpjb_campaign_progress {
+    padding: 16px 20px;
+    border-top: 1px solid var(--wpjb-border);
+
+    p {
+        margin: 0 0 10px;
+        color: var(--wpjb-text-secondary);
+        font-size: 13px;
+    }
+
+    .el-progress-bar__inner {
+        background-color: var(--wpjb-primary);
+    }
+}
+
+.wpjb_app .wpjb_campaign_meta {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 10px 24px;
+    margin: 0;
+
+    dt {
+        color: var(--wpjb-text-secondary);
+        font-size: 13px;
+        line-height: 22px;
+    }
+
+    dd {
+        margin: 0;
+        color: var(--wpjb-text);
+        line-height: 22px;
+    }
+}
+
+// The sent email, shown on a grey canvas like an inbox preview
+.wpjb_app .wpjb_email_preview {
+    padding: 24px;
+    background: var(--wpjb-bg);
+    border-bottom-left-radius: var(--wpjb-radius);
+    border-bottom-right-radius: var(--wpjb-radius);
+
+    .wpjb_email_preview_body {
+        max-width: 640px;
+        margin: 0 auto;
+        padding: 24px;
+        overflow-x: auto;
+        border: 1px solid var(--wpjb-border);
+        border-radius: var(--wpjb-radius);
+        background: var(--wpjb-surface);
+        color: var(--wpjb-text);
+        line-height: 1.6;
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    }
+}
+
+// ─── Narrow screens ─────────────────────────────────────────────────────────
+
+@media (max-width: 1100px) {
+    .wpjb_app .wpjb_notification_layout {
+        grid-template-columns: 1fr;
+
+        .wpjb_notification_nav {
+            flex-direction: row;
+            flex-wrap: wrap;
+
+            h3 {
+                display: none;
+            }
+
+            button {
+                width: auto;
+                max-width: 240px;
+            }
+        }
+    }
+}
+
+@media (max-width: 782px) {
+    .wpjb_app .wpjb_setting_rows .el-form-item {
+        display: block;
+
+        .el-form-item__label {
+            margin-bottom: 10px;
+        }
+    }
+
+    .wpjb_app .wpjb_campaign_stats {
+        grid-template-columns: 1fr;
+
+        > div + div {
+            border-left: 0;
+            border-top: 1px solid var(--wpjb-border);
+        }
+    }
+}

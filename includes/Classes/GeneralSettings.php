@@ -26,7 +26,8 @@ class GeneralSettings
             $status = 'yes';
         }
         if ($bool) {
-            $status == 'yes';
+            // A non-empty string like 'no' is truthy, so return a real boolean
+            $status = ($status === 'yes');
         }
         return apply_filters('wpjobboard/ip_logging_status', $status);
     }
@@ -51,10 +52,10 @@ class GeneralSettings
         return apply_filters('wpjobboard/available_internal_statuses', array(
             'new'              => __('New', 'ninja-job-board'),
             'audited'          => __('Audited', 'ninja-job-board'),
-            'initial_rejected' => __('Inital Rejected', 'ninja-job-board'),
+            'initial_rejected' => __('Initial rejected', 'ninja-job-board'),
             'interviewed'      => __('Interviewed', 'ninja-job-board'),
             'potential'        => __('Potential', 'ninja-job-board'),
-            'short_listed'     => __('Short Listed', 'ninja-job-board'),
+            'short_listed'     => __('Shortlisted', 'ninja-job-board'),
             'hired'            => __('Hired', 'ninja-job-board'),
         ));
     }

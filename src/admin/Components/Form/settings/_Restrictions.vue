@@ -1,198 +1,160 @@
 <template>
-    <el-form ref="form-bottom" label-width="220px" label-position="left">
-        <!--Limit Number of Entries-->
-        <el-form-item>
-            <template #label>
-                Maximum Number of Entries
-                <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <template #content><div>
-                        <h3>Maximum Number of Entries</h3>
-                        <p>
-                            Enter a number in the input box below to limit <br>
-                            the number of entries allowed for this form. The <br>
-                            form will become inactive when that number is reached.
-                        </p>
-                    </div></template>
-                    <el-icon class="el-text-info"><InfoFilled /></el-icon>
-                </el-tooltip>
-            </template>
-            <el-switch active-value="yes" inactive-value="no" v-model="form.limitNumberOfEntries.status"></el-switch>
-        </el-form-item>
+    <el-form ref="form-bottom" class="wpjb_setting_rows" label-position="top">
+        <div class="wpjb_card wpjb_setting_card">
+            <div class="wpjb_card_head">
+                <h3>Application limit</h3>
+            </div>
+            <!--Limit Number of Entries-->
+            <el-form-item>
+                <template #label>
+                    <span class="wpjb_field_label">Limit applications</span>
+                    <span class="wpjb_field_help">Close the form when it reaches a set number of applications.</span>
+                </template>
+                <el-switch active-value="yes" inactive-value="no" aria-label="Limit applications"
+                           v-model="form.limitNumberOfEntries.status"></el-switch>
+            </el-form-item>
 
-        <!--Additional fields when limit number of entries enabled-->
-        <transition name="slide-down">
-            <div v-if="form.limitNumberOfEntries.status == 'yes'" class="conditional-items">
-                <el-form-item label="Maximum Entries">
-                    <el-col :md="8">
-                        <el-input-number :min="0"
-                                         v-model="form.limitNumberOfEntries.number_of_entries"
-                        ></el-input-number>
-                    </el-col>
-
-                    <el-col :md="8">
-                        For <el-select v-model="form.limitNumberOfEntries.limit_type">
-                            <el-option v-for="(label, period) in entryPeriodOptions" :key="period"
-                                       :label="label" :value="period"
-                            ></el-option>
-                        </el-select>
-                    </el-col>
-                    <el-col :md="8">
-                        <el-select multiple v-model="form.limitNumberOfEntries.limit_application_statuses">
-                            <el-option v-for="(label, label_value) in applicationStatuses" :key="label_value"
+            <!--Additional fields when limit number of entries enabled-->
+            <el-form-item v-if="form.limitNumberOfEntries.status == 'yes'">
+                <template #label>
+                    <span class="wpjb_field_label">Maximum applications</span>
+                    <span class="wpjb_field_help">The number, the period, and which application statuses count.</span>
+                </template>
+                <div class="wpjb_inline_controls">
+                    <el-input-number :min="0" controls-position="right" aria-label="Maximum applications"
+                                     v-model="form.limitNumberOfEntries.number_of_entries"
+                    ></el-input-number>
+                    <el-select v-model="form.limitNumberOfEntries.limit_type" aria-label="Limit period">
+                        <el-option v-for="(label, period) in entryPeriodOptions" :key="period"
+                                   :label="label" :value="period"
+                        ></el-option>
+                    </el-select>
+                    <el-select class="wpjb_inline_full" multiple placeholder="All application statuses"
+                               aria-label="Application statuses that count"
+                               v-model="form.limitNumberOfEntries.limit_application_statuses">
+                        <el-option v-for="(label, label_value) in applicationStatuses" :key="label_value"
                                    :label="label" :value="label_value"
                         ></el-option>
                     </el-select>
-                    </el-col>
-                </el-form-item>
-                <el-form-item class="label-lh-1-5" label="Message Shown on Reaching Max. Entries" key="limit-reached-msg">
-                    <el-input v-model="form.limitNumberOfEntries.limit_exceeds_message" type="textarea"></el-input>
-                </el-form-item>
+                </div>
+            </el-form-item>
+            <el-form-item v-if="form.limitNumberOfEntries.status == 'yes'" key="limit-reached-msg">
+                <template #label>
+                    <span class="wpjb_field_label">Limit reached message</span>
+                    <span class="wpjb_field_help">Shown instead of the form when the limit is reached.</span>
+                </template>
+                <el-input v-model="form.limitNumberOfEntries.limit_exceeds_message" type="textarea" :rows="3"
+                          aria-label="Limit reached message"></el-input>
+            </el-form-item>
+        </div>
+
+        <div class="wpjb_card wpjb_setting_card">
+            <div class="wpjb_card_head">
+                <h3>Schedule</h3>
             </div>
-        </transition>
-
-        <!--Schedule Form-->
-        <el-form-item>
-            <template #label>
-                Form Scheduling
-                <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <template #content><div>
-                        <h3>Form Scheduling</h3>
-                        <p>
-                            Schedule a time period the form is active.
-                        </p>
-                    </div></template>
-
-                    <el-icon class="el-text-info"><InfoFilled /></el-icon>
-                </el-tooltip>
-            </template>
-            <el-switch  active-value="yes" inactive-value="no" v-model="form.scheduleForm.status"></el-switch>
-        </el-form-item>
-
-        <!--Additional fields when form sheduling enabled-->
-        <transition name="slide-down">
-            <div v-if="form.scheduleForm.status == 'yes'" class="conditional-items">
-                <p>Scheduling will be performed based on your server time. Current server date and time: <code>{{ current_date_time }}</code></p>
-                <el-row :gutter="30">
-                    <el-col :md="12">
-                        <el-form-item label="Submission Starts Date">
-                            <el-date-picker
-                                    class="el-fluid"
-                                    value-format="YYYY-MM-DD HH:mm:ss"
-                                    style="width: 100%;"
-                                    v-model="form.scheduleForm.start_date"
-                                    type="datetime"
-                                    placeholder="Select date and time"
-                            >
-                            </el-date-picker>
-                        </el-form-item>
-                    </el-col>
-                    <el-form labelWidth="160px">
-                    <el-col :md="12">
-                        <el-form-item label="Submission Ends Date">
-                            <el-date-picker
-                                class="el-fluid"
-                                style="width: 100%;"
-                                value-format="YYYY-MM-DD HH:mm:ss"
-                                v-model="form.scheduleForm.end_date"
-                                type="datetime"
-                                placeholder="Select date and time"
-                                :shortcuts="dateShortcuts">
-                            </el-date-picker>
-                        </el-form-item>
-                    </el-col>
-                    </el-form>
-                </el-row>
-
-                <el-form-item label="Form Waiting Message">
-                    <el-input v-model="form.scheduleForm.before_start_message" type="textarea"></el-input>
-                </el-form-item>
-
-                <el-form-item label="Form Expired Message">
-                    <el-input v-model="form.scheduleForm.expire_message" type="textarea"></el-input>
-                </el-form-item>
-            </div>
-        </transition>
-
-        <!--Require user to be logged in-->
-        <h4>Login Requirement Settings</h4>
-        <el-form-item>
-            <template #label>
-                Require user to be logged in
-
-                <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <template #content><div>
-                        <h3>Require user to be logged in</h3>
-
-                        <p>
-                            Check this option to require a user to be <br>
-                            logged in to view this form.
-                        </p>
-                    </div></template>
-
-                    <el-icon class="el-text-info"><InfoFilled /></el-icon>
-                </el-tooltip>
-            </template>
-
-            <el-switch  active-value="yes" inactive-value="no" v-model="form.requireLogin.status"></el-switch>
-        </el-form-item>
-
-        <!--Additional fields when user logged in is enabled-->
-        <transition name="slide-down">
-            <div v-if="form.requireLogin.status == 'yes'" class="conditional-items">
-                <el-form-item>
-                    <template #label>
-                        Require Login Message
-                        <el-tooltip class="item" placement="bottom-start" effect="light">
-                            <template #content><div>
-                                <h3>Require Login Message</h3>
-                                <p>
-                                    Enter a message to be displayed to users who <br>
-                                    are not logged in (shortcodes and HTML are supported).
-                                </p>
-                            </div></template>
-                            <el-icon class="el-text-info"><InfoFilled /></el-icon>
-                        </el-tooltip>
-                    </template>
-                    <el-input type="textarea" v-model="form.requireLogin.message"></el-input>
-                </el-form-item>
-            </div>
-        </transition>
-
-        <template v-if="hasAnyRestriction">
-            <h4>Form Display option when restriction met</h4>
+            <!--Schedule Form-->
             <el-form-item>
                 <template #label>
-                    Restricted Form Status
-                    <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <template #content><div>
-                            <h3>Restricted Form Status</h3>
-                            <p>
-                                You can show / hide the form inputs if any restriction mate
-                            </p>
-                        </div></template>
-                        <el-icon class="el-text-info"><InfoFilled /></el-icon>
-                    </el-tooltip>
+                    <span class="wpjb_field_label">Schedule the form</span>
+                    <span class="wpjb_field_help">Accept applications only between two dates.</span>
                 </template>
-                <el-radio-group v-model="form.restriction_applied_type">
-                    <el-radio value="hide_form">Hide Form</el-radio>
-                    <el-radio value="hide_submit_button">Hide Submit Button</el-radio>
-                    <el-radio value="validation_failed">Make validation failed after submit</el-radio>
+                <el-switch active-value="yes" inactive-value="no" aria-label="Schedule the form"
+                           v-model="form.scheduleForm.status"></el-switch>
+            </el-form-item>
+
+            <!--Additional fields when form scheduling enabled-->
+            <el-form-item v-if="form.scheduleForm.status == 'yes'">
+                <template #label>
+                    <span class="wpjb_field_label">Opens on</span>
+                    <span class="wpjb_field_help">Uses server time. Now: <code>{{ current_date_time }}</code></span>
+                </template>
+                <el-date-picker
+                    value-format="YYYY-MM-DD HH:mm:ss"
+                    v-model="form.scheduleForm.start_date"
+                    type="datetime"
+                    aria-label="Opens on"
+                    placeholder="Select date and time">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item v-if="form.scheduleForm.status == 'yes'">
+                <template #label>
+                    <span class="wpjb_field_label">Closes on</span>
+                    <span class="wpjb_field_help">The form stops accepting applications at this time.</span>
+                </template>
+                <el-date-picker
+                    value-format="YYYY-MM-DD HH:mm:ss"
+                    v-model="form.scheduleForm.end_date"
+                    type="datetime"
+                    aria-label="Closes on"
+                    placeholder="Select date and time"
+                    :shortcuts="dateShortcuts">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item v-if="form.scheduleForm.status == 'yes'">
+                <template #label>
+                    <span class="wpjb_field_label">Before opening message</span>
+                    <span class="wpjb_field_help">Shown before the start date.</span>
+                </template>
+                <el-input v-model="form.scheduleForm.before_start_message" type="textarea" :rows="3"
+                          aria-label="Before opening message"></el-input>
+            </el-form-item>
+            <el-form-item v-if="form.scheduleForm.status == 'yes'">
+                <template #label>
+                    <span class="wpjb_field_label">After closing message</span>
+                    <span class="wpjb_field_help">Shown after the end date.</span>
+                </template>
+                <el-input v-model="form.scheduleForm.expire_message" type="textarea" :rows="3"
+                          aria-label="After closing message"></el-input>
+            </el-form-item>
+        </div>
+
+        <div class="wpjb_card wpjb_setting_card">
+            <div class="wpjb_card_head">
+                <h3>Login</h3>
+            </div>
+            <!--Require user to be logged in-->
+            <el-form-item>
+                <template #label>
+                    <span class="wpjb_field_label">Require login</span>
+                    <span class="wpjb_field_help">Only logged-in users can see the form.</span>
+                </template>
+                <el-switch active-value="yes" inactive-value="no" aria-label="Require login"
+                           v-model="form.requireLogin.status"></el-switch>
+            </el-form-item>
+
+            <!--Additional fields when user logged in is enabled-->
+            <el-form-item v-if="form.requireLogin.status == 'yes'">
+                <template #label>
+                    <span class="wpjb_field_label">Login required message</span>
+                    <span class="wpjb_field_help">Shown to logged-out visitors. Shortcodes and HTML work.</span>
+                </template>
+                <el-input type="textarea" :rows="3" v-model="form.requireLogin.message"
+                          aria-label="Login required message"></el-input>
+            </el-form-item>
+        </div>
+
+        <div v-if="hasAnyRestriction" class="wpjb_card wpjb_setting_card">
+            <div class="wpjb_card_head">
+                <h3>When a restriction applies</h3>
+            </div>
+            <el-form-item>
+                <template #label>
+                    <span class="wpjb_field_label">Restricted form</span>
+                    <span class="wpjb_field_help">What happens to the form while a restriction is active.</span>
+                </template>
+                <el-radio-group v-model="form.restriction_applied_type" class="wpjb_radio_list">
+                    <el-radio value="hide_form">Hide the form</el-radio>
+                    <el-radio value="hide_submit_button">Hide the submit button</el-radio>
+                    <el-radio value="validation_failed">Show a validation error after submit</el-radio>
                 </el-radio-group>
             </el-form-item>
-        </template>
+        </div>
     </el-form>
 </template>
 
 <script>
-    import { InfoFilled } from '@element-plus/icons-vue';
-
     export default {
         name: 'FormRestrictions',
-        // Icons used as tags in the template must be registered here
-        components: { InfoFilled },
-        setup() {
-            return { InfoFilled };
-        },
         props: {
             data: {
                 required: true
@@ -205,11 +167,11 @@
         data() {
             return {
                 entryPeriodOptions: {
-                    total: 'Total Entries',
-                    day: 'Per Day',
-                    week: 'Per Week',
-                    month: 'Per Month',
-                    year: 'Per Year',
+                    total: 'In total',
+                    day: 'Per day',
+                    week: 'Per week',
+                    month: 'Per month',
+                    year: 'Per year',
                 },
                 applicationStatuses: window.wpJobBoardsAdmin.applicationStatuses,
                 dateShortcuts: [

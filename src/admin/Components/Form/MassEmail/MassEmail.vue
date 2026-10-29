@@ -1,50 +1,62 @@
 <template>
-    <el-container>
-        <el-main>
-            <div class="edit_form_warpper">
-                <div class="all_payforms_wrapper payform_section">
-                    <div class="payform_section_header">
-                        <h3 class="payform_section_title">
-                            Email Broadcast
-                        </h3>
-                        <div class="payform_section_actions">
-                            <router-link class="el-button payform_action el-button--primary el-button--small" :to="{ name: 'new_email_campaign', params: { form_id: form_id } }">New Email Broadcast</router-link>
-                        </div>
-                    </div>
-                    <div style="padding: 10px 20px;" v-loading="loading" id="email_notifications"
-                         class="payform_section_body">
-                        <template v-if="!campaigns.length">
-                            <p style="text-align: center;">No Email camapigns are found! To send bulk email to your applicants please create a new email campaign</p>
-                        </template>
-                        <template v-else>
-                            <el-table border :data="campaigns">
-                                <el-table-column width="100" label="ID" prop="id"></el-table-column>
-                                <el-table-column width="120" label="Status" prop="status"></el-table-column>
-                                <el-table-column width="200" label="Date" prop="created_at"></el-table-column>
-                                <el-table-column width="120" label="Email Count" prop="total_sent"></el-table-column>
-                                <el-table-column label="Subject" prop="subject"></el-table-column>
-                                <el-table-column  width="120" label="Action">
-                                    <template #default="scope">
-                                        <router-link class="el-button payform_action el-button--primary el-button--small" :to="{name: 'view_email_campaign', params: { campaign_id: scope.row.id, form_id: form_id }}">Detail</router-link>
-                                    </template>
-                                </el-table-column>
-                            </el-table>
-                            <div class="payform_pagination" v-if="total > per_page" style="margin-top: 20px; text-align: right;">
-                                <el-pagination
-                                    background
-                                    layout="total, prev, pager, next"
-                                    @current-change="getCampaigns"
-                                    v-model:current-page="page"
-                                    :page-size="per_page"
-                                    :total="total"
-                                />
-                            </div>
-                        </template>
-                    </div>
-                </div>
+    <div class="wpjb_settings_page wpjb_email_page">
+        <div class="payform_section_header">
+            <h3 class="payform_section_title">
+                Email broadcasts
+                <span v-if="total" class="wpjb_count wpjb_num">({{ total }})</span>
+            </h3>
+            <div v-if="campaigns.length" class="payform_section_actions">
+                <router-link class="el-button el-button--primary" :to="{ name: 'new_email_campaign', params: { form_id: form_id } }">New broadcast</router-link>
             </div>
-        </el-main>
-    </el-container>
+        </div>
+        <div v-loading="loading" class="wpjb_card">
+            <div v-if="!campaigns.length && !loading" class="wpjb_empty">
+                <h3>No email broadcasts yet</h3>
+                <p>A broadcast sends one email to the applicants of this job. You can pick them by application status.</p>
+                <router-link class="el-button el-button--primary" :to="{ name: 'new_email_campaign', params: { form_id: form_id } }">New broadcast</router-link>
+            </div>
+            <template v-else-if="campaigns.length">
+                <el-table :data="campaigns">
+                    <el-table-column label="Broadcast" min-width="280">
+                        <template #default="scope">
+                            <router-link class="wpjb_cell_primary" :to="{name: 'view_email_campaign', params: { campaign_id: scope.row.id, form_id: form_id }}">{{ scope.row.subject || scope.row.title }}</router-link>
+                            <span v-if="scope.row.title && scope.row.title !== scope.row.subject" class="wpjb_cell_secondary">{{ scope.row.title }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="Status" width="140">
+                        <template #default="scope">
+                            <span :class="['wpjb_badge', 'is-' + campaignTone(scope.row.status)]">{{ campaignLabel(scope.row.status) }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="Emails" width="110" align="right">
+                        <template #default="scope">
+                            <span class="wpjb_num">{{ scope.row.total_sent }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="Created" width="200">
+                        <template #default="scope">
+                            <span class="wpjb_num">{{ $dateFormat(scope.row.created_at, 'MMM D, YYYY h:mm A') }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="" width="100" align="right">
+                        <template #default="scope">
+                            <router-link class="el-button el-button--small" :to="{name: 'view_email_campaign', params: { campaign_id: scope.row.id, form_id: form_id }}">View</router-link>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div class="wpjb_pagination" v-if="total > per_page">
+                    <el-pagination
+                        background
+                        layout="total, prev, pager, next"
+                        @current-change="getCampaigns"
+                        v-model:current-page="page"
+                        :page-size="per_page"
+                        :total="total"
+                    />
+                </div>
+            </template>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -61,6 +73,14 @@
             }
         },
         methods: {
+            campaignLabel(status) {
+                const labels = { completed: 'Sent', ready: 'Sending' };
+                return labels[status] || String(status || '').charAt(0).toUpperCase() + String(status || '').slice(1);
+            },
+            campaignTone(status) {
+                const tones = { completed: 'green', ready: 'amber' };
+                return tones[status] || 'neutral';
+            },
             getCampaigns() {
                 this.loading = true;
                 this.$api.get('/forms/' + this.form_id + '/campaigns', {

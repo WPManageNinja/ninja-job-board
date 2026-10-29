@@ -1,0 +1,720 @@
+// Fluent design language for the Ninja Job Board admin.
+// Tokens follow FluentCRM / Fluent Support (--fc-*), so the plugins look like one family.
+// Everything is scoped under .wpjb_app (the admin app root) to win over legacy rules.
+
+body.toplevel_page_wpjobboard {
+    background: #F5F7FA;
+
+    #wpcontent {
+        padding-left: 0;
+    }
+
+    #wpbody-content {
+        padding-bottom: 40px;
+    }
+
+    #wpfooter {
+        display: none;
+    }
+}
+
+.wpjb_app {
+    // Base palette (same values as FluentCRM)
+    --wpjb-bg: #F5F7FA;
+    --wpjb-surface: #FFFFFF;
+    --wpjb-surface-weak: #F9FAFB;
+    --wpjb-text: #0E121B;
+    --wpjb-text-secondary: #525866;
+    --wpjb-text-muted: #99A0AE;
+    --wpjb-border: #E1E4EA;
+    --wpjb-border-strong: #CACFD8;
+    --wpjb-primary: #222530;
+    --wpjb-link: #335CFF;
+    --wpjb-link-bg: #EEF2FF;
+    --wpjb-radius: 8px;
+    --wpjb-radius-sm: 6px;
+
+    // Status badge pairs (text / background)
+    --wpjb-badge-neutral: #222530;
+    --wpjb-badge-neutral-bg: #F2F5F8;
+    --wpjb-badge-blue: #122368;
+    --wpjb-badge-blue-bg: #EBF1FF;
+    --wpjb-badge-amber: #624C18;
+    --wpjb-badge-amber-bg: #FFFAEB;
+    --wpjb-badge-purple: #351A75;
+    --wpjb-badge-purple-bg: #EFEBFF;
+    --wpjb-badge-orange: #71330A;
+    --wpjb-badge-orange-bg: #FFF3EB;
+    --wpjb-badge-green: #0B4627;
+    --wpjb-badge-green-bg: #E0FAEC;
+    --wpjb-badge-red: #681219;
+    --wpjb-badge-red-bg: #FFEBEC;
+
+    // Element Plus follows the same palette
+    --el-color-primary: #335CFF;
+    --el-color-primary-light-3: #7090FF;
+    --el-color-primary-light-5: #99B0FF;
+    --el-color-primary-light-7: #C2CFFF;
+    --el-color-primary-light-8: #D6DFFF;
+    --el-color-primary-light-9: #EEF2FF;
+    --el-color-primary-dark-2: #2949CC;
+    --el-color-success: #1FC16B;
+    --el-color-warning: #F6B51E;
+    --el-color-danger: #FB3748;
+    --el-color-error: #FB3748;
+    --el-text-color-primary: #0E121B;
+    --el-text-color-regular: #525866;
+    --el-text-color-secondary: #99A0AE;
+    --el-text-color-placeholder: #99A0AE;
+    --el-border-color: #E1E4EA;
+    --el-border-color-light: #E1E4EA;
+    --el-border-color-lighter: #EDEFF3;
+    --el-fill-color-light: #F5F7FA;
+    --el-fill-color-lighter: #F9FAFB;
+    --el-border-radius-base: 8px;
+    --el-border-radius-small: 6px;
+    --el-font-size-base: 14px;
+    --el-component-size: 36px;
+    --el-component-size-small: 32px;
+
+    color: var(--wpjb-text);
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+
+    a {
+        color: var(--wpjb-link);
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    a:focus-visible,
+    button:focus-visible {
+        outline: 2px solid var(--wpjb-link);
+        outline-offset: 2px;
+        box-shadow: none;
+    }
+
+    // Undo the legacy .wrap spacing: the app header is full width
+    .wrap {
+        margin: 0;
+    }
+
+    .payform_admin {
+        min-height: calc(100vh - 32px);
+    }
+}
+
+// ─── App header ─────────────────────────────────────────────────────────────
+
+.wpjb_app .wpjb_topbar {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    height: 56px;
+    padding: 0 20px;
+    background: var(--wpjb-surface);
+    border-bottom: 1px solid var(--wpjb-border);
+
+    .wpjb_brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--wpjb-text);
+        font-size: 15px;
+        font-weight: 600;
+        white-space: nowrap;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+
+    .wpjb_brand_mark {
+        display: grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        border-radius: var(--wpjb-radius);
+        background: var(--wpjb-primary);
+        color: #fff;
+
+        svg {
+            width: 18px;
+            height: 18px;
+        }
+    }
+
+    .wpjb_menu {
+        display: flex;
+        gap: 4px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .wpjb_menu_item {
+        display: block;
+        padding: 8px 12px;
+        border-radius: var(--wpjb-radius);
+        color: var(--wpjb-text-secondary);
+        font-size: 14px;
+        font-weight: 500;
+
+        &:hover {
+            background: var(--wpjb-bg);
+            color: var(--wpjb-text);
+            text-decoration: none;
+        }
+
+        &.is-active {
+            background: var(--wpjb-bg);
+            color: var(--wpjb-text);
+        }
+    }
+
+    .wpjb_topbar_actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
+    }
+}
+
+// ─── Job context bar (second row, like FluentCRM's sub menu) ────────────────
+
+.wpjb_app .wpjb_subbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 24px;
+    padding: 0 20px;
+    background: var(--wpjb-surface);
+    border-bottom: 1px solid var(--wpjb-border);
+
+    .wpjb_subbar_title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        max-width: 320px;
+        padding: 12px 0;
+        color: var(--wpjb-text);
+        font-weight: 600;
+
+        span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    nav {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .wpjb_tabs {
+        display: flex;
+        gap: 20px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        overflow-x: auto;
+    }
+
+    .wpjb_tab {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 14px 0 12px;
+        border-bottom: 2px solid transparent;
+        color: var(--wpjb-text-secondary);
+        font-weight: 500;
+        white-space: nowrap;
+
+        &:hover {
+            color: var(--wpjb-text);
+            text-decoration: none;
+        }
+
+        &.is-active {
+            border-bottom-color: var(--wpjb-text);
+            color: var(--wpjb-text);
+        }
+
+        .el-icon {
+            font-size: 14px;
+        }
+    }
+}
+
+// ─── Page body, title row and cards ─────────────────────────────────────────
+
+.wpjb_app {
+    .wpjb_page {
+        padding: 24px 20px;
+    }
+
+    .payform_editor_wrapper {
+        margin-top: 0;
+    }
+
+    .payform_section {
+        margin: 0;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+    }
+
+    // Title row: title + count on the left, actions on the right
+    .payform_section_header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+        margin: 0 0 16px;
+        padding: 0;
+        background: transparent;
+        border: 0;
+    }
+
+    .payform_section_title {
+        flex: 1 1 auto;
+        margin: 0;
+        padding: 0;
+        color: var(--wpjb-text);
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 1.3;
+
+        .wpjb_count {
+            color: var(--wpjb-text-muted);
+            font-weight: 400;
+        }
+    }
+
+    .payform_section_actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin: 0;
+        float: none;
+
+        .payform_action {
+            margin: 0;
+        }
+    }
+
+    .payform_section_body,
+    .wpjb_card {
+        background: var(--wpjb-surface);
+        border: 1px solid var(--wpjb-border);
+        border-radius: var(--wpjb-radius);
+        box-shadow: none;
+    }
+
+    .wpjb_card + .wpjb_card {
+        margin-top: 16px;
+    }
+
+    .wpjb_card_head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 20px;
+        border-bottom: 1px solid var(--wpjb-border);
+
+        h3 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 600;
+        }
+    }
+
+    .wpjb_card_body {
+        padding: 20px;
+    }
+
+    // Toolbar row inside a card (filters, search)
+    .wpjb_toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--wpjb-border);
+
+        .wpjb_toolbar_end {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: auto;
+        }
+    }
+}
+
+// ─── Buttons ────────────────────────────────────────────────────────────────
+
+.wpjb_app {
+    .el-button {
+        --el-button-border-color: var(--wpjb-border);
+        --el-button-text-color: var(--wpjb-text-secondary);
+        --el-button-hover-text-color: var(--wpjb-text);
+        --el-button-hover-bg-color: var(--wpjb-surface-weak);
+        --el-button-hover-border-color: var(--wpjb-border-strong);
+        border-radius: var(--wpjb-radius);
+        font-weight: 500;
+    }
+
+    // Primary actions use the dark Fluent button
+    .el-button--primary:not(.is-link):not(.is-text) {
+        --el-button-bg-color: var(--wpjb-primary);
+        --el-button-border-color: var(--wpjb-primary);
+        --el-button-text-color: #fff;
+        --el-button-hover-bg-color: #3A3E4D;
+        --el-button-hover-border-color: #3A3E4D;
+        --el-button-hover-text-color: #fff;
+        --el-button-active-bg-color: #11131A;
+        --el-button-active-border-color: #11131A;
+        --el-button-disabled-bg-color: #A3A6B1;
+        --el-button-disabled-border-color: #A3A6B1;
+        --el-button-disabled-text-color: #fff;
+    }
+
+    // Solid danger buttons (delete confirmations) keep a white label
+    .el-button--danger:not(.is-plain):not(.is-link):not(.is-text) {
+        --el-button-text-color: #fff;
+        --el-button-hover-text-color: #fff;
+        --el-button-hover-bg-color: var(--el-color-danger-light-3);
+        --el-button-hover-border-color: var(--el-color-danger-light-3);
+        --el-button-active-text-color: #fff;
+    }
+}
+
+// The small radius token would round the 14px checkbox into a circle
+.wpjb_app .el-checkbox__inner {
+    border-radius: 3px;
+}
+
+// WordPress core styles input[type=text] and textarea (border, padding, min-height).
+// Element Plus draws its own box around the inner field, so reset the core styles.
+.wpjb_app {
+    .el-input__inner,
+    .el-select__input {
+        min-height: 0;
+        box-shadow: none;
+
+        &:focus {
+            box-shadow: none;
+            outline: 0;
+        }
+    }
+
+    // Element Plus draws the textarea border with box-shadow; drop only the core border
+    .el-textarea__inner:not(.wp-editor-area) {
+        border: 0;
+        min-height: 0;
+    }
+
+    .el-input__inner,
+    .el-select__input {
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+
+        &:focus {
+            border: 0;
+        }
+    }
+}
+
+// ─── Status badges ──────────────────────────────────────────────────────────
+
+.wpjb_app .wpjb_badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--wpjb-badge-neutral-bg);
+    color: var(--wpjb-badge-neutral);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 20px;
+    white-space: nowrap;
+
+    &::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+        opacity: .6;
+    }
+
+    @each $tone in 'blue', 'amber', 'purple', 'orange', 'green', 'red' {
+        &.is-#{$tone} {
+            background: var(--wpjb-badge-#{$tone}-bg);
+            color: var(--wpjb-badge-#{$tone});
+        }
+    }
+}
+
+// ─── Stage tabs: the pipeline filter (Fluent Support style segmented tabs) ──
+
+.wpjb_app .wpjb_stages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 32px;
+        padding: 0 12px;
+        border: 0;
+        border-radius: var(--wpjb-radius);
+        background: transparent;
+        color: var(--wpjb-text-secondary);
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+
+        &:hover {
+            color: var(--wpjb-text);
+        }
+
+        &.is-active {
+            background: var(--wpjb-bg);
+            color: var(--wpjb-text);
+        }
+    }
+
+    .wpjb_stage_count {
+        min-width: 20px;
+        padding: 0 6px;
+        border-radius: 999px;
+        background: var(--wpjb-surface);
+        border: 1px solid var(--wpjb-border);
+        color: var(--wpjb-text-secondary);
+        font-size: 12px;
+        font-variant-numeric: tabular-nums;
+        line-height: 18px;
+        text-align: center;
+    }
+}
+
+// ─── Tables ─────────────────────────────────────────────────────────────────
+
+.wpjb_app .el-table {
+    --el-table-border-color: var(--wpjb-border);
+    --el-table-header-bg-color: var(--wpjb-surface-weak);
+    --el-table-header-text-color: var(--wpjb-text-secondary);
+    --el-table-text-color: var(--wpjb-text);
+    --el-table-row-hover-bg-color: var(--wpjb-surface-weak);
+    font-size: 14px;
+
+    th.el-table__cell {
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    td.el-table__cell {
+        padding: 12px 0;
+    }
+
+    // Tables live inside cards; the card draws the outer border
+    &.el-table--border {
+        border: 0;
+
+        &::before,
+        &::after,
+        .el-table__inner-wrapper::before,
+        .el-table__inner-wrapper::after,
+        .el-table__border-left-patch {
+            display: none;
+        }
+
+        .el-table__cell {
+            border-right: 0;
+        }
+    }
+
+    .wpjb_cell_primary {
+        color: var(--wpjb-text);
+        font-weight: 500;
+    }
+
+    .wpjb_cell_secondary {
+        display: block;
+        overflow: hidden;
+        color: var(--wpjb-text-muted);
+        font-size: 13px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .wpjb_num {
+        font-variant-numeric: tabular-nums;
+    }
+
+    .row-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 4px;
+        font-size: 13px;
+        color: var(--wpjb-text-muted);
+        visibility: hidden;
+
+        a {
+            color: var(--wpjb-text-secondary);
+        }
+
+        .is-danger {
+            color: var(--el-color-danger);
+        }
+    }
+
+    .el-table__row:hover .row-actions,
+    .el-table__row:focus-within .row-actions {
+        visibility: visible;
+    }
+}
+
+.wpjb_app .wpf_pagination,
+.wpjb_app .wpjb_pagination {
+    display: flex;
+    justify-content: flex-end;
+    padding: 12px 16px;
+    border-top: 1px solid var(--wpjb-border);
+}
+
+// ─── Settings layout (white sub sidebar, like FluentCRM settings) ───────────
+
+.wpjb_app .wpjb_settings_layout {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    min-height: calc(100vh - 90px);
+
+    .wpjb_settings_nav {
+        padding: 16px 12px;
+        background: var(--wpjb-surface);
+        border-right: 1px solid var(--wpjb-border);
+
+        a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            border-radius: var(--wpjb-radius);
+            color: var(--wpjb-text-secondary);
+            font-weight: 500;
+
+            &:hover {
+                color: var(--wpjb-text);
+                text-decoration: none;
+            }
+
+            &.is-active {
+                background: var(--wpjb-bg);
+                color: var(--wpjb-text);
+            }
+
+            .el-icon,
+            .dashicons {
+                font-size: 16px;
+                width: 16px;
+                height: 16px;
+            }
+        }
+    }
+
+    .wpjb_settings_main {
+        min-width: 0;
+        padding: 24px 32px;
+
+        > * {
+            max-width: 960px;
+        }
+    }
+
+    // Settings forms: label (with help) left, control right, hairline between rows
+    .el-form-item {
+        margin-bottom: 0;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--wpjb-border);
+
+        &:last-child {
+            border-bottom: 0;
+        }
+    }
+
+    .el-form-item__label {
+        color: var(--wpjb-text);
+        font-weight: 500;
+    }
+}
+
+// ─── Empty states ───────────────────────────────────────────────────────────
+
+.wpjb_app .wpjb_empty {
+    padding: 56px 24px;
+    text-align: center;
+
+    h3 {
+        margin: 0 0 6px;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    p {
+        max-width: 460px;
+        margin: 0 auto 20px;
+        color: var(--wpjb-text-secondary);
+    }
+}
+
+@media (max-width: 960px) {
+    .wpjb_app .wpjb_topbar {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 10px 16px;
+        gap: 12px;
+    }
+
+    .wpjb_app .wpjb_settings_layout {
+        grid-template-columns: 1fr;
+
+        .wpjb_settings_nav {
+            display: flex;
+            flex-wrap: wrap;
+            border-right: 0;
+            border-bottom: 1px solid var(--wpjb-border);
+        }
+
+        .wpjb_settings_main {
+            padding: 20px 16px;
+        }
+    }
+
+    .wpjb_app .wpjb_page {
+        padding: 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wpjb_app * {
+        transition: none !important;
+        animation: none !important;
+    }
+}

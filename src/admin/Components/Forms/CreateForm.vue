@@ -1,21 +1,25 @@
 <template>
     <el-dialog
-        top="40px"
-        width="70%"
-        :append-to-body="true"
-        title="Create a new Job Post"
+        class="wpjb_dialog"
+        width="480px"
+        :title="$t('Add a job')"
         v-model="isVisible"
     >
-        <div class="pay_form_modal_body">
-            <h4>Please Provide a title for the job post</h4>
-            <p>
-                <el-input v-model="form_title" placeholder="Job Title" />
-
-            </p>
-            <p>
-                <el-button type="primary" :loading="submitting" @click="createForm()">Continue</el-button>
-            </p>
-        </div>
+        <el-form label-position="top" @submit.prevent="createForm()">
+            <el-form-item :label="$t('Job title')" for="wpjb_new_job_title">
+                <el-input
+                    id="wpjb_new_job_title"
+                    ref="titleInput"
+                    v-model="form_title"
+                    :placeholder="$t('For example, Senior backend engineer')"
+                />
+            </el-form-item>
+            <p class="wpjb_dialog_help">{{ $t('You can add the job details and the application form next.') }}</p>
+        </el-form>
+        <template #footer>
+            <el-button @click="isVisible = false">{{ $t('Cancel') }}</el-button>
+            <el-button type="primary" :loading="submitting" @click="createForm()">{{ $t('Create job') }}</el-button>
+        </template>
     </el-dialog>
 </template>
 <script>
@@ -41,8 +45,10 @@
         },
         methods: {
             createForm() {
+                if (this.submitting) {
+                    return;
+                }
                 this.submitting = true;
-                // Send Request now
                 this.$api.post('/forms', {
                     post_title: this.form_title
                 })
@@ -67,6 +73,11 @@
                     });
 
             }
+        },
+        mounted() {
+            this.$nextTick(() => {
+                setTimeout(() => this.$refs.titleInput && this.$refs.titleInput.focus(), 200);
+            });
         }
     }
 </script>

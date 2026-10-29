@@ -5,7 +5,7 @@
             <el-popover
                 placement="bottom"
                 :width="200"
-                popper-class="el-dropdown-list-wrapper"
+                popper-class="el-dropdown-list-wrapper wpjb_shortcode_popper"
                 trigger="click">
                 <ul class="el-dropdown-menu el-dropdown-list">
                     <li v-for="(item, itemIndex) in data" :key="itemIndex">
@@ -21,7 +21,7 @@
                     </li>
                 </ul>
                 <template #reference>
-                    <el-button :icon="MoreFilled"></el-button>
+                    <el-button :icon="MoreFilled" :aria-label="$t('Insert shortcode')" :title="$t('Insert shortcode')"></el-button>
                 </template>
             </el-popover>
         </template>
@@ -31,7 +31,7 @@
         <el-popover
             placement="bottom"
             :width="200"
-            popper-class="el-dropdown-list-wrapper"
+            popper-class="el-dropdown-list-wrapper wpjb_shortcode_popper"
             trigger="click">
             <ul class="el-dropdown-menu el-dropdown-list">
                 <li v-for="(item, itemIndex) in data" :key="itemIndex">
@@ -47,7 +47,7 @@
                 </li>
             </ul>
             <template #reference>
-                <el-icon class="icon"><Tickets /></el-icon>
+                <button type="button" class="icon wpjb_shortcode_trigger" :aria-label="$t('Insert shortcode')" :title="$t('Insert shortcode')"><el-icon><Tickets /></el-icon></button>
             </template>
         </el-popover>
         <el-input type="textarea" v-model="model"></el-input>
@@ -95,27 +95,3 @@ export default {
     }
 }
 </script>
-
-<style lang="scss">
-    .el-dropdown-list-wrapper {
-        padding: 0;
-
-        .group-title {
-            display: block;
-            padding: 5px 10px;
-            background-color: gray;
-            color: #fff;
-        }
-    }
-
-    .input-textarea-value {
-        position: relative;
-
-        .icon {
-            position: absolute;
-            right: 0;
-            top: -18px;
-            cursor: pointer;
-        }
-    }
-</style>

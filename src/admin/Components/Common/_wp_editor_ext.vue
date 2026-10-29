@@ -5,7 +5,7 @@
             <textarea :style="{ minHeight: height }" class="wp_vue_editor" :id="ninja_editor_id">{{modelValue}}</textarea>
         </template>
         <template v-else>
-            <p style="font-style: italic"><small>WP Editor is only available on WordPress version 4.8 or later. Please Upgrade Your WordPress Core</small></p>
+            <p class="wpjb_help">The WordPress editor needs WordPress 4.8 or later. Update WordPress to use it.</p>
             <textarea
                       class="wp_vue_editor wp_vue_editor_plain"
                       v-model="plain_content">
@@ -117,35 +117,3 @@
         }
     }
 </script>
-<style lang="scss">
-    button.button.ninja_demo_media_button {
-        position: absolute;
-        z-index: 9999999999;
-        cursor: pointer;
-    }
-    .wp_vue_editor {
-        width: 100%;
-        min-height: 100px;
-    }
-    .wp_vue_editor_wrapper {
-        position: relative;
-
-        .popover-wrapper {
-            z-index: 2;
-            position: absolute;
-            top: 0;
-            right: 0;
-            &-plaintext {
-                left: auto;
-                right: 0;
-                top: -32px;
-            }
-        }
-        button.wp-switch-editor {
-            margin: 0px !important;
-            padding-bottom: 14px;
-            line-height: 22px;
-            height: 28px;
-        }
-    }
-</style>

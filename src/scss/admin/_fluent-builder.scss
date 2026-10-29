@@ -1,0 +1,703 @@
+// Fluent design layer: Application form builder and job post edit screen nav.
+// Scope every rule under .wpjb_app (see _fluent.scss for tokens and shared primitives).
+// Exception: Element Plus teleports popovers to <body>, so popover rules at the end
+// of this file are not under .wpjb_app. They use the tokens with fallbacks.
+
+// ─── Builder layout ─────────────────────────────────────────────────────────
+
+.wpjb_app .wpjb_builder {
+    .wpjb_builder_layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 340px;
+        gap: 20px;
+        align-items: start;
+    }
+
+    .wpjb_builder_aside {
+        position: sticky;
+        top: 52px;
+    }
+
+    .wpjb_builder_card {
+        overflow: hidden;
+    }
+
+    .wpjb_card_head h3 .wpjb_count {
+        color: var(--wpjb-text-muted);
+        font-weight: 400;
+    }
+
+    .wpjb_builder_hint {
+        margin: 0;
+        color: var(--wpjb-text-muted);
+        font-size: 13px;
+    }
+
+    .wpjb_builder_errors {
+        display: grid;
+        gap: 8px;
+        padding: 16px 20px 0;
+    }
+
+    .wpjb_builder_empty {
+        padding: 48px 24px;
+    }
+
+    .wpjb_num {
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+// ─── Field rows ─────────────────────────────────────────────────────────────
+
+.wpjb_app .wpjb_builder {
+    .wpjb_field_list {
+        min-height: 64px;
+    }
+
+    .wpjb_field {
+        border-bottom: 1px solid var(--wpjb-border);
+        background: var(--wpjb-surface);
+
+        &:last-child {
+            border-bottom: 0;
+        }
+
+        &.is-open {
+            background: var(--wpjb-surface-weak);
+        }
+
+        // Form step: a page break between groups of fields
+        &.is-step .wpjb_field_head {
+            background: var(--wpjb-surface-weak);
+            border-top: 1px dashed var(--wpjb-border-strong);
+        }
+    }
+
+    .wpjb_field_head {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        min-height: 56px;
+        padding: 0 12px 0 8px;
+    }
+
+    .wpjb_drag_handle {
+        display: grid;
+        flex: none;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        border: 0;
+        border-radius: var(--wpjb-radius-sm);
+        background: transparent;
+        color: var(--wpjb-text-muted);
+        font-size: 16px;
+        cursor: grab;
+
+        &:hover {
+            background: var(--wpjb-bg);
+            color: var(--wpjb-text);
+        }
+
+        &.is-static {
+            cursor: default;
+
+            &:hover {
+                background: transparent;
+                color: var(--wpjb-text-muted);
+            }
+        }
+    }
+
+    .wpjb_field_toggle {
+        display: flex;
+        flex: 1 1 auto;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+        min-height: 44px;
+        padding: 0 4px;
+        border: 0;
+        border-radius: var(--wpjb-radius-sm);
+        background: transparent;
+        color: var(--wpjb-text);
+        font-size: 14px;
+        text-align: left;
+        cursor: pointer;
+
+        &:hover .wpjb_field_chevron {
+            color: var(--wpjb-text);
+        }
+    }
+
+    .wpjb_field_label {
+        flex: 1 1 auto;
+        overflow: hidden;
+        font-weight: 500;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .wpjb_field_type {
+        flex: none;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: var(--wpjb-badge-neutral-bg);
+        color: var(--wpjb-text-secondary);
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 18px;
+        white-space: nowrap;
+    }
+
+    .wpjb_field_chevron {
+        flex: none;
+        color: var(--wpjb-text-muted);
+        font-size: 14px;
+        transition: transform .15s ease;
+    }
+
+    .wpjb_field.is-open .wpjb_field_chevron {
+        transform: rotate(180deg);
+    }
+
+    // Submit button row: always last, set apart from the sortable fields
+    .wpjb_field_submit {
+        border-top: 1px solid var(--wpjb-border);
+        border-bottom: 0;
+        background: var(--wpjb-surface-weak);
+
+    }
+
+    .wpjb_field_settings {
+        padding: 4px 20px 20px 52px;
+    }
+
+    // vuedraggable placeholder while a row moves
+    .ghost {
+        opacity: 1;
+        background: var(--wpjb-link-bg);
+        border: 1px dashed var(--el-color-primary-light-5);
+        color: var(--wpjb-text);
+
+        > * {
+            visibility: hidden;
+        }
+    }
+
+    // A palette button dropped into the list before it becomes a field
+    .wpjb_field_list > .wpjb_palette_item {
+        display: flex;
+        width: 100%;
+        height: 56px;
+        border: 1px dashed var(--el-color-primary-light-5);
+        border-radius: 0;
+        background: var(--wpjb-link-bg);
+    }
+}
+
+// ─── Field settings form ────────────────────────────────────────────────────
+
+.wpjb_app .wpjb_builder .wpjb_editor_form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 20px;
+    padding: 20px;
+    background: var(--wpjb-surface);
+    border: 1px solid var(--wpjb-border);
+    border-radius: var(--wpjb-radius);
+
+    .editor_form_item {
+        min-width: 0;
+
+        // Wide controls take the full row
+        &.is-textarea,
+        &.is-html,
+        &.is-key_pair,
+        &.is-checkbox,
+        &.is-info_html,
+        &.is-confirm_email_switch {
+            grid-column: 1 / -1;
+        }
+    }
+
+    .el-form-item {
+        margin-bottom: 18px;
+    }
+
+    .el-form-item__label {
+        margin-bottom: 6px;
+        padding: 0 !important;
+        color: var(--wpjb-text);
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 20px;
+    }
+
+    .el-input-number,
+    .el-select {
+        width: 100%;
+    }
+
+    .checkbox_new_lined .el-checkbox-group {
+        display: grid;
+        gap: 4px;
+    }
+
+    .checkbox_new_lined .el-checkbox {
+        display: flex;
+        height: auto;
+        min-height: 28px;
+        margin: 0;
+        white-space: normal;
+    }
+
+    .wpjb_help {
+        width: 100%;
+        margin: 6px 0 0;
+        color: var(--wpjb-text-muted);
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .el-switch + .wpjb_help {
+        margin-top: 0;
+    }
+
+    .html_placeholder_instruction {
+        margin-top: 8px;
+        color: var(--wpjb-text-muted);
+        font-size: 13px;
+
+        span {
+            padding: 1px 6px;
+            border-radius: var(--wpjb-radius-sm);
+            background: var(--wpjb-badge-neutral-bg);
+            color: var(--wpjb-text-secondary);
+            font-size: 12px;
+        }
+    }
+
+    .wpjb_editor_footer {
+        display: flex;
+        flex-wrap: wrap;
+        grid-column: 1 / -1;
+        align-items: center;
+        gap: 12px;
+        padding-top: 16px;
+        border-top: 1px solid var(--wpjb-border);
+    }
+
+    .wpjb_field_id {
+        color: var(--wpjb-text-muted);
+        font-size: 13px;
+
+        code {
+            margin-left: 4px;
+            padding: 2px 6px;
+            border-radius: var(--wpjb-radius-sm);
+            background: var(--wpjb-badge-neutral-bg);
+            color: var(--wpjb-text-secondary);
+            font-size: 12px;
+        }
+    }
+
+    .wpjb_editor_actions {
+        display: flex;
+        gap: 8px;
+        margin-left: auto;
+
+        .el-button + .el-button {
+            margin-left: 0;
+        }
+    }
+}
+
+// Choice options (dropdown, radio, checkbox fields)
+.wpjb_app .wpjb_builder .wpjb_options_editor {
+    width: 100%;
+
+    .wpjb_options_table {
+        width: 100%;
+        margin-top: 8px;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 1px solid var(--wpjb-border);
+        border-radius: var(--wpjb-radius);
+        text-align: left;
+
+        th,
+        td {
+            padding: 6px 8px;
+            border: 0;
+            border-bottom: 1px solid var(--wpjb-border);
+            vertical-align: middle;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        th {
+            background: var(--wpjb-surface-weak);
+            color: var(--wpjb-text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 20px;
+
+            &:first-child {
+                border-top-left-radius: var(--wpjb-radius);
+            }
+
+            &:last-child {
+                border-top-right-radius: var(--wpjb-radius);
+            }
+        }
+    }
+
+    .wpjb_options_handle {
+        width: 28px;
+        text-align: center;
+
+        .handle {
+            display: inline-grid;
+            place-items: center;
+            color: var(--wpjb-text-muted);
+            font-size: 16px;
+            cursor: grab;
+        }
+    }
+
+    .wpjb_options_actions {
+        width: 88px;
+        white-space: nowrap;
+
+        .el-button {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+        }
+
+        .el-button + .el-button {
+            margin-left: 6px;
+        }
+    }
+}
+
+// ─── "Add a field" palette ──────────────────────────────────────────────────
+
+.wpjb_app .wpjb_builder {
+    .wpjb_palette_card .wpjb_card_body {
+        display: grid;
+        gap: 12px;
+        padding: 16px;
+    }
+
+    .wpjb_palette_title {
+        margin: 0 0 8px;
+        color: var(--wpjb-text-secondary);
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .wpjb_palette {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .wpjb_palette_item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+        height: 36px;
+        padding: 0 10px;
+        border: 1px solid var(--wpjb-border);
+        border-radius: var(--wpjb-radius);
+        background: var(--wpjb-surface);
+        color: var(--wpjb-text);
+        font-size: 13px;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+
+        .el-icon {
+            flex: none;
+            color: var(--wpjb-text-secondary);
+            font-size: 15px;
+        }
+
+        span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        &:hover {
+            border-color: var(--wpjb-border-strong);
+            background: var(--wpjb-surface-weak);
+
+            .el-icon {
+                color: var(--wpjb-text);
+            }
+        }
+
+        &.item_active {
+            cursor: grab;
+        }
+    }
+}
+
+@media (max-width: 1200px) {
+    .wpjb_app .wpjb_builder {
+        .wpjb_editor_form {
+            grid-template-columns: 1fr;
+        }
+
+        .wpjb_field_settings {
+            padding-left: 20px;
+        }
+    }
+}
+
+@media (max-width: 960px) {
+    .wpjb_app .wpjb_builder {
+        .wpjb_builder_layout {
+            grid-template-columns: 1fr;
+        }
+
+        .wpjb_builder_aside {
+            position: static;
+            order: -1;
+        }
+    }
+}
+
+// ─── Shared editor and shortcode helpers (Common components) ───────────────
+
+.wpjb_app {
+    .wp_vue_editor {
+        width: 100%;
+        min-height: 100px;
+    }
+
+    .wp_vue_editor_wrapper {
+        position: relative;
+
+        .popover-wrapper {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 2;
+
+            &-plaintext {
+                top: -32px;
+                right: 0;
+                left: auto;
+            }
+        }
+
+        .wp-editor-tabs {
+            float: left;
+        }
+
+        .wp-editor-container {
+            border-color: var(--wpjb-border);
+        }
+
+        button.wp-switch-editor {
+            height: 28px;
+            margin: 0 !important;
+            padding-bottom: 14px;
+            line-height: 22px;
+        }
+
+        .wpjb_help {
+            margin: 0 0 6px;
+            color: var(--wpjb-text-muted);
+            font-size: 13px;
+        }
+    }
+
+    button.button.ninja_demo_media_button {
+        position: absolute;
+        z-index: 3;
+        cursor: pointer;
+    }
+
+    .input-textarea-value {
+        position: relative;
+
+        .wpjb_shortcode_trigger {
+            position: absolute;
+            top: -24px;
+            right: 0;
+            display: grid;
+            place-items: center;
+            width: 24px;
+            height: 24px;
+            padding: 0;
+            border: 0;
+            border-radius: var(--wpjb-radius-sm);
+            background: transparent;
+            color: var(--wpjb-text-secondary);
+            cursor: pointer;
+
+            &:hover {
+                background: var(--wpjb-bg);
+                color: var(--wpjb-text);
+            }
+        }
+    }
+
+    .editor-add-shortcode .wpjb_icon_right {
+        margin-left: 4px;
+    }
+
+    .el-input__suffix .editor-add-shortcode.is-link {
+        color: var(--wpjb-text-muted);
+
+        &:hover {
+            color: var(--wpjb-text);
+        }
+    }
+}
+
+// ─── Shortcode popovers (teleported to <body>, so not under .wpjb_app) ──────
+
+.el-popper.wpjb_shortcode_popper {
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--wpjb-border, #E1E4EA);
+    border-radius: var(--wpjb-radius, 8px);
+    box-shadow: 0 8px 24px rgba(14, 18, 27, .08);
+    font-size: 13px;
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    // input-popover.vue: grouped list
+    .el-dropdown-list {
+        max-height: 320px;
+        overflow-y: auto;
+        padding: 4px 0;
+        box-shadow: none;
+        border: 0;
+    }
+
+    .group-title {
+        display: block;
+        padding: 8px 12px 4px;
+        background: transparent;
+        color: var(--wpjb-text-muted, #99A0AE);
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .el-dropdown-menu__item {
+        padding: 6px 12px;
+        color: var(--wpjb-text, #0E121B);
+        line-height: 20px;
+        cursor: pointer;
+
+        &:hover {
+            background: var(--wpjb-surface-weak, #F9FAFB);
+        }
+    }
+
+    // input-popover-dropdown.vue: groups on the left, tags on the right
+    .el_pop_data_group {
+        display: flex;
+        max-height: 340px;
+        background: var(--wpjb-surface, #FFFFFF);
+    }
+
+    .el_pop_data_headings {
+        flex: none;
+        width: 150px;
+        overflow-y: auto;
+        padding: 6px;
+        border-right: 1px solid var(--wpjb-border, #E1E4EA);
+        background: var(--wpjb-surface-weak, #F9FAFB);
+
+        li {
+            margin: 0 0 2px;
+            padding: 6px 10px;
+            border-radius: var(--wpjb-radius-sm, 6px);
+            color: var(--wpjb-text-secondary, #525866);
+            font-weight: 500;
+            cursor: pointer;
+
+            &:hover {
+                color: var(--wpjb-text, #0E121B);
+            }
+
+            &.active_item_selected {
+                background: var(--wpjb-surface, #FFFFFF);
+                box-shadow: inset 0 0 0 1px var(--wpjb-border, #E1E4EA);
+                color: var(--wpjb-text, #0E121B);
+            }
+        }
+    }
+
+    .el_pop_data_body {
+        width: 340px;
+        overflow-y: auto;
+        padding: 6px;
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 0;
+            padding: 6px 10px;
+            border-radius: var(--wpjb-radius-sm, 6px);
+            color: var(--wpjb-text, #0E121B);
+            text-align: left;
+            cursor: pointer;
+
+            &:hover {
+                background: var(--wpjb-surface-weak, #F9FAFB);
+            }
+
+            span {
+                overflow: hidden;
+                color: var(--wpjb-text-muted, #99A0AE);
+                font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+                font-size: 12px;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+    }
+}
+
+// ─── Fixes for WordPress core form styles inside Element Plus inputs ───────
+// WP forms.css gives input[type=text] its own border, padding and height,
+// which draws a second box inside .el-input__wrapper.
+
+.wpjb_app .wpjb_builder {
+    // --el-border-radius-small (6px) turns 14px checkboxes into circles
+    .el-checkbox__inner {
+        border-radius: 3px;
+    }
+
+    .el-input__inner {
+        min-height: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .el-input-number .el-input__inner {
+        text-align: center;
+    }
+}

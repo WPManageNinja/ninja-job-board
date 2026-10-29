@@ -1,31 +1,23 @@
 <template>
-    <el-container>
-        <el-main class="no_shadow">
-            <div class="edit_form_warpper">
-                <div class="all_payforms_wrapper payform_section">
-                    <div class="payform_section_header">
-                        <h3 class="payform_section_title">
-                            {{ $t('Form Confirmation Settings') }}
-                        </h3>
-                        <div class="payform_section_actions">
-                            <el-button @click="saveSettings()" class="payform_action" size="small" type="primary">
-                                {{ $t( 'Save Confirmation Settings' ) }}
-                            </el-button>
-                        </div>
-                    </div>
-                    <div v-loading="fetching" class="payform_section_body">
-                        <el-form ref="payment_settings" :label-position="labelPosition" :model="payment_settings" label-width="220px">
-                            <confirmation-settings
-                                :pages="pages"
-                                :editorShortcodes="editorShortcodes"
-                                :confirmation="confirmation_settings">
-                            </confirmation-settings>
-                        </el-form>
-                    </div>
-                </div>
+    <div class="wpjb_settings_page">
+        <div class="payform_section_header">
+            <h3 class="payform_section_title">{{ $t('Confirmation') }}</h3>
+            <div class="payform_section_actions">
+                <el-button @click="saveSettings()" :loading="saving" type="primary">
+                    {{ $t('Save settings') }}
+                </el-button>
             </div>
-        </el-main>
-    </el-container>
+        </div>
+        <div v-loading="fetching" class="wpjb_card wpjb_setting_card">
+            <el-form ref="payment_settings" class="wpjb_setting_rows" label-position="top" :model="payment_settings">
+                <confirmation-settings
+                    :pages="pages"
+                    :editorShortcodes="editorShortcodes"
+                    :confirmation="confirmation_settings">
+                </confirmation-settings>
+            </el-form>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -44,8 +36,7 @@
                 editorShortcodes: [],
                 confirmation_settings: {},
                 app_ready: false,
-                saving: false,
-                labelPosition: 'right'
+                saving: false
             }
         },
         methods: {
@@ -90,9 +81,6 @@
         mounted() {
             this.getSettings();
             this.$setTitle('Form Confirmation Settings');
-            if(window.outerWidth < 500) {
-                this.labelPosition = "top";
-            }
         }
     }
 </script>

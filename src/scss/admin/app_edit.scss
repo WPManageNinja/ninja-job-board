@@ -1,33 +1,166 @@
-@import 'element-plus/theme-chalk/base';
-@import 'element-plus/theme-chalk/el-menu';
-@import 'element-plus/theme-chalk/el-menu-item';
+// Job post edit screen (wp-admin/post.php for wp_job_board).
+// Compiled to assets/css/jobboard-edit.css and loaded only on this screen.
+// The tab bar matches the app's job tab bar (.wpjb_subbar / .wpjb_tab in _fluent.scss).
 
-.el-menu--horizontal>.el-menu-item {
-  height: 50px;
-  line-height: 50px;
-  a {
-    text-decoration: none;
-    display: inline-block;
-  }
+body.post-type-wp_job_board {
+    // Same values as the app tokens in _fluent.scss
+    --wpjb-bg: #F5F7FA;
+    --wpjb-surface: #FFFFFF;
+    --wpjb-surface-weak: #F9FAFB;
+    --wpjb-text: #0E121B;
+    --wpjb-text-secondary: #525866;
+    --wpjb-text-muted: #99A0AE;
+    --wpjb-border: #E1E4EA;
+    --wpjb-border-strong: #CACFD8;
+    --wpjb-link: #335CFF;
+    --wpjb-radius: 8px;
+    --wpjb-radius-sm: 6px;
+
+    // The tab bar replaces the page title and "Add New" button
+    .wrap > a.page-title-action,
+    .wrap > h1.wp-heading-inline,
+    .wrap > .wp-header-end {
+        display: none;
+    }
 }
 
-.wrap > a.page-title-action {
-  display: none;
-}
-.wrap > h1.wp-heading-inline {
-  display: none;
-}
+// ─── Job tab bar ────────────────────────────────────────────────────────────
 
-.wpjb_meta_field {
-  display: block;
-  margin-bottom: 15px;
-  label {
-    font-weight: 500;
-    margin-bottom: 4px;
+body.post-type-wp_job_board .wpjb_edit_nav {
+    // Full width white bar: undo the .wrap margins and the #wpcontent padding.
+    // display: block keeps the bar under the floated "Screen Options" tab.
     display: block;
-  }
-  input {
-    width: 400px;
-    padding: 10px;
-  }
+    margin: -10px -20px 20px -22px;
+    // Room on the right for the floated "Screen Options" tab
+    padding: 0 170px 0 20px;
+    background: var(--wpjb-surface);
+    border-bottom: 1px solid var(--wpjb-border);
+
+    .wpjb_edit_tabs {
+        display: flex;
+        gap: 20px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        overflow-x: auto;
+
+        li {
+            margin: 0;
+        }
+    }
+
+    .wpjb_edit_tab {
+        display: block;
+        padding: 14px 0 12px;
+        border-bottom: 2px solid transparent;
+        color: var(--wpjb-text-secondary);
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+        text-decoration: none;
+        white-space: nowrap;
+
+        &:hover {
+            color: var(--wpjb-text);
+        }
+
+        &:focus {
+            box-shadow: none;
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--wpjb-link);
+            outline-offset: 2px;
+        }
+
+        &.is-active {
+            border-bottom-color: var(--wpjb-text);
+            color: var(--wpjb-text);
+        }
+    }
+}
+
+body.post-type-wp_job_board #screen-meta-links .show-settings {
+    border-color: var(--wpjb-border);
+    border-radius: var(--wpjb-radius-sm);
+}
+
+// ─── "Job Info" meta box ────────────────────────────────────────────────────
+
+body.post-type-wp_job_board #wpjobboard_metabox_job_info {
+    .inside {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px 20px;
+        margin: 0;
+        padding: 16px 12px 20px;
+    }
+
+    .wpjb_meta_field {
+        display: block;
+        min-width: 0;
+        margin: 0;
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--wpjb-text);
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 20px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            max-width: none;
+            min-height: 36px;
+            margin: 0;
+            padding: 0 12px;
+            border: 1px solid var(--wpjb-border);
+            border-radius: var(--wpjb-radius);
+            box-shadow: none;
+            color: var(--wpjb-text);
+            font-size: 14px;
+            line-height: 34px;
+
+            &::placeholder {
+                color: var(--wpjb-text-muted);
+            }
+
+            &:hover {
+                border-color: var(--wpjb-border-strong);
+            }
+
+            &:focus {
+                border-color: var(--wpjb-link);
+                box-shadow: 0 0 0 1px var(--wpjb-link);
+                outline: 0;
+            }
+        }
+
+        select {
+            padding-right: 28px;
+        }
+    }
+}
+
+// Not enough room beside "Screen Options": put the bar below it
+@media (max-width: 1180px) {
+    body.post-type-wp_job_board .wpjb_edit_nav {
+        clear: both;
+        margin-top: 0;
+        padding-right: 20px;
+    }
+}
+
+@media (max-width: 782px) {
+    body.post-type-wp_job_board .wpjb_edit_nav {
+        margin: 0 -10px 16px -12px;
+        padding: 0 12px;
+    }
+
+    body.post-type-wp_job_board #wpjobboard_metabox_job_info .inside {
+        grid-template-columns: 1fr;
+    }
 }

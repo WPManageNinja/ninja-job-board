@@ -1,0 +1,473 @@
+// Fluent design layer: Single application view.
+// Scope every rule under .wpjb_app (see _fluent.scss for tokens and shared primitives).
+
+.wpjb_app .wpjb_entry {
+    min-height: 300px;
+
+    .wpjb_num {
+        font-variant-numeric: tabular-nums;
+    }
+
+    // ─── Header ─────────────────────────────────────────────────────────────
+
+    .wpjb_entry_back {
+        display: inline-flex;
+        float: none;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 12px;
+        color: var(--wpjb-text-secondary);
+        font-size: 13px;
+        font-weight: 500;
+
+        &:hover {
+            color: var(--wpjb-text);
+            text-decoration: none;
+        }
+    }
+
+    .wpjb_entry_header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 20px;
+    }
+
+    .wpjb_entry_heading {
+        min-width: 0;
+    }
+
+    .wpjb_entry_title {
+        margin: 0;
+        padding: 0;
+        color: var(--wpjb-text);
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+    }
+
+    .wpjb_entry_meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px 12px;
+        margin: 4px 0 0;
+        color: var(--wpjb-text-secondary);
+        font-size: 13px;
+
+        a {
+            overflow-wrap: anywhere;
+        }
+
+        > * + * {
+            padding-left: 12px;
+            border-left: 1px solid var(--wpjb-border);
+        }
+    }
+
+    .wpjb_entry_actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .el-button + .el-button {
+            margin-left: 0;
+        }
+    }
+
+    // Prev / Next: one outlined pair
+    .wpjb_entry_nav {
+        display: inline-flex;
+
+        .el-button {
+            margin: 0;
+        }
+
+        .el-button:first-child {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .el-button:last-child {
+            margin-left: -1px;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .el-button:hover,
+        .el-button:focus-visible {
+            position: relative;
+            z-index: 1;
+        }
+    }
+
+    .wpjb_icon_after {
+        margin-left: 6px;
+    }
+
+    // ─── Two columns ────────────────────────────────────────────────────────
+
+    .wpjb_entry_grid {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+        align-items: start;
+        gap: 20px;
+    }
+
+    .wpjb_entry_main,
+    .wpjb_entry_side {
+        min-width: 0;
+    }
+
+    .wpjb_card_head h3 {
+        color: var(--wpjb-text);
+    }
+
+    // Element Plus switch label in the card head
+    .info_box_header_actions .el-switch__label {
+        color: var(--wpjb-text-secondary);
+        font-size: 13px;
+        font-weight: 400;
+
+        span {
+            font-size: 13px;
+        }
+
+        &.is-active {
+            color: var(--wpjb-text);
+        }
+    }
+
+    // ─── Application answers ────────────────────────────────────────────────
+
+    .wpjb_answers {
+        margin: 0;
+        padding: 0 20px;
+    }
+
+    .wpjb_answer {
+        display: grid;
+        grid-template-columns: minmax(120px, 28%) minmax(0, 1fr);
+        gap: 4px 24px;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--wpjb-border);
+
+        &:last-child {
+            border-bottom: 0;
+        }
+
+        dt {
+            margin: 0;
+            color: var(--wpjb-text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 20px;
+        }
+
+        dd {
+            margin: 0;
+            min-width: 0;
+            color: var(--wpjb-text);
+            font-size: 14px;
+            line-height: 20px;
+            overflow-wrap: anywhere;
+            white-space: pre-line;
+
+            &.is-empty {
+                color: var(--wpjb-text-muted);
+            }
+
+            p {
+                margin: 0 0 8px;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+
+    // ─── Activity timeline ──────────────────────────────────────────────────
+
+    .wpjb_note_box {
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--wpjb-border);
+    }
+
+    .wpjb_note_actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 12px;
+
+        .el-button + .el-button {
+            margin-left: 0;
+        }
+    }
+
+    .wpjb_timeline {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        li {
+            position: relative;
+            margin: 0;
+            padding: 0 0 20px 24px;
+
+            // The dot
+            &::before {
+                content: '';
+                position: absolute;
+                top: 5px;
+                left: 0;
+                width: 10px;
+                height: 10px;
+                box-sizing: border-box;
+                border: 2px solid var(--wpjb-border-strong);
+                border-radius: 50%;
+                background: var(--wpjb-surface);
+            }
+
+            // The line to the next item
+            &::after {
+                content: '';
+                position: absolute;
+                top: 19px;
+                bottom: 0;
+                left: 4px;
+                width: 2px;
+                background: var(--wpjb-border);
+            }
+
+            &:first-child::before {
+                border-color: var(--wpjb-primary);
+            }
+
+            &:last-child {
+                padding-bottom: 0;
+
+                &::after {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    .wpjb_timeline_meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 8px;
+        color: var(--wpjb-text-muted);
+        font-size: 13px;
+        line-height: 20px;
+
+        strong {
+            color: var(--wpjb-text-secondary);
+            font-weight: 500;
+        }
+    }
+
+    .wpjb_timeline_content {
+        margin-top: 2px;
+        color: var(--wpjb-text);
+        font-size: 14px;
+        line-height: 20px;
+        overflow-wrap: anywhere;
+
+        p {
+            margin: 0 0 8px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    .wpjb_entry_none {
+        margin: 0;
+        color: var(--wpjb-text-secondary);
+    }
+
+    // ─── Side: status ───────────────────────────────────────────────────────
+
+    .wpjb_status_now {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+
+    .wpjb_status_field {
+        margin-bottom: 16px;
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--wpjb-text);
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .el-select {
+            width: 100%;
+        }
+    }
+
+    // ─── Side: details ──────────────────────────────────────────────────────
+
+    .wpjb_details {
+        margin: 0;
+        padding: 8px 20px;
+
+        > div {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 8px 0;
+        }
+
+        dt {
+            flex: none;
+            color: var(--wpjb-text-secondary);
+            font-size: 13px;
+        }
+
+        dd {
+            margin: 0;
+            min-width: 0;
+            color: var(--wpjb-text);
+            font-size: 13px;
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+        .wpjb_nowrap {
+            white-space: nowrap;
+        }
+    }
+
+    // ─── Side: other applications ───────────────────────────────────────────
+
+    .wpjb_other_apps {
+        margin: 0;
+        padding: 0 20px;
+        list-style: none;
+
+        li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 0;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--wpjb-border);
+
+            &:last-child {
+                border-bottom: 0;
+            }
+        }
+
+        .wpjb_other_app_text {
+            min-width: 0;
+
+            a {
+                display: block;
+                font-weight: 500;
+                overflow-wrap: anywhere;
+            }
+
+            span {
+                color: var(--wpjb-text-muted);
+                font-size: 13px;
+            }
+        }
+    }
+}
+
+// ─── File chips (server HTML from FileUploadComponent::convertValueToHtml) ──
+
+.wpjb_app .wpjb_file_list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    white-space: normal;
+}
+
+.wpjb_app .wpjb_file {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 4px 12px 4px 4px;
+    border: 1px solid var(--wpjb-border);
+    border-radius: 999px;
+    background: var(--wpjb-surface);
+    color: var(--wpjb-text);
+    font-size: 14px;
+    line-height: 20px;
+
+    &:hover {
+        border-color: var(--wpjb-border-strong);
+        background: var(--wpjb-surface-weak);
+        text-decoration: none;
+    }
+
+    .wpjb_file_ext {
+        flex: none;
+        padding: 2px 6px;
+        border-radius: 999px;
+        background: var(--wpjb-badge-neutral-bg);
+        color: var(--wpjb-text-secondary);
+        font-size: 11px;
+        font-weight: 600;
+        line-height: 16px;
+    }
+
+    .wpjb_file_thumb {
+        flex: none;
+        width: 32px;
+        height: 32px;
+        border-radius: 999px;
+        object-fit: cover;
+    }
+
+    .wpjb_file_name {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+// ─── Stack the columns on narrow screens ────────────────────────────────────
+
+@media (max-width: 1023px) {
+    .wpjb_app .wpjb_entry {
+        .wpjb_entry_grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+}
+
+@media (max-width: 600px) {
+    .wpjb_app .wpjb_entry .wpjb_answer {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+// Print window: the sidebar is hidden by jobboard-print.css, so use one column
+@media print {
+    .wpjb_app .wpjb_entry .wpjb_entry_grid {
+        display: block;
+    }
+
+    .wpjb_app .wpjb_entry .wpjb_entry_back {
+        display: none;
+    }
+}

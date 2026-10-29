@@ -14,7 +14,7 @@ import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import * as sass from 'sass';
-import { cpSync, mkdirSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -97,6 +97,23 @@ function buildStylesheet(entry, outFile) {
     mkdirSync(dirname(path(outFile)), { recursive: true });
     writeFileSync(path(outFile), result.css);
 }
+
+// Only one build at a time: parallel builds write the same files
+const lockDir = path('build/.lock');
+for (let attempt = 0; ; attempt++) {
+    try {
+        mkdirSync(lockDir);
+        break;
+    } catch (e) {
+        if (attempt > 600) {
+            throw new Error('Another build holds build/.lock. Remove it if no build is running.');
+        }
+        await new Promise((r) => setTimeout(r, 500));
+    }
+}
+const releaseLock = () => rmSync(lockDir, { recursive: true, force: true });
+process.on('exit', releaseLock);
+process.on('SIGINT', () => process.exit(130));
 
 await buildClassicScript('src/admin/boot.js', 'assets/admin/boot.js', 'WPJobBoardBoot');
 await buildClassicScript('src/public/public.js', 'assets/js/jobboard-public.js', 'WPJobBoardPublic');

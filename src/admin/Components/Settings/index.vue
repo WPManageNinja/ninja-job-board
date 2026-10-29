@@ -1,55 +1,31 @@
 <template>
-    <div class="wppaymform_editor">
-
-        <div class="payform_editor_wrapper">
-            <el-container>
-                <el-aside :width="sidebarWidth">
-                    <el-menu background-color="#545c64"
-                             text-color="#fff"
-                             :router="true"
-                             :collapse="isCollapse"
-                             :default-active="current_route"
-                             active-text-color="#ffd04b"
-                    >
-                        <el-menu-item
-                            v-for="formMenu in form_menus"
-                            :key="formMenu.route"
-                            :route="{ name: formMenu.route }"
-                            :index="formMenu.route">
-                            <el-icon v-if="typeof formMenu.icon !== 'string'"><component :is="formMenu.icon" /></el-icon>
-                            <i v-else :class="formMenu.icon"></i>
-                            <span>{{  formMenu.title }}</span>
-                        </el-menu-item>
-                    </el-menu>
-                </el-aside>
-                <el-main class="payform_settings_wrapper">
-                    <router-view></router-view>
-                </el-main>
-            </el-container>
-        </div>
+    <div class="wpjb_settings_layout">
+        <nav class="wpjb_settings_nav" :aria-label="$t('Settings')">
+            <router-link
+                v-for="formMenu in form_menus"
+                :key="formMenu.route"
+                :to="{ name: formMenu.route }"
+                :class="{ 'is-active': $route.name === formMenu.route }">
+                <el-icon v-if="typeof formMenu.icon !== 'string'"><component :is="formMenu.icon" /></el-icon>
+                <i v-else :class="formMenu.icon"></i>
+                <span>{{ formMenu.title }}</span>
+            </router-link>
+        </nav>
+        <main class="wpjb_settings_main">
+            <router-view></router-view>
+        </main>
     </div>
 </template>
 
 <script>
     import { markRaw } from 'vue';
-    import { Tools } from '@element-plus/icons-vue';
+    import { Setting, Tools } from '@element-plus/icons-vue';
 
     export default {
         name: 'global_settings',
         data() {
             return {
-                form_menus: [],
-                editFormModalShow: false,
-                form: {},
-                fetching: false,
-                saving: false,
-                sidebarWidth: '200px',
-                isCollapse: false
-            }
-        },
-        computed: {
-            current_route() {
-                return this.$route.name;
+                form_menus: []
             }
         },
         methods: {
@@ -58,12 +34,12 @@
                 let menu = [
                     {
                         route: 'general_settings',
-                        title: 'General Settings',
-                        icon: 'dashicons dashicons-translation'
+                        title: this.$t('General'),
+                        icon: markRaw(Setting)
                     },
                     {
                         route: 'tools',
-                        title: 'Tools',
+                        title: this.$t('Import & Export'),
                         icon: markRaw(Tools)
                     }
                 ];
@@ -72,10 +48,6 @@
         },
         mounted() {
             this.setMenu();
-            if(window.outerWidth < 500) {
-                this.sidebarWidth = "auto";
-                this.isCollapse = true;
-            }
         }
     }
 </script>

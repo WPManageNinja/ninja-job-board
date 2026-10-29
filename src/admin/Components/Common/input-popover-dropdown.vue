@@ -2,7 +2,7 @@
     <div>
         <el-popover
             placement="right"
-            popper-class="el-dropdown-list-wrapper"
+            popper-class="el-dropdown-list-wrapper wpjb_shortcode_popper"
             :width="'auto'"
             ref="shortcodePopover"
             trigger="click">
@@ -29,10 +29,12 @@
                 <el-button class="editor-add-shortcode"
                            size="small"
                            :type="buttonType"
-                           :link="btnType == 'text'">
+                           :link="btnType == 'text'"
+                           :aria-label="buttonText ? undefined : $t('Insert shortcode')"
+                           :title="buttonText ? undefined : $t('Insert shortcode')">
                     <template v-if="buttonText">
                         <span v-html="buttonText"></span>
-                        <el-icon style="margin-left: 5px;"><ArrowDown /></el-icon>
+                        <el-icon class="wpjb_icon_right"><ArrowDown /></el-icon>
                     </template>
                     <el-icon v-else><MenuIcon /></el-icon>
                 </el-button>
@@ -64,7 +66,7 @@
             buttonText: {
                 type: String,
                 default() {
-                    return 'Add Shortcodes';
+                    return 'Add shortcodes';
                 }
             },
             btnType: {
@@ -97,80 +99,3 @@
         }
     }
 </script>
-
-<style lang="scss">
-
-    .el-dropdown-list-wrapper {
-        padding: 0;
-
-        .group-title {
-            display: block;
-            padding: 5px 10px;
-            background-color: gray;
-            color: #fff;
-        }
-    }
-
-    .input-textarea-value {
-        position: relative;
-
-        .icon {
-            position: absolute;
-            right: 0;
-            top: -18px;
-            cursor: pointer;
-        }
-    }
-    .el_pop_data_group {
-        background: #6c757d;
-        overflow: hidden;
-        .el_pop_data_headings {
-            max-width: 150px;
-            float: left;
-            ul {
-                padding: 0;
-                margin: 10px 0px;
-                li {
-                    color: white;
-                    padding: 5px 10px 5px 10px;
-                    display: block;
-                    margin-bottom: 0px;
-                    border-bottom: 1px solid #949393;
-                    cursor: pointer;
-                    &.active_item_selected {
-                        background: whitesmoke;
-                        color: #6c757d;
-                        border-left: 2px solid #6c757d;
-                    }
-                }
-            }
-        }
-
-        .el_pop_data_body {
-            float: left;
-            background: whitesmoke;
-            width: 350px;
-            ul {
-                padding: 10px 0;
-                margin: 0;
-                li {
-                    color: black;
-                    padding: 5px 10px 5px 10px;
-                    display: block;
-                    margin-bottom: 0px;
-                    border-bottom: 1px dotted #dadada;
-                    cursor: pointer;
-                    text-align: left;
-                    &:hover {
-                        background: white;
-                    }
-                    span {
-                        font-size: 11px;
-                        color: #8e8f90;
-                    }
-                }
-            }
-        }
-    }
-
-</style>

@@ -1,0 +1,232 @@
+// Fluent design layer: Jobs list, applications lists, stage tabs toolbar, create dialog, welcome/empty states.
+// Scope every rule under .wpjb_app (see _fluent.scss for tokens and shared primitives).
+
+.wpjb_app {
+    // Search input in a title row or a toolbar
+    .wpjb_search {
+        width: 240px;
+    }
+
+    .wpjb_filter_select {
+        width: 170px;
+    }
+
+    .wpjb_job_select {
+        width: 210px;
+    }
+
+    // Job title plus "#ID" and the hover row actions on one line
+    .wpjb_job_meta {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        margin-top: 2px;
+        color: var(--wpjb-text-muted);
+        font-size: 13px;
+
+        .row-actions {
+            gap: 10px;
+            margin-top: 0;
+        }
+    }
+
+    // Legacy app.scss sets .wpf_pagination / .wpf_entry_pagination margins; the card owns spacing now
+    .wpjb_card .wpjb_pagination {
+        margin: 0;
+    }
+
+    .wpjb_card > .el-table,
+    .wpjb_card .wpjb_entries_table > .el-table {
+        border-radius: var(--wpjb-radius);
+    }
+
+    // The table's last row border would double the card border above the pagination row
+    .wpjb_card .el-table .el-table__inner-wrapper::before {
+        display: none;
+    }
+
+    .el-table {
+        th.el-table__cell:first-child .cell,
+        td.el-table__cell:first-child .cell {
+            padding-left: 20px;
+        }
+
+        th.el-table__cell:last-child .cell,
+        td.el-table__cell:last-child .cell {
+            padding-right: 20px;
+        }
+
+        // Primary link in a row: reads as text, turns into a link on hover
+        .wpjb_cell_link {
+            color: var(--wpjb-text);
+            font-weight: 500;
+
+            &:hover {
+                color: var(--wpjb-link);
+            }
+        }
+
+        .wpjb_cell_job {
+            color: var(--wpjb-text-secondary);
+
+            &:hover {
+                color: var(--wpjb-link);
+            }
+        }
+
+        // WordPress core hides .row-actions with left: -9999em until the row is hovered
+        .row-actions {
+            position: static;
+            left: 0;
+            padding: 0;
+
+            a:hover {
+                color: var(--wpjb-link);
+            }
+
+            a.is-danger {
+                color: var(--el-color-danger);
+            }
+        }
+    }
+
+    // Quiet icon actions at the end of an applications row
+    .el-table td.wpjb_actions_cell .cell,
+    .el-table th.wpjb_actions_cell .cell {
+        padding: 0 12px 0 4px;
+        overflow: visible;
+    }
+
+    // Quiet icon actions at the end of an applications row
+    .wpjb_icon_actions {
+        display: inline-flex;
+        gap: 2px;
+
+        .el-button {
+            width: 32px;
+            height: 32px;
+            margin: 0;
+            padding: 0;
+            color: var(--wpjb-text-muted);
+
+            .el-icon {
+                font-size: 16px;
+            }
+
+            &:hover,
+            &:focus-visible {
+                background: var(--wpjb-bg);
+                color: var(--wpjb-text);
+            }
+
+            &.is-danger:hover,
+            &.is-danger:focus-visible {
+                background: var(--wpjb-badge-red-bg);
+                color: var(--el-color-danger);
+            }
+        }
+    }
+
+    // Toolbar: stage tabs left, filters right
+    .wpjb_applications .wpjb_toolbar {
+        padding: 12px 16px;
+
+        .wpjb_toolbar_end {
+            flex-wrap: wrap;
+        }
+
+        .wpjb_search {
+            width: 200px;
+        }
+
+        .wpjb_filter_select {
+            width: 160px;
+        }
+
+        .wpjb_job_select {
+            width: 190px;
+        }
+    }
+
+    // Undo legacy row tints from app.scss (.has_payments_table .wpf_row_*)
+    .wpjb_entries_table .el-table__row {
+        background: transparent;
+    }
+
+    // Empty state for a fresh install
+    .wpjb_welcome {
+        max-width: 640px;
+        margin: 40px auto 0;
+    }
+
+    // Dialogs: Fluent card look
+    .wpjb_dialog {
+        --el-dialog-border-radius: var(--wpjb-radius);
+        --el-dialog-padding-primary: 24px;
+        border: 1px solid var(--wpjb-border);
+        box-shadow: 0 16px 32px -12px rgba(14, 18, 27, .1);
+
+        .el-dialog__title {
+            color: var(--wpjb-text);
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .el-dialog__body {
+            color: var(--wpjb-text-secondary);
+            font-size: 14px;
+            line-height: 1.5;
+
+            p {
+                margin: 0;
+            }
+
+            strong {
+                color: var(--wpjb-text);
+                font-weight: 600;
+            }
+        }
+
+        .el-form-item {
+            margin-bottom: 8px;
+        }
+
+        .el-form-item__label {
+            color: var(--wpjb-text);
+            font-weight: 500;
+        }
+
+        .wpjb_dialog_help {
+            color: var(--wpjb-text-muted);
+            font-size: 13px;
+        }
+    }
+}
+
+@media (max-width: 1120px) {
+    // Make room for the hover row actions on one line
+    .wpjb_app .wpjb_job_meta > .wpjb_num {
+        display: none;
+    }
+}
+
+@media (max-width: 1200px) {
+    .wpjb_app .wpjb_applications .wpjb_toolbar .wpjb_toolbar_end {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 782px) {
+    .wpjb_app {
+        .wpjb_search,
+        .wpjb_filter_select,
+        .wpjb_job_select {
+            width: 100%;
+        }
+
+        .el-table .row-actions {
+            visibility: visible;
+        }
+    }
+}

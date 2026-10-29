@@ -235,13 +235,26 @@ class FileUploadComponent extends BaseComponent
 
         $uploadUrl = FileHandler::getUploadDir()['url'];
 
-        $html = '<div class="payform_file_lists">';
+        $html = '<div class="wpjb_file_list">';
         foreach ($values as $file) {
             if (!is_string($file) || !FileHandler::isPluginFileUrl($file, $uploadUrl)) {
                 continue;
             }
+
+            $baseName = wp_basename(wp_parse_url($file, PHP_URL_PATH));
+            // Show the original name: drop the random "wpf-<hash>-wpf-" prefix
+            $displayName = preg_replace('/^wpf-[a-f0-9]{32}-wpf-/', '', $baseName);
+            $ext = strtolower(pathinfo($baseName, PATHINFO_EXTENSION));
             $previewUrl = $this->getPreviewUrl($file);
-            $html .= '<div class="payform_each_file"><a title="' . esc_attr__('Click to View/Download', 'ninja-job-board') . '" href="' . esc_url($file) . '" target="_blank" rel="noopener"><img src="' . esc_url($previewUrl) . '" alt="' . esc_attr(wp_basename($file)) . '" /></a></div>';
+
+            $html .= '<a class="wpjb_file" href="' . esc_url($file) . '" target="_blank" rel="noopener" title="' . esc_attr__('Open file in a new tab', 'ninja-job-board') . '">';
+            if ($previewUrl) {
+                $html .= '<img class="wpjb_file_thumb" src="' . esc_url($previewUrl) . '" alt="" width="32" height="32" />';
+            } else {
+                $html .= '<span class="wpjb_file_ext">' . esc_html($ext ? strtoupper(substr($ext, 0, 4)) : __('File', 'ninja-job-board')) . '</span>';
+            }
+            $html .= '<span class="wpjb_file_name">' . esc_html($displayName) . '</span>';
+            $html .= '</a>';
         }
         $html .= '</div>';
         return wp_kses_post($html);
@@ -403,19 +416,19 @@ class FileUploadComponent extends BaseComponent
         ), $code);
     }
 
+    /**
+     * Image files get a small thumbnail. Other files show an extension label instead.
+     *
+     * @return string The image URL, or an empty string for non-image files
+     */
     private function getPreviewUrl($file)
     {
         $ext = strtolower(pathinfo(wp_parse_url($file, PHP_URL_PATH), PATHINFO_EXTENSION));
         $imageExtensions = array('jpg', 'jpeg', 'gif', 'png', 'bmp');
-        if (in_array($ext, $imageExtensions)) {
+        if (in_array($ext, $imageExtensions, true)) {
             return $file;
         }
 
-        if ($ext == 'pdf') {
-            return WPJOBBOARD_URL . '/assets/images/pdf_icon.png';
-        }
-
-        // Return normal Document Extension
-        return WPJOBBOARD_URL . '/assets/images/document.png';
+        return '';
     }
 }

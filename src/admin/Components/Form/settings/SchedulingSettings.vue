@@ -1,26 +1,17 @@
 <template>
-    <el-container>
-        <el-main class="no_shadow">
-            <div v-loading="fetching" class="edit_form_warpper">
-                <div class="all_payforms_wrapper payform_section">
-                    <div class="payform_section_header">
-                        <h3 class="payform_section_title">
-                            {{ $t('Form Scheduling & Restrictions') }}
-                        </h3>
-                        <div class="payform_section_actions">
-                            <el-button v-loading="saving" @click="saveSettings()" class="payform_action" size="small"
-                                       type="primary">
-                                {{ $t( 'Save Settings' ) }}
-                            </el-button>
-                        </div>
-                    </div>
-                    <div class="payform_section_body">
-                        <form-restrictions v-if="loaded" :current_date_time="current_date_time" :data="settings"/>
-                    </div>
-                </div>
+    <div class="wpjb_settings_page">
+        <div class="payform_section_header">
+            <h3 class="payform_section_title">{{ $t('Scheduling & restrictions') }}</h3>
+            <div class="payform_section_actions">
+                <el-button :loading="saving" @click="saveSettings()" type="primary">
+                    {{ $t('Save settings') }}
+                </el-button>
             </div>
-        </el-main>
-    </el-container>
+        </div>
+        <div v-loading="fetching">
+            <form-restrictions v-if="loaded" :current_date_time="current_date_time" :data="settings"/>
+        </div>
+    </div>
 </template>
 
 <script>

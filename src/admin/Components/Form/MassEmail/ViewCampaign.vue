@@ -1,53 +1,73 @@
 <template>
-    <el-container>
-        <el-main>
-            <div class="edit_form_warpper">
-                <div class="all_payforms_wrapper payform_section">
-                    <div class="payform_section_header">
-                        <h3 class="payform_section_title">
-                            Campaign Overview
-                        </h3>
-                        <div class="payform_section_actions">
-                            <router-link class="el-button payform_action el-button--primary el-button--small" :to="{ name: 'email_campaigns', params: { form_id: form_id } }">View All</router-link>
-                        </div>
-                    </div>
-                    <div style="padding: 10px 20px;" v-loading="loading" id="email_notifications"
-                         class="payform_section_body">
-
-                        <div style="text-align: center;" v-if="stats.remaining">
-                            <p>We are sending the emails now. Please hold on and keep this tab open</p>
-                            <p><b>Stat: </b></p>
-                            <pre>{{stats}}</pre>
-                        </div>
-
-                        <div class="email_campain_info" v-else>
-                            <div class="campaign_info">
-                                <ul>
-                                    <li>Campaign Title: {{campaign.title }}</li>
-                                    <li>Email Subject: {{campaign.subject }}</li>
-                                    <li>Sent At: {{campaign.created_at}}</li>
-                                    <li>Total Email Sent: {{campaign.total_sent}}</li>
-                                </ul>
-                            </div>
-                            <div class="campaign_email_body">
-                                <div class="email_body_actual" v-html="campaign.body"></div>
-                            </div>
-                        </div>
-
-                        <div v-if="emails.length" class="campaign_emails_table">
-                            <el-table border :data="emails">
-                                <el-table-column width="100" label="ID" prop="id"></el-table-column>
-                                <el-table-column width="120" label="Status" prop="status"></el-table-column>
-                                <el-table-column label="Email ID" prop="email_to"></el-table-column>
-                                <el-table-column label="Subject" prop="subject"></el-table-column>
-                            </el-table>
-                        </div>
-
-                    </div>
-                </div>
+    <div class="wpjb_settings_page wpjb_email_page">
+        <div class="payform_section_header">
+            <h3 class="payform_section_title">
+                {{ campaign.title || 'Broadcast' }}
+                <span v-if="campaign.status" :class="['wpjb_badge', 'is-' + (isSending ? 'amber' : 'green')]">{{ isSending ? 'Sending' : 'Sent' }}</span>
+            </h3>
+            <div class="payform_section_actions">
+                <router-link class="el-button" :to="{ name: 'email_campaigns', params: { form_id: form_id } }">All broadcasts</router-link>
             </div>
-        </el-main>
-    </el-container>
+        </div>
+
+        <div v-loading="loading" class="wpjb_card">
+            <dl class="wpjb_campaign_stats">
+                <div>
+                    <dt>Sent</dt>
+                    <dd>{{ stats.sent || 0 }}</dd>
+                </div>
+                <div>
+                    <dt>Remaining</dt>
+                    <dd>{{ stats.remaining || 0 }}</dd>
+                </div>
+                <div>
+                    <dt>Total recipients</dt>
+                    <dd>{{ stats.all || 0 }}</dd>
+                </div>
+            </dl>
+            <div v-if="stats.remaining" class="wpjb_campaign_progress" role="status">
+                <p>Sending emails. Keep this tab open until all emails are sent.</p>
+                <el-progress :percentage="progress" :stroke-width="8" :aria-label="'Sent ' + progress + '%'"/>
+            </div>
+        </div>
+
+        <div class="wpjb_card">
+            <div class="wpjb_card_head">
+                <h3>Email</h3>
+            </div>
+            <div class="wpjb_card_body">
+                <dl class="wpjb_campaign_meta">
+                    <dt>Subject</dt>
+                    <dd>{{ campaign.subject }}</dd>
+                    <dt>Created</dt>
+                    <dd class="wpjb_num">{{ $dateFormat(campaign.created_at, 'MMM D, YYYY h:mm A') }}</dd>
+                </dl>
+            </div>
+            <div class="wpjb_email_preview">
+                <div class="wpjb_email_preview_body" v-html="campaign.body"></div>
+            </div>
+        </div>
+
+        <div v-if="emails.length" class="wpjb_card">
+            <div class="wpjb_card_head">
+                <h3>Recipients <span class="wpjb_count wpjb_num">({{ emails.length }})</span></h3>
+            </div>
+            <el-table :data="emails">
+                <el-table-column label="Email" min-width="240" prop="email_to"></el-table-column>
+                <el-table-column label="Subject" min-width="240" prop="subject"></el-table-column>
+                <el-table-column label="Status" width="130">
+                    <template #default="scope">
+                        <span :class="['wpjb_badge', 'is-' + (scope.row.status === 'sent' ? 'green' : 'amber')]">{{ scope.row.status === 'sent' ? 'Sent' : 'Pending' }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="Sent at" width="200">
+                    <template #default="scope">
+                        <span class="wpjb_num">{{ $dateFormat(scope.row.sent_at, 'MMM D, YYYY h:mm A') || '' }}</span>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -64,6 +84,17 @@
                 emails: [],
                 sending_email: false,
                 isUnmounted: false
+            }
+        },
+        computed: {
+            isSending() {
+                return this.campaign.status !== 'completed';
+            },
+            progress() {
+                if (!this.stats.all) {
+                    return 0;
+                }
+                return Math.round((this.stats.sent / this.stats.all) * 100);
             }
         },
         methods: {
@@ -134,29 +165,3 @@
         }
     }
 </script>
-
-<style lang="scss">
-    .email_campain_info {
-        display: block;
-        overflow: hidden;
-        width: 100%;
-    }
-
-    .campaign_info {
-        width: 48%;
-        float: left;
-        margin-right: 2%;
-    }
-
-    .campaign_email_body {
-        float: left;
-        width: 50%;
-        padding: 20px;
-        background: gray;
-    }
-
-    .email_body_actual {
-        background: white;
-        padding: 20px;
-    }
-</style>

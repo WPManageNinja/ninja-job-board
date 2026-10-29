@@ -55,6 +55,11 @@ const formEditorChildrenRoutes = window.WPJobBoard.applyFilters('wpf_main_childr
 ]);
 const formEditRoutes = window.WPJobBoard.applyFilters('wpf_edit_children_roues',[
     {
+        // A job opens on its applications
+        path: '',
+        redirect: to => ({ name: 'form_entries', params: to.params })
+    },
+    {
         path: 'form-builder',
         name: 'edit_form',
         component: FormBuilder

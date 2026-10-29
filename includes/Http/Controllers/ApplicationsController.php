@@ -148,7 +148,8 @@ class ApplicationsController extends Controller
             do_action('wpjobboard/before_application_status_change_manually', $submission, $applicationStatus, $submission->application_status);
             $submissionModel->update($submission->id, array('application_status' => $applicationStatus));
             do_action('wpjobboard/after_application_status_change_manually', $submission->id, $applicationStatus, $submission->application_status);
-            $this->logStatusChange($submission, __('Application status changed:', 'ninja-job-board'), $submission->application_status, $applicationStatus, $note);
+            $labels = GeneralSettings::getApplicationStatuses();
+            $this->logStatusChange($submission, __('Application status changed:', 'ninja-job-board'), $this->statusName($labels, $submission->application_status), $this->statusName($labels, $applicationStatus), $note);
             $note = '';
             $changed = true;
         }
@@ -157,7 +158,8 @@ class ApplicationsController extends Controller
             do_action('wpjobboard/before_internal_status_change_manually', $submission, $internalStatus, $submission->status);
             $submissionModel->update($submission->id, array('status' => $internalStatus));
             do_action('wpjobboard/after_internal_status_change_manually', $submission->id, $internalStatus, $submission->status);
-            $this->logStatusChange($submission, __('Internal status changed:', 'ninja-job-board'), $submission->status, $internalStatus, $note);
+            $labels = GeneralSettings::getInternalStatuses();
+            $this->logStatusChange($submission, __('Internal status changed:', 'ninja-job-board'), $this->statusName($labels, $submission->status), $this->statusName($labels, $internalStatus), $note);
             $changed = true;
         }
 
@@ -308,6 +310,14 @@ class ApplicationsController extends Controller
     private function knownStatus($value, $statuses)
     {
         return (is_string($value) && isset($statuses[$value])) ? $value : '';
+    }
+
+    /**
+     * The human label of a status, or the stored key when the status is unknown
+     */
+    private function statusName($labels, $key)
+    {
+        return isset($labels[$key]) ? $labels[$key] : (string)$key;
     }
 
     private function logStatusChange($submission, $label, $oldStatus, $newStatus, $note = '')

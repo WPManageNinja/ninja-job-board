@@ -118,28 +118,3 @@
         }
     }
 </script>
-<style lang="scss">
-    .wp_vue_editor {
-        width: 100%;
-        min-height: 100px;
-    }
-
-    .wp_vue_editor_wrapper {
-        position: relative;
-
-        .popover-wrapper {
-            z-index: 2;
-            position: absolute;
-            top: 0;
-            right: 0;
-            &-plaintext {
-                left: auto;
-                right: 0;
-                top: -32px;
-            }
-        }
-        .wp-editor-tabs {
-            float: left;
-        }
-    }
-</style>

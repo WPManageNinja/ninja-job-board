@@ -156,6 +156,11 @@ From email setting, you can set it up who will get notified about the submission
 == Changelog ==
 
 = 2.0.0 - October 29, 2026 =
+- New: Redesigned admin that matches the Fluent plugins (FluentCRM, Fluent Support): one app header, job tabs, settings sidebar, clean tables and cards
+- New: Applications lists filter by status with tabs that show the count for each status
+- New: Color-coded status badges for job posts, application status and internal status
+- New: Application view with an activity timeline, a status panel and compact file attachments
+- New: A job now opens on its applications
 - New: The admin app is rebuilt with Vue 3 and Element Plus
 - New: The admin app uses the WordPress REST API (namespace `ninja-job-board/v1`) instead of admin-ajax
 - New: Every admin REST route checks the user's capability and, for "own forms" permissions, the form owner
@@ -163,6 +168,9 @@ From email setting, you can set it up who will get notified about the submission
 - Improvement: Smaller admin bundle; removed unused libraries (Spout, Ace editor, vue-html-to-paper, lodash)
 - Improvement: Campaign emails are claimed before sending, so an email is never sent twice
 - Fix: Form scheduling "off" now clears the start and end timestamps
+- Fix: Turning off IP address logging now really stops storing the IP address
+- Fix: Status labels "Initial rejected" and "Shortlisted" (typo and casing)
+- Removed: The "Recommended Plugins" box on the application screen
 - Fix: Users with only the "add form" permission can no longer edit forms of other users
 - Fix: PHP 8.2+ deprecation notices in the bundled query builder
 - Developers: `window.WPJobBoard` keeps the hooks API (applyFilters, addFilter, addAction, doAction) and now also exposes `app` and `router`
