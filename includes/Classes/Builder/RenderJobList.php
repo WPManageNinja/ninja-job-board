@@ -102,6 +102,7 @@ class RenderJobList
             $job->exp_date = $expDate;
             $job->job_type = GeneralSettings::getJobTypeName(get_post_meta($job->ID, 'job_type', true));
             $job->experince_text = ($experinceText) ? $experinceText : '—';
+            $job->location = get_post_meta($job->ID, 'job_location', true);
             $job->category = $category;
             if($category) {
                 $categories[$category->slug] = $category->name;

@@ -1,6 +1,6 @@
 === Ninja Job Board ===
 Contributors: techjewel, wpmanageninja
-Tags: job board, career, job listing, job manager, recruitment
+Tags: job board, careers, job listing, recruitment, applicant tracking
 Requires at least: 6.3
 Tested up to: 7.1
 Stable tag: 2.0.0
@@ -8,142 +8,118 @@ Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Ninja Job Board is a light-weight plugin that adds a job board along with application form to your WordPress website.
+Post jobs, collect applications with CVs, and manage applicants in WordPress. Includes Gutenberg blocks, spam protection and privacy tools.
 
 == Description ==
 
-Ninja Job Board is made for small and medium organizations to reduce their pain on hiring new people. The ultimate goal of this job board plugin is to make the recruitment process as easy as possible with a little time invested.
+Ninja Job Board turns your WordPress site into a careers page. Post a job, give it an application form, and review every applicant in one place. You do not need a paid job portal, and applications do not get lost in your inbox.
 
-Ninja Job Board is a self-hosted WordPress Plugin where you can build a questionnaire form by drag and drop form builder.
+It is made for small and medium teams that hire a few times a year and want a simple, self-hosted way to do it.
 
-<b>The Following Form fields are available:</b>
+= How it works =
 
-- Applicant Name
-- Applicant Email
-- CV Upload Field
-- File Upload Field
-- Single Line Text
-- Texarea Field
-- Number Field
-- Dropdown Select Field
-- Radio Choice Field
-- CheckBoxes
-- Date Field
-- Hidden Input Field
-- Markup HTML
-- Form Steps to breakdown your form to several pages.
-- More is coming soon.
+1. Create a job. Write the description in the block editor and add the job type, location, vacancies and experience.
+2. Build the application form with the drag and drop form builder.
+3. Publish. The job page shows the job details and the application form automatically.
+4. Review applications. Filter them by status, open each applicant's CV, add notes, and move them through your hiring steps.
+5. Reply to applicants one by one, or send one email to all applicants with a given status.
 
+= Jobs and the careers page =
 
-#### Why another WordPress job board plugin?
-The developers of <a href="https://wordpress.org/plugins/ninja-tables/">Ninja Tables</a> went through the stress, and they wanted one excellent solution for that. As a result, this plugin sees the light and is presented to the world for making others beneficial, too.
+* Each job is a WordPress post with its own page, category and details.
+* **Job List** block and `[wp_job_list]` shortcode: show your open jobs on any page, with an optional category filter.
+* **Job Application Form** block and `[wp_job_form id="123"]` shortcode: show a job's application form anywhere.
+* **Job Details** block: show a job's type, location, vacancies, experience and posting date.
+* Job categories, and an option to hide jobs that are no longer open.
 
-#### Application processing via emails sucks
-It's a real challenge for startups and small enterprises to recruit talents painlessly. Using a job portal is costly, and accepting applications via emails is distressing and messy because it's hard to keep track of all the emails and sort and manage applicants into categories.
+= Application form builder =
 
-#### The easiest way to create listings
-Ninja Job Board makes it plain and simple. Every time you want to hire for your company, create a job listing on your website. The listings are effective, well-organized, and above all, easy to manage.
+Build each job's form by drag and drop. Available fields:
 
-#### No need to train your HR Manager
-As the tool implies with simplicity, you don't need to train your HR manager to know how to run it. The tool itself is self-explanatory means anyone can understand what's going on right after entering it.
+* Applicant name and applicant email
+* CV upload and file upload
+* Single line text, paragraph text and number
+* Dropdown, radio buttons and checkboxes
+* Date
+* Hidden field
+* HTML content
+* Form steps, to split a long form into pages
 
-#### Application filtering and search
-From creating a new application real fast to keeping track of every single application, Ninja Job Board is meant for success. Besides sorting the data based on categories, you can apply search and filter on the table.
+Each form has its own settings:
 
-#### A clean and eye-pleasing interface
-The UI is pretty simple that encourages users to interact more without any fear of making things complicated. Additionally, the admin panel is created carefully to ensure better user experience. This is the perfect job listing plugin for smart recruiters.
+* Confirmation: show a message, or send the applicant to a page or URL.
+* Scheduling: open and close applications on set dates.
+* Restrictions: require login, or limit the number of applications.
+* Design: label placement, required marker and submit button position.
 
-#### Application Management
-With built-in application management system, you can see the total applications of your job post. You can also set application status as well as internal status.
+= Applicant tracking =
 
-In individual application view page, you can see the complete submitted data, uploaded applicant cv. You can also change the application status and internal status easily. One of the important feature is, you can add notes to each application.
+* All applications for a job in one table, with tabs that count each status.
+* Two statuses per application: the application status (Applied, Processing, Pending, Completed) and a private internal status for your team (New, Audited, Interviewed, Shortlisted, Hired and more).
+* An application page with the answers, the CV and other files, notes, and an activity timeline.
+* See the other applications from the same applicant.
+* Search applications, print an application, and export applications to CSV.
 
-#### Email Broadcast to Applicants
-Send email to Applicants as bulk and you can select filter by application status and internal status before send.
+= Email =
 
+* Email notifications when someone applies: to the applicant, to your HR team, or both. Use placeholders such as the applicant's name and the job title.
+* Email broadcast: send one email to all applicants of a job, filtered by application status and internal status.
 
-#### Super fast and Light Weight Form
-This is a super fast form builder and it's only loads css and js if you add the form in a page. Every line of CSS and JS is useful and there has no extra css and js. For a normal form, It's loads less than 30KB css and js combined. This form builder plugin will not slow down your site. it's the fastest form builder plugin in WordPress. It has also a nice interface to give detailed information of your job post.
+= Security and privacy =
 
-### KEY FEATURES
-- Add new job posting on your WordPress site, whenever you want
-- The UI is clean and simple
-- Searching and filtering options available for job listings
-- Make 'Shortlists' easily based on your criteria
-- Print the application data if it's necessary
-- Intuitive form creation via readymade input fields
-- Attach file option to include a CV
-- Create multiple job listings at a time and check on them separately
-- It's easy to operate by anyone
-- All submitted data are easily searchable and filterable
-- Add a note against an application to mark it for reviewing in future
-- View the uploaded CV as a PDF
-- Notify the applicants and HR manager simultaneously after an application is submitted
-- Schedule the application to open at a specific time
-- Categorize the application based on its status
+* Uploaded CVs are private. Only users who can view the application can download them. Direct links to the upload folder are blocked (see the FAQ for Nginx).
+* Spam protection: a hidden honeypot field on every form, and optional [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/).
+* WordPress privacy tools: export or erase an applicant's data from Tools > Export Personal Data and Tools > Erase Personal Data.
+* Option to stop storing applicants' IP addresses.
+* Option to delete all plugin data when you delete the plugin.
 
+= Fast and lightweight =
 
-#### Features Tracker
-- Job Posting with information *(DONE)*
-- Application Form Builder *(DONE)*
-- CV Management System *(Done)*
-- Application status management *(Done)*
-- Filter Applications based on status *(Done)*
-- Search Applications with keywords/full text search *(Done)*
-- Email Notification System management *(Done)*
-- Send bulk emails to the applicants and filter by application status *(Done)*
-- Export Data as CSV/Excel/JSON *(On development)
-- Application Assesment for HR Department (On development)
+The form's CSS and JavaScript load only on pages that show a form or a job list. The admin is a modern app built with Vue 3, and it uses the WordPress REST API.
 
-This plugin is a very planned project, and we have a long term development plan for this. We already invested around 200 human working hours (+coffees) on it, and we have the intention to spend much more on it. Please let us know what features you want, and we are happy to add that in our development sprint.
+= Source code =
 
-The full source code is available on <a href="https://github.com/WPManageNinja/wp-job-board">Github</a>.
+The full source code, including the uncompiled admin app and blocks, is on [GitHub](https://github.com/WPManageNinja/ninja-job-board). Bug reports and pull requests are welcome.
 
+= Other plugins by WPManageNinja =
 
-== Other Plugins by WPManageNinja ==
-<ul>
-<li><a href="https://wordpress.org/plugins/ninja-tables/" target="_blank">Ninja Tables – WP Data Table Plugin for WordPress</a></li>
-<li><a href="https://wordpress.org/plugins/fluentform/" target="_blank">WP Fluent Form – Contact Form Plugin for WordPress with Advanced Form Builder Features</a></li>
-<li><a href="https://wordpress.org/plugins/wp-payment-form/" target="_blank">WPPayForm for Stripe WordPress Payments Plugin</a></li>
-</ul>
-
+* [Fluent Forms](https://wordpress.org/plugins/fluentform/): drag and drop form builder
+* [FluentCRM](https://wordpress.org/plugins/fluent-crm/): email marketing and CRM for WordPress
+* [Fluent Support](https://wordpress.org/plugins/fluent-support/): helpdesk and customer support
+* [Ninja Tables](https://wordpress.org/plugins/ninja-tables/): data tables for WordPress
 
 == Installation ==
 
-This section describes how to install the plugin and get it working.
-e.g.
-
-1. Upload the plugin files to the /wp-content/plugins/ directory, or install the plugin through the WordPress plugins screen directly.
-1. Activate the plugin through the ‘Plugins’ screen in WordPress
-1. Use the WPPay Forms -> All Forms -> Add a Job Posting and get started.
-
+1. In your WordPress admin, go to Plugins > Add New, search for "Ninja Job Board", then click Install Now and Activate. Or upload the plugin folder to `/wp-content/plugins/` and activate it on the Plugins screen.
+2. Go to Job Board > All Jobs and click Add job.
+3. Build the application form, then publish the job.
+4. To list your jobs, add the Job List block to a page, for example "Careers".
 
 == Frequently Asked Questions ==
 
-= How to create a job listing? =
+= How do I create a job? =
 
-Go to Ninja Job Board from WordPress admin panel. Create 'Add new job' and give it a 'Title'. Describe the job and add other information: no. of vacancies, years of experience, etc.
+Go to Job Board > All Jobs and click Add job. Give the job a title, then build its application form. To write the job description and add the job type, location, vacancies and experience, click the "Edit job post" tab.
 
-= How to display the job posts on the website? =
-Each job post has its own page. To list your jobs on any page, add the **Job List** block (or the `[wp_job_list]` shortcode). To show an application form anywhere, add the **Job Application Form** block (or `[wp_job_form id="123"]`). The **Job Details** block shows a job's type, location, vacancies and experience.
+= How do I show my jobs on the website? =
 
-On a job post, the job details and the application form are added automatically. If you place the Job Details or Job Application Form block in the job post yourself, the automatic copy is left out.
+Each job has its own page. To list all open jobs on a page, add the **Job List** block, or the `[wp_job_list]` shortcode.
 
-=  How to customize job applications? =
-You can easily customize the application process from the dashboard.
-Check this doc to know the application customization
+To show an application form somewhere else, add the **Job Application Form** block, or `[wp_job_form id="123"]` where 123 is the job ID.
 
-= Can I change an application form after it's published? =
-Yes, you can change it from the backend and modify with your latest information.
+On a job's own page, the job details and the application form are added automatically. If you add the Job Details or Job Application Form block to the job yourself, the automatic copy is left out, so nothing shows twice.
 
-= What will the users see after submitting an application? =
-You can set a thank you page to redirect users there or use a custom URL right from the setting.
+= Can I change an application form after the job is published? =
 
-= How can I show all the current open job postings? =
-Use the shortcode <b>[wp_job_list]</b> to show the open job listings.
+Yes. Changes apply to new applications. Applications you already received keep their answers.
 
-= How to notify the applicants that their application is submitted successfully? =
-From email setting, you can set it up who will get notified about the submissions. You can include the HR manager and other persons as well.
+= What do applicants see after they apply? =
+
+You choose in the job's Form Settings: a thank-you message, a page on your site, or any URL.
+
+= How do I get notified about new applications? =
+
+Open the job and go to the Email Notifications tab. You can email the applicant, your HR team, or both.
 
 = Who can open uploaded CVs and other application files? =
 
@@ -155,7 +131,7 @@ On Nginx, `.htaccess` files are ignored. Add this rule to your server block so n
 
 = How do I stop spam applications? =
 
-A hidden honeypot field is always on. For stronger protection, turn on Cloudflare Turnstile in Settings > General and add your Turnstile site key and secret key.
+A hidden honeypot field is always on. For stronger protection, turn on Cloudflare Turnstile in Job Board > Settings > General and add your Turnstile site key and secret key.
 
 = Can applicants ask for their data to be exported or erased? =
 
@@ -163,11 +139,15 @@ Yes. Ninja Job Board adds job applications to the WordPress privacy tools (Tools
 
 = What happens to my data when I delete the plugin? =
 
-Nothing, by default. To remove all jobs, applications, uploaded files and settings when you delete the plugin, turn on "Delete all data when the plugin is deleted" in Settings > General first.
+Nothing, by default. To remove all jobs, applications, uploaded files and settings when you delete the plugin, turn on "Delete all data when the plugin is deleted" in Job Board > Settings > General first.
+
+= Does it work with my theme? =
+
+Yes. The job pages use your theme's single post template, and the blocks and shortcodes work in any theme, including block themes.
 
 == External services ==
 
-This plugin can connect to Cloudflare Turnstile, a security check that blocks spam on the public application form. It is off by default and only works after you turn it on and add your keys in Settings > General.
+This plugin can connect to Cloudflare Turnstile, a security check that blocks spam on the public application form. It is off by default and only works after you turn it on and add your keys in Job Board > Settings > General.
 
 When it is on, the application form loads the Turnstile script from `challenges.cloudflare.com`, and the visitor's browser sends Cloudflare the data it needs to tell people from bots. When an application is submitted, your site sends the Turnstile token, your secret key and the visitor's IP address to `https://challenges.cloudflare.com/turnstile/v0/siteverify` to check the token.
 
@@ -175,16 +155,16 @@ Cloudflare Turnstile: [Terms of Use](https://www.cloudflare.com/website-terms/),
 
 == Screenshots ==
 
-1. All jobs, with status and application counts
-2. Application form builder
-3. Email notification editor
-4. Job details page with the apply button
-5. All applications, filtered by status
-6. Single application with status, details and activity
-7. Job post editor with job details
-8. Job list shortcode [wp_job_list]
-9. Job List block with its settings in the block editor
-10. Job post in the block editor with the Job details panel
+1. All jobs, with their status and number of applications
+2. Applications for a job, with a tab for each status
+3. An application, with the CV, status, notes and activity
+4. Drag and drop application form builder
+5. Email notifications for a job
+6. A job in the block editor, with the job tabs and the Job details panel
+7. The Job List block and its settings
+8. A job page with its details and the application form
+9. The job list on your site
+10. General settings, with spam protection and privacy options
 
 == Changelog ==
 
@@ -214,7 +194,8 @@ New
 - Spam protection: a honeypot field on every form and optional Cloudflare Turnstile
 - Option to delete all plugin data when the plugin is deleted
 - Gutenberg blocks: Job List (with categories, filter, number of jobs and order), Job Application Form and Job Details, with live previews in the editor
-- Job posts use the block editor, with a Job details panel (job type, location, vacancies, experience) and links to the job's applications and form
+- Job posts use the block editor, with a Job details panel (job type, location, vacancies, experience) and the job's tabs (applications, form, settings, emails) at the top
+- New logo, icon and banner
 
 Improvements
 - Admin app rebuilt with Vue 3, Element Plus and Vite

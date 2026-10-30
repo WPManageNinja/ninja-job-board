@@ -220,27 +220,34 @@ class PostType
                 .wpjb_meta_icon {
                     display: inline-block;
                     width: 16px;
-                    margin-right: 2px;
+                    height: 16px;
+                    opacity: .7;
                 }
+                /* Only the vertical margins: block themes center the list with auto side margins */
                 ul.wpjb_job_meta {
-                    display: block;
-                    overflow: hidden;
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    gap: 8px 18px;
                     list-style: none;
-                    margin: 10px 0px 20px !important;
+                    margin-top: 10px !important;
+                    margin-bottom: 24px !important;
                     padding: 0;
-                    width: 100%;
+                    font-size: .95em;
                 }
                 ul.wpjb_job_meta li {
-                    display: inline-block;
-                    padding: 0px 8px;
-                }
-                ul.wpjb_job_meta li:last-child {
-                    margin-right: 0px;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    margin: 0;
+                    padding: 0;
                 }
                 ul.wpjb_job_meta li.wpjb_job_type {
-                    background-color: #f7e2c5;
-                    color: #906b37;
-                    border-radius: 3px;
+                    padding: 2px 12px;
+                    border-radius: 999px;
+                    background-color: #EBF1FF;
+                    color: #335CFF;
+                    font-weight: 500;
                 }
             </style>
         <?php

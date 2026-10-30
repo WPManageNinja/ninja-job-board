@@ -33,8 +33,8 @@ class Menu
 
 
         add_menu_page(
-            __('WP Job Board', 'ninja-job-board'),
-            __('WP Job Board', 'ninja-job-board'),
+            __('Ninja Job Board', 'ninja-job-board'),
+            __('Job Board', 'ninja-job-board'),
             $menuPermission,
             'wpjobboard.php',
             array($this, 'render'),

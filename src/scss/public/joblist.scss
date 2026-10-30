@@ -1,100 +1,120 @@
+// Job list: the Job List block and the [wp_job_list] shortcode.
+// Same colors as the admin (Fluent tokens); the font comes from the theme.
+
 .wpjb_job_list_wrapper {
-  box-shadow: 0px -2px 3px 0 rgba(60, 66, 87, 0.1), 0px 0px 1px 0 rgba(0, 0, 0, 0.07);
   display: block;
   overflow: hidden;
+  border: 1px solid #E1E4EA;
+  border-radius: 12px;
+  background: #fff;
+  color: #0E121B;
 }
 
 .wpjb_job_list_header {
-  list-style-type: none;
-  background-color: #e3e7ec;
-  padding: 15px;
-  text-align: right;
-  width: 100%;
-  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #E1E4EA;
+  background-color: #F5F7FA;
+
   .wpjb_job_list_header-label {
-    float: left;
-    font-weight: bold;
-    margin: 0
+    margin: 0;
+    font-size: 1.1em;
+    font-weight: 600;
   }
-  .wpjb_job_filter {
-    display: inline-block;
-    text-align: right;
+
+  .wpjb_job_filter select {
+    max-width: 100%;
+    min-height: 36px;
+    margin: 0;
+    padding: 4px 32px 4px 12px;
+    border: 1px solid #CACFD8;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #0E121B;
+    font-size: 14px;
   }
 }
 
 .wpjb_each_job {
+  margin: 0;
+  border-bottom: 1px solid #E1E4EA;
   list-style-type: none;
-  border-bottom: 1px solid #e1e1e1;
-  float: left;
-  width: 100%;
-  margin-bottom: 0;
-  font-family: helvetica,arial;
-  border-left: 1px solid #f1f1f1;
-  border-right: 1px solid #f1f1f1;
-  margin-left: 0;
-  a {
-    padding: 17px 0;
-    text-decoration: none !important;
-    box-shadow: none !important;
-    float: left;
-    width: 99%
+
+  &:last-child {
+    border-bottom: 0;
   }
 
   .wpjb_hover {
-    width: 1%;
-    float: left;
-    height: 90px;
-    &:before {
-      content: "\00a0 ";
+    display: none;
+  }
+
+  a {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 6px 24px;
+    padding: 18px 20px;
+    color: inherit;
+    text-decoration: none !important;
+    box-shadow: none !important;
+    transition: background-color .15s;
+
+    &:hover,
+    &:focus-visible {
+      background-color: #F5F7FA;
+
+      .wpjb_jb_title {
+        color: #335CFF;
+      }
     }
   }
 
-  &:hover .wpjb_hover {
-    background-color: #3F51B5;
-  }
-
-  .hoverparts:before {
-    content: "\00a0 "
-  }
-
   .wpjb_jb_title {
-    color: #3F51B5;
     display: block;
-    padding-left: 8px
+    color: #0E121B;
+    font-size: 1.05em;
+    font-weight: 600;
   }
 
   .wpjb_cat {
     display: block;
+    margin-top: 2px;
+    color: #525866;
     font-size: 14px;
-    color: #a9a9a9;
-    padding-left: 8px
   }
-  .wpjb_exp_text {
-    display: block;
+
+  .wpjb_details {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 4px 16px;
+    color: #525866;
     font-size: 14px;
-    color: #5f5f5f;
-    padding-left: 8px
   }
 
   .wpjb_type {
-    display: block;
-    color: #3F51B5;
-    text-transform: capitalize;
+    padding: 3px 12px;
+    border-radius: 999px;
+    background-color: #EBF1FF;
+    color: #335CFF;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 600px) {
+  .wpjb_each_job a {
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
-  .wpjb_exp_date {
-    display: block;
-    font-size: 14px;
-    color: #a9a9a9;
+  .wpjb_each_job .wpjb_details {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: flex-start;
   }
-
-  .wpjb_part {
-    float: left;
-    width: 20%
-  }
-
-  .wpjb_part.wpjb_title {
-    width: 39%;
-  }
-
 }
