@@ -18,3 +18,7 @@ build/.lock
 # WordPress.org page assets (icon, banner); they go to svn/assets, not the plugin
 .wordpress-org
 README.md
+
+# Repo docs and the translation lint (tests/ is excluded above)
+CLAUDE.md
+docs

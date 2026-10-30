@@ -5,10 +5,12 @@
   "description": "Ninja Job Board WordPress plugin",
   "type": "module",
   "scripts": {
-    "build": "node build/build.mjs",
+    "build": "node i18n.node.cjs && node build/build.mjs",
     "dev": "node build/build.mjs --watch",
     "test:php": "composer test:integration",
-    "prepare:emogrifier": "node build/prepare-emogrifier.mjs"
+    "prepare:emogrifier": "node build/prepare-emogrifier.mjs",
+    "translate": "node i18n.node.cjs && node tests/lint/translation-map.cjs",
+    "translate:check": "node tests/lint/translation-map.cjs"
   },
   "license": "GPL-2.0-or-later",
   "devDependencies": {
