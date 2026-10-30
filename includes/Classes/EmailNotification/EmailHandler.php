@@ -92,10 +92,10 @@ class EmailHandler
 
         if ($result) {
             /* translators: 1: recipient email addresses, 2: email subject */
-            $content = sprintf(__('Email Notification sent to %1$s and the subject: %2$s.', 'ninja-job-board'), $emailTo, $subject);
+            $content = sprintf(__('Email notification sent to %1$s with the subject: %2$s.', 'ninja-job-board'), $emailTo, $subject);
         } else {
             /* translators: 1: recipient email addresses, 2: email subject */
-            $content = sprintf(__('Maybe email sending failed to %1$s and the subject: %2$s, You may check wp_mail fuction and probably you should use smtp', 'ninja-job-board'), $emailTo, $subject);
+            $content = sprintf(__('The email notification to %1$s may have failed (subject: %2$s). Check wp_mail() or set up SMTP.', 'ninja-job-board'), $emailTo, $subject);
         }
 
         SubmissionActivity::createActivity(array(

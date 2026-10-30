@@ -81,12 +81,12 @@ class CampaignsController extends Controller
         $body = wp_kses_post((string)ArrayHelper::get($campaign, 'body'));
 
         if (!$title || !$subject || !$body) {
-            return $this->error(__('Email subject, title, body required', 'ninja-job-board'));
+            return $this->error(__('Broadcast name, email subject and body are required.', 'ninja-job-board'));
         }
 
         $applications = $this->applicantsQuery($form->ID, $settings)->get();
         if (!$applications) {
-            return $this->error(__('No Applicant found based on your selection', 'ninja-job-board'));
+            return $this->error(__('No applicant found for your selection.', 'ninja-job-board'));
         }
 
         $now = gmdate('Y-m-d H:i:s');
@@ -132,7 +132,7 @@ class CampaignsController extends Controller
 
         return array(
             'campaign_id' => $campaignId,
-            'message'     => __('Campaign created and email will be start sending now...', 'ninja-job-board')
+            'message'     => __('Email broadcast created. Emails will start sending now.', 'ninja-job-board')
         );
     }
 
@@ -204,8 +204,8 @@ class CampaignsController extends Controller
                 'submission_id' => $pendingEmail->submission_id,
                 'type'          => 'activity',
                 'created_by'    => 'WPJobBoard BOT',
-                /* translators: 1: recipient email, 2: email subject */
-                'content'       => sprintf(__('Email Notification sent to %1$s and the subject: %2$s.', 'ninja-job-board'), esc_html($pendingEmail->email_to), esc_html($pendingEmail->subject))
+                /* translators: 1: recipient email address, 2: email subject */
+                'content'       => sprintf(__('Email sent to %1$s. Subject: %2$s.', 'ninja-job-board'), esc_html($pendingEmail->email_to), esc_html($pendingEmail->subject))
             ));
         }
 

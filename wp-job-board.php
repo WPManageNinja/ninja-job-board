@@ -130,10 +130,10 @@ class WPJobBoard
                     $receiptHandler = new \WPJobBoard\Classes\Builder\ApplicationConfirmation();
                     return $receiptHandler->render($submission->id);
                 } else {
-                    return '<p class="wpjb_no_recipt_found">' . esc_html__('Sorry, no submission confirmation found, Please check your URL', 'ninja-job-board') . '</p>';
+                    return '<p class="wpjb_no_recipt_found">' . esc_html__('Sorry, no application confirmation found. Please check your URL.', 'ninja-job-board') . '</p>';
                 }
             } else {
-                return '<p class="wpjb_no_recipt_found">' . esc_html__('Sorry, no submission confirmation found, Please check your URL', 'ninja-job-board') . '</p>';
+                return '<p class="wpjb_no_recipt_found">' . esc_html__('Sorry, no application confirmation found. Please check your URL.', 'ninja-job-board') . '</p>';
             }
         });
     }

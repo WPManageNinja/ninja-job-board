@@ -57,7 +57,9 @@ class DashboardWidgetModule
         <ul class="wpjb_dashboard_stats">
             <?php foreach ($stats as $stat): ?>
                 <li>
-                    <a title="<?php echo esc_attr__('Form:', 'ninja-job-board') . ' ' . esc_attr($stat->post_title); ?>"
+                    <a title="<?php
+                    /* translators: %s: job title */
+                    echo esc_attr(sprintf(__('Job: %s', 'ninja-job-board'), $stat->post_title)); ?>"
                        href="<?php echo esc_url(admin_url('admin.php?page=wpjobboard.php#/edit-form/' . intval($stat->form_id) . '/entries/' . intval($stat->id) . '/view')); ?>">
                         #<?php echo esc_html($stat->id); ?> - <?php echo esc_html($stat->applicant_name); ?>
                     </a>
@@ -67,15 +69,21 @@ class DashboardWidgetModule
 
         <?php if (!defined('NINJA_TABLES_DIR_URL')): ?>
         <div class="wpjb_recommended_plugin">
-            Recommended Plugin: <b>Ninja Tables</b> - Best Table Plugin for WP -
-            <a href="<?php echo esc_url($this->getInstallUrl('ninja-tables')); ?>">Install</a>
-            | <a target="_blank" rel="noopener" href="https://wordpress.org/plugins/ninja-tables/">Learn More</a>
+            <?php
+            /* translators: %s: plugin name */
+            printf(esc_html__('Recommended plugin: %s, the best table plugin for WordPress.', 'ninja-job-board'), '<b>Ninja Tables</b>');
+            ?>
+            <a href="<?php echo esc_url($this->getInstallUrl('ninja-tables')); ?>"><?php esc_html_e('Install', 'ninja-job-board'); ?></a>
+            | <a target="_blank" rel="noopener" href="https://wordpress.org/plugins/ninja-tables/"><?php esc_html_e('Learn more', 'ninja-job-board'); ?></a>
         </div>
     <?php elseif (!defined('ENHANCED_BLOCKS_VERSION')) : ?>
         <div class="wpjb_recommended_plugin">
-            Recommended Plugin: <b>Enhanced Blocks – Page Builder Blocks for Gutenberg</b> <br/>
-            <a href="<?php echo esc_url($this->getInstallUrl('enhanced-blocks')); ?>">Install</a>
-            | <a target="_blank" rel="noopener" href="https://wordpress.org/plugins/enhanced-blocks/">Learn More</a>
+            <?php
+            /* translators: %s: plugin name */
+            printf(esc_html__('Recommended plugin: %s, page builder blocks for Gutenberg.', 'ninja-job-board'), '<b>Enhanced Blocks</b>');
+            ?> <br/>
+            <a href="<?php echo esc_url($this->getInstallUrl('enhanced-blocks')); ?>"><?php esc_html_e('Install', 'ninja-job-board'); ?></a>
+            | <a target="_blank" rel="noopener" href="https://wordpress.org/plugins/enhanced-blocks/"><?php esc_html_e('Learn more', 'ninja-job-board'); ?></a>
         </div>
     <?php endif; ?>
         <style>

@@ -1,8 +1,9 @@
 (function() {
     tinymce.PluginManager.add( 'wpjb_mce_job_button', function( editor, url ) {
+        var vars = window.wpjb_tinymce_vars || {};
         // Add Button to Visual Editor Toolbar
         editor.addButton('wpjb_mce_job_button', {
-            title: 'Insert Job Application Form',
+            title: vars.button_title || 'Insert job application form',
             cmd: 'wpjb_mce_job_command',
             image: url + '/tinymce_icon.png'
         });
@@ -20,7 +21,7 @@
                     {
                         type   : 'checkbox',
                         name   : 'wpjobboard_show_title',
-                        label  : 'Show Form Title',
+                        label  : vars.show_title || 'Show form title',
                         values : 'yes'
                     }
                 ],

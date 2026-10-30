@@ -1,348 +1,824 @@
-#, fuzzy
+# Copyright (C) 2026 WPManageNinja LLC
+# This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Ninja Job Board\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-21 07:48+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Project-Id-Version: Ninja Job Board 2.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ninja-job-board\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: \n"
-"Language: \n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.5.7; wp-5.8.3\n"
-"X-Domain: ninja-job-board"
+"POT-Creation-Date: 2026-10-30T11:26:49+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: ninja-job-board\n"
 
-#: includes/Classes/FormComponents/ApplicantEmailComponent.php:82
-msgid " does not match"
+#. Plugin Name of the plugin
+#: wp-job-board.php
+#: includes/Classes/Menu.php:36
+#: includes/Classes/Privacy.php:141
+msgid "Ninja Job Board"
 msgstr ""
 
-#: includes/Classes/SubmissionHandler.php:155
-msgid " is required"
+#. Plugin URI of the plugin
+#: wp-job-board.php
+msgid "https://github.com/WPManageNinja/wp-job-board"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:275
-msgid " to "
+#. Description of the plugin
+#: wp-job-board.php
+msgid "Create Job Posting and Manage Job Application In WordPress"
 msgstr ""
 
-#: includes/Classes/FormPlaceholders.php:132
-msgid "Admin Email"
+#. Author of the plugin
+#: wp-job-board.php
+msgid "WPManageNinja LLC"
 msgstr ""
 
-#: includes/Classes/Models/Forms.php:224
-msgid "All input field html"
+#. Author URI of the plugin
+#: wp-job-board.php
+msgid "https://wpmanageninja.com"
 msgstr ""
 
-#: includes/Classes/Menu.php:103
-msgid "All Job Posts"
+#: includes/Classes/Activator.php:171
+msgid "Job Application Confirmation"
 msgstr ""
 
-#: includes/Classes/Menu.php:46
-msgid "All Jobs"
+#: includes/Classes/Blocks.php:89
+#: wp-job-board.php:109
+msgid "Job List"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:280
-msgid "AM"
+#: includes/Classes/Blocks.php:122
+msgid "Choose a published job to show its application form."
 msgstr ""
 
-#: includes/Classes/Models/Forms.php:219
-msgid "Applicant Email"
+#: includes/Classes/Blocks.php:127
+msgid "This job has no application form fields yet."
 msgstr ""
 
-#: includes/Classes/Models/Forms.php:218
-msgid "Applicant Name"
+#: includes/Classes/Blocks.php:142
+msgid "Choose a job to show its details."
 msgstr ""
 
-#: includes/Classes/Menu.php:51
-msgid "Applications"
+#: includes/Classes/Builder/Render.php:143
+#: includes/Classes/Models/Forms.php:117
+#: includes/Http/Controllers/FormsController.php:309
+msgid "Please wait…"
 msgstr ""
 
-#: includes/Classes/GeneralSettings.php:42
-msgid "Applied"
-msgstr ""
-
+#: includes/Classes/Builder/Render.php:147
 #: includes/Classes/Models/Forms.php:116
-#: includes/Classes/Builder/Render.php:141
 msgid "Apply"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:216
-msgid "Apr"
+msgid "Something went wrong while submitting the form. Please try again."
+msgstr ""
+
+#. translators: %s: raw response text from the server
+#: includes/Classes/Builder/Render.php:218
+#, php-format
+msgid "Server response: %s"
+msgstr ""
+
+#. translators: %s: field label
+#: includes/Classes/Builder/Render.php:220
+#: includes/Classes/SubmissionHandler.php:175
+#, php-format
+msgid "%s is required."
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:221
+msgid "File upload"
+msgstr ""
+
+#. translators: Do not translate {{filesize}} and {{maxFilesize}}. They are replaced with file sizes in MB.
+#: includes/Classes/Builder/Render.php:224
+msgid "The file is too big ({{filesize}} MB). Maximum file size: {{maxFilesize}} MB."
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:225
+msgid "You cannot upload files of this type."
+msgstr ""
+
+#. translators: Do not translate {{statusCode}}. It is replaced with the HTTP status code.
+#: includes/Classes/Builder/Render.php:227
+msgid "The server responded with code {{statusCode}}."
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:228
+msgid "Cancel upload"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:229
+msgid "Upload canceled."
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:230
-msgid "April"
+msgid "Are you sure you want to cancel this upload?"
 msgstr ""
 
-#: includes/Classes/GeneralSettings.php:53
-msgid "Audited"
+#: includes/Classes/Builder/Render.php:231
+msgid "Remove file"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:220
+#: includes/Classes/Builder/Render.php:232
+msgid "You cannot upload any more files."
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:235
+msgid "Previous Month"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:236
+msgid "Next Month"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:239
+#: includes/Classes/TransStrings.php:205
+msgid "Jan"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:240
+#: includes/Classes/TransStrings.php:159
+msgid "Feb"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:241
+#: includes/Classes/TransStrings.php:232
+msgid "Mar"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:242
+#: includes/Classes/TransStrings.php:67
+msgid "Apr"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:243
+#: includes/Classes/TransStrings.php:440
+msgctxt "short month name"
+msgid "May"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:244
+#: includes/Classes/TransStrings.php:217
+msgid "Jun"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:245
+#: includes/Classes/TransStrings.php:215
+msgid "Jul"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:246
+#: includes/Classes/TransStrings.php:69
 msgid "Aug"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:234
+#: includes/Classes/Builder/Render.php:247
+#: includes/Classes/TransStrings.php:339
+msgid "Sep"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:248
+#: includes/Classes/TransStrings.php:263
+msgid "Oct"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:249
+#: includes/Classes/TransStrings.php:259
+msgid "Nov"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:250
+#: includes/Classes/TransStrings.php:105
+msgid "Dec"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:253
+#: includes/Classes/TransStrings.php:206
+msgid "January"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:254
+#: includes/Classes/TransStrings.php:160
+msgid "February"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:255
+#: includes/Classes/TransStrings.php:233
+msgid "March"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:256
+#: includes/Classes/TransStrings.php:68
+msgid "April"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:257
+#: includes/Classes/TransStrings.php:235
+msgid "May"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:258
+#: includes/Classes/TransStrings.php:218
+msgid "June"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:259
+#: includes/Classes/TransStrings.php:216
+msgid "July"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:260
+#: includes/Classes/TransStrings.php:70
 msgid "August"
 msgstr ""
 
+#: includes/Classes/Builder/Render.php:261
+#: includes/Classes/TransStrings.php:340
+msgid "September"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:262
+#: includes/Classes/TransStrings.php:264
+msgid "October"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:263
+#: includes/Classes/TransStrings.php:260
+msgid "November"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:264
+#: includes/Classes/TransStrings.php:106
+msgid "December"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:269
+#: includes/Classes/TransStrings.php:373
+msgid "Sunday"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:270
+#: includes/Classes/TransStrings.php:238
+msgid "Monday"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:271
+#: includes/Classes/TransStrings.php:399
+msgid "Tuesday"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:272
+#: includes/Classes/TransStrings.php:423
+msgid "Wednesday"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:273
+#: includes/Classes/TransStrings.php:389
+msgid "Thursday"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:274
+#: includes/Classes/TransStrings.php:177
+msgid "Friday"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:275
+#: includes/Classes/TransStrings.php:308
+msgid "Saturday"
+msgstr ""
+
 #: includes/Classes/Builder/Render.php:278
+#: includes/Classes/TransStrings.php:372
+msgid "Sun"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:279
+#: includes/Classes/TransStrings.php:237
+msgid "Mon"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:280
+#: includes/Classes/TransStrings.php:398
+msgid "Tue"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:281
+#: includes/Classes/TransStrings.php:422
+msgid "Wed"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:282
+#: includes/Classes/TransStrings.php:388
+msgid "Thu"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:283
+#: includes/Classes/TransStrings.php:176
+msgid "Fri"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:284
+#: includes/Classes/TransStrings.php:307
+msgid "Sat"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:302
+msgid " to "
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:303
+msgid "Wk"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:304
+msgid "Scroll to increment"
+msgstr ""
+
+#: includes/Classes/Builder/Render.php:305
 msgid "Click to toggle"
 msgstr ""
 
-#: includes/Classes/GeneralSettings.php:45
-msgid "Completed"
+#: includes/Classes/Builder/Render.php:307
+msgid "AM"
 msgstr ""
 
-#: includes/Classes/GeneralSettings.php:68
-msgid "Contractual"
+#: includes/Classes/Builder/Render.php:308
+msgid "PM"
 msgstr ""
 
-#. Description of the plugin
-msgid "Create Job Posting and Manage Jon Application In WordPress"
+#: includes/Classes/Builder/Render.php:310
+msgid "Year"
 msgstr ""
 
+#: includes/Classes/Builder/RenderJobList.php:90
+msgid "No Current Job Found"
+msgstr ""
+
+#: includes/Classes/DashboardWidgetModule.php:25
+msgid "WPJobBoard Latest Applications"
+msgstr ""
+
+#: includes/Classes/DashboardWidgetModule.php:46
+msgid "You can see Job Applications here"
+msgstr ""
+
+#. translators: %s: job title
+#: includes/Classes/DashboardWidgetModule.php:62
+#, php-format
+msgid "Job: %s"
+msgstr ""
+
+#. translators: %s: plugin name
+#: includes/Classes/DashboardWidgetModule.php:74
+#, php-format
+msgid "Recommended plugin: %s, the best table plugin for WordPress."
+msgstr ""
+
+#: includes/Classes/DashboardWidgetModule.php:76
+#: includes/Classes/DashboardWidgetModule.php:85
+msgid "Install"
+msgstr ""
+
+#: includes/Classes/DashboardWidgetModule.php:77
+#: includes/Classes/DashboardWidgetModule.php:86
+msgid "Learn more"
+msgstr ""
+
+#. translators: %s: plugin name
+#: includes/Classes/DashboardWidgetModule.php:83
+#, php-format
+msgid "Recommended plugin: %s, page builder blocks for Gutenberg."
+msgstr ""
+
+#: includes/Classes/DefaultValueParser/FormDefaultValueRenderer.php:29
+#: includes/Classes/FormPlaceholders.php:25
+msgid "WordPress"
+msgstr ""
+
+#: includes/Classes/DefaultValueParser/FormDefaultValueRenderer.php:33
+msgid "Current User Info"
+msgstr ""
+
+#: includes/Classes/DefaultValueParser/FormDefaultValueRenderer.php:37
+#: includes/Classes/FormPlaceholders.php:29
+msgid "Other"
+msgstr ""
+
+#. translators: 1: recipient email addresses, 2: email subject
+#: includes/Classes/EmailNotification/EmailHandler.php:95
+#, php-format
+msgid "Email notification sent to %1$s with the subject: %2$s."
+msgstr ""
+
+#. translators: 1: recipient email addresses, 2: email subject
+#: includes/Classes/EmailNotification/EmailHandler.php:98
+#, php-format
+msgid "The email notification to %1$s may have failed (subject: %2$s). Check wp_mail() or set up SMTP."
+msgstr ""
+
+#: includes/Classes/File/FileAccess.php:194
+msgid "You can not open this file."
+msgstr ""
+
+#: includes/Classes/File/FileAccess.php:195
+msgid "File not available"
+msgstr ""
+
+#: includes/Classes/File/FileHandler.php:32
+msgid "Invalid File Extension"
+msgstr ""
+
+#. translators: %s: max file size in MB
+#: includes/Classes/File/FileHandler.php:38
+#, php-format
+msgid "File size needs to be less than %sMB"
+msgstr ""
+
+#: includes/Classes/FormComponents/ApplicantEmailComponent.php:23
+msgid "Applicant email"
+msgstr ""
+
+#: includes/Classes/FormComponents/ApplicantEmailComponent.php:28
+#: includes/Classes/FormComponents/ApplicantNameComponent.php:27
+#: includes/Classes/FormComponents/CheckBoxComponent.php:25
+#: includes/Classes/FormComponents/DateComponent.php:56
+#: includes/Classes/FormComponents/NumberComponent.php:26
+#: includes/Classes/FormComponents/RadioComponent.php:25
+#: includes/Classes/FormComponents/SelectComponent.php:25
+#: includes/Classes/FormComponents/TextAreaComponent.php:27
+#: includes/Classes/FormComponents/TextComponent.php:24
+msgid "Field label"
+msgstr ""
+
+#: includes/Classes/FormComponents/ApplicantEmailComponent.php:33
+#: includes/Classes/FormComponents/ApplicantNameComponent.php:32
+#: includes/Classes/FormComponents/DateComponent.php:61
+#: includes/Classes/FormComponents/NumberComponent.php:31
+#: includes/Classes/FormComponents/SelectComponent.php:30
+#: includes/Classes/FormComponents/TextComponent.php:29
+msgid "Placeholder"
+msgstr ""
+
+#: includes/Classes/FormComponents/ApplicantEmailComponent.php:38
+#: includes/Classes/FormComponents/ApplicantNameComponent.php:37
+#: includes/Classes/FormComponents/CheckBoxComponent.php:30
+#: includes/Classes/FormComponents/DateComponent.php:66
+#: includes/Classes/FormComponents/FileUploadComponent.php:50
+#: includes/Classes/FormComponents/NumberComponent.php:36
+#: includes/Classes/FormComponents/RadioComponent.php:30
+#: includes/Classes/FormComponents/SelectComponent.php:35
+#: includes/Classes/FormComponents/TextAreaComponent.php:32
+#: includes/Classes/FormComponents/TextComponent.php:34
+msgid "Required"
+msgstr ""
+
+#: includes/Classes/FormComponents/ApplicantEmailComponent.php:43
+msgid "Enable confirm email field"
+msgstr ""
+
+#: includes/Classes/FormComponents/ApplicantEmailComponent.php:48
+#: includes/Classes/FormComponents/ApplicantNameComponent.php:42
+#: includes/Classes/FormComponents/CheckBoxComponent.php:35
+#: includes/Classes/FormComponents/DateComponent.php:78
+#: includes/Classes/FormComponents/NumberComponent.php:41
+#: includes/Classes/FormComponents/RadioComponent.php:35
+#: includes/Classes/FormComponents/SelectComponent.php:40
+#: includes/Classes/FormComponents/TextAreaComponent.php:37
+#: includes/Classes/FormComponents/TextComponent.php:39
+msgid "Default value"
+msgstr ""
+
+#: includes/Classes/FormComponents/ApplicantEmailComponent.php:54
+#: includes/Classes/FormComponents/ApplicantEmailComponent.php:55
+#: includes/Http/Controllers/FormsController.php:286
+#: includes/Http/Controllers/FormsController.php:287
+msgid "Email address"
+msgstr ""
+
+#: includes/Classes/FormComponents/ApplicantEmailComponent.php:58
+#: includes/Classes/FormComponents/ApplicantEmailComponent.php:104
+#: includes/Classes/FormComponents/ApplicantEmailComponent.php:105
+#: includes/Http/Controllers/FormsController.php:288
+msgid "Confirm email"
+msgstr ""
+
+#. translators: %s: field label
+#: includes/Classes/FormComponents/ApplicantEmailComponent.php:75
+#, php-format
+msgid "Enter a valid email address in %s."
+msgstr ""
+
+#. translators: 1: email field label, 2: confirm email field label
+#: includes/Classes/FormComponents/ApplicantEmailComponent.php:84
+#, php-format
+msgid "%1$s and %2$s do not match."
+msgstr ""
+
+#: includes/Classes/FormComponents/ApplicantNameComponent.php:22
+msgid "Applicant name"
+msgstr ""
+
+#: includes/Classes/FormComponents/ApplicantNameComponent.php:48
+#: includes/Http/Controllers/FormsController.php:282
+msgid "Your name"
+msgstr ""
+
+#: includes/Classes/FormComponents/ApplicantNameComponent.php:49
+#: includes/Classes/Privacy.php:68
+#: includes/Http/Controllers/FormsController.php:283
+msgid "Name"
+msgstr ""
+
+#: includes/Classes/FormComponents/CheckBoxComponent.php:20
+msgid "Checkbox"
+msgstr ""
+
+#: includes/Classes/FormComponents/CheckBoxComponent.php:40
+msgid "Field options"
+msgstr ""
+
+#: includes/Classes/FormComponents/CheckBoxComponent.php:46
+msgid "Checkboxes"
+msgstr ""
+
+#: includes/Classes/FormComponents/CheckBoxComponent.php:51
+#: includes/Classes/FormComponents/CheckBoxComponent.php:52
+msgid "Checkbox item 1"
+msgstr ""
+
+#: includes/Classes/FormComponents/CheckBoxComponent.php:55
+#: includes/Classes/FormComponents/CheckBoxComponent.php:56
+msgid "Checkbox item 2"
+msgstr ""
+
+#. translators: 1: date format code, 2: sample date in that format
+#: includes/Classes/FormComponents/DateComponent.php:22
+#, php-format
+msgid "%1$s (example: %2$s)"
+msgstr ""
+
+#. translators: 1: time format code, 2: sample time in that format
+#: includes/Classes/FormComponents/DateComponent.php:26
+#, php-format
+msgid "%1$s (time only, example: %2$s)"
+msgstr ""
+
+#: includes/Classes/FormComponents/DateComponent.php:51
+#: includes/Classes/FormComponents/DateComponent.php:84
 #: includes/Classes/FormPlaceholders.php:198
 msgid "Date"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:224
-msgid "Dec"
+#: includes/Classes/FormComponents/DateComponent.php:71
+msgid "Date format"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:238
-msgid "December"
-msgstr ""
-
-#: includes/Classes/FormPlaceholders.php:161
-msgid "Display name"
-msgstr ""
-
-#: includes/Classes/Builder/Render.php:214
-msgid "Feb"
-msgstr ""
-
-#: includes/Classes/Builder/Render.php:228
-msgid "February"
-msgstr ""
-
-#: includes/Classes/FormComponents/FileUploadComponent.php:33
+#: includes/Classes/FormComponents/FileUploadComponent.php:35
 msgid "File Upload"
 msgstr ""
 
-#: includes/Classes/FormPlaceholders.php:151
-msgid "First name"
+#: includes/Classes/FormComponents/FileUploadComponent.php:40
+msgid "Upload label"
 msgstr ""
 
-#: includes/Classes/Models/Forms.php:184
-msgid "Form has been successfully submitted"
+#: includes/Classes/FormComponents/FileUploadComponent.php:45
+msgid "Upload button text"
 msgstr ""
 
-#: includes/Classes/SubmissionHandler.php:100
-msgid "Form is successfully submitted"
+#: includes/Classes/FormComponents/FileUploadComponent.php:55
+msgid "Maximum file size (in MB)"
 msgstr ""
 
-#: includes/Classes/Tools/SchedulingSettings.php:161
-msgid "Form submission is not started yet."
+#: includes/Classes/FormComponents/FileUploadComponent.php:60
+msgid "Maximum number of files"
 msgstr ""
 
-#: includes/Classes/Tools/SchedulingSettings.php:167
-msgid "Form submission is now closed."
+#: includes/Classes/FormComponents/FileUploadComponent.php:65
+msgid "Allowed file types"
 msgstr ""
 
-#: includes/Classes/Models/Forms.php:312
-msgid ""
-"Form submission time schedule is not started yet. Please check back later"
+#: includes/Classes/FormComponents/FileUploadComponent.php:72
+msgid "Upload your file"
 msgstr ""
 
-#: includes/Classes/SubmissionHandler.php:135
-msgid "Form Validation failed"
+#: includes/Classes/FormComponents/FileUploadComponent.php:73
+#: includes/Classes/FormComponents/FileUploadComponent.php:109
+#: includes/Http/Controllers/FormsController.php:292
+msgid "Drag and drop your files or browse"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:257
-msgid "Fri"
+#. translators: %d: maximum number of files
+#: includes/Classes/FormComponents/FileUploadComponent.php:153
+#, php-format
+msgid "You can upload a maximum of %d file."
+msgid_plural "You can upload a maximum of %d files."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: field label
+#: includes/Classes/FormComponents/FileUploadComponent.php:163
+#, php-format
+msgid "%s is required. Please upload the required files."
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:248
-msgid "Friday"
+#: includes/Classes/FormComponents/FileUploadComponent.php:253
+msgid "Open file in a new tab"
 msgstr ""
 
-#: includes/Classes/GeneralSettings.php:65
-msgid "Full Time"
+#: includes/Classes/FormComponents/FileUploadComponent.php:257
+msgid "File"
 msgstr ""
 
-#: includes/Classes/GeneralSettings.php:58
-msgid "Hired"
+#: includes/Classes/FormComponents/FileUploadComponent.php:284
+msgid "Images (jpg, jpeg, gif, png, bmp)"
 msgstr ""
 
-#. URI of the plugin
-msgid "https://github.com/WPManageNinja/wp-job-board"
+#: includes/Classes/FormComponents/FileUploadComponent.php:288
+msgid "Audio (mp3, wav, ogg, wma, mka, m4a, ra, mid, midi)"
 msgstr ""
 
-#. Author URI of the plugin
-msgid "https://wpmanageninja.com"
+#: includes/Classes/FormComponents/FileUploadComponent.php:292
+msgid "PDF (pdf)"
 msgstr ""
 
-#: includes/Classes/GeneralSettings.php:54
-msgid "Inital Rejected"
+#: includes/Classes/FormComponents/FileUploadComponent.php:296
+msgid "Docs (doc, ppt, pps, xls, mdb, docx, xlsx, pptx, odt, odp, ods, odg, odc, odb, odf, rtf, txt)"
 msgstr ""
 
-#: includes/Classes/Integrations/TinyMceBlock.php:41
-msgid "Insert Form Shortcode"
+#: includes/Classes/FormComponents/FileUploadComponent.php:300
+msgid "Zip archives (zip, gz, gzip, rar, 7z)"
 msgstr ""
 
-#: includes/Classes/Integrations/TinyMceBlock.php:43
-msgid "Insert Shortcode"
+#: includes/Classes/FormComponents/FileUploadComponent.php:304
+msgid "CSV (csv)"
 msgstr ""
 
-#: includes/Classes/GeneralSettings.php:55
-msgid "Interviewed"
+#: includes/Classes/FormComponents/FileUploadComponent.php:325
+#: includes/Classes/SubmissionHandler.php:25
+msgid "Security check failed. Please reload the page and try again."
 msgstr ""
 
-#: includes/Classes/SubmissionHandler.php:34
-msgid "Invalid request. Please try again"
+#: includes/Classes/FormComponents/FileUploadComponent.php:332
+msgid "Wrong file upload instance"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:213
-msgid "Jan"
+#: includes/Classes/FormComponents/FileUploadComponent.php:337
+msgid "Form not found"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:227
-msgid "January"
+#: includes/Classes/FormComponents/FileUploadComponent.php:343
+msgid "Element not found"
 msgstr ""
 
-#: includes/Classes/Activator.php:174
-msgid "Job Application Confirmation"
+#: includes/Classes/FormComponents/FileUploadComponent.php:347
+msgid "No file was uploaded"
 msgstr ""
 
-#: includes/Classes/Menu.php:62
-msgid "Job Categories"
+#: includes/Classes/FormComponents/FileUploadComponent.php:353
+msgid "Invalid file upload"
 msgstr ""
 
-#: wp-job-board.php:126
-msgid "Job List"
+#: includes/Classes/FormComponents/FileUploadComponent.php:401
+msgid "Validation Failed"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:219
-msgid "Jul"
+#: includes/Classes/FormComponents/HiddenInputComponent.php:23
+msgid "Hidden input"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:233
-msgid "July"
+#: includes/Classes/FormComponents/HiddenInputComponent.php:28
+msgid "Admin field label"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:218
-msgid "Jun"
+#: includes/Classes/FormComponents/HiddenInputComponent.php:33
+msgid "Input value"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:232
-msgid "June"
+#: includes/Classes/FormComponents/HiddenInputComponent.php:39
+msgid "Hidden value"
 msgstr ""
 
-#: includes/Classes/FormPlaceholders.php:156
-msgid "Last name"
+#. translators: %s: field label
+#: includes/Classes/FormComponents/HiddenInputComponent.php:50
+#, php-format
+msgid "%s needs a value."
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:215
-msgid "Mar"
+#: includes/Classes/FormComponents/HtmlComponent.php:20
+msgid "HTML markup"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:229
-msgid "March"
+#: includes/Classes/FormComponents/HtmlComponent.php:25
+msgid "Custom HTML"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:217
-#: includes/Classes/Builder/Render.php:231
-msgid "May"
+#: includes/Classes/FormComponents/HtmlComponent.php:28
+msgid "You can use any valid HTML here."
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:253
-msgid "Mon"
+#: includes/Classes/FormComponents/NumberComponent.php:20
+msgid "Number"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:244
-msgid "Monday"
+#: includes/Classes/FormComponents/NumberComponent.php:46
+msgid "Minimum value"
 msgstr ""
 
-#: includes/Classes/GeneralSettings.php:52
-msgid "New"
+#: includes/Classes/FormComponents/NumberComponent.php:52
+msgid "Numeric value"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:210
-msgid "Next Month"
+#: includes/Classes/FormComponents/RadioComponent.php:20
+#: includes/Classes/FormComponents/RadioComponent.php:46
+msgid "Radio"
 msgstr ""
 
-#. Name of the plugin
-msgid "Ninja Job Board"
+#: includes/Classes/FormComponents/RadioComponent.php:40
+#: includes/Classes/FormComponents/SelectComponent.php:45
+msgid "Field choices"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:223
-msgid "Nov"
+#: includes/Classes/FormComponents/RadioComponent.php:51
+#: includes/Classes/FormComponents/RadioComponent.php:52
+msgid "Radio item 1"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:237
-msgid "November"
+#: includes/Classes/FormComponents/RadioComponent.php:55
+#: includes/Classes/FormComponents/RadioComponent.php:56
+msgid "Radio item 2"
 msgstr ""
 
-#: includes/Classes/Models/Forms.php:306
-msgid "Number of entry has been exceeds, Please check back later"
+#: includes/Classes/FormComponents/SelectComponent.php:20
+#: includes/Classes/FormComponents/SelectComponent.php:51
+msgid "Dropdown"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:222
-msgid "Oct"
+#: includes/Classes/FormComponents/SelectComponent.php:56
+#: includes/Classes/FormComponents/SelectComponent.php:57
+msgid "Select item 1"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:236
-msgid "October"
+#: includes/Classes/FormComponents/SelectComponent.php:60
+#: includes/Classes/FormComponents/SelectComponent.php:61
+msgid "Select item 2"
 msgstr ""
 
-#: includes/Classes/FormPlaceholders.php:29
-#: includes/Classes/DefaultValueParser/FormDefaultValueRenderer.php:37
-msgid "Other"
+#: includes/Classes/FormComponents/StepComponent.php:24
+msgid "Form step"
 msgstr ""
 
-#: includes/Classes/GeneralSettings.php:66
-msgid "Part Time"
+#: includes/Classes/FormComponents/StepComponent.php:29
+msgid "Step title"
 msgstr ""
 
-#: includes/Classes/GeneralSettings.php:44
-msgid "Pending"
+#: includes/Classes/FormComponents/StepComponent.php:32
+msgid "Provide a step title."
 msgstr ""
 
-#: includes/Classes/Integrations/TinyMceBlock.php:42
-msgid "Please select a Form"
+#: includes/Classes/FormComponents/StepComponent.php:35
+msgid "Next step button text"
 msgstr ""
 
-#: includes/Classes/GlobalSettingsHandler.php:64
-msgid "Please upload only jpg/png format files"
+#: includes/Classes/FormComponents/StepComponent.php:41
+msgid "Back button text"
 msgstr ""
 
-#: includes/Classes/Models/Forms.php:117
-#: includes/Classes/Builder/Render.php:137
-msgid "Please Wait…"
+#: includes/Classes/FormComponents/StepComponent.php:49
+#: includes/Classes/FormComponents/StepComponent.php:100
+#: includes/Classes/TransStrings.php:241
+msgid "Next"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:281
-msgid "PM"
+#: includes/Classes/FormComponents/StepComponent.php:50
+#: includes/Classes/FormComponents/StepComponent.php:77
+#: includes/Classes/FormComponents/StepComponent.php:105
+msgid "Back"
 msgstr ""
 
-#: includes/Classes/FormPlaceholders.php:60
-msgid "Post Author"
+#: includes/Classes/FormComponents/TextAreaComponent.php:22
+msgid "Textarea"
 msgstr ""
 
-#: includes/Classes/FormPlaceholders.php:66
-msgid "Post Author Email"
+#: includes/Classes/FormComponents/TextAreaComponent.php:43
+msgid "Textarea field"
+msgstr ""
+
+#: includes/Classes/FormComponents/TextComponent.php:19
+#: includes/Classes/FormComponents/TextComponent.php:45
+msgid "Single line text"
+msgstr ""
+
+#: includes/Classes/FormPlaceholders.php:21
+msgid "Submission Info"
 msgstr ""
 
 #: includes/Classes/FormPlaceholders.php:42
 msgid "Post ID"
-msgstr ""
-
-#: includes/Classes/FormPlaceholders.php:72
-msgid "Post Meta"
 msgstr ""
 
 #: includes/Classes/FormPlaceholders.php:48
@@ -353,133 +829,29 @@ msgstr ""
 msgid "Post URL"
 msgstr ""
 
-#: includes/Classes/GeneralSettings.php:56
-msgid "Potential"
+#: includes/Classes/FormPlaceholders.php:60
+msgid "Post Author"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:209
-msgid "Previous Month"
+#: includes/Classes/FormPlaceholders.php:66
+msgid "Post Author Email"
 msgstr ""
 
-#: includes/Classes/GeneralSettings.php:43
-msgid "Processing"
+#: includes/Classes/FormPlaceholders.php:72
+msgid "Post Meta"
 msgstr ""
 
-#: includes/Classes/FormPlaceholders.php:192
-msgid "Query String"
+#: includes/Classes/FormPlaceholders.php:78
+#: includes/Classes/FormPlaceholders.php:146
+msgid "User ID"
 msgstr ""
 
-#: includes/Classes/GeneralSettings.php:67
-msgid "Remote"
+#: includes/Classes/FormPlaceholders.php:84
+msgid "User First Name"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:258
-msgid "Sat"
-msgstr ""
-
-#: includes/Classes/Builder/Render.php:249
-msgid "Saturday"
-msgstr ""
-
-#: includes/Classes/Builder/Render.php:277
-msgid "Scroll to increment"
-msgstr ""
-
-#: includes/Classes/Integrations/TinyMceBlock.php:40
-msgid "Select a Form to insert"
-msgstr ""
-
-#: includes/Classes/Builder/Render.php:221
-msgid "Sep"
-msgstr ""
-
-#: includes/Classes/Builder/Render.php:235
-msgid "September"
-msgstr ""
-
-#: includes/Classes/Menu.php:56
-msgid "Settings"
-msgstr ""
-
-#: includes/Classes/GlobalSettingsHandler.php:47
-#: includes/Classes/Tools/SchedulingSettings.php:72
-msgid "Settings successfully updated"
-msgstr ""
-
-#: includes/Classes/GeneralSettings.php:57
-msgid "Short Listed"
-msgstr ""
-
-#: includes/Classes/FormPlaceholders.php:120
-msgid "Site Title"
-msgstr ""
-
-#: includes/Classes/FormPlaceholders.php:126
-msgid "Site URL"
-msgstr ""
-
-#: includes/Classes/GlobalSettingsHandler.php:74
-msgid "Something is wrong when uploading the file"
-msgstr ""
-
-#: wp-job-board.php:146
-msgid "Sorry, no submission confirmation found, Please check your URL"
-msgstr ""
-
-#: wp-job-board.php:149
-msgid "Sorry, no submission conirmation found, Please check your URL"
-msgstr ""
-
-#: includes/Classes/AccessControl.php:50
-msgid "Sorry, You do not have permission to do this action: "
-msgstr ""
-
-#: includes/Classes/Models/Forms.php:217
-msgid "Submission Hash ID"
-msgstr ""
-
-#: includes/Classes/Models/Forms.php:216
-msgid "Submission ID"
-msgstr ""
-
-#: includes/Classes/FormPlaceholders.php:21
-msgid "Submission Info"
-msgstr ""
-
-#: includes/Classes/Tools/SchedulingSettings.php:145
-msgid "Submission limit has been exceded."
-msgstr ""
-
-#: includes/Classes/Builder/Render.php:252
-msgid "Sun"
-msgstr ""
-
-#: includes/Classes/Builder/Render.php:243
-msgid "Sunday"
-msgstr ""
-
-#: includes/Classes/Builder/Render.php:256
-msgid "Thu"
-msgstr ""
-
-#: includes/Classes/Builder/Render.php:247
-msgid "Thursday"
-msgstr ""
-
-#: includes/Classes/FormPlaceholders.php:204
-msgid "Time"
-msgstr ""
-
-#: includes/Classes/Builder/Render.php:254
-msgid "Tue"
-msgstr ""
-
-#: includes/Classes/Builder/Render.php:245
-msgid "Tuesday"
-msgstr ""
-
-#: includes/Classes/FormPlaceholders.php:176
-msgid "User Description"
+#: includes/Classes/FormPlaceholders.php:90
+msgid "User Last Name"
 msgstr ""
 
 #: includes/Classes/FormPlaceholders.php:96
@@ -491,81 +863,2401 @@ msgstr ""
 msgid "User Email"
 msgstr ""
 
-#: includes/Classes/FormPlaceholders.php:84
-msgid "User First Name"
-msgstr ""
-
-#: includes/Classes/FormPlaceholders.php:78
-#: includes/Classes/FormPlaceholders.php:146
-msgid "User ID"
-msgstr ""
-
-#: includes/Classes/FormPlaceholders.php:210
-msgid "User IP Address"
-msgstr ""
-
-#: includes/Classes/FormPlaceholders.php:90
-msgid "User Last Name"
+#: includes/Classes/FormPlaceholders.php:108
+#: includes/Classes/FormPlaceholders.php:171
+msgid "User URL"
 msgstr ""
 
 #: includes/Classes/FormPlaceholders.php:114
 msgid "User Meta"
 msgstr ""
 
+#: includes/Classes/FormPlaceholders.php:120
+msgid "Site Title"
+msgstr ""
+
+#: includes/Classes/FormPlaceholders.php:126
+msgid "Site URL"
+msgstr ""
+
+#: includes/Classes/FormPlaceholders.php:132
+msgid "Admin Email"
+msgstr ""
+
+#: includes/Classes/FormPlaceholders.php:151
+msgid "First name"
+msgstr ""
+
+#: includes/Classes/FormPlaceholders.php:156
+msgid "Last name"
+msgstr ""
+
+#: includes/Classes/FormPlaceholders.php:161
+msgid "Display name"
+msgstr ""
+
+#: includes/Classes/FormPlaceholders.php:176
+msgid "User Description"
+msgstr ""
+
 #: includes/Classes/FormPlaceholders.php:181
 msgid "User Role"
 msgstr ""
 
-#: includes/Classes/FormPlaceholders.php:108
-#: includes/Classes/FormPlaceholders.php:171
-msgid "User URL"
+#: includes/Classes/FormPlaceholders.php:192
+msgid "Query String"
 msgstr ""
 
-#: includes/Classes/FormComponents/ApplicantEmailComponent.php:74
-msgid "Valid email address is required for field:"
+#: includes/Classes/FormPlaceholders.php:204
+msgid "Time"
 msgstr ""
 
-#: includes/Classes/FormComponents/HiddenInputComponent.php:49
-msgid "Value is required for item:"
+#: includes/Classes/FormPlaceholders.php:210
+msgid "User IP Address"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:255
-msgid "Wed"
+#: includes/Classes/GeneralSettings.php:43
+msgid "Applied"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:246
-msgid "Wednesday"
+#: includes/Classes/GeneralSettings.php:44
+msgid "Processing"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:276
-msgid "Wk"
+#: includes/Classes/GeneralSettings.php:45
+msgid "Pending"
 msgstr ""
 
-#: includes/Classes/FormPlaceholders.php:25
-#: includes/Classes/DefaultValueParser/FormDefaultValueRenderer.php:29
-msgid "WordPress"
+#: includes/Classes/GeneralSettings.php:46
+msgid "Completed"
 msgstr ""
 
-#: includes/Classes/Menu.php:36 includes/Classes/Menu.php:37
-msgid "WP Job Board"
+#: includes/Classes/GeneralSettings.php:53
+msgid "New"
 msgstr ""
 
-#: includes/Classes/DashboardWidgetModule.php:21
-msgid "WPJobBoard Latest Applications"
+#: includes/Classes/GeneralSettings.php:54
+msgid "Audited"
 msgstr ""
 
-#. Author of the plugin
-msgid "WPManageNinja LLC"
+#: includes/Classes/GeneralSettings.php:55
+msgid "Initial rejected"
 msgstr ""
 
-#: includes/Classes/Builder/Render.php:283
-msgid "Year"
+#: includes/Classes/GeneralSettings.php:56
+msgid "Interviewed"
 msgstr ""
 
-#: includes/Classes/Tools/SchedulingSettings.php:180
-msgid "You must be logged in to submit the form."
+#: includes/Classes/GeneralSettings.php:57
+msgid "Potential"
+msgstr ""
+
+#: includes/Classes/GeneralSettings.php:58
+msgid "Shortlisted"
+msgstr ""
+
+#: includes/Classes/GeneralSettings.php:59
+msgid "Hired"
+msgstr ""
+
+#: includes/Classes/GeneralSettings.php:66
+msgid "Full Time"
+msgstr ""
+
+#: includes/Classes/GeneralSettings.php:67
+msgid "Part Time"
+msgstr ""
+
+#: includes/Classes/GeneralSettings.php:68
+msgid "Remote"
+msgstr ""
+
+#: includes/Classes/GeneralSettings.php:69
+msgid "Contractual"
+msgstr ""
+
+#: includes/Classes/Integrations/TinyMceBlock.php:40
+msgid "Select a Form to insert"
+msgstr ""
+
+#: includes/Classes/Integrations/TinyMceBlock.php:41
+msgid "Insert Form Shortcode"
+msgstr ""
+
+#: includes/Classes/Integrations/TinyMceBlock.php:42
+msgid "Please select a Form"
+msgstr ""
+
+#: includes/Classes/Integrations/TinyMceBlock.php:43
+msgid "Insert Shortcode"
+msgstr ""
+
+#: includes/Classes/Integrations/TinyMceBlock.php:44
+msgid "Insert job application form"
+msgstr ""
+
+#: includes/Classes/Integrations/TinyMceBlock.php:45
+msgid "Show form title"
+msgstr ""
+
+#: includes/Classes/Menu.php:37
+msgid "Job Board"
+msgstr ""
+
+#: includes/Classes/Menu.php:46
+msgid "All Jobs"
+msgstr ""
+
+#: includes/Classes/Menu.php:51
+#: includes/Classes/Menu.php:172
+#: includes/Classes/TransStrings.php:66
+#: assets/blocks/job-editor.js:105
+#: src/blocks/job-editor.jsx:122
+msgid "Applications"
+msgstr ""
+
+#: includes/Classes/Menu.php:56
+#: includes/Classes/TransStrings.php:342
+msgid "Settings"
+msgstr ""
+
+#: includes/Classes/Menu.php:62
+msgid "Job Categories"
+msgstr ""
+
+#: includes/Classes/Menu.php:169
+#: includes/Classes/TransStrings.php:211
+#: assets/blocks/job-editor.js:112
+#: src/blocks/job-editor.jsx:130
+msgid "Job sections"
+msgstr ""
+
+#: includes/Classes/Menu.php:175
+#: assets/blocks/job-editor.js:106
+#: src/blocks/job-editor.jsx:123
+msgid "Application Form"
+msgstr ""
+
+#: includes/Classes/Menu.php:178
+#: assets/blocks/job-editor.js:107
+#: src/blocks/job-editor.jsx:124
+msgid "Form Settings"
+msgstr ""
+
+#: includes/Classes/Menu.php:181
+#: assets/blocks/job-editor.js:108
+#: src/blocks/job-editor.jsx:125
+msgid "Email Notifications"
+msgstr ""
+
+#: includes/Classes/Menu.php:184
+#: assets/blocks/job-editor.js:109
+#: src/blocks/job-editor.jsx:126
+msgid "Email Broadcast"
+msgstr ""
+
+#: includes/Classes/Menu.php:187
+#: includes/Classes/TransStrings.php:128
+#: assets/blocks/job-editor.js:112
+#: src/blocks/job-editor.jsx:138
+msgid "Edit job post"
+msgstr ""
+
+#: includes/Classes/Models/Forms.php:184
+msgid "Form has been successfully submitted"
+msgstr ""
+
+#: includes/Classes/Models/Forms.php:198
+msgid "Custom input items"
+msgstr ""
+
+#: includes/Classes/Models/Forms.php:214
+msgid "Application fields"
+msgstr ""
+
+#: includes/Classes/Models/Forms.php:216
+msgid "Submission ID"
+msgstr ""
+
+#: includes/Classes/Models/Forms.php:217
+msgid "Submission Hash ID"
+msgstr ""
+
+#: includes/Classes/Models/Forms.php:218
+msgid "Applicant Name"
+msgstr ""
+
+#: includes/Classes/Models/Forms.php:219
+msgid "Applicant Email"
+msgstr ""
+
+#: includes/Classes/Models/Forms.php:224
+msgid "All input field html"
+msgstr ""
+
+#: includes/Classes/Models/Forms.php:306
+msgid "The maximum number of applications has been reached. Please check back later."
+msgstr ""
+
+#: includes/Classes/Models/Forms.php:312
+msgid "The application period has not started yet. Please check back later."
+msgstr ""
+
+#: includes/Classes/Models/Forms.php:313
+msgid "The application period has ended."
 msgstr ""
 
 #: includes/Classes/Models/Forms.php:317
-msgid "You need to login to submit this form"
+msgid "You need to log in to submit this form."
+msgstr ""
+
+#: includes/Classes/PostType.php:34
+#: includes/Classes/TransStrings.php:214
+msgid "Jobs"
+msgstr ""
+
+#: includes/Classes/PostType.php:35
+#: includes/Classes/Privacy.php:66
+#: includes/Classes/TransStrings.php:207
+#: src/blocks/shared/JobPicker.jsx:42
+msgid "Job"
+msgstr ""
+
+#: includes/Classes/PostType.php:36
+msgid "Add new job"
+msgstr ""
+
+#: includes/Classes/PostType.php:37
+msgid "Edit job"
+msgstr ""
+
+#: includes/Classes/PostType.php:38
+msgid "View job"
+msgstr ""
+
+#: includes/Classes/PostType.php:39
+msgid "View job posts"
+msgstr ""
+
+#: includes/Classes/PostType.php:40
+#: includes/Classes/TransStrings.php:317
+msgid "Search jobs"
+msgstr ""
+
+#: includes/Classes/PostType.php:41
+msgid "No jobs found."
+msgstr ""
+
+#: includes/Classes/PostType.php:74
+msgctxt "taxonomy general name"
+msgid "Job Category"
+msgstr ""
+
+#: includes/Classes/PostType.php:75
+msgctxt "taxonomy singular name"
+msgid "Job Category"
+msgstr ""
+
+#: includes/Classes/PostType.php:76
+msgid "Search Job Categories"
+msgstr ""
+
+#: includes/Classes/PostType.php:77
+msgid "All Job Categories"
+msgstr ""
+
+#: includes/Classes/PostType.php:78
+msgid "Parent Job Category"
+msgstr ""
+
+#: includes/Classes/PostType.php:79
+msgid "Parent Job Category:"
+msgstr ""
+
+#: includes/Classes/PostType.php:80
+msgid "Edit Job Category"
+msgstr ""
+
+#: includes/Classes/PostType.php:81
+msgid "Update Job Category"
+msgstr ""
+
+#: includes/Classes/PostType.php:82
+msgid "Add New Job Category"
+msgstr ""
+
+#: includes/Classes/PostType.php:83
+msgid "New Job Category Name"
+msgstr ""
+
+#: includes/Classes/PostType.php:84
+msgid "Job Category"
+msgstr ""
+
+#: includes/Classes/PostType.php:159
+msgid "Apply for this position"
+msgstr ""
+
+#. translators: %s: human readable time difference
+#: includes/Classes/PostType.php:185
+#, php-format
+msgid "%s ago"
+msgstr ""
+
+#. translators: %s: number of vacancies
+#: includes/Classes/PostType.php:196
+#, php-format
+msgid "Vacancy: %s"
+msgid_plural "Vacancies: %s"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/Classes/PostType.php:283
+msgid "Job Info"
+msgstr ""
+
+#: includes/Classes/PostType.php:304
+#: includes/Classes/PostType.php:306
+#: assets/blocks/blocks.js:248
+#: assets/blocks/job-editor.js:31
+#: src/blocks/job-details/edit.jsx:10
+#: src/blocks/job-editor.jsx:37
+msgid "Location"
+msgstr ""
+
+#: includes/Classes/PostType.php:311
+#: includes/Classes/PostType.php:313
+#: assets/blocks/blocks.js:249
+#: assets/blocks/job-editor.js:41
+#: src/blocks/job-details/edit.jsx:11
+#: src/blocks/job-editor.jsx:45
+msgid "Number of vacancies"
+msgstr ""
+
+#: includes/Classes/PostType.php:318
+msgid "Experience Year Requirement"
+msgstr ""
+
+#: includes/Classes/PostType.php:320
+#: assets/blocks/job-editor.js:53
+#: src/blocks/job-editor.jsx:55
+msgid "For example: 1-2 years"
+msgstr ""
+
+#: includes/Classes/PostType.php:325
+msgid "Job Type"
+msgstr ""
+
+#: includes/Classes/PostType.php:328
+msgid "Select Job Type"
+msgstr ""
+
+#: includes/Classes/Privacy.php:37
+#: includes/Classes/Privacy.php:46
+#: includes/Classes/Privacy.php:92
+#: includes/Classes/TransStrings.php:209
+msgid "Job applications"
+msgstr ""
+
+#: includes/Classes/Privacy.php:67
+#: includes/Classes/TransStrings.php:370
+msgid "Submitted at"
+msgstr ""
+
+#: includes/Classes/Privacy.php:69
+#: includes/Classes/TransStrings.php:130
+msgid "Email"
+msgstr ""
+
+#: includes/Classes/Privacy.php:70
+#: includes/Classes/TransStrings.php:64
+msgid "Application status"
+msgstr ""
+
+#: includes/Classes/Privacy.php:71
+#: includes/Classes/TransStrings.php:193
+msgid "IP address"
+msgstr ""
+
+#: includes/Classes/Privacy.php:72
+#: includes/Classes/TransStrings.php:79
+msgid "Browser"
+msgstr ""
+
+#: includes/Classes/Privacy.php:73
+msgid "Device"
+msgstr ""
+
+#: includes/Classes/Privacy.php:93
+msgid "Applications submitted through Ninja Job Board."
+msgstr ""
+
+#: includes/Classes/Privacy.php:138
+msgid "When you apply for a job, we store the information you enter in the application form, the files you upload (for example your CV), the date, and, if enabled, your IP address and browser. The hiring team uses this data to review your application."
+msgstr ""
+
+#: includes/Classes/Privacy.php:139
+msgid "Uploaded files are only available to logged-in users who are allowed to review applications. You can ask us to export or erase your application data."
+msgstr ""
+
+#: includes/Classes/SpamProtection.php:56
+msgid "Leave this field empty"
+msgstr ""
+
+#: includes/Classes/SpamProtection.php:89
+msgid "Your application could not be sent. Please reload the page and try again."
+msgstr ""
+
+#: includes/Classes/SpamProtection.php:98
+msgid "Please complete the security check."
+msgstr ""
+
+#: includes/Classes/SpamProtection.php:117
+msgid "The security check could not be verified. Please try again."
+msgstr ""
+
+#: includes/Classes/SpamProtection.php:122
+msgid "The security check failed. Please try again."
+msgstr ""
+
+#: includes/Classes/SubmissionHandler.php:41
+msgid "Invalid request. Please try again"
+msgstr ""
+
+#: includes/Classes/SubmissionHandler.php:119
+msgid "Form is successfully submitted"
+msgstr ""
+
+#: includes/Classes/SubmissionHandler.php:154
+msgid "Form Validation failed"
+msgstr ""
+
+#: includes/Classes/Tools/SchedulingSettings.php:88
+msgid "The application limit has been reached."
+msgstr ""
+
+#: includes/Classes/Tools/SchedulingSettings.php:104
+msgid "The application period has not started yet."
+msgstr ""
+
+#: includes/Classes/Tools/SchedulingSettings.php:110
+msgid "Form submission is now closed."
+msgstr ""
+
+#: includes/Classes/Tools/SchedulingSettings.php:123
+msgid "You must be logged in to submit the form."
+msgstr ""
+
+#. translators: 1: characters typed, 2: the character limit
+#: includes/Classes/TransStrings.php:18
+#, php-format
+msgid "%1$s / %2$s characters"
+msgstr ""
+
+#. translators: %s is the title of the current admin screen, for example a job title
+#: includes/Classes/TransStrings.php:20
+#, php-format
+msgid "%s :: Ninja Job Board"
+msgstr ""
+
+#. translators: %s is the job title
+#: includes/Classes/TransStrings.php:22
+#, php-format
+msgid "%s and all of its applications will be deleted permanently. You cannot undo this."
+msgstr ""
+
+#. translators: %s is the number of applicants
+#: includes/Classes/TransStrings.php:24
+#, php-format
+msgid "%s applicant will get this email."
+msgstr ""
+
+#. translators: %s is the number of applicants
+#: includes/Classes/TransStrings.php:26
+#, php-format
+msgid "%s applicants will get this email."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:27
+#: src/blocks/shared/JobPicker.jsx:36
+msgid "(no title)"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:28
+msgid "/page"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:29
+msgid "A secret key is saved. Leave empty to keep it."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:30
+msgid "A week ago"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:31
+msgid "Accept applications only between two dates."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:32
+msgid "Actions"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:33
+msgid "Activity"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:34
+msgid "Add a field"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:35
+msgid "Add a job"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:36
+msgid "Add a job post, then build its application form and start to collect applications."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:37
+msgid "Add job"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:38
+msgid "Add media (Pro)"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:39
+msgid "Add note"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:40
+msgid "Add notification"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:41
+msgid "Add option"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:42
+msgid "Add shortcodes"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:43
+msgid "Add your first job"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:44
+msgid "Adding media is a Pro feature."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:45
+msgid "Adds a privacy-friendly security check to application forms. A hidden honeypot field is always on."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:46
+msgid "After closing message"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:47
+msgid "After label"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:48
+msgid "After someone applies"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:49
+msgid "After submission"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:50
+msgid "Alignment of the submit button under the form."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:51
+#: includes/Http/Controllers/ApplicationsController.php:187
+msgid "All"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:52
+msgid "All application statuses"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:53
+msgid "All broadcasts"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:54
+msgid "All internal statuses"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:55
+msgid "All jobs"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:56
+msgid "All notifications"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:57
+msgid "An email broadcast sends the same email to each selected applicant of this job. You can pick applicants by application status."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:58
+msgid "Applicant"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:59
+msgid "Application"
+msgstr ""
+
+#. translators: %s is the application ID number
+#: includes/Classes/TransStrings.php:61
+#, php-format
+msgid "Application #%s"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:62
+msgid "Application form"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:63
+msgid "Application limit"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:65
+msgid "Application statuses that count"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:71
+msgid "BCC"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:72
+msgid "Back to applications"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:73
+msgid "Before label"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:74
+msgid "Before opening message"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:75
+msgid "Bold labels"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:76
+msgid "Broadcast"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:77
+msgid "Broadcast name"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:78
+msgid "Browse applications"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:80
+msgid "Button"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:81
+msgid "Button style"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:82
+msgid "Button text"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:83
+msgid "Button text while submitting"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:84
+msgid "CC"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:85
+msgid "CSS class (optional)"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:86
+msgid "Cancel"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:87
+msgid "Center"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:88
+msgid "Choose when this email sends."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:89
+msgid "Clear"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:90
+msgid "Click a field type on the right, or drag it here. Applicants fill in these fields when they apply."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:91
+msgid "Click a field type to add it, or drag it into the form."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:92
+msgid "Close the form when it reaches a set number of applications."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:93
+msgid "Close this dialog"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:94
+msgid "Closes on"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:95
+msgid "Cloudflare Turnstile"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:96
+msgid "Collapse this row"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:97
+msgid "Confirm"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:98
+msgid "Confirm email label"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:99
+msgid "Confirmation"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:100
+msgid "Confirmation message"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:101
+msgid "Create a widget in the Cloudflare dashboard (Turnstile) and copy its keys."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:102
+msgid "Create job"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:103
+msgid "Created"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:104
+msgid "Data"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:107
+msgid "Decrease number"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:108
+msgid "Default input styles"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:109
+msgid "Default style"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:110
+msgid "Delete"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:111
+msgid "Delete all data when the plugin is deleted"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:112
+msgid "Delete application"
+msgstr ""
+
+#. translators: %s is the applicant name
+#: includes/Classes/TransStrings.php:114
+#, php-format
+msgid "Delete application from %s"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:115
+msgid "Delete field"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:116
+msgid "Delete job"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:117
+msgid "Delete this application?"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:118
+msgid "Delete this job?"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:119
+msgid "Details"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:120
+msgid "Download a job and its application form as a .json file. Import it on any site that runs Ninja Job Board."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:121
+msgid "Downloading the job file."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:122
+msgid "Draft"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:123
+msgid "Drag the handle to reorder fields"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:124
+msgid "Drag to reorder"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:125
+msgid "Duplicate"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:126
+msgid "Duplicating the job..."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:127
+msgid "Edit"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:129
+msgid "Edit notification"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:131
+msgid "Email addresses, separated by commas. Merge tags work."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:132
+msgid "Email body"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:133
+msgid "Email broadcasts"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:134
+msgid "Email notification"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:135
+msgctxt "Email notification status"
+msgid "Off"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:136
+msgctxt "Email notification status"
+msgid "On"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:137
+msgid "Email notifications"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:138
+msgid "Email notifications go to you or the applicant when someone applies. Use \"Add notification\" to create one."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:139
+msgctxt "Email status"
+msgid "Pending"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:140
+msgctxt "Email status"
+msgid "Sending"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:141
+msgctxt "Email status"
+msgid "Sent"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:142
+msgid "Email subject"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:143
+msgid "Emails"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:144
+msgid "End date"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:145
+msgid "End time"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:146
+msgid "Enter a from email address."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:147
+#: includes/Http/Controllers/FormsController.php:99
+msgid "Enter a job title."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:148
+msgid "Enter a title for this email notification."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:149
+msgid "Enter an email subject."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:150
+msgid "Enter at least one email address to send to."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:151
+msgid "Enter the email body."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:152
+msgid "Error"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:153
+msgid "Expand this row"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:154
+msgid "Export CSV"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:155
+msgid "Export JSON"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:156
+msgid "Export a job"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:157
+msgid "Export as JSON"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:158
+msgid "Extra CSS class for the button"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:161
+msgid "Field ID"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:162
+msgid "Field styles"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:163
+msgid "Fields"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:164
+msgid "Fill in all required fields."
+msgstr ""
+
+#. translators: %s is a column name
+#: includes/Classes/TransStrings.php:166
+#, php-format
+msgid "Filter by %s"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:167
+msgid "Filter by application status"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:168
+msgid "For example: Interview invitations, May"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:169
+msgid "For example: Notify the hiring team"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:170
+msgid "For example: Please wait…"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:171
+msgid "For example: Senior backend engineer"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:172
+msgid "For example: Submit application"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:173
+msgid "Form after submission"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:174
+msgid "Form design"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:175
+msgid "Form settings"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:178
+msgid "From email"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:179
+msgid "From name"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:180
+msgid "Full width button"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:181
+msgid "General"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:182
+msgid "General settings"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:183
+msgid "Go to"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:184
+msgid "Go to a URL"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:185
+msgid "Go to a page"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:186
+msgid "Go to next page"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:187
+msgid "Go to previous page"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:188
+msgid "Helps you find this broadcast later. Applicants do not see it."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:189
+msgid "Helps you find this notification in the list."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:190
+msgid "Hide the form"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:191
+msgid "Hide the form, or clear it for a new application."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:192
+msgid "Hide the submit button"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:194
+msgid "Illegal input"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:195
+msgid "Import"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:196
+msgid "Import & export"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:197
+msgid "Import a job"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:198
+msgid "In total"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:199
+msgid "Increase number"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:200
+msgid "Input fields"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:201
+msgid "Insert shortcode"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:202
+msgid "Internal"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:203
+msgid "Internal status"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:204
+msgid "JSON file to import"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:208
+msgid "Job application confirmation"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:210
+msgid "Job imported."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:212
+msgid "Job title"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:213
+msgid "Job to export"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:219
+msgid "Label"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:220
+msgid "Label alignment"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:221
+msgid "Layout"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:222
+msgid "Leave both empty to email every applicant of this job."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:223
+msgid "Left"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:224
+msgid "Limit applications"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:225
+msgid "Limit period"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:226
+msgid "Limit reached message"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:227
+msgid "Loading"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:228
+msgid "Loading application..."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:229
+msgid "Loading fields..."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:230
+msgid "Log IP addresses"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:231
+msgid "Login required message"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:234
+msgid "Maximum applications"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:236
+msgid "Message"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:239
+msgid "Network error. Please check your connection and try again."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:240
+msgid "New broadcast"
+msgstr ""
+
+#. translators: %s is a number of pages
+#: includes/Classes/TransStrings.php:243
+#, php-format
+msgid "Next %s pages"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:244
+msgid "Next application"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:245
+msgid "Next month"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:246
+msgid "Next year"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:247
+msgid "No activity yet. Status changes and notes show here."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:248
+msgid "No applications match these filters."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:249
+msgid "No data"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:250
+msgid "No email broadcasts yet"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:251
+msgid "No email notifications yet"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:252
+msgid "No fields yet"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:253
+msgid "No jobs match your search."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:254
+msgid "No matching data"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:255
+msgid "No style (theme default)"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:256
+msgid "Not provided"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:257
+msgid "Note"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:258
+msgid "Notifications"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:261
+msgid "Now"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:262
+msgid "OK"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:265
+msgid "Only logged-in users can see the form."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:266
+msgid "Open Cloudflare"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:267
+msgid "Open the job"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:268
+msgid "Opens on"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:269
+msgid "Option label"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:270
+msgid "Option value"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:271
+msgid "Optional. Empty fields use the WordPress defaults."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:272
+#: src/blocks/job-list/edit.jsx:61
+msgid "Order"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:273
+msgid "Other applications by this applicant"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:274
+msgid "Page"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:275
+msgid "Pending review"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:276
+msgid "Per day"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:277
+msgid "Per month"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:278
+msgid "Per week"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:279
+msgid "Per year"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:280
+msgid "Platform"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:281
+msgid "Previous"
+msgstr ""
+
+#. translators: %s is a number of pages
+#: includes/Classes/TransStrings.php:283
+#, php-format
+msgid "Previous %s pages"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:284
+msgid "Previous application"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:285
+msgid "Previous month"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:286
+msgid "Previous year"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:287
+msgid "Print application"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:288
+msgid "Privacy"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:289
+msgid "Private"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:290
+msgid "Provide values separately"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:291
+msgid "Published"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:292
+msgid "Recipients"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:293
+msgid "Redirect URL"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:294
+msgid "Redirect page"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:295
+msgid "Remaining"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:296
+msgid "Remove option"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:297
+msgid "Removes jobs, applications, uploaded files and settings when you delete the plugin. You cannot undo this."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:298
+msgid "Reply-to"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:299
+msgid "Require login"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:300
+msgid "Required marker"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:301
+msgctxt "Required marker position"
+msgid "None"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:302
+msgid "Reset"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:303
+msgid "Reset form"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:304
+msgid "Restore"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:305
+msgid "Restricted form"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:306
+msgid "Right"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:309
+msgid "Save form"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:310
+msgid "Save note"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:311
+msgid "Save notification"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:312
+msgid "Save settings"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:313
+msgid "Schedule the form"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:314
+msgid "Scheduled"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:315
+msgid "Scheduling & restrictions"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:316
+msgid "Search applicants"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:318
+msgid "Secret key"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:319
+msgid "Select"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:320
+msgid "Select a .json file to import."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:321
+msgid "Select a job"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:322
+msgid "Select a page"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:323
+msgid "Select a valid field type."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:324
+msgid "Select all rows"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:325
+msgid "Select date"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:326
+msgid "Select date and time"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:327
+msgid "Select this row"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:328
+msgid "Select time"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:329
+msgid "Selected date"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:330
+msgid "Send a copy to these addresses, separated by commas."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:331
+msgid "Send a hidden copy to these addresses, separated by commas."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:332
+msgid "Send broadcast"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:333
+msgid "Send to"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:334
+msgid "Sender and copies"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:335
+msgid "Sending emails. Keep this tab open until all emails are sent."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:336
+msgid "Sent at"
+msgstr ""
+
+#. translators: %s is the percentage of emails sent, for example 40%
+#: includes/Classes/TransStrings.php:338
+#, php-format
+msgid "Sent: %s"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:341
+msgid "Set the maximum number of applications, the period, and the application statuses that count toward the limit."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:343
+msgctxt "Settings section heading"
+msgid "Login"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:344
+msgctxt "Settings section heading"
+msgid "Schedule"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:345
+msgid "Show a message"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:346
+msgid "Show a validation error after submit"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:347
+msgid "Show all field labels in bold."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:348
+msgid "Show empty fields"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:349
+msgid "Shown after the form closes."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:350
+msgid "Shown before the form opens."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:351
+msgid "Shown instead of the form when the limit is reached."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:352
+msgid "Shown on the same page after the form is sent."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:353
+msgid "Shown to logged-out visitors. Shortcodes and HTML work."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:354
+msgid "Site key"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:355
+msgid "Something went wrong. Please try again."
+msgstr ""
+
+#. translators: %s is a column name
+#: includes/Classes/TransStrings.php:357
+#, php-format
+msgid "Sort by %s"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:358
+msgid "Spam protection"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:359
+msgid "Start date"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:360
+msgid "Start time"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:361
+msgid "Status"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:362
+msgid "Store the IP address with each application. Advanced analytics need it."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:363
+msgid "Stored on your server; never shown again."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:364
+msgid "Subject"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:365
+msgid "Submit button"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:366
+msgid "Submit button position"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:367
+msgid "Submitted"
+msgstr ""
+
+#. translators: %s is the date and time the application was submitted
+#: includes/Classes/TransStrings.php:369
+#, php-format
+msgid "Submitted %s"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:371
+msgid "Sum"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:374
+msgid "The WordPress editor needs WordPress 4.8 or later. Update WordPress to use it."
+msgstr ""
+
+#. translators: %1$s is the applicant name or email, %2$s is the job title
+#: includes/Classes/TransStrings.php:376
+#, php-format
+msgid "The application from %1$s for %2$s will be deleted permanently. You cannot undo this."
+msgstr ""
+
+#. translators: %s is the applicant name or email
+#: includes/Classes/TransStrings.php:378
+#, php-format
+msgid "The application from %s will be deleted permanently. You cannot undo this."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:379
+msgid "The event that sends this email."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:380
+msgid "The form stops accepting applications at this time."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:381
+msgid "The page the applicant goes to after sending the form."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:382
+msgid "The sender name in the inbox. Works only with a From email."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:383
+msgid "The subject line applicants see in their inbox."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:384
+msgid "The subject line of the email."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:385
+msgid "The web address the applicant goes to after sending the form."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:386
+msgid "This field is already on your form. You can add it only once."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:387
+msgid "This field is not available."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:390
+#: src/blocks/job-list/edit.jsx:23
+msgid "Title"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:391
+msgid "To show the confirmation message on that page, add this shortcode to it:"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:392
+msgid "Today"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:393
+msgid "Top"
+msgstr ""
+
+#. translators: %s is the total number of items
+#: includes/Classes/TransStrings.php:395
+#, php-format
+msgid "Total %s"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:396
+msgid "Total recipients"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:397
+msgid "Trash"
+msgstr ""
+
+#. translators: %s is the email notification title
+#: includes/Classes/TransStrings.php:401
+#, php-format
+msgid "Turn on %s"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:402
+msgid "Unnamed applicant"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:403
+msgid "Untitled notification"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:404
+msgid "Update status"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:405
+msgid "Upload a .json file exported from Ninja Job Board. The import creates a new job."
+msgstr ""
+
+#. translators: %1$s and %2$s are merge tags that show the applicant name and email
+#: includes/Classes/TransStrings.php:407
+#, php-format
+msgid "Use %1$s and %2$s to add the name and email of each applicant."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:408
+msgid "Use an address on your domain so the email is delivered."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:409
+msgid "Use the arrow keys and enter to select the day of the month"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:410
+msgid "Use the arrow keys and enter to select the month"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:411
+msgid "Use the arrow keys and enter to select the year"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:412
+msgid "Use the merge tag button to add application data."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:413
+msgid "Use the plugin's input styles. Turn off to use your theme's styles."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:414
+msgid "User"
+msgstr ""
+
+#. translators: %s is the current date and time on the server
+#: includes/Classes/TransStrings.php:416
+#, php-format
+msgid "Uses server time. The time now is %s."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:417
+msgid "Value"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:418
+msgid "View"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:419
+msgid "View application"
+msgstr ""
+
+#. translators: %s is the applicant name
+#: includes/Classes/TransStrings.php:421
+#, php-format
+msgid "View application from %s"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:424
+msgid "What happens to the form while a restriction is active."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:425
+msgid "What the applicant sees after sending the form."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:426
+msgid "When a restriction applies"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:427
+msgid "When it sends"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:428
+msgid "Where field labels sit: above, left of, or right of the field."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:429
+msgid "Where replies go. Leave empty to use the sender."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:430
+msgid "Where the asterisk shows on required fields."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:431
+msgid "Who gets this email"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:432
+msgid "Write a note first."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:433
+msgid "Write a note for your team"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:434
+msgid "Yesterday"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:435
+msgid "You can add the job details and the application form next."
+msgstr ""
+
+#: includes/Classes/TransStrings.php:436
+msgid "You have no jobs yet"
+msgstr ""
+
+#: includes/Classes/TransStrings.php:437
+msgid "Your company"
+msgstr ""
+
+#. translators: %s is a page number
+#: includes/Classes/TransStrings.php:439
+#, php-format
+msgid "page %s"
+msgstr ""
+
+#: includes/Http/Controllers/ApplicationsController.php:70
+#: includes/Http/Controllers/ApplicationsController.php:261
+#: includes/Http/Controllers/ApplicationsController.php:287
+msgid "Sorry, no application found."
+msgstr ""
+
+#: includes/Http/Controllers/ApplicationsController.php:88
+msgid "Selected submission successfully deleted"
+msgstr ""
+
+#: includes/Http/Controllers/ApplicationsController.php:102
+msgid "Please provide note content"
+msgstr ""
+
+#: includes/Http/Controllers/ApplicationsController.php:120
+msgid "Note successfully added"
+msgstr ""
+
+#: includes/Http/Controllers/ApplicationsController.php:141
+msgid "Please provide a valid status."
+msgstr ""
+
+#. translators: 1: old application status, 2: new application status
+#: includes/Http/Controllers/ApplicationsController.php:153
+#, php-format
+msgid "Application status changed from %1$s to %2$s."
+msgstr ""
+
+#. translators: 1: old internal status, 2: new internal status
+#: includes/Http/Controllers/ApplicationsController.php:164
+#, php-format
+msgid "Internal status changed from %1$s to %2$s."
+msgstr ""
+
+#: includes/Http/Controllers/ApplicationsController.php:169
+msgid "The application already has this status."
+msgstr ""
+
+#: includes/Http/Controllers/ApplicationsController.php:173
+msgid "Status has been changed successfully"
+msgstr ""
+
+#: includes/Http/Controllers/ApplicationsController.php:211
+#: includes/Http/Controllers/Controller.php:26
+msgid "Job post not found"
+msgstr ""
+
+#. translators: %s: note text
+#: includes/Http/Controllers/ApplicationsController.php:333
+#, php-format
+msgid "Note: %s"
+msgstr ""
+
+#: includes/Http/Controllers/CampaignsController.php:84
+msgid "Broadcast name, email subject and body are required."
+msgstr ""
+
+#: includes/Http/Controllers/CampaignsController.php:89
+msgid "No applicant found for your selection."
+msgstr ""
+
+#: includes/Http/Controllers/CampaignsController.php:135
+msgid "Email broadcast created. Emails will start sending now."
+msgstr ""
+
+#. translators: 1: recipient email address, 2: email subject
+#: includes/Http/Controllers/CampaignsController.php:208
+#, php-format
+msgid "Email sent to %1$s. Subject: %2$s."
+msgstr ""
+
+#: includes/Http/Controllers/CampaignsController.php:239
+msgid "Campaign not found"
+msgstr ""
+
+#: includes/Http/Controllers/FormsController.php:48
+msgid "Please provide a job title."
+msgstr ""
+
+#: includes/Http/Controllers/FormsController.php:61
+msgid "Something is wrong when creating the form. Please try again"
+msgstr ""
+
+#: includes/Http/Controllers/FormsController.php:69
+msgid "Please wait. You are being redirected to the next page."
+msgstr ""
+
+#: includes/Http/Controllers/FormsController.php:116
+msgid "Form successfully updated"
+msgstr ""
+
+#: includes/Http/Controllers/FormsController.php:132
+msgid "Selected form successfully deleted"
+msgstr ""
+
+#: includes/Http/Controllers/FormsController.php:151
+msgid "No form found when duplicating the form"
+msgstr ""
+
+#: includes/Http/Controllers/FormsController.php:156
+msgid "Something is wrong when duplicating the form. Please try again"
+msgstr ""
+
+#: includes/Http/Controllers/FormsController.php:160
+msgid "Form successfully duplicated"
+msgstr ""
+
+#: includes/Http/Controllers/FormsController.php:178
+msgid "Job post successfully restored"
+msgstr ""
+
+#: includes/Http/Controllers/FormsController.php:191
+msgid "No Form Found"
+msgstr ""
+
+#: includes/Http/Controllers/FormsController.php:208
+msgid "Please upload a json file"
+msgstr ""
+
+#: includes/Http/Controllers/FormsController.php:212
+msgid "The file is too large"
+msgstr ""
+
+#: includes/Http/Controllers/FormsController.php:219
+msgid "Invalid file. Please upload a valid JSON file."
+msgstr ""
+
+#: includes/Http/Controllers/FormsController.php:226
+msgid "Something is wrong when processing the file. Please try again"
+msgstr ""
+
+#: includes/Http/Controllers/FormsController.php:232
+msgid "Form successfully imported"
+msgstr ""
+
+#: includes/Http/Controllers/FormsController.php:291
+msgid "Attach your CV"
+msgstr ""
+
+#: includes/Http/Controllers/FormsController.php:308
+msgid "Submit application"
+msgstr ""
+
+#: includes/Http/Controllers/FormsController.php:313
+msgid "Your application has been successfully submitted."
+msgstr ""
+
+#: includes/Http/Controllers/FormsController.php:317
+msgid "Email notification to admin"
+msgstr ""
+
+#. translators: %s: job title placeholder, for example {wp:post_title}
+#: includes/Http/Controllers/FormsController.php:319
+#, php-format
+msgid "New job application for %s"
+msgstr ""
+
+#: includes/Http/Controllers/FormsController.php:320
+msgid "Application details:"
+msgstr ""
+
+#. translators: %s: job page URL placeholder, for example {wp:post_url}
+#: includes/Http/Controllers/FormsController.php:323
+#, php-format
+msgid "Job page: %s"
+msgstr ""
+
+#: includes/Http/Controllers/FormSettingsController.php:61
+msgid "Validation error. Please try again."
+msgstr ""
+
+#: includes/Http/Controllers/FormSettingsController.php:63
+msgid "Please add at least one input element"
+msgstr ""
+
+#: includes/Http/Controllers/FormSettingsController.php:69
+msgid "Validation failed when saving the form"
+msgstr ""
+
+#: includes/Http/Controllers/FormSettingsController.php:85
+#: includes/Http/Controllers/FormSettingsController.php:131
+#: includes/Http/Controllers/FormSettingsController.php:157
+#: includes/Http/Controllers/FormSettingsController.php:202
+#: includes/Http/Controllers/SettingsController.php:56
+msgid "Settings successfully updated"
+msgstr ""
+
+#: includes/Http/Controllers/FormSettingsController.php:242
+msgid "Email notifications have been updated."
+msgstr ""
+
+#: includes/Http/Controllers/FormSettingsController.php:251
+msgid "After Form Submission"
+msgstr ""
+
+#: includes/Http/Controllers/FormSettingsController.php:252
+msgid "Send an email when the application form is submitted."
+msgstr ""
+
+#: includes/Http/Controllers/SettingsController.php:48
+msgid "Add the Turnstile site key and secret key, or turn Turnstile off."
+msgstr ""
+
+#: includes/Http/Controllers/SettingsController.php:64
+msgid "Please upload only jpg/png format files"
+msgstr ""
+
+#: includes/Http/Controllers/SettingsController.php:82
+msgid "Something is wrong when uploading the file"
+msgstr ""
+
+#: includes/views/elements/input_fields_html.php:10
+msgid "Application Details"
+msgstr ""
+
+#. translators: 1: plugin name, 2: link to the plugin author's website
+#: includes/views/email/default/footer.php:11
+#, php-format
+msgid "%1$s plugin made by %2$s"
+msgstr ""
+
+#: includes/views/templates/job_list.php:7
+msgid "No Job found"
+msgstr ""
+
+#: includes/views/templates/job_list.php:14
+msgid "Filter jobs by category"
+msgstr ""
+
+#: includes/views/templates/job_list.php:15
+msgid "All categories"
+msgstr ""
+
+#: includes/views/templates/job_list.php:37
+#: assets/blocks/blocks.js:250
+#: assets/blocks/job-editor.js:52
+#: src/blocks/job-details/edit.jsx:12
+#: src/blocks/job-editor.jsx:54
+msgid "Experience"
+msgstr ""
+
+#. translators: %s: the date applications close
+#: includes/views/templates/job_list.php:42
+#, php-format
+msgid "Closes %s"
+msgstr ""
+
+#: wp-job-board.php:133
+#: wp-job-board.php:136
+msgid "Sorry, no application confirmation found. Please check your URL."
+msgstr ""
+
+#: assets/blocks/blocks.js:247
+#: assets/blocks/job-editor.js:21
+#: src/blocks/job-details/edit.jsx:9
+#: src/blocks/job-editor.jsx:29
+msgid "Job type"
+msgstr ""
+
+#: assets/blocks/blocks.js:251
+#: src/blocks/job-details/edit.jsx:13
+msgid "Posted date"
+msgstr ""
+
+#: assets/blocks/blocks.js:261
+#: src/blocks/job-details/edit.jsx:30
+msgid "Job details settings"
+msgstr ""
+
+#: assets/blocks/blocks.js:261
+#: src/blocks/job-details/edit.jsx:33
+msgid "Show"
+msgstr ""
+
+#: assets/blocks/blocks.js:281
+#: src/blocks/job-details/edit.jsx:57
+msgid "Job Details"
+msgstr ""
+
+#: assets/blocks/blocks.js:282
+#: src/blocks/job-details/edit.jsx:58
+msgid "Choose the job whose details you want to show."
+msgstr ""
+
+#: assets/blocks/job-editor.js:18
+#: src/blocks/job-editor.jsx:27
+msgid "Job details"
+msgstr ""
+
+#: assets/blocks/job-editor.js:23
+#: src/blocks/job-editor.jsx:31
+msgid "Select job type"
+msgstr ""
+
+#: assets/blocks/job-editor.js:32
+#: src/blocks/job-editor.jsx:38
+msgid "For example: Remote, or Dhaka"
+msgstr ""
+
+#: src/blocks/application-form/edit.jsx:16
+msgid "Application form settings"
+msgstr ""
+
+#: src/blocks/application-form/edit.jsx:19
+msgid "Show the job title above the form"
+msgstr ""
+
+#: src/blocks/application-form/edit.jsx:37
+msgid "Job Application Form"
+msgstr ""
+
+#: src/blocks/application-form/edit.jsx:38
+msgid "Choose the job whose application form you want to show."
+msgstr ""
+
+#: src/blocks/job-list/edit.jsx:21
+msgid "Job list settings"
+msgstr ""
+
+#: src/blocks/job-list/edit.jsx:30
+msgid "Categories"
+msgstr ""
+
+#: src/blocks/job-list/edit.jsx:38
+msgid "Leave empty to show jobs from all categories."
+msgstr ""
+
+#: src/blocks/job-list/edit.jsx:40
+msgid "Show the category filter"
+msgstr ""
+
+#: src/blocks/job-list/edit.jsx:46
+msgid "Hide expired jobs"
+msgstr ""
+
+#: src/blocks/job-list/edit.jsx:52
+msgid "Number of jobs"
+msgstr ""
+
+#: src/blocks/job-list/edit.jsx:64
+msgid "Newest first"
+msgstr ""
+
+#: src/blocks/job-list/edit.jsx:65
+msgid "Oldest first"
+msgstr ""
+
+#: src/blocks/shared/JobPicker.jsx:32
+msgid "Current job (this post)"
+msgstr ""
+
+#: src/blocks/shared/JobPicker.jsx:33
+msgid "Choose a job"
+msgstr ""
+
+#: assets/blocks/application-form/block.json
+#: src/blocks/application-form/block.json
+msgctxt "block title"
+msgid "Job Application Form"
+msgstr ""
+
+#: assets/blocks/application-form/block.json
+#: src/blocks/application-form/block.json
+msgctxt "block description"
+msgid "The application form of a job. In a job post it uses that job."
+msgstr ""
+
+#: assets/blocks/application-form/block.json
+#: src/blocks/application-form/block.json
+msgctxt "block keyword"
+msgid "apply"
+msgstr ""
+
+#: assets/blocks/application-form/block.json
+#: src/blocks/application-form/block.json
+msgctxt "block keyword"
+msgid "application"
+msgstr ""
+
+#: assets/blocks/application-form/block.json
+#: src/blocks/application-form/block.json
+msgctxt "block keyword"
+msgid "form"
+msgstr ""
+
+#: assets/blocks/application-form/block.json
+#: assets/blocks/job-list/block.json
+#: src/blocks/application-form/block.json
+#: src/blocks/job-list/block.json
+msgctxt "block keyword"
+msgid "jobs"
+msgstr ""
+
+#: assets/blocks/job-details/block.json
+#: src/blocks/job-details/block.json
+msgctxt "block title"
+msgid "Job Details"
+msgstr ""
+
+#: assets/blocks/job-details/block.json
+#: src/blocks/job-details/block.json
+msgctxt "block description"
+msgid "A job's type, location, vacancies, experience and posted date. In a job post it uses that job."
+msgstr ""
+
+#: assets/blocks/job-details/block.json
+#: src/blocks/job-details/block.json
+msgctxt "block keyword"
+msgid "job"
+msgstr ""
+
+#: assets/blocks/job-details/block.json
+#: src/blocks/job-details/block.json
+msgctxt "block keyword"
+msgid "location"
+msgstr ""
+
+#: assets/blocks/job-details/block.json
+#: src/blocks/job-details/block.json
+msgctxt "block keyword"
+msgid "type"
+msgstr ""
+
+#: assets/blocks/job-details/block.json
+#: assets/blocks/job-list/block.json
+#: src/blocks/job-details/block.json
+#: src/blocks/job-list/block.json
+msgctxt "block keyword"
+msgid "vacancies"
+msgstr ""
+
+#: assets/blocks/job-list/block.json
+#: src/blocks/job-list/block.json
+msgctxt "block title"
+msgid "Job List"
+msgstr ""
+
+#: assets/blocks/job-list/block.json
+#: src/blocks/job-list/block.json
+msgctxt "block description"
+msgid "A list of your open jobs, with an optional category filter."
+msgstr ""
+
+#: assets/blocks/job-list/block.json
+#: src/blocks/job-list/block.json
+msgctxt "block keyword"
+msgid "careers"
+msgstr ""
+
+#: assets/blocks/job-list/block.json
+#: src/blocks/job-list/block.json
+msgctxt "block keyword"
+msgid "openings"
 msgstr ""

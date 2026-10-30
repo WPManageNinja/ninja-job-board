@@ -58,7 +58,7 @@ class FormSettingsController extends Controller
         }
 
         if (!$builderSettings) {
-            return $this->error(__('Validation Error, Please try again', 'ninja-job-board'), 422, array(
+            return $this->error(__('Validation error. Please try again.', 'ninja-job-board'), 422, array(
                 'errors' => array(
                     'general' => __('Please add at least one input element', 'ninja-job-board')
                 )
@@ -239,7 +239,7 @@ class FormSettingsController extends Controller
         update_post_meta($form->ID, 'wpjb_email_notifications', array_values($notifications));
 
         return array(
-            'message' => __('Email Notifications has been updated', 'ninja-job-board')
+            'message' => __('Email notifications have been updated.', 'ninja-job-board')
         );
     }
 
@@ -249,7 +249,7 @@ class FormSettingsController extends Controller
             'wpjobboard/after_form_submission_complete' => array(
                 'hook_name'   => 'wpjobboard/after_form_submission_complete',
                 'hook_title'  => __('After Form Submission', 'ninja-job-board'),
-                'description' => __('Send email when the form will be submitted.', 'ninja-job-board')
+                'description' => __('Send an email when the application form is submitted.', 'ninja-job-board')
             )
         ), $formId);
     }

@@ -41,6 +41,8 @@ class TinyMceBlock
                 "title" => __('Insert Form Shortcode', 'ninja-job-board'),
                 "select_error" => __('Please select a Form', 'ninja-job-board'),
                 "insert_text" => __('Insert Shortcode', 'ninja-job-board'),
+                "button_title" => __('Insert job application form', 'ninja-job-board'),
+                "show_title" => __('Show form title', 'ninja-job-board'),
                 "forms" => $this->getAllFormsForMce(),
         ));
 

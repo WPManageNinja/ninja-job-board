@@ -140,7 +140,7 @@ class Render
         $submitButton = Forms::getButtonSettings($form->ID);
         $processingText = $submitButton['processing_text'];
         if (!$processingText) {
-            $processingText = __('Please Wait…', 'ninja-job-board');
+            $processingText = __('Please wait…', 'ninja-job-board');
         }
         $button_text = $submitButton['button_text'];
         if (!$button_text) {
@@ -212,6 +212,25 @@ class Render
         wp_localize_script('wpjobboard_public', 'wp_job_board_general', array(
             'ajax_url'  => admin_url('admin-ajax.php'),
             'nonce'     => wp_create_nonce('wpjobboard_public_nonce'),
+            'i18n'      => array(
+                'submit_error'      => __('Something went wrong while submitting the form. Please try again.', 'ninja-job-board'),
+                /* translators: %s: raw response text from the server */
+                'server_response'   => __('Server response: %s', 'ninja-job-board'),
+                /* translators: %s: field label */
+                'field_required'    => __('%s is required.', 'ninja-job-board'),
+                'file_upload'       => __('File upload', 'ninja-job-board'),
+                // File upload (Dropzone) messages. Keep the {{…}} tokens unchanged.
+                /* translators: Do not translate {{filesize}} and {{maxFilesize}}. They are replaced with file sizes in MB. */
+                'file_too_big'      => __('The file is too big ({{filesize}} MB). Maximum file size: {{maxFilesize}} MB.', 'ninja-job-board'),
+                'invalid_file_type' => __('You cannot upload files of this type.', 'ninja-job-board'),
+                /* translators: Do not translate {{statusCode}}. It is replaced with the HTTP status code. */
+                'response_error'    => __('The server responded with code {{statusCode}}.', 'ninja-job-board'),
+                'cancel_upload'     => __('Cancel upload', 'ninja-job-board'),
+                'upload_canceled'   => __('Upload canceled.', 'ninja-job-board'),
+                'cancel_confirm'    => __('Are you sure you want to cancel this upload?', 'ninja-job-board'),
+                'remove_file'       => __('Remove file', 'ninja-job-board'),
+                'max_files'         => __('You cannot upload any more files.', 'ninja-job-board')
+            ),
             'date_i18n' => array(
                 'previousMonth'    => __('Previous Month', 'ninja-job-board'),
                 'nextMonth'        => __('Next Month', 'ninja-job-board'),
@@ -221,7 +240,7 @@ class Render
                         __('Feb', 'ninja-job-board'),
                         __('Mar', 'ninja-job-board'),
                         __('Apr', 'ninja-job-board'),
-                        __('May', 'ninja-job-board'),
+                        _x('May', 'short month name', 'ninja-job-board'),
                         __('Jun', 'ninja-job-board'),
                         __('Jul', 'ninja-job-board'),
                         __('Aug', 'ninja-job-board'),

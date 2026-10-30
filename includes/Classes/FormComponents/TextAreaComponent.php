@@ -19,28 +19,28 @@ class TextAreaComponent extends BaseComponent
     {
         return array(
             'type'            => 'textarea',
-            'editor_title'    => 'Textarea Field',
+            'editor_title'    => __('Textarea', 'ninja-job-board'),
             'group'           => 'input',
             'postion_group'   => 'general',
             'editor_elements' => array(
                 'label'         => array(
-                    'label' => 'Field Label',
+                    'label' => __('Field label', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 ),
                 'required'      => array(
-                    'label' => 'Required',
+                    'label' => __('Required', 'ninja-job-board'),
                     'type'  => 'switch',
                     'group' => 'general'
                 ),
                 'default_value' => array(
-                    'label' => 'Default Value',
+                    'label' => __('Default value', 'ninja-job-board'),
                     'type'  => 'textarea',
                     'group' => 'general'
                 )
             ),
             'field_options'   => array(
-                'label' => 'Textarea Field',
+                'label' => __('Textarea field', 'ninja-job-board'),
                 'placeholder' => '',
                 'required' => 'no'
             )

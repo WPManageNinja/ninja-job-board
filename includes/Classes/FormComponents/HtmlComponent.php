@@ -17,15 +17,15 @@ class HtmlComponent extends BaseComponent
     {
         return array(
             'type'            => 'custom_html',
-            'editor_title'    => 'HTML Markup',
+            'editor_title'    => __('HTML markup', 'ninja-job-board'),
             'group'           => 'html',
             'postion_group'   => 'general',
             'editor_elements' => array(
                 'custom_html' => array(
-                    'label' => 'Custom HTML',
+                    'label' => __('Custom HTML', 'ninja-job-board'),
                     'type' => 'html',
                     'group' => 'general',
-                    'info' => 'You can use any valid html here'
+                    'info' => __('You can use any valid HTML here.', 'ninja-job-board')
                 )
             )
         );

@@ -24,7 +24,7 @@ class PrivacyTest extends IntegrationTestCase
         $this->assertSame('Data Analyst', $values['Job']);
         $this->assertSame('ada@example.com', $values['Email']);
         $this->assertSame('203.0.113.7', $values['IP address']);
-        $this->assertSame('ada-cv.pdf', $values['Attach Your CV'], 'Files are listed by their original name');
+        $this->assertSame('ada-cv.pdf', $values['Attach your CV'], 'Files are listed by their original name');
         $this->assertStringNotContainsString('Bob Other', wp_json_encode($result));
     }
 

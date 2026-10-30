@@ -67,7 +67,7 @@ class ApplicationsController extends Controller
 
         // The found application can belong to another form, so check the access again
         if (!$submission || !AccessControl::canAccess('get_submission', 'submissions', 0, $submission->id)) {
-            return $this->error(__('Sorry, No Submission found', 'ninja-job-board'), 404);
+            return $this->error(__('Sorry, no application found.', 'ninja-job-board'), 404);
         }
 
         return $this->entryResponse($submission->id);
@@ -138,7 +138,7 @@ class ApplicationsController extends Controller
         $note = is_string($note) ? wp_kses_post($note) : '';
 
         if (!$applicationStatus && !$internalStatus) {
-            return $this->error(__('Please Provide a valid status', 'ninja-job-board'));
+            return $this->error(__('Please provide a valid status.', 'ninja-job-board'));
         }
 
         $submissionModel = new Submission();
@@ -149,7 +149,8 @@ class ApplicationsController extends Controller
             $submissionModel->update($submission->id, array('application_status' => $applicationStatus));
             do_action('wpjobboard/after_application_status_change_manually', $submission->id, $applicationStatus, $submission->application_status);
             $labels = GeneralSettings::getApplicationStatuses();
-            $this->logStatusChange($submission, __('Application status changed:', 'ninja-job-board'), $this->statusName($labels, $submission->application_status), $this->statusName($labels, $applicationStatus), $note);
+            /* translators: 1: old application status, 2: new application status */
+            $this->logStatusChange($submission, __('Application status changed from %1$s to %2$s.', 'ninja-job-board'), $this->statusName($labels, $submission->application_status), $this->statusName($labels, $applicationStatus), $note);
             $note = '';
             $changed = true;
         }
@@ -159,12 +160,13 @@ class ApplicationsController extends Controller
             $submissionModel->update($submission->id, array('status' => $internalStatus));
             do_action('wpjobboard/after_internal_status_change_manually', $submission->id, $internalStatus, $submission->status);
             $labels = GeneralSettings::getInternalStatuses();
-            $this->logStatusChange($submission, __('Internal status changed:', 'ninja-job-board'), $this->statusName($labels, $submission->status), $this->statusName($labels, $internalStatus), $note);
+            /* translators: 1: old internal status, 2: new internal status */
+            $this->logStatusChange($submission, __('Internal status changed from %1$s to %2$s.', 'ninja-job-board'), $this->statusName($labels, $submission->status), $this->statusName($labels, $internalStatus), $note);
             $changed = true;
         }
 
         if (!$changed) {
-            return $this->error(__('The submission have the same status', 'ninja-job-board'));
+            return $this->error(__('The application already has this status.', 'ninja-job-board'));
         }
 
         return array(
@@ -256,7 +258,7 @@ class ApplicationsController extends Controller
         $submission = $submissionModel->getSubmission($submissionId, array('activities'));
 
         if (!$submission) {
-            return $this->error(__('Sorry, No Submission found', 'ninja-job-board'), 404);
+            return $this->error(__('Sorry, no application found.', 'ninja-job-board'), 404);
         }
 
         if ($submission->user_id) {
@@ -282,7 +284,7 @@ class ApplicationsController extends Controller
     {
         $submission = (new Submission())->getSubmission(absint($request->get_param('id')));
         if (!$submission) {
-            return $this->error(__('Sorry, No Submission found', 'ninja-job-board'), 404);
+            return $this->error(__('Sorry, no application found.', 'ninja-job-board'), 404);
         }
         return $submission;
     }
@@ -320,11 +322,15 @@ class ApplicationsController extends Controller
         return isset($labels[$key]) ? $labels[$key] : (string)$key;
     }
 
-    private function logStatusChange($submission, $label, $oldStatus, $newStatus, $note = '')
+    /**
+     * @param string $format Translated sentence with %1$s (old status) and %2$s (new status)
+     */
+    private function logStatusChange($submission, $format, $oldStatus, $newStatus, $note = '')
     {
-        $content = esc_html($label) . ' <b>' . esc_html($oldStatus) . '</b> &rarr; <b>' . esc_html($newStatus) . '</b>';
+        $content = sprintf(esc_html($format), '<b>' . esc_html($oldStatus) . '</b>', '<b>' . esc_html($newStatus) . '</b>');
         if ($note) {
-            $content .= '<br />' . esc_html__('Note:', 'ninja-job-board') . ' ' . $note;
+            /* translators: %s: note text */
+            $content .= '<br />' . sprintf(esc_html__('Note: %s', 'ninja-job-board'), $note);
         }
 
         $user = wp_get_current_user();

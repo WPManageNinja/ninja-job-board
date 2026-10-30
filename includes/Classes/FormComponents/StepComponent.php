@@ -21,24 +21,24 @@ class StepComponent extends BaseComponent
     {
         return array(
             'type'            => 'step_component',
-            'editor_title'    => 'Form Step',
+            'editor_title'    => __('Form step', 'ninja-job-board'),
             'group'           => 'html',
             'postion_group'   => 'general',
             'editor_elements' => array(
                 'step_title'  => array(
-                    'label' => 'Step Title',
+                    'label' => __('Step title', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general',
-                    'info'  => 'Provide a step title'
+                    'info'  => __('Provide a step title.', 'ninja-job-board')
                 ),
                 'next_button' => array(
-                    'label' => 'Next Step Button Text',
+                    'label' => __('Next step button text', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general',
                     'info'  => ''
                 ),
                 'back_button' => array(
-                    'label' => 'Back Button Text',
+                    'label' => __('Back button text', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general',
                     'info'  => ''
@@ -46,8 +46,8 @@ class StepComponent extends BaseComponent
             ),
             'field_options'   => array(
                 'step_title'  => '',
-                'next_button' => 'Next',
-                'back_button' => 'Back'
+                'next_button' => __('Next', 'ninja-job-board'),
+                'back_button' => __('Back', 'ninja-job-board')
             )
         );
     }
@@ -74,7 +74,7 @@ class StepComponent extends BaseComponent
         ?>
         <?php if ($lastStep): ?>
         <?php
-        $backBtnText = ArrayHelper::get($lastStep, 'field_options.back_button', 'Back');
+        $backBtnText = ArrayHelper::get($lastStep, 'field_options.back_button', __('Back', 'ninja-job-board'));
         ?>
         <div class="wpjb_step_button_wrapper wpjb_last_step">
             <button data-target_step_number="<?php echo intval($lastStep['step_counter']) - 1; ?>"
@@ -97,12 +97,12 @@ class StepComponent extends BaseComponent
 
         $fieldOptions = ArrayHelper::get($element, 'field_options', []);
         $stepTitle = ArrayHelper::get($fieldOptions, 'step_title');
-        $nextBtnText = ArrayHelper::get($fieldOptions, 'next_button', 'Next');
+        $nextBtnText = ArrayHelper::get($fieldOptions, 'next_button', __('Next', 'ninja-job-board'));
         ?>
         <div class="wpjb_step_button_wrapper">
             <?php if ($element['previous_step']): ?>
                 <?php
-                $backBtnText = ArrayHelper::get($element['previous_step'], 'field_options.back_button', 'Back');
+                $backBtnText = ArrayHelper::get($element['previous_step'], 'field_options.back_button', __('Back', 'ninja-job-board'));
                 ?>
                 <button data-target_step_number="<?php echo (int) $element['step_counter'] - 2; ?>"
                         class="wpjb_step_button wpjb_step_back"><?php echo wp_kses_post($backBtnText); ?></button>

@@ -17,62 +17,71 @@ class DateComponent extends BaseComponent
 
     public function component()
     {
+        $example = function ($format, $sample) {
+            /* translators: 1: date format code, 2: sample date in that format */
+            return sprintf(__('%1$s (example: %2$s)', 'ninja-job-board'), $format, $sample);
+        };
+        $timeExample = function ($format, $sample) {
+            /* translators: 1: time format code, 2: sample time in that format */
+            return sprintf(__('%1$s (time only, example: %2$s)', 'ninja-job-board'), $format, $sample);
+        };
+
         $dateFormats = apply_filters('wpjobboard/available_date_formats', array(
-            'm/d/Y'       => 'm/d/Y - (Ex: 04/28/2018)', // USA
-            'd/m/Y'       => 'd/m/Y - (Ex: 28/04/2018)', // Canada, UK
-            'd.m.Y'       => 'd.m.Y - (Ex: 28.04.2019)', // Germany
-            'n/j/y'       => 'n/j/y - (Ex: 4/28/18)',
-            'm/d/y'       => 'm/d/y - (Ex: 04/28/18)',
-            'M/d/Y'       => 'M/d/Y - (Ex: Apr/28/2018)',
-            'y/m/d'       => 'y/m/d - (Ex: 18/04/28)',
-            'Y-m-d'       => 'Y-m-d - (Ex: 2018-04-28)',
-            'd-M-y'      => 'd-M-y - (Ex: 28-Apr-18)',
-            'm/d/Y h:i K' => 'm/d/Y h:i K - (Ex: 04/28/2018 08:55 PM)', // USA
-            'm/d/Y H:i'   => 'm/d/Y H:i - (Ex: 04/28/2018 20:55)', // USA
-            'd/m/Y h:i K' => 'd/m/Y h:i K - (Ex: 28/04/2018 08:55 PM)', // Canada, UK
-            'd/m/Y H:i'   => 'd/m/Y H:i - (Ex: 28/04/2018 20:55)', // Canada, UK
-            'd.m.Y h:i K' => 'd.m.Y h:i K - (Ex: 28.04.2019 08:55 PM)', // Germany
-            'd.m.Y H:i'   => 'd.m.Y H:i - (Ex: 28.04.2019 20:55)', // Germany
-            'h:i K'       => 'h:i K (Only Time Ex: 08:55 PM)',
-            'H:i'         => 'H:i (Only Time Ex: 20:55)',
+            'm/d/Y'       => $example('m/d/Y', '04/28/2018'), // USA
+            'd/m/Y'       => $example('d/m/Y', '28/04/2018'), // Canada, UK
+            'd.m.Y'       => $example('d.m.Y', '28.04.2019'), // Germany
+            'n/j/y'       => $example('n/j/y', '4/28/18'),
+            'm/d/y'       => $example('m/d/y', '04/28/18'),
+            'M/d/Y'       => $example('M/d/Y', 'Apr/28/2018'),
+            'y/m/d'       => $example('y/m/d', '18/04/28'),
+            'Y-m-d'       => $example('Y-m-d', '2018-04-28'),
+            'd-M-y'      => $example('d-M-y', '28-Apr-18'),
+            'm/d/Y h:i K' => $example('m/d/Y h:i K', '04/28/2018 08:55 PM'), // USA
+            'm/d/Y H:i'   => $example('m/d/Y H:i', '04/28/2018 20:55'), // USA
+            'd/m/Y h:i K' => $example('d/m/Y h:i K', '28/04/2018 08:55 PM'), // Canada, UK
+            'd/m/Y H:i'   => $example('d/m/Y H:i', '28/04/2018 20:55'), // Canada, UK
+            'd.m.Y h:i K' => $example('d.m.Y h:i K', '28.04.2019 08:55 PM'), // Germany
+            'd.m.Y H:i'   => $example('d.m.Y H:i', '28.04.2019 20:55'), // Germany
+            'h:i K'       => $timeExample('h:i K', '08:55 PM'),
+            'H:i'         => $timeExample('H:i', '20:55'),
         ));
 
         return array(
             'type'            => 'date',
-            'editor_title'    => 'Date Field',
+            'editor_title'    => __('Date', 'ninja-job-board'),
             'group'           => 'input',
             'postion_group'   => 'general',
             'editor_elements' => array(
                 'label'         => array(
-                    'label' => 'Field Label',
+                    'label' => __('Field label', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 ),
                 'placeholder'   => array(
-                    'label' => 'Placeholder',
+                    'label' => __('Placeholder', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 ),
                 'required'      => array(
-                    'label' => 'Required',
+                    'label' => __('Required', 'ninja-job-board'),
                     'type'  => 'switch',
                     'group' => 'general'
                 ),
                 'date_format'   => array(
-                    'label'     => 'Date Format',
+                    'label'     => __('Date format', 'ninja-job-board'),
                     'type'      => 'select_option',
                     'options'   => $dateFormats,
                     'group'     => 'general',
                     'creatable' => 'yes'
                 ),
                 'default_value' => array(
-                    'label' => 'Default Value',
+                    'label' => __('Default value', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 )
             ),
             'field_options'   => array(
-                'label'       => 'Date',
+                'label'       => __('Date', 'ninja-job-board'),
                 'placeholder' => '',
                 'required'    => 'no',
                 'date_format' => 'm/d/Y'

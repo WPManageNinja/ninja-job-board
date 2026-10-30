@@ -171,7 +171,8 @@ class SubmissionHandler
                 $label = $element['id'];
             }
         }
-        $label = $label . __(' is required', 'ninja-job-board');
+        /* translators: %s: field label */
+        $label = sprintf(__('%s is required.', 'ninja-job-board'), $label);
         return apply_filters('wpjobboard/error_label_text', $label, $element, $formId);
     }
 

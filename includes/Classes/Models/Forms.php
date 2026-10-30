@@ -114,7 +114,7 @@ class Forms
         }
         $buttonDefault = array(
             'button_text'     => __('Apply', 'ninja-job-board'),
-            'processing_text' => __('Please Wait…', 'ninja-job-board'),
+            'processing_text' => __('Please wait…', 'ninja-job-board'),
             'button_style'    => 'wpjb_default_btn',
             'css_class'       => ''
         );
@@ -195,7 +195,7 @@ class Forms
         }
         $formattedShortcodes = array(
             'input' => array(
-                'title'      => 'Custom Input Items',
+                'title'      => __('Custom input items', 'ninja-job-board'),
                 'shortcodes' => array()
             )
         );
@@ -211,7 +211,7 @@ class Forms
         $items = [$formattedShortcodes['input']];
 
         $submissionItem = array(
-            'title'      => 'Submission Fields',
+            'title'      => __('Application fields', 'ninja-job-board'),
             'shortcodes' => array(
                 '{submission.id}'              => __('Submission ID', 'ninja-job-board'),
                 '{submission.submission_hash}' => __('Submission Hash ID', 'ninja-job-board'),
@@ -303,18 +303,18 @@ class Forms
                 'limit_type'                 => 'total',
                 'number_of_entries'          => 100,
                 'limit_application_statuses' => array(),
-                'limit_exceeds_message'      => __('Number of entry has been exceeds, Please check back later', 'ninja-job-board')
+                'limit_exceeds_message'      => __('The maximum number of applications has been reached. Please check back later.', 'ninja-job-board')
             ),
             'scheduleForm'             => array(
                 'status'               => 'no',
                 'start_date'           => gmdate('Y-m-d H:i:s'),
                 'end_date'             => '',
-                'before_start_message' => __('Form submission time schedule is not started yet. Please check back later', 'ninja-job-board'),
-                'expire_message'       => __('Form submission time has been expired.', 'ninja-job-board')
+                'before_start_message' => __('The application period has not started yet. Please check back later.', 'ninja-job-board'),
+                'expire_message'       => __('The application period has ended.', 'ninja-job-board')
             ),
             'requireLogin'             => array(
                 'status'  => 'no',
-                'message' => __('You need to login to submit this form', 'ninja-job-board')
+                'message' => __('You need to log in to submit this form.', 'ninja-job-board')
             ),
             'restriction_applied_type' => 'hide_form'
         );

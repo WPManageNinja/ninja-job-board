@@ -45,7 +45,7 @@ class FormsController extends Controller
     {
         $title = $this->text($request, 'post_title');
         if (!$title || !is_string($title)) {
-            return $this->error(__('Please Provide a job title', 'ninja-job-board'));
+            return $this->error(__('Please provide a job title.', 'ninja-job-board'));
         }
 
         $data = array(
@@ -66,7 +66,7 @@ class FormsController extends Controller
         $this->createDemoApplicationForm($formId);
 
         return array(
-            'message'      => __('Please wait, You are redirecting to the next page', 'ninja-job-board'),
+            'message'      => __('Please wait. You are being redirected to the next page.', 'ninja-job-board'),
             'form_id'      => $formId,
             'redirect_url' => get_edit_post_link($formId, 'raw')
         );
@@ -96,7 +96,7 @@ class FormsController extends Controller
 
         $title = $this->text($request, 'post_title');
         if (!$title || !is_string($title)) {
-            return $this->error(__('Please provide form title', 'ninja-job-board'));
+            return $this->error(__('Enter a job title.', 'ninja-job-board'));
         }
 
         $content = $request->get_param('post_content');
@@ -216,7 +216,7 @@ class FormsController extends Controller
         $form = apply_filters('wpjobboard/impor_form_json_data', $form);
 
         if (!is_array($form) || !isset($form['post_title']) || ArrayHelper::get($form, 'post_type') != 'wp_job_board') {
-            return $this->error(__('Invalid File, Please upload right json file', 'ninja-job-board'));
+            return $this->error(__('Invalid file. Please upload a valid JSON file.', 'ninja-job-board'));
         }
 
         do_action('wpjobboard/before_form_json_import', $form);
@@ -238,6 +238,7 @@ class FormsController extends Controller
     {
         $default = '{"form_meta":{"wpjobboard_application_builder_settings":[{"type":"applicant_name","editor_title":"Applicant Name","group":"input","postion_group":"general","editor_elements":{"label":{"label":"Field Label","type":"text","group":"general"},"placeholder":{"label":"Placeholder","type":"text","group":"general"},"required":{"label":"Required","type":"switch","group":"general"},"default_value":{"label":"Default Value","type":"text","group":"general"}},"field_options":{"label":"Your Name","placeholder":"Name","required":"yes"},"id":"applicant_name"},{"type":"applicant_email","editor_title":"Applicant Email","group":"input","postion_group":"general","editor_elements":{"label":{"label":"Field Label","type":"text","group":"general"},"placeholder":{"label":"Placeholder","type":"text","group":"general"},"required":{"label":"Required","type":"switch","group":"general"},"confirm_email":{"label":"Enable Confirm Email Field","type":"confirm_email_switch","group":"general"},"default_value":{"label":"Default Value","type":"text","group":"general"}},"field_options":{"label":"Email Address","placeholder":"Email Address","required":"yes","confirm_email":"no","confirm_email_label":"Confirm Email","default_value":""},"id":"applicant_email"},{"type":"file_upload_input","editor_title":"File Upload","group":"input","postion_group":"general","editor_elements":{"label":{"label":"Upload Label","type":"text","group":"general"},"button_text":{"label":"Upload Button Text","type":"text","group":"general"},"required":{"label":"Required","type":"switch","group":"general"},"max_file_size":{"label":"Max File Size (in MegaByte)","type":"number","group":"general"},"max_allowed_files":{"label":"Max Upload Files","type":"number","group":"general"},"allowed_files":{"label":"Allowed file types","type":"checkbox","wrapper_class":"checkbox_new_lined","options":{"images":"Images (jpg, jpeg, gif, png, bmp)","audios":"Audio (mp3, wav, ogg, wma, mka, m4a, ra, mid, midi)","pdf":"pdf","docs":"Docs (doc, ppt, pps, xls, mdb, docx, xlsx, pptx, odt, odp, ods, odg, odc, odb, odf, rtf, txt)","zips":"Zip Archives (zip, gz, gzip, rar, 7z)","csv":"CSV (csv)"}}},"field_options":{"label":"Attach Your CV","button_text":"Drag & Drop your files or Browse","required":"yes","max_file_size":"2","max_allowed_files":"1","allowed_files":["pdf"]},"id":"file_upload_input"}],"wpjobboard_submit_button_settings":{"button_text":"Submit Application","processing_text":"Please Wait\u2026","button_style":"wpjb_default_btn","css_class":""},"jobboard_confirmation_settings":{"confirmation_type":"custom","redirectTo":"samePage","customUrl":"","messageToShow":"<p>Your application has been successfully submitted.<\/p>","samePageFormBehavior":"hide_form"},"wpjobboard_form_design_settings":{"labelPlacement":"top","asteriskPlacement":"left","submit_button_position":"right","extra_styles":{"wpjb_default_form_styles":"yes","wpjb_bold_labels":"no"}},"wpjb_email_notifications":[{"title":"Email Notification to Admin","email_to":"{wp:admin_email}","reply_to":"{submission.applicant_email}","email_subject":"New Job Application Submitted at {wp:post_title}","email_body":"<p><strong>Application Details:<\/strong><\/p>\n<p>{submission.all_input_field_html}<\/p>\n<p>Application has been submitted at: {wp:post_url}<\/p>","from_name":"","from_email":"","format":"html","email_template":"default","cc_to":"","bcc_to":"","conditions":"","sending_action":"wpjobboard\/after_form_submission_complete","status":"disabled"}]}}';
         $defaltForm = json_decode($default, true);
+        $defaltForm = $this->localizeDemoForm($defaltForm);
 
         $builderSettings  = ArrayHelper::get($defaltForm, 'form_meta.wpjobboard_application_builder_settings');
         if($builderSettings) {
@@ -265,5 +266,63 @@ class FormsController extends Controller
         if($emailSettings) {
             update_post_meta($formId, 'wpjb_email_notifications', $emailSettings);
         }
+    }
+
+    /**
+     * Replace the English defaults of the demo form with translated text.
+     */
+    private function localizeDemoForm($form)
+    {
+        if (!is_array($form)) {
+            return $form;
+        }
+
+        $fieldTexts = array(
+            'applicant_name'    => array(
+                'label'       => __('Your name', 'ninja-job-board'),
+                'placeholder' => __('Name', 'ninja-job-board')
+            ),
+            'applicant_email'   => array(
+                'label'               => __('Email address', 'ninja-job-board'),
+                'placeholder'         => __('Email address', 'ninja-job-board'),
+                'confirm_email_label' => __('Confirm email', 'ninja-job-board')
+            ),
+            'file_upload_input' => array(
+                'label'       => __('Attach your CV', 'ninja-job-board'),
+                'button_text' => __('Drag and drop your files or browse', 'ninja-job-board')
+            )
+        );
+
+        $fields = ArrayHelper::get($form, 'form_meta.wpjobboard_application_builder_settings', array());
+        foreach ($fields as $index => $field) {
+            $fieldId = ArrayHelper::get($field, 'id');
+            if (isset($fieldTexts[$fieldId])) {
+                $form['form_meta']['wpjobboard_application_builder_settings'][$index]['field_options'] = array_merge(
+                    (array) ArrayHelper::get($field, 'field_options', array()),
+                    $fieldTexts[$fieldId]
+                );
+            }
+        }
+
+        if (isset($form['form_meta']['wpjobboard_submit_button_settings'])) {
+            $form['form_meta']['wpjobboard_submit_button_settings']['button_text'] = __('Submit application', 'ninja-job-board');
+            $form['form_meta']['wpjobboard_submit_button_settings']['processing_text'] = __('Please wait…', 'ninja-job-board');
+        }
+
+        if (isset($form['form_meta']['jobboard_confirmation_settings'])) {
+            $form['form_meta']['jobboard_confirmation_settings']['messageToShow'] = '<p>' . esc_html__('Your application has been successfully submitted.', 'ninja-job-board') . '</p>';
+        }
+
+        if (isset($form['form_meta']['wpjb_email_notifications'][0])) {
+            $form['form_meta']['wpjb_email_notifications'][0]['title'] = __('Email notification to admin', 'ninja-job-board');
+            /* translators: %s: job title placeholder, for example {wp:post_title} */
+            $form['form_meta']['wpjb_email_notifications'][0]['email_subject'] = sprintf(__('New job application for %s', 'ninja-job-board'), '{wp:post_title}');
+            $form['form_meta']['wpjb_email_notifications'][0]['email_body'] = '<p><strong>' . esc_html__('Application details:', 'ninja-job-board') . '</strong></p>' . "\n"
+                . '<p>{submission.all_input_field_html}</p>' . "\n"
+                /* translators: %s: job page URL placeholder, for example {wp:post_url} */
+                . '<p>' . sprintf(esc_html__('Job page: %s', 'ninja-job-board'), '{wp:post_url}') . '</p>';
+        }
+
+        return $form;
     }
 }

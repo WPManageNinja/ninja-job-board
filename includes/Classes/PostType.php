@@ -31,14 +31,14 @@ class PostType
     public function register()
     {
         $labels = [
-            'name'          => 'Jobs',
-            'singular_name' => 'Job',
-            'add_new'       => 'Add New Job',
-            'edit_item'     => 'Edit Job',
-            'view_item'     => 'View Job Post',
-            'view_items'    => 'View Job Posts',
-            'search_items'  => 'Search Job Posts',
-            'not_found'     => 'No Job Found',
+            'name'          => __('Jobs', 'ninja-job-board'),
+            'singular_name' => __('Job', 'ninja-job-board'),
+            'add_new'       => __('Add new job', 'ninja-job-board'),
+            'edit_item'     => __('Edit job', 'ninja-job-board'),
+            'view_item'     => __('View job', 'ninja-job-board'),
+            'view_items'    => __('View job posts', 'ninja-job-board'),
+            'search_items'  => __('Search jobs', 'ninja-job-board'),
+            'not_found'     => __('No jobs found.', 'ninja-job-board'),
         ];
 
         $postSlug = apply_filters('wpjobboard/job_slug', 'wpjb-jobs');
@@ -192,11 +192,9 @@ class PostType
             $html .= '<li class="wpjb_job_location"><img alt="" class="wpjb_meta_icon" src="' . esc_url(WPJOBBOARD_URL . 'assets/images/map.svg') . '" />' . esc_html($location) . '</li>';
         }
         if($vacancies && $show('vacancies')) {
-            $vacanciesText = __('No. of Vacancies:', 'ninja-job-board');
-            if(intval($vacancies) == 1) {
-                $vacanciesText = __('No. of Vacancy:', 'ninja-job-board');
-            }
-            $html .= '<li class="wpjb_job_vacancies"><img alt="" class="wpjb_meta_icon" src="' . esc_url(WPJOBBOARD_URL . 'assets/images/people.svg') . '" />' . esc_html($vacanciesText . ' ' . $vacancies) . '</li>';
+            /* translators: %s: number of vacancies */
+            $vacanciesText = sprintf(_n('Vacancy: %s', 'Vacancies: %s', intval($vacancies), 'ninja-job-board'), $vacancies);
+            $html .= '<li class="wpjb_job_vacancies"><img alt="" class="wpjb_meta_icon" src="' . esc_url(WPJOBBOARD_URL . 'assets/images/people.svg') . '" />' . esc_html($vacanciesText) . '</li>';
         }
         if($experinceText && $show('experience')) {
             $html .= '<li class="wpjb_job_exp_text"><img alt="" class="wpjb_meta_icon" src="' . esc_url(WPJOBBOARD_URL . 'assets/images/exp.svg') . '" />' . esc_html($experinceText) . '</li>';
@@ -305,21 +303,21 @@ class PostType
         <div class="wpjb_meta_field">
             <label><?php esc_html_e('Location', 'ninja-job-board');?></label>
             <div class="wpjb_input_container">
-                <input placeholder="Location" type="text" value="<?php echo esc_attr($location); ?>"
+                <input placeholder="<?php esc_attr_e('Location', 'ninja-job-board'); ?>" type="text" value="<?php echo esc_attr($location); ?>"
                        name="wpjobboard_job_meta_values[job_location]"/>
             </div>
         </div>
         <div class="wpjb_meta_field">
-            <label><?php esc_html_e('Number of Vacancies', 'ninja-job-board');?></label>
+            <label><?php esc_html_e('Number of vacancies', 'ninja-job-board');?></label>
             <div class="wpjb_input_container">
-                <input placeholder="Number of Vacancies" type="number" value="<?php echo esc_attr($vacancies); ?>"
+                <input placeholder="<?php esc_attr_e('Number of vacancies', 'ninja-job-board'); ?>" type="number" value="<?php echo esc_attr($vacancies); ?>"
                        name="wpjobboard_job_meta_values[job_vacancies]"/>
             </div>
         </div>
         <div class="wpjb_meta_field">
             <label><?php esc_html_e('Experience Year Requirement', 'ninja-job-board');?> </label>
             <div class="wpjb_input_container">
-                <input placeholder="ex: 1-2 Years" type="text" value="<?php echo esc_attr($experinceText); ?>"
+                <input placeholder="<?php esc_attr_e('For example: 1-2 years', 'ninja-job-board'); ?>" type="text" value="<?php echo esc_attr($experinceText); ?>"
                        name="wpjobboard_job_meta_values[job_experince_text]"/>
             </div>
         </div>

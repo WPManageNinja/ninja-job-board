@@ -20,42 +20,42 @@ class ApplicantEmailComponent extends BaseComponent
     {
         return array(
             'type'            => 'applicant_email',
-            'editor_title'    => 'Applicant Email',
+            'editor_title'    => __('Applicant email', 'ninja-job-board'),
             'group'           => 'input',
             'postion_group'   => 'general',
             'editor_elements' => array(
                 'label'         => array(
-                    'label' => 'Field Label',
+                    'label' => __('Field label', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 ),
                 'placeholder'   => array(
-                    'label' => 'Placeholder',
+                    'label' => __('Placeholder', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 ),
                 'required'      => array(
-                    'label' => 'Required',
+                    'label' => __('Required', 'ninja-job-board'),
                     'type'  => 'switch',
                     'group' => 'general'
                 ),
                 'confirm_email'      => array(
-                    'label' => 'Enable Confirm Email Field',
+                    'label' => __('Enable confirm email field', 'ninja-job-board'),
                     'type'  => 'confirm_email_switch',
                     'group' => 'general'
                 ),
                 'default_value' => array(
-                    'label' => 'Default Value',
+                    'label' => __('Default value', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 ),
             ),
             'field_options'   => array(
-                'label' => 'Email Address',
-                'placeholder' => 'Email Address',
+                'label' => __('Email address', 'ninja-job-board'),
+                'placeholder' => __('Email address', 'ninja-job-board'),
                 'required' => 'yes',
                 'confirm_email' => 'no',
-                'confirm_email_label' => 'Confirm Email',
+                'confirm_email_label' => __('Confirm email', 'ninja-job-board'),
                 'default_value' => ''
             )
         );
@@ -71,7 +71,8 @@ class ApplicantEmailComponent extends BaseComponent
         if($value) {
             // We have to check if it's a valid email address or not
             if(!is_email($value)) {
-                return __('Valid email address is required for field:', 'ninja-job-board').' '.ArrayHelper::get($element, 'label');
+                /* translators: %s: field label */
+                return sprintf(__('Enter a valid email address in %s.', 'ninja-job-board'), ArrayHelper::get($element, 'label'));
             }
         }
 
@@ -79,7 +80,8 @@ class ApplicantEmailComponent extends BaseComponent
         if(ArrayHelper::get($element, 'options.confirm_email') == 'yes') {
             $confirmEmailvalue = ArrayHelper::get($data, '__confirm_'.$elementId);
             if($confirmEmailvalue != $value) {
-                return ArrayHelper::get($element, 'label') .' & '.ArrayHelper::get($element, 'options.confirm_email_label') .__(' does not match', 'ninja-job-board');
+                /* translators: 1: email field label, 2: confirm email field label */
+                return sprintf(__('%1$s and %2$s do not match.', 'ninja-job-board'), ArrayHelper::get($element, 'label'), ArrayHelper::get($element, 'options.confirm_email_label'));
             }
         }
 
@@ -99,8 +101,8 @@ class ApplicantEmailComponent extends BaseComponent
             );
             $element['extra_input_class'] = 'wpjb_confirm_email';
             $element['id'] = '__confirm_'.$element['id'];
-            $element['field_options']['placeholder'] = ArrayHelper::get($element, 'field_options.confirm_email_label', 'Confirm Email');
-            $element['field_options']['label'] = ArrayHelper::get($element, 'field_options.confirm_email_label', 'Confirm Email');
+            $element['field_options']['placeholder'] = ArrayHelper::get($element, 'field_options.confirm_email_label', __('Confirm email', 'ninja-job-board'));
+            $element['field_options']['label'] = ArrayHelper::get($element, 'field_options.confirm_email_label', __('Confirm email', 'ninja-job-board'));
             $this->renderNormalInput($element, $form);
         }
     }

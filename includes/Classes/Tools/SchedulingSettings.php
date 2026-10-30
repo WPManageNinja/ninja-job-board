@@ -85,7 +85,7 @@ class SchedulingSettings
             if ($totalEntryCount >= intval($numberOfEntries)) {
                 return $limitEntrySettings['limit_exceeds_message']
                     ? $limitEntrySettings['limit_exceeds_message']
-                    : __('Submission limit has been exceded.', 'ninja-job-board');
+                    : __('The application limit has been reached.', 'ninja-job-board');
             }
         }
         return false;
@@ -101,7 +101,7 @@ class SchedulingSettings
             if ($time < $start) {
                 return $timeSchedule['before_start_message']
                     ? $timeSchedule['before_start_message']
-                    : __('Form submission is not started yet.', 'ninja-job-board');
+                    : __('The application period has not started yet.', 'ninja-job-board');
 
             }
             if ($time >= $end) {

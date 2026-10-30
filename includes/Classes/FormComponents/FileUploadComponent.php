@@ -37,40 +37,40 @@ class FileUploadComponent extends BaseComponent
             'postion_group'   => 'general',
             'editor_elements' => array(
                 'label'             => array(
-                    'label' => 'Upload Label',
+                    'label' => __('Upload label', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 ),
                 'button_text'       => array(
-                    'label' => 'Upload Button Text',
+                    'label' => __('Upload button text', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 ),
                 'required'          => array(
-                    'label' => 'Required',
+                    'label' => __('Required', 'ninja-job-board'),
                     'type'  => 'switch',
                     'group' => 'general'
                 ),
                 'max_file_size'     => array(
-                    'label' => 'Max File Size (in MegaByte)',
+                    'label' => __('Maximum file size (in MB)', 'ninja-job-board'),
                     'type'  => 'number',
                     'group' => 'general'
                 ),
                 'max_allowed_files' => array(
-                    'label' => 'Max Upload Files',
+                    'label' => __('Maximum number of files', 'ninja-job-board'),
                     'type'  => 'number',
                     'group' => 'general'
                 ),
                 'allowed_files'     => array(
-                    'label'         => 'Allowed file types',
+                    'label'         => __('Allowed file types', 'ninja-job-board'),
                     'type'          => 'checkbox',
                     'wrapper_class' => 'checkbox_new_lined',
                     'options'       => $this->getFileTypes('label')
                 )
             ),
             'field_options'   => array(
-                'label'             => 'Upload Your File',
-                'button_text'       => 'Drag & Drop your files or Browse',
+                'label'             => __('Upload your file', 'ninja-job-board'),
+                'button_text'       => __('Drag and drop your files or browse', 'ninja-job-board'),
                 'required'          => 'yes',
                 'max_file_size'     => 2,
                 'max_allowed_files' => 1,
@@ -106,7 +106,7 @@ class FileUploadComponent extends BaseComponent
 
         $btnText = ArrayHelper::get($fieldOptions, 'button_text');
         if (!$btnText) {
-            $btnText = 'Drag & Drop your files or Browse';
+            $btnText = __('Drag and drop your files or browse', 'ninja-job-board');
         }
 
         $associateKey = '__' . $element['id'] . '_files';
@@ -150,7 +150,7 @@ class FileUploadComponent extends BaseComponent
         $maxFiles = absint(ArrayHelper::get($element, 'options.max_allowed_files'));
         if ($maxFiles && count($dataValues) > $maxFiles) {
             /* translators: %d: maximum number of files */
-            return sprintf(__('You can upload maximum %d file(s)', 'ninja-job-board'), $maxFiles);
+            return sprintf(_n('You can upload a maximum of %d file.', 'You can upload a maximum of %d files.', $maxFiles, 'ninja-job-board'), $maxFiles);
         }
 
         $isRequired = ArrayHelper::get($element, 'options.required') == 'yes';
@@ -159,7 +159,8 @@ class FileUploadComponent extends BaseComponent
         }
 
         if (!$dataValues) {
-            $error = ArrayHelper::get($element, 'options.label') . ' ' . __('is required, Please upload required files', 'ninja-job-board');
+            /* translators: %s: field label */
+            $error = sprintf(__('%s is required. Please upload the required files.', 'ninja-job-board'), ArrayHelper::get($element, 'options.label'));
         }
         return $error;
     }
@@ -280,27 +281,27 @@ class FileUploadComponent extends BaseComponent
     {
         $types = array(
             'images' => array(
-                'label'   => 'Images (jpg, jpeg, gif, png, bmp)',
+                'label'   => __('Images (jpg, jpeg, gif, png, bmp)', 'ninja-job-board'),
                 'accepts' => '.jpg,.jpeg,.gif,.png,.bmp'
             ),
             'audios' => array(
-                'label'   => 'Audio (mp3, wav, ogg, wma, mka, m4a, ra, mid, midi)',
+                'label'   => __('Audio (mp3, wav, ogg, wma, mka, m4a, ra, mid, midi)', 'ninja-job-board'),
                 'accepts' => '.mp3, .wav, .ogg, .wma, .mka, .m4a, .ra, .mid, .midi'
             ),
             'pdf'    => array(
-                'label'   => 'pdf',
+                'label'   => __('PDF (pdf)', 'ninja-job-board'),
                 'accepts' => '.pdf'
             ),
             'docs'   => array(
-                'label'   => 'Docs (doc, ppt, pps, xls, mdb, docx, xlsx, pptx, odt, odp, ods, odg, odc, odb, odf, rtf, txt)',
+                'label'   => __('Docs (doc, ppt, pps, xls, mdb, docx, xlsx, pptx, odt, odp, ods, odg, odc, odb, odf, rtf, txt)', 'ninja-job-board'),
                 'accepts' => '.doc,.ppt,.pps,.xls,.mdb,.docx,.xlsx,.pptx,.odt,.odp,.ods,.odg,.odc,.odb,.odf,.rtf,.txt'
             ),
             'zips'   => array(
-                'label'   => 'Zip Archives (zip, gz, gzip, rar, 7z)',
+                'label'   => __('Zip archives (zip, gz, gzip, rar, 7z)', 'ninja-job-board'),
                 'accepts' => '.zip,.gz,.gzip,.rar,.7z'
             ),
             'csv'    => array(
-                'label'   => 'CSV (csv)',
+                'label'   => __('CSV (csv)', 'ninja-job-board'),
                 'accepts' => '.csv'
             )
         );

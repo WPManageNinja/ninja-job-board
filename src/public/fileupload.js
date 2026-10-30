@@ -39,6 +39,7 @@ jQuery(document).ready(function ($) {
                 let uploadUrl = window.wp_job_board_general.ajax_url;
                 uploadUrl = addQueryString(uploadUrl, $.param(formData));
                 let $dropZoneParent = element.parent();
+                let i18n = window.wp_job_board_general.i18n || {};
                 let dropZoneInstance = $dropZoneParent.dropzone({
                     url: uploadUrl,
                     maxFiles: element.data('max_files'),
@@ -47,6 +48,14 @@ jQuery(document).ready(function ($) {
                     filesizeBase: 1024,
                     dictDefaultMessage: element.data('btn_txt'),
                     acceptedFiles: element.attr('accept'),
+                    dictFileTooBig: i18n.file_too_big || 'The file is too big ({{filesize}} MB). Maximum file size: {{maxFilesize}} MB.',
+                    dictInvalidFileType: i18n.invalid_file_type || 'You cannot upload files of this type.',
+                    dictResponseError: i18n.response_error || 'The server responded with code {{statusCode}}.',
+                    dictCancelUpload: i18n.cancel_upload || 'Cancel upload',
+                    dictUploadCanceled: i18n.upload_canceled || 'Upload canceled.',
+                    dictCancelUploadConfirmation: i18n.cancel_confirm || 'Are you sure you want to cancel this upload?',
+                    dictRemoveFile: i18n.remove_file || 'Remove file',
+                    dictMaxFilesExceeded: i18n.max_files || 'You cannot upload any more files.',
                     success(file, response) {
                         $('<input>', {
                             type: 'hidden',

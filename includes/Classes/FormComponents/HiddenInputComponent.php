@@ -20,23 +20,23 @@ class HiddenInputComponent extends BaseComponent
     {
         return array(
             'type'            => 'hidden_input',
-            'editor_title'    => 'Hidden Input',
+            'editor_title'    => __('Hidden input', 'ninja-job-board'),
             'group'           => 'input',
             'postion_group'   => 'general',
             'editor_elements' => array(
                 'label'         => array(
-                    'label' => 'Admin Field Label',
+                    'label' => __('Admin field label', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 ),
                 'default_value' => array(
-                    'label' => 'Input Value',
+                    'label' => __('Input value', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 )
             ),
             'field_options'   => array(
-                'label'         => 'Hidden Value',
+                'label'         => __('Hidden value', 'ninja-job-board'),
                 'required'      => 'no',
                 'default_value' => ''
             )
@@ -46,7 +46,8 @@ class HiddenInputComponent extends BaseComponent
     public function validateOnSave($error, $element, $formId)
     {
         if (!ArrayHelper::get($element, 'field_options.default_value')) {
-            $error = __('Value is required for item:', 'ninja-job-board') . ' ' . ArrayHelper::get($element, 'field_options.label');
+            /* translators: %s: field label */
+            $error = sprintf(__('%s needs a value.', 'ninja-job-board'), ArrayHelper::get($element, 'field_options.label'));
         }
         return $error;
     }
