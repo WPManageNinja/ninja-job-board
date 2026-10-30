@@ -1,37 +1,38 @@
 <template>
     <div class="wpjb_settings_page wpjb_email_page">
         <div class="payform_section_header">
-            <h3 class="payform_section_title">New broadcast</h3>
+            <h3 class="payform_section_title">{{ $t('New broadcast') }}</h3>
             <div class="payform_section_actions">
-                <router-link class="el-button" :to="{ name: 'email_campaigns', params: { form_id: form_id } }">Cancel</router-link>
-                <el-button @click="sendEmail()" :loading="sending" type="primary" :icon="Promotion">Send broadcast</el-button>
+                <router-link class="el-button" :to="{ name: 'email_campaigns', params: { form_id: form_id } }">{{ $t('Cancel') }}</router-link>
+                <el-button @click="sendEmail()" :loading="sending" type="primary" :icon="Promotion">{{ $t('Send broadcast') }}</el-button>
             </div>
         </div>
         <el-form ref="new_campaign" class="wpjb_setting_rows" label-position="top" :model="campaign">
             <div class="wpjb_card wpjb_setting_card">
                 <div class="wpjb_card_head">
-                    <h3>Email</h3>
+                    <h3>{{ $t('Email') }}</h3>
                 </div>
                 <el-form-item>
                     <template #label>
-                        <span class="wpjb_field_label">Broadcast name</span>
-                        <span class="wpjb_field_help">Helps you find this broadcast later. Applicants do not see it.</span>
+                        <span class="wpjb_field_label">{{ $t('Broadcast name') }}</span>
+                        <span class="wpjb_field_help">{{ $t('Helps you find this broadcast later. Applicants do not see it.') }}</span>
                     </template>
-                    <el-input placeholder="For example: Interview invitations, May" aria-label="Broadcast name" v-model="campaign.title"></el-input>
+                    <el-input :placeholder="$t('For example: Interview invitations, May')" :aria-label="$t('Broadcast name')" v-model="campaign.title"></el-input>
                 </el-form-item>
 
                 <el-form-item>
                     <template #label>
-                        <span class="wpjb_field_label">Subject</span>
-                        <span class="wpjb_field_help">The subject line applicants see in their inbox.</span>
+                        <span class="wpjb_field_label">{{ $t('Subject') }}</span>
+                        <span class="wpjb_field_help">{{ $t('The subject line applicants see in their inbox.') }}</span>
                     </template>
-                    <el-input placeholder="Email subject" aria-label="Subject" v-model="campaign.subject"></el-input>
+                    <el-input :placeholder="$t('Email subject')" :aria-label="$t('Subject')" v-model="campaign.subject"></el-input>
                 </el-form-item>
 
                 <el-form-item class="is-stacked">
                     <template #label>
-                        <span class="wpjb_field_label">Email body</span>
-                        <span class="wpjb_field_help">Use <code>{applicant_name}</code> and <code>{applicant_email}</code> to add each applicant's details.</span>
+                        <span class="wpjb_field_label">{{ $t('Email body') }}</span>
+                        <!-- translators: %1$s and %2$s are merge tags that show the applicant name and email -->
+                        <span class="wpjb_field_help" v-html="$t('Use %1$s and %2$s to add the name and email of each applicant.', '<code>{applicant_name}</code>', '<code>{applicant_email}</code>')"></span>
                     </template>
                     <wp-editor v-model="campaign.body" />
                 </el-form-item>
@@ -39,18 +40,18 @@
 
             <div v-loading="loading" class="wpjb_card wpjb_setting_card">
                 <div class="wpjb_card_head">
-                    <h3>Recipients</h3>
+                    <h3>{{ $t('Recipients') }}</h3>
                 </div>
                 <el-form-item>
                     <template #label>
-                        <span class="wpjb_field_label">Who gets this email</span>
-                        <span class="wpjb_field_help">Leave both empty to email every applicant of this job.</span>
+                        <span class="wpjb_field_label">{{ $t('Who gets this email') }}</span>
+                        <span class="wpjb_field_help">{{ $t('Leave both empty to email every applicant of this job.') }}</span>
                     </template>
                     <div class="wpjb_select_stack">
                         <div>
-                            <label for="wpjb_bc_app_status">Application status</label>
+                            <label for="wpjb_bc_app_status">{{ $t('Application status') }}</label>
                             <el-select id="wpjb_bc_app_status" @change="getCount" multiple v-model="campaign.campaign_settings.application_statuses"
-                                       placeholder="All application statuses">
+                                       :placeholder="$t('All application statuses')">
                                 <template v-for="(status, status_key) in application_statuses" :key="status_key">
                                     <el-option
                                         v-if="status_key"
@@ -61,9 +62,9 @@
                             </el-select>
                         </div>
                         <div>
-                            <label for="wpjb_bc_internal_status">Internal status</label>
+                            <label for="wpjb_bc_internal_status">{{ $t('Internal status') }}</label>
                             <el-select id="wpjb_bc_internal_status" @change="getCount" multiple v-model="campaign.campaign_settings.internal_statuses"
-                                       placeholder="All internal statuses">
+                                       :placeholder="$t('All internal statuses')">
                                 <template v-for="(status, status_key) in internal_statuses" :key="status_key">
                                     <el-option
                                         v-if="status_key"
@@ -74,7 +75,8 @@
                             </el-select>
                         </div>
                         <p class="wpjb_field_note" role="status">
-                            <strong class="wpjb_num">{{ total }}</strong> {{ total == 1 ? 'applicant' : 'applicants' }} will get this email.
+                            <!-- translators: %s is the number of applicants -->
+                            {{ $_n('%s applicant will get this email.', '%s applicants will get this email.', total) }}
                         </p>
                     </div>
                 </el-form-item>

@@ -11,13 +11,13 @@
         <el-form v-loading="fetching" ref="layout_settings" class="wpjb_setting_rows" label-position="top" :model="layout_settings">
             <div class="wpjb_card wpjb_setting_card">
                 <div class="wpjb_card_head">
-                    <h3>Layout</h3>
+                    <h3>{{ $t('Layout') }}</h3>
                 </div>
                 <!--Label placement-->
                 <el-form-item>
                     <template #label>
-                        <span class="wpjb_field_label">Label alignment</span>
-                        <span class="wpjb_field_help">Where field labels sit: above, left of, or right of the field.</span>
+                        <span class="wpjb_field_label">{{ $t('Label alignment') }}</span>
+                        <span class="wpjb_field_help">{{ $t('Where field labels sit: above, left of, or right of the field.') }}</span>
                     </template>
                     <el-radio-group v-model="layout_settings.labelPlacement">
                         <el-radio-button v-for="(labelOption, optionName) in labelPlacementOptions"
@@ -30,8 +30,8 @@
                 <!--Required asterisk mark position -->
                 <el-form-item>
                     <template #label>
-                        <span class="wpjb_field_label">Required marker</span>
-                        <span class="wpjb_field_help">Where the asterisk shows on required fields.</span>
+                        <span class="wpjb_field_label">{{ $t('Required marker') }}</span>
+                        <span class="wpjb_field_help">{{ $t('Where the asterisk shows on required fields.') }}</span>
                     </template>
                     <el-radio-group v-model="layout_settings.asteriskPlacement">
                         <el-radio-button v-for="(option, optionName) in asteriskPlacementMock"
@@ -44,38 +44,38 @@
                 <!--Submit Button Position -->
                 <el-form-item>
                     <template #label>
-                        <span class="wpjb_field_label">Submit button position</span>
-                        <span class="wpjb_field_help">Alignment of the submit button under the form.</span>
+                        <span class="wpjb_field_label">{{ $t('Submit button position') }}</span>
+                        <span class="wpjb_field_help">{{ $t('Alignment of the submit button under the form.') }}</span>
                     </template>
                     <el-radio-group v-model="layout_settings.submit_button_position">
-                        <el-radio-button value="left">Left</el-radio-button>
-                        <el-radio-button value="center">Center</el-radio-button>
-                        <el-radio-button value="right">Right</el-radio-button>
+                        <el-radio-button value="left">{{ $t('Left') }}</el-radio-button>
+                        <el-radio-button value="center">{{ $t('Center') }}</el-radio-button>
+                        <el-radio-button value="right">{{ $t('Right') }}</el-radio-button>
                     </el-radio-group>
                 </el-form-item>
             </div>
 
             <div class="wpjb_card wpjb_setting_card">
                 <div class="wpjb_card_head">
-                    <h3>Field styles</h3>
+                    <h3>{{ $t('Field styles') }}</h3>
                 </div>
                 <!--Label font weight-->
                 <el-form-item>
                     <template #label>
-                        <span class="wpjb_field_label">Bold labels</span>
-                        <span class="wpjb_field_help">Show all field labels in bold.</span>
+                        <span class="wpjb_field_label">{{ $t('Bold labels') }}</span>
+                        <span class="wpjb_field_help">{{ $t('Show all field labels in bold.') }}</span>
                     </template>
-                    <el-switch active-value="yes" inactive-value="no" aria-label="Bold labels"
+                    <el-switch active-value="yes" inactive-value="no" :aria-label="$t('Bold labels')"
                                v-model="layout_settings.extra_styles.wpjb_bold_labels"/>
                 </el-form-item>
 
                 <!--Input Styling Option-->
                 <el-form-item>
                     <template #label>
-                        <span class="wpjb_field_label">Default input styles</span>
-                        <span class="wpjb_field_help">Use the plugin's input styles. Turn off to use your theme's styles.</span>
+                        <span class="wpjb_field_label">{{ $t('Default input styles') }}</span>
+                        <span class="wpjb_field_help">{{ $t("Use the plugin's input styles. Turn off to use your theme's styles.") }}</span>
                     </template>
-                    <el-switch active-value="yes" inactive-value="no" aria-label="Default input styles"
+                    <el-switch active-value="yes" inactive-value="no" :aria-label="$t('Default input styles')"
                                v-model="layout_settings.extra_styles.wpjb_default_form_styles"/>
                 </el-form-item>
             </div>
@@ -97,14 +97,14 @@
                     }
                 },
                 labelPlacementOptions: {
-                    'top': 'Top',
-                    'left': 'Left',
-                    'right': 'Right'
+                    'top': this.$t('Top'),
+                    'left': this.$t('Left'),
+                    'right': this.$t('Right')
                 },
                 asteriskPlacementMock: {
-                    'none': 'None',
-                    'left': 'Before label',
-                    'right': 'After label'
+                    'none': this.$_x('None', 'Required marker position'),
+                    'left': this.$t('Before label'),
+                    'right': this.$t('After label')
                 },
                 fetching: false,
                 saving: false
@@ -142,7 +142,7 @@
         },
         mounted() {
             this.getSettings();
-            this.$setTitle('Design Settings');
+            this.$setTitle(this.$t('Form design'));
         }
     }
 </script>

@@ -2,44 +2,44 @@
     <div class="wpjb_settings_page wpjb_email_page">
         <div class="payform_section_header">
             <h3 class="payform_section_title">
-                {{ campaign.title || 'Broadcast' }}
-                <span v-if="campaign.status" :class="['wpjb_badge', 'is-' + (isSending ? 'amber' : 'green')]">{{ isSending ? 'Sending' : 'Sent' }}</span>
+                {{ campaign.title || $t('Broadcast') }}
+                <span v-if="campaign.status" :class="['wpjb_badge', 'is-' + (isSending ? 'amber' : 'green')]">{{ isSending ? $_x('Sending', 'Email status') : $_x('Sent', 'Email status') }}</span>
             </h3>
             <div class="payform_section_actions">
-                <router-link class="el-button" :to="{ name: 'email_campaigns', params: { form_id: form_id } }">All broadcasts</router-link>
+                <router-link class="el-button" :to="{ name: 'email_campaigns', params: { form_id: form_id } }">{{ $t('All broadcasts') }}</router-link>
             </div>
         </div>
 
         <div v-loading="loading" class="wpjb_card">
             <dl class="wpjb_campaign_stats">
                 <div>
-                    <dt>Sent</dt>
+                    <dt>{{ $_x('Sent', 'Email status') }}</dt>
                     <dd>{{ stats.sent || 0 }}</dd>
                 </div>
                 <div>
-                    <dt>Remaining</dt>
+                    <dt>{{ $t('Remaining') }}</dt>
                     <dd>{{ stats.remaining || 0 }}</dd>
                 </div>
                 <div>
-                    <dt>Total recipients</dt>
+                    <dt>{{ $t('Total recipients') }}</dt>
                     <dd>{{ stats.all || 0 }}</dd>
                 </div>
             </dl>
             <div v-if="stats.remaining" class="wpjb_campaign_progress" role="status">
-                <p>Sending emails. Keep this tab open until all emails are sent.</p>
-                <el-progress :percentage="progress" :stroke-width="8" :aria-label="'Sent ' + progress + '%'"/>
+                <p>{{ $t('Sending emails. Keep this tab open until all emails are sent.') }}</p>
+                <el-progress :percentage="progress" :stroke-width="8" :aria-label="/* translators: %s is the percentage of emails sent, for example 40% */ $t('Sent: %s', progress + '%')"/>
             </div>
         </div>
 
         <div class="wpjb_card">
             <div class="wpjb_card_head">
-                <h3>Email</h3>
+                <h3>{{ $t('Email') }}</h3>
             </div>
             <div class="wpjb_card_body">
                 <dl class="wpjb_campaign_meta">
-                    <dt>Subject</dt>
+                    <dt>{{ $t('Subject') }}</dt>
                     <dd>{{ campaign.subject }}</dd>
-                    <dt>Created</dt>
+                    <dt>{{ $t('Created') }}</dt>
                     <dd class="wpjb_num">{{ $dateFormat(campaign.created_at, 'MMM D, YYYY h:mm A') }}</dd>
                 </dl>
             </div>
@@ -50,17 +50,17 @@
 
         <div v-if="emails.length" class="wpjb_card">
             <div class="wpjb_card_head">
-                <h3>Recipients <span class="wpjb_count wpjb_num">({{ emails.length }})</span></h3>
+                <h3>{{ $t('Recipients') }} <span class="wpjb_count wpjb_num">({{ emails.length }})</span></h3>
             </div>
             <el-table :data="emails">
-                <el-table-column label="Email" min-width="240" prop="email_to"></el-table-column>
-                <el-table-column label="Subject" min-width="240" prop="subject"></el-table-column>
-                <el-table-column label="Status" width="130">
+                <el-table-column :label="$t('Email')" min-width="240" prop="email_to"></el-table-column>
+                <el-table-column :label="$t('Subject')" min-width="240" prop="subject"></el-table-column>
+                <el-table-column :label="$t('Status')" width="130">
                     <template #default="scope">
-                        <span :class="['wpjb_badge', 'is-' + (scope.row.status === 'sent' ? 'green' : 'amber')]">{{ scope.row.status === 'sent' ? 'Sent' : 'Pending' }}</span>
+                        <span :class="['wpjb_badge', 'is-' + (scope.row.status === 'sent' ? 'green' : 'amber')]">{{ scope.row.status === 'sent' ? $_x('Sent', 'Email status') : $_x('Pending', 'Email status') }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="Sent at" width="200">
+                <el-table-column :label="$t('Sent at')" width="200">
                     <template #default="scope">
                         <span class="wpjb_num">{{ $dateFormat(scope.row.sent_at, 'MMM D, YYYY h:mm A') || '' }}</span>
                     </template>

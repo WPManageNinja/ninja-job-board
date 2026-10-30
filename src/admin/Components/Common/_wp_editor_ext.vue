@@ -1,11 +1,11 @@
 <template>
     <div class="wp_vue_editor_wrapper" :class="'editor_wrapper_'+ninja_editor_id">
         <template v-if="hasWpEditor">
-            <button @click="showPro" v-if="!has_pro" type="button" class="button ninja_demo_media_button"><span class="dashicons dashicons-admin-media"></span> Add Media (pro)</button>
+            <button @click="showPro" v-if="!has_pro" type="button" class="button ninja_demo_media_button"><span class="dashicons dashicons-admin-media"></span> {{ $t('Add media (Pro)') }}</button>
             <textarea :style="{ minHeight: height }" class="wp_vue_editor" :id="ninja_editor_id">{{modelValue}}</textarea>
         </template>
         <template v-else>
-            <p class="wpjb_help">The WordPress editor needs WordPress 4.8 or later. Update WordPress to use it.</p>
+            <p class="wpjb_help">{{ $t('The WordPress editor needs WordPress 4.8 or later. Update WordPress to use it.') }}</p>
             <textarea
                       class="wp_vue_editor wp_vue_editor_plain"
                       v-model="plain_content">
@@ -106,7 +106,7 @@
             },
             showPro() {
                 // has_pro is always true, so this button never shows. The old event bus is gone.
-                this.$message.info('Add Media is a pro feature');
+                this.$message.info(this.$t('Adding media is a Pro feature.'));
             }
         },
         mounted() {

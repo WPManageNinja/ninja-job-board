@@ -84,13 +84,13 @@
             },
             exportForm() {
                 window.location.href = this.$api.downloadUrl('/forms/' + this.export_id + '/export');
-                this.$notify.success('Exporting form');
+                this.$notify.success(this.$t('Downloading the job file.'));
                 this.export_id = '';
             },
             importForm() {
                 const file = this.$refs.import_file.files[0];
                 if (!file) {
-                    this.$message.error('Please select a .json file');
+                    this.$message.error(this.$t('Select a .json file to import.'));
                     return;
                 }
                 const formData = new FormData();

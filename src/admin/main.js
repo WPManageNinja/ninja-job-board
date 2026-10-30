@@ -6,6 +6,9 @@ import { ElMessage } from 'element-plus/es/components/message/index.mjs';
 import { ElMessageBox } from 'element-plus/es/components/message-box/index.mjs';
 import { ElNotification } from 'element-plus/es/components/notification/index.mjs';
 import dayjs from 'dayjs';
+import { $t, $_n, $_x } from './utils/i18n.js';
+import { elementLocale } from './utils/elementLocale.js';
+import { provideGlobalConfig } from 'element-plus/es/components/config-provider/index.mjs';
 
 import 'element-plus/theme-chalk/base.css';
 import 'element-plus/theme-chalk/el-loading.css';
@@ -39,16 +42,16 @@ Object.assign(app.config.globalProperties, {
     $confirm: ElMessageBox.confirm,
     $msgbox: ElMessageBox,
     $printElement: printElement,
-    $t(str) {
-        const transString = window.wpJobBoardsAdmin.i18n[str];
-        return transString ? transString : str;
-    },
+    $t,
+    $_n,
+    $_x,
     $showAjaxError(error) {
-        const message = (error && error.message) ? error.message : 'Something is wrong when doing ajax request! Please try again';
-        ElNotification.error({ title: 'Error', message });
+        const message = (error && error.message) ? error.message : $t('Something went wrong. Please try again.');
+        ElNotification.error({ title: $t('Error'), message });
     },
     $setTitle(title) {
-        document.title = title + ' :: Ninja Job Board';
+        // translators: %s is the title of the current admin screen, for example a job title
+        document.title = $t('%s :: Ninja Job Board', title);
     },
     $ucFirst(string) {
         return string ? string.charAt(0).toUpperCase() + string.slice(1) : '';
@@ -80,6 +83,9 @@ Object.assign(app.config.globalProperties, {
 });
 
 app.directive('loading', ElLoading.directive);
+// Element Plus texts (pagination, selects, tables, dialogs, date picker) in the site language
+provideGlobalConfig({ locale: elementLocale() }, app, true);
+
 app.use(router);
 
 WPJobBoard.app = app;

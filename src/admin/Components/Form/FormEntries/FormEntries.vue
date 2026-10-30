@@ -157,7 +157,7 @@
                 this.selected_internal_status = this.$route.query.internal_status;
             }
             this.getFormReport();
-            this.$setTitle('Job applications');
+            this.$setTitle(this.$t('Job applications'));
         }
     }
 </script>

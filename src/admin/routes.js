@@ -1,4 +1,3 @@
-import SupportAndDocumentation from './Components/SupportAndDocumentation.vue';
 import GlobalView from './Components/Global/index.vue';
 import AllForms from './Components/Forms/AllForms.vue';
 
@@ -122,11 +121,6 @@ return [
                 component: SettingView,
                 children: globalSettingsViewChilderRoutes
             },
-            {
-                path: 'support',
-                name: 'support',
-                component: SupportAndDocumentation
-            }
         ]
     },
     {

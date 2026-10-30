@@ -92,8 +92,8 @@
                         </el-switch>
                         <p v-if="item.info" class="wpjb_help" v-html="item.info"></p>
                     </el-form-item>
-                    <el-form-item v-if="element.field_options[itemName] == 'yes'" label="Confirm email label">
-                        <el-input placeholder="Confirm email label"
+                    <el-form-item v-if="element.field_options[itemName] == 'yes'" :label="$t('Confirm email label')">
+                        <el-input :placeholder="$t('Confirm email label')"
                                   v-model="element.field_options.confirm_email_label"></el-input>
                     </el-form-item>
                 </template>

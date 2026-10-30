@@ -66,7 +66,7 @@
             editForm() {
                 // validate first
                 if (!this.form.post_title) {
-                    this.$message.error('Please provide form title');
+                    this.$message.error(this.$t('Enter a job title.'));
                     return;
                 }
                 this.saving = true;
@@ -96,22 +96,22 @@
                     },
                     {
                         route: 'edit_form',
-                        title: this.$t('Application Form'),
+                        title: this.$t('Application form'),
                         match: ['edit_form']
                     },
                     {
                         route: 'confirmation_settings',
-                        title: this.$t('Form Settings'),
+                        title: this.$t('Form settings'),
                         match: ['confirmation_settings', 'design_options', 'scheduling_settings']
                     },
                     {
                         route: 'email_settings',
-                        title: this.$t('Email Notifications'),
+                        title: this.$t('Email notifications'),
                         match: ['email_settings']
                     },
                     {
                         route: 'email_campaigns',
-                        title: this.$t('Email Broadcast'),
+                        title: this.$t('Email broadcasts'),
                         match: ['email_campaigns', 'new_email_campaign', 'view_email_campaign']
                     }
                 ], this.form_id);

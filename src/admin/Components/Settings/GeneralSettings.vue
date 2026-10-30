@@ -63,7 +63,7 @@
                     <el-form-item>
                         <template #label>
                             <span class="wpjb_field_label">{{ $t('Delete all data when the plugin is deleted') }}</span>
-                            <span class="wpjb_field_help">{{ $t('Removes jobs, applications, uploaded files and settings when you delete the plugin from the Plugins screen. This can not be undone.') }}</span>
+                            <span class="wpjb_field_help">{{ $t('Removes jobs, applications, uploaded files and settings when you delete the plugin. You cannot undo this.') }}</span>
                         </template>
                         <el-switch active-value="yes" inactive-value="no" :aria-label="$t('Delete all data when the plugin is deleted')"
                                    v-model="settings.delete_data_on_uninstall"/>
@@ -132,7 +132,7 @@
         },
         mounted() {
             this.getSettings();
-            this.$setTitle('General settings');
+            this.$setTitle(this.$t('General settings'));
         }
     }
 </script>

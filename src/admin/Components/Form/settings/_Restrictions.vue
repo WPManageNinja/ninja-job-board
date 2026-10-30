@@ -2,35 +2,35 @@
     <el-form ref="form-bottom" class="wpjb_setting_rows" label-position="top">
         <div class="wpjb_card wpjb_setting_card">
             <div class="wpjb_card_head">
-                <h3>Application limit</h3>
+                <h3>{{ $t('Application limit') }}</h3>
             </div>
             <!--Limit Number of Entries-->
             <el-form-item>
                 <template #label>
-                    <span class="wpjb_field_label">Limit applications</span>
-                    <span class="wpjb_field_help">Close the form when it reaches a set number of applications.</span>
+                    <span class="wpjb_field_label">{{ $t('Limit applications') }}</span>
+                    <span class="wpjb_field_help">{{ $t('Close the form when it reaches a set number of applications.') }}</span>
                 </template>
-                <el-switch active-value="yes" inactive-value="no" aria-label="Limit applications"
+                <el-switch active-value="yes" inactive-value="no" :aria-label="$t('Limit applications')"
                            v-model="form.limitNumberOfEntries.status"></el-switch>
             </el-form-item>
 
             <!--Additional fields when limit number of entries enabled-->
             <el-form-item v-if="form.limitNumberOfEntries.status == 'yes'">
                 <template #label>
-                    <span class="wpjb_field_label">Maximum applications</span>
-                    <span class="wpjb_field_help">The number, the period, and which application statuses count.</span>
+                    <span class="wpjb_field_label">{{ $t('Maximum applications') }}</span>
+                    <span class="wpjb_field_help">{{ $t('Set the maximum number of applications, the period, and the application statuses that count toward the limit.') }}</span>
                 </template>
                 <div class="wpjb_inline_controls">
-                    <el-input-number :min="0" controls-position="right" aria-label="Maximum applications"
+                    <el-input-number :min="0" controls-position="right" :aria-label="$t('Maximum applications')"
                                      v-model="form.limitNumberOfEntries.number_of_entries"
                     ></el-input-number>
-                    <el-select v-model="form.limitNumberOfEntries.limit_type" aria-label="Limit period">
+                    <el-select v-model="form.limitNumberOfEntries.limit_type" :aria-label="$t('Limit period')">
                         <el-option v-for="(label, period) in entryPeriodOptions" :key="period"
                                    :label="label" :value="period"
                         ></el-option>
                     </el-select>
-                    <el-select class="wpjb_inline_full" multiple placeholder="All application statuses"
-                               aria-label="Application statuses that count"
+                    <el-select class="wpjb_inline_full" multiple :placeholder="$t('All application statuses')"
+                               :aria-label="$t('Application statuses that count')"
                                v-model="form.limitNumberOfEntries.limit_application_statuses">
                         <el-option v-for="(label, label_value) in applicationStatuses" :key="label_value"
                                    :label="label" :value="label_value"
@@ -40,112 +40,113 @@
             </el-form-item>
             <el-form-item v-if="form.limitNumberOfEntries.status == 'yes'" key="limit-reached-msg">
                 <template #label>
-                    <span class="wpjb_field_label">Limit reached message</span>
-                    <span class="wpjb_field_help">Shown instead of the form when the limit is reached.</span>
+                    <span class="wpjb_field_label">{{ $t('Limit reached message') }}</span>
+                    <span class="wpjb_field_help">{{ $t('Shown instead of the form when the limit is reached.') }}</span>
                 </template>
                 <el-input v-model="form.limitNumberOfEntries.limit_exceeds_message" type="textarea" :rows="3"
-                          aria-label="Limit reached message"></el-input>
+                          :aria-label="$t('Limit reached message')"></el-input>
             </el-form-item>
         </div>
 
         <div class="wpjb_card wpjb_setting_card">
             <div class="wpjb_card_head">
-                <h3>Schedule</h3>
+                <h3>{{ $_x('Schedule', 'Settings section heading') }}</h3>
             </div>
             <!--Schedule Form-->
             <el-form-item>
                 <template #label>
-                    <span class="wpjb_field_label">Schedule the form</span>
-                    <span class="wpjb_field_help">Accept applications only between two dates.</span>
+                    <span class="wpjb_field_label">{{ $t('Schedule the form') }}</span>
+                    <span class="wpjb_field_help">{{ $t('Accept applications only between two dates.') }}</span>
                 </template>
-                <el-switch active-value="yes" inactive-value="no" aria-label="Schedule the form"
+                <el-switch active-value="yes" inactive-value="no" :aria-label="$t('Schedule the form')"
                            v-model="form.scheduleForm.status"></el-switch>
             </el-form-item>
 
             <!--Additional fields when form scheduling enabled-->
             <el-form-item v-if="form.scheduleForm.status == 'yes'">
                 <template #label>
-                    <span class="wpjb_field_label">Opens on</span>
-                    <span class="wpjb_field_help">Uses server time. Now: <code>{{ current_date_time }}</code></span>
+                    <span class="wpjb_field_label">{{ $t('Opens on') }}</span>
+                    <!-- translators: %s is the current date and time on the server -->
+                    <span class="wpjb_field_help">{{ $t('Uses server time. The time now is %s.', current_date_time) }}</span>
                 </template>
                 <el-date-picker
                     value-format="YYYY-MM-DD HH:mm:ss"
                     v-model="form.scheduleForm.start_date"
                     type="datetime"
-                    aria-label="Opens on"
-                    placeholder="Select date and time">
+                    :aria-label="$t('Opens on')"
+                    :placeholder="$t('Select date and time')">
                 </el-date-picker>
             </el-form-item>
             <el-form-item v-if="form.scheduleForm.status == 'yes'">
                 <template #label>
-                    <span class="wpjb_field_label">Closes on</span>
-                    <span class="wpjb_field_help">The form stops accepting applications at this time.</span>
+                    <span class="wpjb_field_label">{{ $t('Closes on') }}</span>
+                    <span class="wpjb_field_help">{{ $t('The form stops accepting applications at this time.') }}</span>
                 </template>
                 <el-date-picker
                     value-format="YYYY-MM-DD HH:mm:ss"
                     v-model="form.scheduleForm.end_date"
                     type="datetime"
-                    aria-label="Closes on"
-                    placeholder="Select date and time"
+                    :aria-label="$t('Closes on')"
+                    :placeholder="$t('Select date and time')"
                     :shortcuts="dateShortcuts">
                 </el-date-picker>
             </el-form-item>
             <el-form-item v-if="form.scheduleForm.status == 'yes'">
                 <template #label>
-                    <span class="wpjb_field_label">Before opening message</span>
-                    <span class="wpjb_field_help">Shown before the start date.</span>
+                    <span class="wpjb_field_label">{{ $t('Before opening message') }}</span>
+                    <span class="wpjb_field_help">{{ $t('Shown before the form opens.') }}</span>
                 </template>
                 <el-input v-model="form.scheduleForm.before_start_message" type="textarea" :rows="3"
-                          aria-label="Before opening message"></el-input>
+                          :aria-label="$t('Before opening message')"></el-input>
             </el-form-item>
             <el-form-item v-if="form.scheduleForm.status == 'yes'">
                 <template #label>
-                    <span class="wpjb_field_label">After closing message</span>
-                    <span class="wpjb_field_help">Shown after the end date.</span>
+                    <span class="wpjb_field_label">{{ $t('After closing message') }}</span>
+                    <span class="wpjb_field_help">{{ $t('Shown after the form closes.') }}</span>
                 </template>
                 <el-input v-model="form.scheduleForm.expire_message" type="textarea" :rows="3"
-                          aria-label="After closing message"></el-input>
+                          :aria-label="$t('After closing message')"></el-input>
             </el-form-item>
         </div>
 
         <div class="wpjb_card wpjb_setting_card">
             <div class="wpjb_card_head">
-                <h3>Login</h3>
+                <h3>{{ $_x('Login', 'Settings section heading') }}</h3>
             </div>
             <!--Require user to be logged in-->
             <el-form-item>
                 <template #label>
-                    <span class="wpjb_field_label">Require login</span>
-                    <span class="wpjb_field_help">Only logged-in users can see the form.</span>
+                    <span class="wpjb_field_label">{{ $t('Require login') }}</span>
+                    <span class="wpjb_field_help">{{ $t('Only logged-in users can see the form.') }}</span>
                 </template>
-                <el-switch active-value="yes" inactive-value="no" aria-label="Require login"
+                <el-switch active-value="yes" inactive-value="no" :aria-label="$t('Require login')"
                            v-model="form.requireLogin.status"></el-switch>
             </el-form-item>
 
             <!--Additional fields when user logged in is enabled-->
             <el-form-item v-if="form.requireLogin.status == 'yes'">
                 <template #label>
-                    <span class="wpjb_field_label">Login required message</span>
-                    <span class="wpjb_field_help">Shown to logged-out visitors. Shortcodes and HTML work.</span>
+                    <span class="wpjb_field_label">{{ $t('Login required message') }}</span>
+                    <span class="wpjb_field_help">{{ $t('Shown to logged-out visitors. Shortcodes and HTML work.') }}</span>
                 </template>
                 <el-input type="textarea" :rows="3" v-model="form.requireLogin.message"
-                          aria-label="Login required message"></el-input>
+                          :aria-label="$t('Login required message')"></el-input>
             </el-form-item>
         </div>
 
         <div v-if="hasAnyRestriction" class="wpjb_card wpjb_setting_card">
             <div class="wpjb_card_head">
-                <h3>When a restriction applies</h3>
+                <h3>{{ $t('When a restriction applies') }}</h3>
             </div>
             <el-form-item>
                 <template #label>
-                    <span class="wpjb_field_label">Restricted form</span>
-                    <span class="wpjb_field_help">What happens to the form while a restriction is active.</span>
+                    <span class="wpjb_field_label">{{ $t('Restricted form') }}</span>
+                    <span class="wpjb_field_help">{{ $t('What happens to the form while a restriction is active.') }}</span>
                 </template>
                 <el-radio-group v-model="form.restriction_applied_type" class="wpjb_radio_list">
-                    <el-radio value="hide_form">Hide the form</el-radio>
-                    <el-radio value="hide_submit_button">Hide the submit button</el-radio>
-                    <el-radio value="validation_failed">Show a validation error after submit</el-radio>
+                    <el-radio value="hide_form">{{ $t('Hide the form') }}</el-radio>
+                    <el-radio value="hide_submit_button">{{ $t('Hide the submit button') }}</el-radio>
+                    <el-radio value="validation_failed">{{ $t('Show a validation error after submit') }}</el-radio>
                 </el-radio-group>
             </el-form-item>
         </div>
@@ -167,20 +168,20 @@
         data() {
             return {
                 entryPeriodOptions: {
-                    total: 'In total',
-                    day: 'Per day',
-                    week: 'Per week',
-                    month: 'Per month',
-                    year: 'Per year',
+                    total: this.$t('In total'),
+                    day: this.$t('Per day'),
+                    week: this.$t('Per week'),
+                    month: this.$t('Per month'),
+                    year: this.$t('Per year'),
                 },
                 applicationStatuses: window.wpJobBoardsAdmin.applicationStatuses,
                 dateShortcuts: [
                     {
-                        text: 'Today',
+                        text: this.$t('Today'),
                         value: () => new Date()
                     },
                     {
-                        text: 'Yesterday',
+                        text: this.$t('Yesterday'),
                         value: () => {
                             const date = new Date();
                             date.setTime(date.getTime() - 3600 * 1000 * 24);
@@ -188,7 +189,7 @@
                         }
                     },
                     {
-                        text: 'A week ago',
+                        text: this.$t('A week ago'),
                         value: () => {
                             const date = new Date();
                             date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);

@@ -81,9 +81,9 @@
             title() {
                 let index = this.editingNotificationIndex;
                 if (index != null && this.notifications.length) {
-                    return 'Edit notification';
+                    return this.$t('Edit notification');
                 }
-                return 'Email notifications';
+                return this.$t('Email notifications');
             }
         },
         methods: {
@@ -104,10 +104,10 @@
             },
             addNotidication() {
                 this.notifications.push({
-                    title: 'Email Notification',
+                    title: this.$t('Email notification'),
                     email_to: '',
                     reply_to: '',
-                    email_subject: 'Job Application Confirmation',
+                    email_subject: this.$t('Job application confirmation'),
                     email_body: '',
                     from_name: '',
                     from_email: '',

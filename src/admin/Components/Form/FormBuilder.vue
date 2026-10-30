@@ -75,7 +75,7 @@
                         <template #footer>
                             <div v-if="!builder_elements.length && !fetching" class="wpjb_empty wpjb_builder_empty">
                                 <h3>{{ $t('No fields yet') }}</h3>
-                                <p>{{ $t('Add fields from the list on the right. Click a field type, or drag it here. Applicants fill in these fields when they apply.') }}</p>
+                                <p>{{ $t('Click a field type on the right, or drag it here. Applicants fill in these fields when they apply.') }}</p>
                             </div>
                         </template>
                     </draggable>
@@ -249,7 +249,7 @@
             fieldGroups() {
                 let componentGroups = {
                     general: {
-                        title: 'Input fields',
+                        title: this.$t('Input fields'),
                         elements: []
                     }
                 }
@@ -329,7 +329,7 @@
                 let componentName = component.type;
                 if (!componentName) {
                     this.$message({
-                        message: 'Select a valid field type',
+                        message: this.$t('Select a valid field type.'),
                         type: 'error'
                     });
                     return;
@@ -342,7 +342,7 @@
                 // check if it's single only
                 if (component.single_only && this.alreadyExistElement(component.group)) {
                     this.$message({
-                        message: 'This field is already on your form. You can add it only once.',
+                        message: this.$t('This field is already on your form. You can add it only once.'),
                         type: 'error'
                     });
                     return;
@@ -357,7 +357,7 @@
                 this.adding_component = '';
             },
             handlePro(component) {
-                let message = 'This item is disabled';
+                let message = this.$t('This field is not available.');
                 if(component.disabled_message) {
                     message = component.disabled_message;
                 }
@@ -452,7 +452,7 @@
         mounted() {
             this.getSettings();
             this.showNotice = this.getFromStore('hide_form_' + this.form_id) != 'yes';
-            this.$setTitle('Application form');
+            this.$setTitle(this.$t('Application form'));
         }
     }
 </script>

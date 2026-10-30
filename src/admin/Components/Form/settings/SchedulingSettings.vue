@@ -69,7 +69,7 @@
         },
         mounted() {
             this.getSettings();
-            this.$setTitle('Scheduling Settings');
+            this.$setTitle(this.$t('Scheduling & restrictions'));
         }
     }
 </script>

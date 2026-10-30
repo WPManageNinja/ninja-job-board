@@ -3,12 +3,12 @@
         <el-form ref="submit_button_element_form" :model="submit_button" label-position="top" class="wpjb_editor_form" @submit.prevent>
             <div class="editor_form_item">
                 <el-form-item :label="$t('Button text')">
-                    <el-input :placeholder="$t('e.g. Submit application')" v-model="submit_button.button_text"></el-input>
+                    <el-input :placeholder="$t('For example: Submit application')" v-model="submit_button.button_text"></el-input>
                 </el-form-item>
             </div>
             <div class="editor_form_item">
                 <el-form-item :label="$t('Button text while submitting')">
-                    <el-input :placeholder="$t('e.g. Please wait...')" v-model="submit_button.processing_text"></el-input>
+                    <el-input :placeholder="$t('For example: Please wait…')" v-model="submit_button.processing_text"></el-input>
                 </el-form-item>
             </div>
             <div class="editor_form_item">

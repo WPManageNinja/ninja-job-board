@@ -39,7 +39,7 @@
                     },
                     {
                         route: 'tools',
-                        title: this.$t('Import & Export'),
+                        title: this.$t('Import & export'),
                         icon: markRaw(Tools)
                     }
                 ];

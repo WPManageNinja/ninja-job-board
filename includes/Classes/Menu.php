@@ -105,9 +105,8 @@ class Menu
             add_filter('script_loader_tag', array($this, 'loadAsModule'), 10, 2);
 
             $payformAdminVars = apply_filters('wpjobboard/admin_app_vars', array(
-                'i18n'                => array(
-                    'All Job Posts' => __('All Job Posts', 'ninja-job-board')
-                ),
+                // Generated from the admin app's $t() calls by i18n.node.cjs (npm run translate)
+                'i18n'                => TransStrings::getStrings(),
                 'applicationStatuses' => GeneralSettings::getApplicationStatuses(),
                 'internalStatuses'    => GeneralSettings::getInternalStatuses(),
                 'rest'                => array(

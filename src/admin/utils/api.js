@@ -5,6 +5,8 @@
  * Every method returns a Promise with the response JSON.
  * A failed request rejects with { status, message, data }.
  */
+import { $t } from './i18n.js';
+
 const config = () => window.wpJobBoardsAdmin.rest;
 
 // Serialize nested params like jQuery.param(): a[b][]=1
@@ -61,7 +63,7 @@ async function request(method, path, data) {
     try {
         response = await fetch(url, options);
     } catch (e) {
-        throw { status: 0, message: 'Network error. Please check your connection and try again.', data: {} };
+        throw { status: 0, message: $t('Network error. Please check your connection and try again.'), data: {} };
     }
 
     let json = null;
@@ -74,7 +76,7 @@ async function request(method, path, data) {
     if (!response.ok) {
         throw {
             status: response.status,
-            message: (json && json.message) || response.statusText || 'Something is wrong! Please try again',
+            message: (json && json.message) || response.statusText || $t('Something went wrong. Please try again.'),
             data: (json && json.data) || {}
         };
     }

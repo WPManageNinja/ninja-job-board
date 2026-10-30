@@ -51,7 +51,7 @@
                         <el-button
                             text
                             :icon="View"
-                            :aria-label="$t('View application from') + ' ' + (scope.row.applicant_name || '')"
+                            :aria-label="/* translators: %s is the applicant name */ $t('View application from %s', scope.row.applicant_name || scope.row.applicant_email || '')"
                             :title="$t('View application')"
                             @click="goToViewRoute(scope.row)"
                         />
@@ -59,7 +59,7 @@
                             text
                             class="is-danger"
                             :icon="Delete"
-                            :aria-label="$t('Delete application from') + ' ' + (scope.row.applicant_name || '')"
+                            :aria-label="/* translators: %s is the applicant name */ $t('Delete application from %s', scope.row.applicant_name || scope.row.applicant_email || '')"
                             :title="$t('Delete application')"
                             @click="showDeleteConformation(scope.row)"
                         />
@@ -86,11 +86,16 @@
             v-model="delete_pop_up"
             :before-close="handleDeleteClose"
             width="480px">
-            <p v-if="deleting_row">
-                {{ $t('The application from') }}
-                <strong>{{ deleting_row.applicant_name || deleting_row.applicant_email }}</strong>
-                <template v-if="deleting_row.post_title">{{ ' ' + $t('for') + ' ' }}<strong>{{ deleting_row.post_title }}</strong></template>{{ ' ' + $t('will be deleted permanently. You cannot undo this.') }}
-            </p>
+            <template v-if="deleting_row">
+                <p v-if="deleting_row.post_title">
+                    <!-- translators: %1$s is the applicant name or email, %2$s is the job title -->
+                    {{ $t('The application from %1$s for %2$s will be deleted permanently. You cannot undo this.', deleting_row.applicant_name || deleting_row.applicant_email, deleting_row.post_title) }}
+                </p>
+                <p v-else>
+                    <!-- translators: %s is the applicant name or email -->
+                    {{ $t('The application from %s will be deleted permanently. You cannot undo this.', deleting_row.applicant_name || deleting_row.applicant_email) }}
+                </p>
+            </template>
             <template #footer>
                 <el-button @click="delete_pop_up = false">{{ $t('Cancel') }}</el-button>
                 <el-button type="danger" :loading="deletetingItem" @click="deleteEntryNow()">{{ $t('Delete application') }}</el-button>

@@ -1,3 +1,5 @@
+import { $t } from './i18n.js';
+
 /**
  * Labels and badge colors for job post statuses and application statuses.
  * Colors use the Fluent badge palette (see _fluent.scss).
@@ -24,14 +26,17 @@ const TONES = {
     trash: 'red'
 };
 
-const POST_LABELS = {
-    publish: 'Published',
-    draft: 'Draft',
-    pending: 'Pending review',
-    future: 'Scheduled',
-    private: 'Private',
-    trash: 'Trash'
-};
+// A function, so the labels are translated when they are shown, after the map is loaded
+function postLabels() {
+    return {
+        publish: $t('Published'),
+        draft: $t('Draft'),
+        pending: $t('Pending review'),
+        future: $t('Scheduled'),
+        private: $t('Private'),
+        trash: $t('Trash')
+    };
+}
 
 function humanize(key) {
     const text = String(key || '').replace(/_/g, ' ');
@@ -50,8 +55,9 @@ export function statusLabel(type, key) {
     if (type === 'internal' && vars.internalStatuses && vars.internalStatuses[key]) {
         return vars.internalStatuses[key];
     }
-    if (type === 'post' && POST_LABELS[key]) {
-        return POST_LABELS[key];
+    const postLabelsByKey = type === 'post' ? postLabels() : {};
+    if (postLabelsByKey[key]) {
+        return postLabelsByKey[key];
     }
     return humanize(key);
 }

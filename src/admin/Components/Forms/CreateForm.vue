@@ -11,7 +11,7 @@
                     id="wpjb_new_job_title"
                     ref="titleInput"
                     v-model="form_title"
-                    :placeholder="$t('For example, Senior backend engineer')"
+                    :placeholder="$t('For example: Senior backend engineer')"
                 />
             </el-form-item>
             <p class="wpjb_dialog_help">{{ $t('You can add the job details and the application form next.') }}</p>

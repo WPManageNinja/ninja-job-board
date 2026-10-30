@@ -30,10 +30,10 @@
                            size="small"
                            :type="buttonType"
                            :link="btnType == 'text'"
-                           :aria-label="buttonText ? undefined : $t('Insert shortcode')"
-                           :title="buttonText ? undefined : $t('Insert shortcode')">
-                    <template v-if="buttonText">
-                        <span v-html="buttonText"></span>
+                           :aria-label="buttonLabel ? undefined : $t('Insert shortcode')"
+                           :title="buttonLabel ? undefined : $t('Insert shortcode')">
+                    <template v-if="buttonLabel">
+                        <span v-html="buttonLabel"></span>
                         <el-icon class="wpjb_icon_right"><ArrowDown /></el-icon>
                     </template>
                     <el-icon v-else><MenuIcon /></el-icon>
@@ -63,11 +63,10 @@
                     return true;
                 }
             },
+            // null shows the translated default label; '' shows only the icon
             buttonText: {
                 type: String,
-                default() {
-                    return 'Add shortcodes';
-                }
+                default: null
             },
             btnType: {
                 type: String,
@@ -77,6 +76,9 @@
             }
         },
         computed: {
+            buttonLabel() {
+                return this.buttonText === null ? this.$t('Add shortcodes') : this.buttonText;
+            },
             // Element Plus has no type="text" button; it is a link button now
             buttonType() {
                 return this.btnType == 'text' ? '' : this.btnType;

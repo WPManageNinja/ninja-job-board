@@ -173,7 +173,7 @@
             }
             this.getFormTitles();
             this.getReport();
-            this.$setTitle('Applications');
+            this.$setTitle(this.$t('Applications'));
         }
     }
 </script>

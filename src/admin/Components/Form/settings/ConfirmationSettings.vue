@@ -80,7 +80,7 @@
         },
         mounted() {
             this.getSettings();
-            this.$setTitle('Form Confirmation Settings');
+            this.$setTitle(this.$t('Confirmation'));
         }
     }
 </script>

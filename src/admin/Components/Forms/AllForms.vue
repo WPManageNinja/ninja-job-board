@@ -91,8 +91,8 @@
             :before-close="handleDeleteClose"
             width="480px">
             <p>
-                <strong>{{ deleteingForm.post_title }}</strong>
-                {{ $t('and all of its applications will be deleted permanently. You cannot undo this.') }}
+                <!-- translators: %s is the job title -->
+                {{ $t('%s and all of its applications will be deleted permanently. You cannot undo this.', deleteingForm.post_title || $t('(no title)')) }}
             </p>
             <template #footer>
                 <el-button @click="deleteDialogVisible = false">{{ $t('Cancel') }}</el-button>
@@ -223,7 +223,7 @@
                                 }
                             });
                         } else {
-                            this.$notify.error('Something is wrong! Please try again');
+                            this.$notify.error(this.$t('Something went wrong. Please try again.'));
                         }
                     })
                     .catch((error) => {
@@ -236,7 +236,7 @@
         },
         mounted() {
             this.fetchForms();
-            this.$setTitle('Jobs');
+            this.$setTitle(this.$t('Jobs'));
         }
     }
 </script>

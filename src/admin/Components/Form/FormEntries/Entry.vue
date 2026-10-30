@@ -2,48 +2,50 @@
     <div id="print_view" class="wpjb_app wpjb_entry_print">
         <div v-loading="fething"
              :class="print_hides"
-             element-loading-text="Loading application..."
+             :element-loading-text="$t('Loading application...')"
              class="wpjb_entry">
             <template v-if="submission.id">
                 <router-link class="wpjb_entry_back"
                              :to="{ name: 'form_entries', params: { form_id: form_id } }">
                     <el-icon><ArrowLeft/></el-icon>
-                    Back to applications
+                    {{ $t('Back to applications') }}
                 </router-link>
 
                 <div class="wpjb_entry_header">
                     <div class="wpjb_entry_heading">
                         <h1 class="wpjb_entry_title">
-                            {{ submission.applicant_name || ('Application #' + submission.id) }}
+                            <!-- translators: %s is the application ID number -->
+                            {{ submission.applicant_name || $t('Application #%s', submission.id) }}
                         </h1>
                         <p class="wpjb_entry_meta">
                             <a v-if="submission.applicant_email"
                                :href="'mailto:' + submission.applicant_email">{{ submission.applicant_email }}</a>
-                            <span class="wpjb_num">Submitted {{ formatDate(submission.created_at) }}</span>
+                            <!-- translators: %s is the date and time the application was submitted -->
+                            <span class="wpjb_num">{{ $t('Submitted %s', formatDate(submission.created_at)) }}</span>
                         </p>
                     </div>
                     <div class="wpjb_entry_actions wpf_header_actions">
-                        <div class="wpjb_entry_nav" role="group" aria-label="Browse applications">
+                        <div class="wpjb_entry_nav" role="group" :aria-label="$t('Browse applications')">
                             <el-button :icon="ArrowLeft"
                                        :loading="loading"
-                                       aria-label="Previous application"
-                                       title="Previous application"
-                                       @click="handleNavClick('next')">Prev</el-button>
-                            <el-button aria-label="Next application"
-                                       title="Next application"
+                                       :aria-label="$t('Previous application')"
+                                       :title="$t('Previous application')"
+                                       @click="handleNavClick('next')">{{ $t('Previous') }}</el-button>
+                            <el-button :aria-label="$t('Next application')"
+                                       :title="$t('Next application')"
                                        :disabled="loading"
                                        @click="handleNavClick('prev')">
-                                Next
+                                {{ $t('Next') }}
                                 <el-icon class="wpjb_icon_after"><ArrowRight/></el-icon>
                             </el-button>
                         </div>
                         <el-button :icon="Download"
-                                   aria-label="Export as JSON"
-                                   title="Export as JSON"
+                                   :aria-label="$t('Export as JSON')"
+                                   :title="$t('Export as JSON')"
                                    @click="exportJSON()"/>
                         <el-button :icon="Printer"
-                                   aria-label="Print application"
-                                   title="Print application"
+                                   :aria-label="$t('Print application')"
+                                   :title="$t('Print application')"
                                    @click="print"/>
                     </div>
                 </div>
@@ -52,13 +54,13 @@
                     <div class="wpjb_entry_main">
                         <section class="wpjb_card entry_input_data">
                             <div class="wpjb_card_head">
-                                <h3>Application</h3>
+                                <h3>{{ $t('Application') }}</h3>
                                 <div class="info_box_header_actions">
                                     <el-switch v-model="show_empty"
                                                active-value="yes"
                                                inactive-value="no"
                                                size="small"
-                                               active-text="Show empty fields"/>
+                                               :active-text="$t('Show empty fields')"/>
                                 </div>
                             </div>
                             <dl class="wpjb_answers">
@@ -68,34 +70,34 @@
                                      class="wpjb_answer">
                                     <dt>{{ entry.label }}</dt>
                                     <dd v-if="entry.value" v-html="entry.value"></dd>
-                                    <dd v-else class="is-empty">Not provided</dd>
+                                    <dd v-else class="is-empty">{{ $t('Not provided') }}</dd>
                                 </div>
                             </dl>
                         </section>
 
                         <section class="wpjb_card entry_submission_activity">
                             <div class="wpjb_card_head">
-                                <h3>Activity</h3>
+                                <h3>{{ $t('Activity') }}</h3>
                                 <div class="info_box_header_actions">
                                     <el-button size="small"
                                                :icon="Plus"
                                                :aria-expanded="add_note_box ? 'true' : 'false'"
-                                               @click="add_note_box = !add_note_box">Add note</el-button>
+                                               @click="add_note_box = !add_note_box">{{ $t('Add note') }}</el-button>
                                 </div>
                             </div>
                             <div class="wpjb_card_body">
                                 <div v-if="add_note_box" class="wpjb_note_box">
                                     <el-input type="textarea"
                                               :autosize="{ minRows: 3 }"
-                                              aria-label="Note"
-                                              placeholder="Write a note for your team"
+                                              :aria-label="$t('Note')"
+                                              :placeholder="$t('Write a note for your team')"
                                               v-model="new_note_content"/>
                                     <div class="wpjb_note_actions">
-                                        <el-button size="small" @click="add_note_box = false">Cancel</el-button>
+                                        <el-button size="small" @click="add_note_box = false">{{ $t('Cancel') }}</el-button>
                                         <el-button size="small"
                                                    type="primary"
                                                    :loading="adding_note"
-                                                   @click="submitNote()">Save note</el-button>
+                                                   @click="submitNote()">{{ $t('Save note') }}</el-button>
                                     </div>
                                 </div>
 
@@ -109,7 +111,7 @@
                                         <div class="wpjb_timeline_content" v-html="activity.content"></div>
                                     </li>
                                 </ol>
-                                <p v-else class="wpjb_entry_none">No activity yet. Status changes and notes show here.</p>
+                                <p v-else class="wpjb_entry_none">{{ $t('No activity yet. Status changes and notes show here.') }}</p>
                             </div>
                         </section>
                     </div>
@@ -117,15 +119,15 @@
                     <aside class="wpjb_entry_side wpf_submission_sidebar">
                         <section class="wpjb_card">
                             <div class="wpjb_card_head">
-                                <h3>Status</h3>
+                                <h3>{{ $t('Status') }}</h3>
                             </div>
                             <div class="wpjb_card_body">
                                 <div class="wpjb_status_now">
-                                    <status-badge type="application" title="Application status" :status="saved_statuses.application_status"/>
-                                    <status-badge type="internal" title="Internal status" :status="saved_statuses.status"/>
+                                    <status-badge type="application" :title="$t('Application status')" :status="saved_statuses.application_status"/>
+                                    <status-badge type="internal" :title="$t('Internal status')" :status="saved_statuses.status"/>
                                 </div>
                                 <div class="wpjb_status_field">
-                                    <label for="wpjb_application_status">Application status</label>
+                                    <label for="wpjb_application_status">{{ $t('Application status') }}</label>
                                     <el-select id="wpjb_application_status" v-model="submission.application_status">
                                         <el-option
                                             v-for="(status, status_value) in available_application_statuses"
@@ -136,7 +138,7 @@
                                     </el-select>
                                 </div>
                                 <div class="wpjb_status_field">
-                                    <label for="wpjb_internal_status">Internal status</label>
+                                    <label for="wpjb_internal_status">{{ $t('Internal status') }}</label>
                                     <el-select id="wpjb_internal_status" v-model="submission.status">
                                         <el-option
                                             v-for="(status, status_value) in available_internal_statuses"
@@ -146,36 +148,36 @@
                                         ></el-option>
                                     </el-select>
                                 </div>
-                                <el-button type="primary" @click="updateStatuses()">Update status</el-button>
+                                <el-button type="primary" @click="updateStatuses()">{{ $t('Update status') }}</el-button>
                             </div>
                         </section>
 
                         <section class="wpjb_card">
                             <div class="wpjb_card_head">
-                                <h3>Details</h3>
+                                <h3>{{ $t('Details') }}</h3>
                             </div>
                             <dl class="wpjb_details">
                                 <div>
-                                    <dt>Submitted at</dt>
+                                    <dt>{{ $t('Submitted at') }}</dt>
                                     <dd class="wpjb_num wpjb_nowrap">{{ formatDate(submission.created_at) }}</dd>
                                 </div>
                                 <div v-if="submission.ip_address">
-                                    <dt>IP address</dt>
+                                    <dt>{{ $t('IP address') }}</dt>
                                     <dd class="wpjb_num">
                                         <a target="_blank" rel="noopener"
                                            :href="'https://ipinfo.io/' + submission.ip_address">{{ submission.ip_address }}</a>
                                     </dd>
                                 </div>
                                 <div v-if="submission.browser">
-                                    <dt>Browser</dt>
+                                    <dt>{{ $t('Browser') }}</dt>
                                     <dd>{{ submission.browser }}</dd>
                                 </div>
                                 <div v-if="submission.device">
-                                    <dt>Platform</dt>
+                                    <dt>{{ $t('Platform') }}</dt>
                                     <dd>{{ submission.device }}</dd>
                                 </div>
                                 <div v-if="submission.user">
-                                    <dt>User</dt>
+                                    <dt>{{ $t('User') }}</dt>
                                     <dd>
                                         <a target="_blank" rel="noopener"
                                            :href="submission.user.profile_url">{{ submission.user.display_name }}</a>
@@ -186,7 +188,7 @@
 
                         <section v-if="other_entries && other_entries.length" class="wpjb_card">
                             <div class="wpjb_card_head">
-                                <h3>Other applications by this applicant</h3>
+                                <h3>{{ $t('Other applications by this applicant') }}</h3>
                             </div>
                             <ul class="wpjb_other_apps">
                                 <li v-for="other_entry in other_entries" :key="other_entry.id">
@@ -275,7 +277,8 @@ export default {
                     this.entry_items = response.entry;
                     this.other_entries = response.other_entries;
                     this.setSavedStatuses(response.submission);
-                    this.$setTitle('Entry#' + response.submission.id);
+                    // translators: %s is the application ID number
+                    this.$setTitle(this.$t('Application #%s', response.submission.id));
                 })
                 .catch(error => {
                     this.$showAjaxError(error);
@@ -296,7 +299,8 @@ export default {
                     this.entry_id = response.submission.id;
                     this.other_entries = response.other_entries;
                     this.setSavedStatuses(response.submission);
-                    this.$setTitle('Entry#' + response.submission.id);
+                    // translators: %s is the application ID number
+                    this.$setTitle(this.$t('Application #%s', response.submission.id));
                     this.$router.push({
                         name: 'entry',
                         params: {entry_id: response.submission.id},
@@ -315,7 +319,7 @@ export default {
         submitNote() {
             if (!this.new_note_content) {
                 this.$message({
-                    message: 'Please provide note',
+                    message: this.$t('Write a note first.'),
                     type: 'error'
                 });
                 return;
