@@ -30,7 +30,6 @@
 <script>
     import WpEditor from '../Common/_wp_editor.vue';
     import StatusBadge from '../Common/StatusBadge.vue';
-    import Clipboard from 'clipboard';
     export default {
         name: 'global_wrapper',
         components: {WpEditor, StatusBadge},
@@ -133,18 +132,6 @@
         mounted() {
             this.setFormMenu();
             this.getForm();
-            this.clipboard = new Clipboard('.copy');
-            this.clipboard.on('success', (e) => {
-                this.$message({
-                    message: 'Copied to Clipboard!',
-                    type: 'success'
-                });
-            });
-        },
-        beforeUnmount() {
-            if (this.clipboard) {
-                this.clipboard.destroy();
-            }
         }
     }
 </script>

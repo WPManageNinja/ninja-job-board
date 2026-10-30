@@ -50,7 +50,7 @@ composer test:integration     # or: npm run test:php
 
 ### Proof of catch
 
-Every test was watched failing against injected faults (break, run, restore). Mutations run and caught: 36.
+Every test was watched failing against injected faults (break, run, restore). Mutations run and caught: 41.
 
 Equivalent mutants (no behavior change, so no test can catch them; the code stays as defense in depth):
 - Removing `esc_url()` on the protected download link: the link is built from a name that already passed the strict file-name pattern and `rawurlencode()`.

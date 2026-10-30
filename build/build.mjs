@@ -145,7 +145,15 @@ buildStylesheet('src/scss/public/public.scss', 'assets/css/wp_job_board-public.c
 buildStylesheet('src/scss/public/joblist.scss', 'assets/css/joblist.css');
 
 cpSync(path('src/images'), path('assets/images'), { recursive: true });
-cpSync(path('src/libs'), path('assets/libs'), { recursive: true });
+// Public form libraries, pinned in package.json: ship only the minified files
+rmSync(path('assets/libs'), { recursive: true, force: true });
+for (const [from, to] of [
+    ['node_modules/dropzone/dist/min/dropzone.min.js', 'assets/libs/dropzone/dropzone.min.js'],
+    ['node_modules/flatpickr/dist/flatpickr.min.js', 'assets/libs/flatpickr/flatpickr.min.js'],
+    ['node_modules/flatpickr/dist/flatpickr.min.css', 'assets/libs/flatpickr/flatpickr.min.css']
+]) {
+    cpSync(path(from), path(to));
+}
 cpSync(path('src/integrations/tinymce_icon.png'), path('assets/js/tinymce_icon.png'));
 
 await buildAdminApp();

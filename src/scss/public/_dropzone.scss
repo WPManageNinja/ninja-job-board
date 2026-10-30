@@ -255,6 +255,16 @@
   cursor: pointer;
 }
 
+.dropzone .dz-message .dz-button {
+  // Dropzone 5.9 renders the message as a button: keep it looking like text
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
 .dropzone.dz-started.dz-max-files-reached .dz-message {
   display: none;
 }

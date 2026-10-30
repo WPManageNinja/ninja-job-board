@@ -199,7 +199,10 @@ New
 
 Improvements
 - Admin app rebuilt with Vue 3, Element Plus and Vite
-- Smaller admin bundle; removed unused libraries (Spout, Ace editor, vue-html-to-paper, lodash)
+- Smaller admin bundle; removed unused libraries (Spout, Ace editor, vue-html-to-paper, lodash, clipboard)
+- Updated Dropzone to 5.9.3 and flatpickr to 4.6.13; the release ships only their minified files
+- Email CSS is inlined with the same library as FluentCRM (css-to-inline-styles 2.4.0); @media rules are kept for mobile email clients
+- New browser and platform detection for applications: knows Edge, Opera, Samsung Internet, iPadOS and ChromeOS
 - Campaign emails are claimed before sending, so an email is never sent twice
 
 Fixes
@@ -209,6 +212,7 @@ Fixes
 - Fatal errors in multi-step forms and the `{other.user_ip}` default value on PHP 8
 - Email notification From and Reply-To headers used the unparsed template values
 - Status labels "Initial rejected" and "Shortlisted"
+- Short month names in the date picker; the calendar now starts on the site's "Week starts on" day
 - PHP 8.2+ deprecation notices
 
 Removed

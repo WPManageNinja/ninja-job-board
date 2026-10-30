@@ -196,8 +196,8 @@ class Render
     {
         do_action('wpjobboard/wpjobboard_adding_assets', $form);
 
-        wp_register_script('flatpickr', WPJOBBOARD_URL . 'assets/libs/flatpickr/flatpickr.min.js', array(), '4.5.7', true);
-        wp_register_style('flatpickr', WPJOBBOARD_URL . 'assets/libs/flatpickr/flatpickr.min.css', array(), '4.5.7', 'all');
+        wp_register_script('flatpickr', WPJOBBOARD_URL . 'assets/libs/flatpickr/flatpickr.min.js', array(), '4.6.13', true);
+        wp_register_style('flatpickr', WPJOBBOARD_URL . 'assets/libs/flatpickr/flatpickr.min.css', array(), '4.6.13', 'all');
 
         wp_enqueue_script('wpjobboard_public', WPJOBBOARD_URL . 'assets/js/jobboard-public.js', array('jquery'), WPJOBBOARD_VERSION, true);
         wp_enqueue_style('wpjobboard_public', WPJOBBOARD_URL . 'assets/css/wp_job_board-public.css', array(), WPJOBBOARD_VERSION);
@@ -206,7 +206,7 @@ class Render
             'form_id' => $form->ID
         ), $form));
 
-        wp_register_script('dropzone', WPJOBBOARD_URL . 'assets/libs/dropzone/dropzone.min.js', array('jquery'), '5.5.0', true);
+        wp_register_script('dropzone', WPJOBBOARD_URL . 'assets/libs/dropzone/dropzone.min.js', array('jquery'), '5.9.3', true);
         wp_register_script('wpjobboard_file_upload', WPJOBBOARD_URL . 'assets/js/fileupload.js', array('jquery', 'wpjobboard_public', 'dropzone'), WPJOBBOARD_VERSION, true);
 
         wp_localize_script('wpjobboard_public', 'wp_job_board_general', array(
@@ -216,7 +216,7 @@ class Render
                 'previousMonth'    => __('Previous Month', 'ninja-job-board'),
                 'nextMonth'        => __('Next Month', 'ninja-job-board'),
                 'months'           => [
-                    'sorthand' => [
+                    'shorthand' => [
                         __('Jan', 'ninja-job-board'),
                         __('Feb', 'ninja-job-board'),
                         __('Mar', 'ninja-job-board'),
@@ -279,6 +279,7 @@ class Render
                     30,
                     31
                 ],
+                'firstDayOfWeek'   => (int)get_option('start_of_week', 0),
                 'rangeSeparator'   => __(' to ', 'ninja-job-board'),
                 'weekAbbreviation' => __('Wk', 'ninja-job-board'),
                 'scrollTitle'      => __('Scroll to increment', 'ninja-job-board'),
