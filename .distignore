@@ -14,3 +14,6 @@ composer.lock
 phpunit.integration.xml
 build/.lock
 .gstack
+
+# WordPress.org page assets (icon, banner); they go to svn/assets, not the plugin
+.wordpress-org

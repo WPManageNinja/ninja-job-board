@@ -1,7 +1,7 @@
 <template>
     <header class="wpjb_topbar">
         <router-link :to="{ name: 'forms' }" class="wpjb_brand">
-            <span class="wpjb_brand_mark" aria-hidden="true"><el-icon><Suitcase /></el-icon></span>
+            <img class="wpjb_brand_mark" :src="logoUrl" alt="" width="32" height="32">
             <span>Ninja Job Board</span>
         </router-link>
         <nav aria-label="Ninja Job Board">
@@ -18,12 +18,12 @@
 </template>
 
 <script>
-    import { Suitcase } from '@element-plus/icons-vue';
-
     export default {
         name: 'AppHeader',
-        components: { Suitcase },
         computed: {
+            logoUrl() {
+                return window.wpJobBoardsAdmin.assets_url + 'images/logo.svg';
+            },
             menu() {
                 // Each item: route name, title, and the route names that keep it highlighted
                 return this.applyFilters('wpf_top_level_menu', [

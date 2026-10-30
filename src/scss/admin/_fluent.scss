@@ -133,18 +133,9 @@ body.toplevel_page_wpjobboard {
     }
 
     .wpjb_brand_mark {
-        display: grid;
-        place-items: center;
+        display: block;
         width: 32px;
         height: 32px;
-        border-radius: var(--wpjb-radius);
-        background: var(--wpjb-primary);
-        color: #fff;
-
-        svg {
-            width: 18px;
-            height: 18px;
-        }
     }
 
     .wpjb_menu {
