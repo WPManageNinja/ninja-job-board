@@ -14,6 +14,7 @@ class TransStrings
     public static function getStrings()
     {
         return [
+            "\x00plural_index" => self::pluralRule('ninja-job-board')['index'],
             /* translators: 1: characters typed, 2: the character limit */
             '%1$s / %2$s characters' => __('%1$s / %2$s characters', 'ninja-job-board'),
             /* translators: %s is the title of the current admin screen, for example a job title */
@@ -21,9 +22,7 @@ class TransStrings
             /* translators: %s is the job title */
             '%s and all of its applications will be deleted permanently. You cannot undo this.' => __('%s and all of its applications will be deleted permanently. You cannot undo this.', 'ninja-job-board'),
             /* translators: %s is the number of applicants */
-            '%s applicant will get this email.' => __('%s applicant will get this email.', 'ninja-job-board'),
-            /* translators: %s is the number of applicants */
-            '%s applicants will get this email.' => __('%s applicants will get this email.', 'ninja-job-board'),
+            "%s applicant will get this email.\x00%s applicants will get this email." => self::pluralForms(_n_noop('%s applicant will get this email.', '%s applicants will get this email.', 'ninja-job-board')),
             '(no title)' => __('(no title)', 'ninja-job-board'),
             '/page' => __('/page', 'ninja-job-board'),
             'A secret key is saved. Leave empty to keep it.' => __('A secret key is saved. Leave empty to keep it.', 'ninja-job-board'),
@@ -439,5 +438,61 @@ class TransStrings
             'page %s' => __('page %s', 'ninja-job-board'),
             "short month name\x04May" => _x('May', 'short month name', 'ninja-job-board'),
         ];
+    }
+
+    /**
+     * Every translated form of a $_n() string, in the order of the site language's plural rule.
+     *
+     * @param array $noop From _n_noop()
+     * @return string[]
+     */
+    private static function pluralForms($noop)
+    {
+        $samples = self::pluralRule($noop['domain'])['samples'];
+        $forms = [];
+        foreach ($samples as $count) {
+            $forms[] = translate_nooped_plural($noop, $count, $noop['domain']);
+        }
+        return $forms;
+    }
+
+    /**
+     * The plural form index for counts 0..199 (`index`) and the first count of each form (`samples`).
+     *
+     * @param string $domain Text domain
+     * @return array{index: int[], samples: int[]}
+     */
+    public static function pluralRule($domain)
+    {
+        static $rules = [];
+        if (isset($rules[$domain])) {
+            return $rules[$domain];
+        }
+
+        $expression = 'n != 1';
+        $translations = get_translations_for_domain($domain);
+        foreach ((array) $translations->headers as $name => $value) {
+            if (strtolower($name) === 'plural-forms' && preg_match('/plural\s*=\s*(.+)$/', (string) $value, $match)) {
+                $expression = rtrim(trim($match[1]), ';');
+            }
+        }
+        try {
+            $rule = new \Plural_Forms($expression);
+        } catch (\Exception $e) {
+            $rule = new \Plural_Forms('n != 1');
+        }
+
+        $index = [];
+        $samples = [];
+        for ($count = 0; $count < 200; $count++) {
+            $form = (int) $rule->get($count);
+            $index[] = $form;
+            if (!isset($samples[$form])) {
+                $samples[$form] = $count;
+            }
+        }
+        ksort($samples);
+
+        return $rules[$domain] = ['index' => $index, 'samples' => array_values($samples)];
     }
 }

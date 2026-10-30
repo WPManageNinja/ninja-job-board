@@ -1,5 +1,5 @@
 /**
- * @fluent-i18n-toolkit v4
+ * @fluent-i18n-toolkit v5
  *
  * Runtime translation helpers for the Vue apps: $t(), $_n() and $_x().
  *
@@ -85,14 +85,50 @@ export function $t(string) {
     return applyPlaceholders(translated, Array.prototype.slice.call(arguments, 1));
 }
 
+// gettext's singular/plural separator, the same byte i18n.node.js writes into $_n() keys.
+const PLURAL_DELIMITER = '\u0000';
+// Form indexes for counts 0..199 under the site language's plural rule (from the map).
+const PLURAL_RULE_KEY = PLURAL_DELIMITER + 'plural_index';
+
 /**
- * Plural helper. Every count except exactly 1 (including non-numbers) takes
- * the plural, which matches how English and most target locales render it.
+ * The plural form index for a count. The map's table covers 0..199; every
+ * gettext rule depends only on n, n % 10 and n % 100, so a larger count is
+ * read as n % 100 + 100. Without a table (an older map) English rules apply.
+ */
+function pluralIndex(count) {
+    const number = parseFloat(String(count).replace(/,/g, ''));
+    const table = translationMap()[PLURAL_RULE_KEY];
+
+    if (!Array.isArray(table) || !Number.isFinite(number)) {
+        return number === 1 ? 0 : 1;
+    }
+
+    const n = Math.floor(Math.abs(number));
+
+    return table[n < 200 ? n : (n % 100) + 100] || 0;
+}
+
+/**
+ * Plural helper, the JS counterpart of PHP's _n(): picks the translated form
+ * for `count` under the site language's plural rule, then fills placeholders
+ * (count is the first argument): $_n('%s ticket', '%s tickets', n).
  */
 export function $_n(singular, plural, count) {
-    const number = parseFloat(String(count).replace(/,/g, ''));
+    const key = singular + PLURAL_DELIMITER + plural;
+    const forms = translationMap()[key];
+    const args = Array.prototype.slice.call(arguments, 2);
 
-    return $t(number === 1 ? singular : plural, count);
+    warnIfMissing(key);
+
+    if (Array.isArray(forms) && forms.length) {
+        const index = pluralIndex(count);
+        const form = forms[Math.min(index, forms.length - 1)];
+
+        return applyPlaceholders(form, args);
+    }
+
+    // An older map without plural entries: English forms, translated as plain keys when present
+    return $t.apply(null, [pluralIndex(count) === 0 ? singular : plural].concat(args));
 }
 
 /**

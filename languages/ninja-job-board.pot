@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-30T11:26:49+00:00\n"
+"POT-Creation-Date: 2026-10-30T11:38:02+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: ninja-job-board\n"
@@ -137,193 +137,193 @@ msgid "Next Month"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:239
-#: includes/Classes/TransStrings.php:205
+#: includes/Classes/TransStrings.php:204
 msgid "Jan"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:240
-#: includes/Classes/TransStrings.php:159
+#: includes/Classes/TransStrings.php:158
 msgid "Feb"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:241
-#: includes/Classes/TransStrings.php:232
+#: includes/Classes/TransStrings.php:231
 msgid "Mar"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:242
-#: includes/Classes/TransStrings.php:67
+#: includes/Classes/TransStrings.php:66
 msgid "Apr"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:243
-#: includes/Classes/TransStrings.php:440
+#: includes/Classes/TransStrings.php:439
 msgctxt "short month name"
 msgid "May"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:244
-#: includes/Classes/TransStrings.php:217
+#: includes/Classes/TransStrings.php:216
 msgid "Jun"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:245
-#: includes/Classes/TransStrings.php:215
+#: includes/Classes/TransStrings.php:214
 msgid "Jul"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:246
-#: includes/Classes/TransStrings.php:69
+#: includes/Classes/TransStrings.php:68
 msgid "Aug"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:247
-#: includes/Classes/TransStrings.php:339
+#: includes/Classes/TransStrings.php:338
 msgid "Sep"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:248
-#: includes/Classes/TransStrings.php:263
+#: includes/Classes/TransStrings.php:262
 msgid "Oct"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:249
-#: includes/Classes/TransStrings.php:259
+#: includes/Classes/TransStrings.php:258
 msgid "Nov"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:250
-#: includes/Classes/TransStrings.php:105
+#: includes/Classes/TransStrings.php:104
 msgid "Dec"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:253
-#: includes/Classes/TransStrings.php:206
+#: includes/Classes/TransStrings.php:205
 msgid "January"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:254
-#: includes/Classes/TransStrings.php:160
+#: includes/Classes/TransStrings.php:159
 msgid "February"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:255
-#: includes/Classes/TransStrings.php:233
+#: includes/Classes/TransStrings.php:232
 msgid "March"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:256
-#: includes/Classes/TransStrings.php:68
+#: includes/Classes/TransStrings.php:67
 msgid "April"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:257
-#: includes/Classes/TransStrings.php:235
+#: includes/Classes/TransStrings.php:234
 msgid "May"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:258
-#: includes/Classes/TransStrings.php:218
+#: includes/Classes/TransStrings.php:217
 msgid "June"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:259
-#: includes/Classes/TransStrings.php:216
+#: includes/Classes/TransStrings.php:215
 msgid "July"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:260
-#: includes/Classes/TransStrings.php:70
+#: includes/Classes/TransStrings.php:69
 msgid "August"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:261
-#: includes/Classes/TransStrings.php:340
+#: includes/Classes/TransStrings.php:339
 msgid "September"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:262
-#: includes/Classes/TransStrings.php:264
+#: includes/Classes/TransStrings.php:263
 msgid "October"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:263
-#: includes/Classes/TransStrings.php:260
+#: includes/Classes/TransStrings.php:259
 msgid "November"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:264
-#: includes/Classes/TransStrings.php:106
+#: includes/Classes/TransStrings.php:105
 msgid "December"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:269
-#: includes/Classes/TransStrings.php:373
+#: includes/Classes/TransStrings.php:372
 msgid "Sunday"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:270
-#: includes/Classes/TransStrings.php:238
+#: includes/Classes/TransStrings.php:237
 msgid "Monday"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:271
-#: includes/Classes/TransStrings.php:399
+#: includes/Classes/TransStrings.php:398
 msgid "Tuesday"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:272
-#: includes/Classes/TransStrings.php:423
+#: includes/Classes/TransStrings.php:422
 msgid "Wednesday"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:273
-#: includes/Classes/TransStrings.php:389
+#: includes/Classes/TransStrings.php:388
 msgid "Thursday"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:274
-#: includes/Classes/TransStrings.php:177
+#: includes/Classes/TransStrings.php:176
 msgid "Friday"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:275
-#: includes/Classes/TransStrings.php:308
+#: includes/Classes/TransStrings.php:307
 msgid "Saturday"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:278
-#: includes/Classes/TransStrings.php:372
+#: includes/Classes/TransStrings.php:371
 msgid "Sun"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:279
-#: includes/Classes/TransStrings.php:237
+#: includes/Classes/TransStrings.php:236
 msgid "Mon"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:280
-#: includes/Classes/TransStrings.php:398
+#: includes/Classes/TransStrings.php:397
 msgid "Tue"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:281
-#: includes/Classes/TransStrings.php:422
+#: includes/Classes/TransStrings.php:421
 msgid "Wed"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:282
-#: includes/Classes/TransStrings.php:388
+#: includes/Classes/TransStrings.php:387
 msgid "Thu"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:283
-#: includes/Classes/TransStrings.php:176
+#: includes/Classes/TransStrings.php:175
 msgid "Fri"
 msgstr ""
 
 #: includes/Classes/Builder/Render.php:284
-#: includes/Classes/TransStrings.php:307
+#: includes/Classes/TransStrings.php:306
 msgid "Sat"
 msgstr ""
 
@@ -790,7 +790,7 @@ msgstr ""
 
 #: includes/Classes/FormComponents/StepComponent.php:49
 #: includes/Classes/FormComponents/StepComponent.php:100
-#: includes/Classes/TransStrings.php:241
+#: includes/Classes/TransStrings.php:240
 msgid "Next"
 msgstr ""
 
@@ -1010,14 +1010,14 @@ msgstr ""
 
 #: includes/Classes/Menu.php:51
 #: includes/Classes/Menu.php:172
-#: includes/Classes/TransStrings.php:66
+#: includes/Classes/TransStrings.php:65
 #: assets/blocks/job-editor.js:105
 #: src/blocks/job-editor.jsx:122
 msgid "Applications"
 msgstr ""
 
 #: includes/Classes/Menu.php:56
-#: includes/Classes/TransStrings.php:342
+#: includes/Classes/TransStrings.php:341
 msgid "Settings"
 msgstr ""
 
@@ -1026,7 +1026,7 @@ msgid "Job Categories"
 msgstr ""
 
 #: includes/Classes/Menu.php:169
-#: includes/Classes/TransStrings.php:211
+#: includes/Classes/TransStrings.php:210
 #: assets/blocks/job-editor.js:112
 #: src/blocks/job-editor.jsx:130
 msgid "Job sections"
@@ -1057,7 +1057,7 @@ msgid "Email Broadcast"
 msgstr ""
 
 #: includes/Classes/Menu.php:187
-#: includes/Classes/TransStrings.php:128
+#: includes/Classes/TransStrings.php:127
 #: assets/blocks/job-editor.js:112
 #: src/blocks/job-editor.jsx:138
 msgid "Edit job post"
@@ -1112,13 +1112,13 @@ msgid "You need to log in to submit this form."
 msgstr ""
 
 #: includes/Classes/PostType.php:34
-#: includes/Classes/TransStrings.php:214
+#: includes/Classes/TransStrings.php:213
 msgid "Jobs"
 msgstr ""
 
 #: includes/Classes/PostType.php:35
 #: includes/Classes/Privacy.php:66
-#: includes/Classes/TransStrings.php:207
+#: includes/Classes/TransStrings.php:206
 #: src/blocks/shared/JobPicker.jsx:42
 msgid "Job"
 msgstr ""
@@ -1140,7 +1140,7 @@ msgid "View job posts"
 msgstr ""
 
 #: includes/Classes/PostType.php:40
-#: includes/Classes/TransStrings.php:317
+#: includes/Classes/TransStrings.php:316
 msgid "Search jobs"
 msgstr ""
 
@@ -1255,32 +1255,32 @@ msgstr ""
 #: includes/Classes/Privacy.php:37
 #: includes/Classes/Privacy.php:46
 #: includes/Classes/Privacy.php:92
-#: includes/Classes/TransStrings.php:209
+#: includes/Classes/TransStrings.php:208
 msgid "Job applications"
 msgstr ""
 
 #: includes/Classes/Privacy.php:67
-#: includes/Classes/TransStrings.php:370
+#: includes/Classes/TransStrings.php:369
 msgid "Submitted at"
 msgstr ""
 
 #: includes/Classes/Privacy.php:69
-#: includes/Classes/TransStrings.php:130
+#: includes/Classes/TransStrings.php:129
 msgid "Email"
 msgstr ""
 
 #: includes/Classes/Privacy.php:70
-#: includes/Classes/TransStrings.php:64
+#: includes/Classes/TransStrings.php:63
 msgid "Application status"
 msgstr ""
 
 #: includes/Classes/Privacy.php:71
-#: includes/Classes/TransStrings.php:193
+#: includes/Classes/TransStrings.php:192
 msgid "IP address"
 msgstr ""
 
 #: includes/Classes/Privacy.php:72
-#: includes/Classes/TransStrings.php:79
+#: includes/Classes/TransStrings.php:78
 msgid "Browser"
 msgstr ""
 
@@ -1349,1460 +1349,1456 @@ msgid "You must be logged in to submit the form."
 msgstr ""
 
 #. translators: 1: characters typed, 2: the character limit
-#: includes/Classes/TransStrings.php:18
+#: includes/Classes/TransStrings.php:19
 #, php-format
 msgid "%1$s / %2$s characters"
 msgstr ""
 
 #. translators: %s is the title of the current admin screen, for example a job title
-#: includes/Classes/TransStrings.php:20
+#: includes/Classes/TransStrings.php:21
 #, php-format
 msgid "%s :: Ninja Job Board"
 msgstr ""
 
 #. translators: %s is the job title
-#: includes/Classes/TransStrings.php:22
+#: includes/Classes/TransStrings.php:23
 #, php-format
 msgid "%s and all of its applications will be deleted permanently. You cannot undo this."
 msgstr ""
 
 #. translators: %s is the number of applicants
-#: includes/Classes/TransStrings.php:24
+#: includes/Classes/TransStrings.php:25
 #, php-format
 msgid "%s applicant will get this email."
-msgstr ""
+msgid_plural "%s applicants will get this email."
+msgstr[0] ""
+msgstr[1] ""
 
-#. translators: %s is the number of applicants
 #: includes/Classes/TransStrings.php:26
-#, php-format
-msgid "%s applicants will get this email."
-msgstr ""
-
-#: includes/Classes/TransStrings.php:27
 #: src/blocks/shared/JobPicker.jsx:36
 msgid "(no title)"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:28
+#: includes/Classes/TransStrings.php:27
 msgid "/page"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:29
+#: includes/Classes/TransStrings.php:28
 msgid "A secret key is saved. Leave empty to keep it."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:30
+#: includes/Classes/TransStrings.php:29
 msgid "A week ago"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:31
+#: includes/Classes/TransStrings.php:30
 msgid "Accept applications only between two dates."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:32
+#: includes/Classes/TransStrings.php:31
 msgid "Actions"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:33
+#: includes/Classes/TransStrings.php:32
 msgid "Activity"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:34
+#: includes/Classes/TransStrings.php:33
 msgid "Add a field"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:35
+#: includes/Classes/TransStrings.php:34
 msgid "Add a job"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:36
+#: includes/Classes/TransStrings.php:35
 msgid "Add a job post, then build its application form and start to collect applications."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:37
+#: includes/Classes/TransStrings.php:36
 msgid "Add job"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:38
+#: includes/Classes/TransStrings.php:37
 msgid "Add media (Pro)"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:39
+#: includes/Classes/TransStrings.php:38
 msgid "Add note"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:40
+#: includes/Classes/TransStrings.php:39
 msgid "Add notification"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:41
+#: includes/Classes/TransStrings.php:40
 msgid "Add option"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:42
+#: includes/Classes/TransStrings.php:41
 msgid "Add shortcodes"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:43
+#: includes/Classes/TransStrings.php:42
 msgid "Add your first job"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:44
+#: includes/Classes/TransStrings.php:43
 msgid "Adding media is a Pro feature."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:45
+#: includes/Classes/TransStrings.php:44
 msgid "Adds a privacy-friendly security check to application forms. A hidden honeypot field is always on."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:46
+#: includes/Classes/TransStrings.php:45
 msgid "After closing message"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:47
+#: includes/Classes/TransStrings.php:46
 msgid "After label"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:48
+#: includes/Classes/TransStrings.php:47
 msgid "After someone applies"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:49
+#: includes/Classes/TransStrings.php:48
 msgid "After submission"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:50
+#: includes/Classes/TransStrings.php:49
 msgid "Alignment of the submit button under the form."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:51
+#: includes/Classes/TransStrings.php:50
 #: includes/Http/Controllers/ApplicationsController.php:187
 msgid "All"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:52
+#: includes/Classes/TransStrings.php:51
 msgid "All application statuses"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:53
+#: includes/Classes/TransStrings.php:52
 msgid "All broadcasts"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:54
+#: includes/Classes/TransStrings.php:53
 msgid "All internal statuses"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:55
+#: includes/Classes/TransStrings.php:54
 msgid "All jobs"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:56
+#: includes/Classes/TransStrings.php:55
 msgid "All notifications"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:57
+#: includes/Classes/TransStrings.php:56
 msgid "An email broadcast sends the same email to each selected applicant of this job. You can pick applicants by application status."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:58
+#: includes/Classes/TransStrings.php:57
 msgid "Applicant"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:59
+#: includes/Classes/TransStrings.php:58
 msgid "Application"
 msgstr ""
 
 #. translators: %s is the application ID number
-#: includes/Classes/TransStrings.php:61
+#: includes/Classes/TransStrings.php:60
 #, php-format
 msgid "Application #%s"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:62
+#: includes/Classes/TransStrings.php:61
 msgid "Application form"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:63
+#: includes/Classes/TransStrings.php:62
 msgid "Application limit"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:65
+#: includes/Classes/TransStrings.php:64
 msgid "Application statuses that count"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:71
+#: includes/Classes/TransStrings.php:70
 msgid "BCC"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:72
+#: includes/Classes/TransStrings.php:71
 msgid "Back to applications"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:73
+#: includes/Classes/TransStrings.php:72
 msgid "Before label"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:74
+#: includes/Classes/TransStrings.php:73
 msgid "Before opening message"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:75
+#: includes/Classes/TransStrings.php:74
 msgid "Bold labels"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:76
+#: includes/Classes/TransStrings.php:75
 msgid "Broadcast"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:77
+#: includes/Classes/TransStrings.php:76
 msgid "Broadcast name"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:78
+#: includes/Classes/TransStrings.php:77
 msgid "Browse applications"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:80
+#: includes/Classes/TransStrings.php:79
 msgid "Button"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:81
+#: includes/Classes/TransStrings.php:80
 msgid "Button style"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:82
+#: includes/Classes/TransStrings.php:81
 msgid "Button text"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:83
+#: includes/Classes/TransStrings.php:82
 msgid "Button text while submitting"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:84
+#: includes/Classes/TransStrings.php:83
 msgid "CC"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:85
+#: includes/Classes/TransStrings.php:84
 msgid "CSS class (optional)"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:86
+#: includes/Classes/TransStrings.php:85
 msgid "Cancel"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:87
+#: includes/Classes/TransStrings.php:86
 msgid "Center"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:88
+#: includes/Classes/TransStrings.php:87
 msgid "Choose when this email sends."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:89
+#: includes/Classes/TransStrings.php:88
 msgid "Clear"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:90
+#: includes/Classes/TransStrings.php:89
 msgid "Click a field type on the right, or drag it here. Applicants fill in these fields when they apply."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:91
+#: includes/Classes/TransStrings.php:90
 msgid "Click a field type to add it, or drag it into the form."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:92
+#: includes/Classes/TransStrings.php:91
 msgid "Close the form when it reaches a set number of applications."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:93
+#: includes/Classes/TransStrings.php:92
 msgid "Close this dialog"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:94
+#: includes/Classes/TransStrings.php:93
 msgid "Closes on"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:95
+#: includes/Classes/TransStrings.php:94
 msgid "Cloudflare Turnstile"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:96
+#: includes/Classes/TransStrings.php:95
 msgid "Collapse this row"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:97
+#: includes/Classes/TransStrings.php:96
 msgid "Confirm"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:98
+#: includes/Classes/TransStrings.php:97
 msgid "Confirm email label"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:99
+#: includes/Classes/TransStrings.php:98
 msgid "Confirmation"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:100
+#: includes/Classes/TransStrings.php:99
 msgid "Confirmation message"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:101
+#: includes/Classes/TransStrings.php:100
 msgid "Create a widget in the Cloudflare dashboard (Turnstile) and copy its keys."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:102
+#: includes/Classes/TransStrings.php:101
 msgid "Create job"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:103
+#: includes/Classes/TransStrings.php:102
 msgid "Created"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:104
+#: includes/Classes/TransStrings.php:103
 msgid "Data"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:107
+#: includes/Classes/TransStrings.php:106
 msgid "Decrease number"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:108
+#: includes/Classes/TransStrings.php:107
 msgid "Default input styles"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:109
+#: includes/Classes/TransStrings.php:108
 msgid "Default style"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:110
+#: includes/Classes/TransStrings.php:109
 msgid "Delete"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:111
+#: includes/Classes/TransStrings.php:110
 msgid "Delete all data when the plugin is deleted"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:112
+#: includes/Classes/TransStrings.php:111
 msgid "Delete application"
 msgstr ""
 
 #. translators: %s is the applicant name
-#: includes/Classes/TransStrings.php:114
+#: includes/Classes/TransStrings.php:113
 #, php-format
 msgid "Delete application from %s"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:115
+#: includes/Classes/TransStrings.php:114
 msgid "Delete field"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:116
+#: includes/Classes/TransStrings.php:115
 msgid "Delete job"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:117
+#: includes/Classes/TransStrings.php:116
 msgid "Delete this application?"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:118
+#: includes/Classes/TransStrings.php:117
 msgid "Delete this job?"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:119
+#: includes/Classes/TransStrings.php:118
 msgid "Details"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:120
+#: includes/Classes/TransStrings.php:119
 msgid "Download a job and its application form as a .json file. Import it on any site that runs Ninja Job Board."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:121
+#: includes/Classes/TransStrings.php:120
 msgid "Downloading the job file."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:122
+#: includes/Classes/TransStrings.php:121
 msgid "Draft"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:123
+#: includes/Classes/TransStrings.php:122
 msgid "Drag the handle to reorder fields"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:124
+#: includes/Classes/TransStrings.php:123
 msgid "Drag to reorder"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:125
+#: includes/Classes/TransStrings.php:124
 msgid "Duplicate"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:126
+#: includes/Classes/TransStrings.php:125
 msgid "Duplicating the job..."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:127
+#: includes/Classes/TransStrings.php:126
 msgid "Edit"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:129
+#: includes/Classes/TransStrings.php:128
 msgid "Edit notification"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:131
+#: includes/Classes/TransStrings.php:130
 msgid "Email addresses, separated by commas. Merge tags work."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:132
+#: includes/Classes/TransStrings.php:131
 msgid "Email body"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:133
+#: includes/Classes/TransStrings.php:132
 msgid "Email broadcasts"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:134
+#: includes/Classes/TransStrings.php:133
 msgid "Email notification"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:135
+#: includes/Classes/TransStrings.php:134
 msgctxt "Email notification status"
 msgid "Off"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:136
+#: includes/Classes/TransStrings.php:135
 msgctxt "Email notification status"
 msgid "On"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:137
+#: includes/Classes/TransStrings.php:136
 msgid "Email notifications"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:138
+#: includes/Classes/TransStrings.php:137
 msgid "Email notifications go to you or the applicant when someone applies. Use \"Add notification\" to create one."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:139
+#: includes/Classes/TransStrings.php:138
 msgctxt "Email status"
 msgid "Pending"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:140
+#: includes/Classes/TransStrings.php:139
 msgctxt "Email status"
 msgid "Sending"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:141
+#: includes/Classes/TransStrings.php:140
 msgctxt "Email status"
 msgid "Sent"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:142
+#: includes/Classes/TransStrings.php:141
 msgid "Email subject"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:143
+#: includes/Classes/TransStrings.php:142
 msgid "Emails"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:144
+#: includes/Classes/TransStrings.php:143
 msgid "End date"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:145
+#: includes/Classes/TransStrings.php:144
 msgid "End time"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:146
+#: includes/Classes/TransStrings.php:145
 msgid "Enter a from email address."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:147
+#: includes/Classes/TransStrings.php:146
 #: includes/Http/Controllers/FormsController.php:99
 msgid "Enter a job title."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:148
+#: includes/Classes/TransStrings.php:147
 msgid "Enter a title for this email notification."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:149
+#: includes/Classes/TransStrings.php:148
 msgid "Enter an email subject."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:150
+#: includes/Classes/TransStrings.php:149
 msgid "Enter at least one email address to send to."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:151
+#: includes/Classes/TransStrings.php:150
 msgid "Enter the email body."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:152
+#: includes/Classes/TransStrings.php:151
 msgid "Error"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:153
+#: includes/Classes/TransStrings.php:152
 msgid "Expand this row"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:154
+#: includes/Classes/TransStrings.php:153
 msgid "Export CSV"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:155
+#: includes/Classes/TransStrings.php:154
 msgid "Export JSON"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:156
+#: includes/Classes/TransStrings.php:155
 msgid "Export a job"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:157
+#: includes/Classes/TransStrings.php:156
 msgid "Export as JSON"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:158
+#: includes/Classes/TransStrings.php:157
 msgid "Extra CSS class for the button"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:161
+#: includes/Classes/TransStrings.php:160
 msgid "Field ID"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:162
+#: includes/Classes/TransStrings.php:161
 msgid "Field styles"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:163
+#: includes/Classes/TransStrings.php:162
 msgid "Fields"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:164
+#: includes/Classes/TransStrings.php:163
 msgid "Fill in all required fields."
 msgstr ""
 
 #. translators: %s is a column name
-#: includes/Classes/TransStrings.php:166
+#: includes/Classes/TransStrings.php:165
 #, php-format
 msgid "Filter by %s"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:167
+#: includes/Classes/TransStrings.php:166
 msgid "Filter by application status"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:168
+#: includes/Classes/TransStrings.php:167
 msgid "For example: Interview invitations, May"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:169
+#: includes/Classes/TransStrings.php:168
 msgid "For example: Notify the hiring team"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:170
+#: includes/Classes/TransStrings.php:169
 msgid "For example: Please wait…"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:171
+#: includes/Classes/TransStrings.php:170
 msgid "For example: Senior backend engineer"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:172
+#: includes/Classes/TransStrings.php:171
 msgid "For example: Submit application"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:173
+#: includes/Classes/TransStrings.php:172
 msgid "Form after submission"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:174
+#: includes/Classes/TransStrings.php:173
 msgid "Form design"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:175
+#: includes/Classes/TransStrings.php:174
 msgid "Form settings"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:178
+#: includes/Classes/TransStrings.php:177
 msgid "From email"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:179
+#: includes/Classes/TransStrings.php:178
 msgid "From name"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:180
+#: includes/Classes/TransStrings.php:179
 msgid "Full width button"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:181
+#: includes/Classes/TransStrings.php:180
 msgid "General"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:182
+#: includes/Classes/TransStrings.php:181
 msgid "General settings"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:183
+#: includes/Classes/TransStrings.php:182
 msgid "Go to"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:184
+#: includes/Classes/TransStrings.php:183
 msgid "Go to a URL"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:185
+#: includes/Classes/TransStrings.php:184
 msgid "Go to a page"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:186
+#: includes/Classes/TransStrings.php:185
 msgid "Go to next page"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:187
+#: includes/Classes/TransStrings.php:186
 msgid "Go to previous page"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:188
+#: includes/Classes/TransStrings.php:187
 msgid "Helps you find this broadcast later. Applicants do not see it."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:189
+#: includes/Classes/TransStrings.php:188
 msgid "Helps you find this notification in the list."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:190
+#: includes/Classes/TransStrings.php:189
 msgid "Hide the form"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:191
+#: includes/Classes/TransStrings.php:190
 msgid "Hide the form, or clear it for a new application."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:192
+#: includes/Classes/TransStrings.php:191
 msgid "Hide the submit button"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:194
+#: includes/Classes/TransStrings.php:193
 msgid "Illegal input"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:195
+#: includes/Classes/TransStrings.php:194
 msgid "Import"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:196
+#: includes/Classes/TransStrings.php:195
 msgid "Import & export"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:197
+#: includes/Classes/TransStrings.php:196
 msgid "Import a job"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:198
+#: includes/Classes/TransStrings.php:197
 msgid "In total"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:199
+#: includes/Classes/TransStrings.php:198
 msgid "Increase number"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:200
+#: includes/Classes/TransStrings.php:199
 msgid "Input fields"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:201
+#: includes/Classes/TransStrings.php:200
 msgid "Insert shortcode"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:202
+#: includes/Classes/TransStrings.php:201
 msgid "Internal"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:203
+#: includes/Classes/TransStrings.php:202
 msgid "Internal status"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:204
+#: includes/Classes/TransStrings.php:203
 msgid "JSON file to import"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:208
+#: includes/Classes/TransStrings.php:207
 msgid "Job application confirmation"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:210
+#: includes/Classes/TransStrings.php:209
 msgid "Job imported."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:212
+#: includes/Classes/TransStrings.php:211
 msgid "Job title"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:213
+#: includes/Classes/TransStrings.php:212
 msgid "Job to export"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:219
+#: includes/Classes/TransStrings.php:218
 msgid "Label"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:220
+#: includes/Classes/TransStrings.php:219
 msgid "Label alignment"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:221
+#: includes/Classes/TransStrings.php:220
 msgid "Layout"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:222
+#: includes/Classes/TransStrings.php:221
 msgid "Leave both empty to email every applicant of this job."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:223
+#: includes/Classes/TransStrings.php:222
 msgid "Left"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:224
+#: includes/Classes/TransStrings.php:223
 msgid "Limit applications"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:225
+#: includes/Classes/TransStrings.php:224
 msgid "Limit period"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:226
+#: includes/Classes/TransStrings.php:225
 msgid "Limit reached message"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:227
+#: includes/Classes/TransStrings.php:226
 msgid "Loading"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:228
+#: includes/Classes/TransStrings.php:227
 msgid "Loading application..."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:229
+#: includes/Classes/TransStrings.php:228
 msgid "Loading fields..."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:230
+#: includes/Classes/TransStrings.php:229
 msgid "Log IP addresses"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:231
+#: includes/Classes/TransStrings.php:230
 msgid "Login required message"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:234
+#: includes/Classes/TransStrings.php:233
 msgid "Maximum applications"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:236
+#: includes/Classes/TransStrings.php:235
 msgid "Message"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:239
+#: includes/Classes/TransStrings.php:238
 msgid "Network error. Please check your connection and try again."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:240
+#: includes/Classes/TransStrings.php:239
 msgid "New broadcast"
 msgstr ""
 
 #. translators: %s is a number of pages
-#: includes/Classes/TransStrings.php:243
+#: includes/Classes/TransStrings.php:242
 #, php-format
 msgid "Next %s pages"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:244
+#: includes/Classes/TransStrings.php:243
 msgid "Next application"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:245
+#: includes/Classes/TransStrings.php:244
 msgid "Next month"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:246
+#: includes/Classes/TransStrings.php:245
 msgid "Next year"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:247
+#: includes/Classes/TransStrings.php:246
 msgid "No activity yet. Status changes and notes show here."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:248
+#: includes/Classes/TransStrings.php:247
 msgid "No applications match these filters."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:249
+#: includes/Classes/TransStrings.php:248
 msgid "No data"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:250
+#: includes/Classes/TransStrings.php:249
 msgid "No email broadcasts yet"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:251
+#: includes/Classes/TransStrings.php:250
 msgid "No email notifications yet"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:252
+#: includes/Classes/TransStrings.php:251
 msgid "No fields yet"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:253
+#: includes/Classes/TransStrings.php:252
 msgid "No jobs match your search."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:254
+#: includes/Classes/TransStrings.php:253
 msgid "No matching data"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:255
+#: includes/Classes/TransStrings.php:254
 msgid "No style (theme default)"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:256
+#: includes/Classes/TransStrings.php:255
 msgid "Not provided"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:257
+#: includes/Classes/TransStrings.php:256
 msgid "Note"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:258
+#: includes/Classes/TransStrings.php:257
 msgid "Notifications"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:261
+#: includes/Classes/TransStrings.php:260
 msgid "Now"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:262
+#: includes/Classes/TransStrings.php:261
 msgid "OK"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:265
+#: includes/Classes/TransStrings.php:264
 msgid "Only logged-in users can see the form."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:266
+#: includes/Classes/TransStrings.php:265
 msgid "Open Cloudflare"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:267
+#: includes/Classes/TransStrings.php:266
 msgid "Open the job"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:268
+#: includes/Classes/TransStrings.php:267
 msgid "Opens on"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:269
+#: includes/Classes/TransStrings.php:268
 msgid "Option label"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:270
+#: includes/Classes/TransStrings.php:269
 msgid "Option value"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:271
+#: includes/Classes/TransStrings.php:270
 msgid "Optional. Empty fields use the WordPress defaults."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:272
+#: includes/Classes/TransStrings.php:271
 #: src/blocks/job-list/edit.jsx:61
 msgid "Order"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:273
+#: includes/Classes/TransStrings.php:272
 msgid "Other applications by this applicant"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:274
+#: includes/Classes/TransStrings.php:273
 msgid "Page"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:275
+#: includes/Classes/TransStrings.php:274
 msgid "Pending review"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:276
+#: includes/Classes/TransStrings.php:275
 msgid "Per day"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:277
+#: includes/Classes/TransStrings.php:276
 msgid "Per month"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:278
+#: includes/Classes/TransStrings.php:277
 msgid "Per week"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:279
+#: includes/Classes/TransStrings.php:278
 msgid "Per year"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:280
+#: includes/Classes/TransStrings.php:279
 msgid "Platform"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:281
+#: includes/Classes/TransStrings.php:280
 msgid "Previous"
 msgstr ""
 
 #. translators: %s is a number of pages
-#: includes/Classes/TransStrings.php:283
+#: includes/Classes/TransStrings.php:282
 #, php-format
 msgid "Previous %s pages"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:284
+#: includes/Classes/TransStrings.php:283
 msgid "Previous application"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:285
+#: includes/Classes/TransStrings.php:284
 msgid "Previous month"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:286
+#: includes/Classes/TransStrings.php:285
 msgid "Previous year"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:287
+#: includes/Classes/TransStrings.php:286
 msgid "Print application"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:288
+#: includes/Classes/TransStrings.php:287
 msgid "Privacy"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:289
+#: includes/Classes/TransStrings.php:288
 msgid "Private"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:290
+#: includes/Classes/TransStrings.php:289
 msgid "Provide values separately"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:291
+#: includes/Classes/TransStrings.php:290
 msgid "Published"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:292
+#: includes/Classes/TransStrings.php:291
 msgid "Recipients"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:293
+#: includes/Classes/TransStrings.php:292
 msgid "Redirect URL"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:294
+#: includes/Classes/TransStrings.php:293
 msgid "Redirect page"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:295
+#: includes/Classes/TransStrings.php:294
 msgid "Remaining"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:296
+#: includes/Classes/TransStrings.php:295
 msgid "Remove option"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:297
+#: includes/Classes/TransStrings.php:296
 msgid "Removes jobs, applications, uploaded files and settings when you delete the plugin. You cannot undo this."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:298
+#: includes/Classes/TransStrings.php:297
 msgid "Reply-to"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:299
+#: includes/Classes/TransStrings.php:298
 msgid "Require login"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:300
+#: includes/Classes/TransStrings.php:299
 msgid "Required marker"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:301
+#: includes/Classes/TransStrings.php:300
 msgctxt "Required marker position"
 msgid "None"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:302
+#: includes/Classes/TransStrings.php:301
 msgid "Reset"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:303
+#: includes/Classes/TransStrings.php:302
 msgid "Reset form"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:304
+#: includes/Classes/TransStrings.php:303
 msgid "Restore"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:305
+#: includes/Classes/TransStrings.php:304
 msgid "Restricted form"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:306
+#: includes/Classes/TransStrings.php:305
 msgid "Right"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:309
+#: includes/Classes/TransStrings.php:308
 msgid "Save form"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:310
+#: includes/Classes/TransStrings.php:309
 msgid "Save note"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:311
+#: includes/Classes/TransStrings.php:310
 msgid "Save notification"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:312
+#: includes/Classes/TransStrings.php:311
 msgid "Save settings"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:313
+#: includes/Classes/TransStrings.php:312
 msgid "Schedule the form"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:314
+#: includes/Classes/TransStrings.php:313
 msgid "Scheduled"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:315
+#: includes/Classes/TransStrings.php:314
 msgid "Scheduling & restrictions"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:316
+#: includes/Classes/TransStrings.php:315
 msgid "Search applicants"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:318
+#: includes/Classes/TransStrings.php:317
 msgid "Secret key"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:319
+#: includes/Classes/TransStrings.php:318
 msgid "Select"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:320
+#: includes/Classes/TransStrings.php:319
 msgid "Select a .json file to import."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:321
+#: includes/Classes/TransStrings.php:320
 msgid "Select a job"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:322
+#: includes/Classes/TransStrings.php:321
 msgid "Select a page"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:323
+#: includes/Classes/TransStrings.php:322
 msgid "Select a valid field type."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:324
+#: includes/Classes/TransStrings.php:323
 msgid "Select all rows"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:325
+#: includes/Classes/TransStrings.php:324
 msgid "Select date"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:326
+#: includes/Classes/TransStrings.php:325
 msgid "Select date and time"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:327
+#: includes/Classes/TransStrings.php:326
 msgid "Select this row"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:328
+#: includes/Classes/TransStrings.php:327
 msgid "Select time"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:329
+#: includes/Classes/TransStrings.php:328
 msgid "Selected date"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:330
+#: includes/Classes/TransStrings.php:329
 msgid "Send a copy to these addresses, separated by commas."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:331
+#: includes/Classes/TransStrings.php:330
 msgid "Send a hidden copy to these addresses, separated by commas."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:332
+#: includes/Classes/TransStrings.php:331
 msgid "Send broadcast"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:333
+#: includes/Classes/TransStrings.php:332
 msgid "Send to"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:334
+#: includes/Classes/TransStrings.php:333
 msgid "Sender and copies"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:335
+#: includes/Classes/TransStrings.php:334
 msgid "Sending emails. Keep this tab open until all emails are sent."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:336
+#: includes/Classes/TransStrings.php:335
 msgid "Sent at"
 msgstr ""
 
 #. translators: %s is the percentage of emails sent, for example 40%
-#: includes/Classes/TransStrings.php:338
+#: includes/Classes/TransStrings.php:337
 #, php-format
 msgid "Sent: %s"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:341
+#: includes/Classes/TransStrings.php:340
 msgid "Set the maximum number of applications, the period, and the application statuses that count toward the limit."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:343
+#: includes/Classes/TransStrings.php:342
 msgctxt "Settings section heading"
 msgid "Login"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:344
+#: includes/Classes/TransStrings.php:343
 msgctxt "Settings section heading"
 msgid "Schedule"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:345
+#: includes/Classes/TransStrings.php:344
 msgid "Show a message"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:346
+#: includes/Classes/TransStrings.php:345
 msgid "Show a validation error after submit"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:347
+#: includes/Classes/TransStrings.php:346
 msgid "Show all field labels in bold."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:348
+#: includes/Classes/TransStrings.php:347
 msgid "Show empty fields"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:349
+#: includes/Classes/TransStrings.php:348
 msgid "Shown after the form closes."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:350
+#: includes/Classes/TransStrings.php:349
 msgid "Shown before the form opens."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:351
+#: includes/Classes/TransStrings.php:350
 msgid "Shown instead of the form when the limit is reached."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:352
+#: includes/Classes/TransStrings.php:351
 msgid "Shown on the same page after the form is sent."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:353
+#: includes/Classes/TransStrings.php:352
 msgid "Shown to logged-out visitors. Shortcodes and HTML work."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:354
+#: includes/Classes/TransStrings.php:353
 msgid "Site key"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:355
+#: includes/Classes/TransStrings.php:354
 msgid "Something went wrong. Please try again."
 msgstr ""
 
 #. translators: %s is a column name
-#: includes/Classes/TransStrings.php:357
+#: includes/Classes/TransStrings.php:356
 #, php-format
 msgid "Sort by %s"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:358
+#: includes/Classes/TransStrings.php:357
 msgid "Spam protection"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:359
+#: includes/Classes/TransStrings.php:358
 msgid "Start date"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:360
+#: includes/Classes/TransStrings.php:359
 msgid "Start time"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:361
+#: includes/Classes/TransStrings.php:360
 msgid "Status"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:362
+#: includes/Classes/TransStrings.php:361
 msgid "Store the IP address with each application. Advanced analytics need it."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:363
+#: includes/Classes/TransStrings.php:362
 msgid "Stored on your server; never shown again."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:364
+#: includes/Classes/TransStrings.php:363
 msgid "Subject"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:365
+#: includes/Classes/TransStrings.php:364
 msgid "Submit button"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:366
+#: includes/Classes/TransStrings.php:365
 msgid "Submit button position"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:367
+#: includes/Classes/TransStrings.php:366
 msgid "Submitted"
 msgstr ""
 
 #. translators: %s is the date and time the application was submitted
-#: includes/Classes/TransStrings.php:369
+#: includes/Classes/TransStrings.php:368
 #, php-format
 msgid "Submitted %s"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:371
+#: includes/Classes/TransStrings.php:370
 msgid "Sum"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:374
+#: includes/Classes/TransStrings.php:373
 msgid "The WordPress editor needs WordPress 4.8 or later. Update WordPress to use it."
 msgstr ""
 
 #. translators: %1$s is the applicant name or email, %2$s is the job title
-#: includes/Classes/TransStrings.php:376
+#: includes/Classes/TransStrings.php:375
 #, php-format
 msgid "The application from %1$s for %2$s will be deleted permanently. You cannot undo this."
 msgstr ""
 
 #. translators: %s is the applicant name or email
-#: includes/Classes/TransStrings.php:378
+#: includes/Classes/TransStrings.php:377
 #, php-format
 msgid "The application from %s will be deleted permanently. You cannot undo this."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:379
+#: includes/Classes/TransStrings.php:378
 msgid "The event that sends this email."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:380
+#: includes/Classes/TransStrings.php:379
 msgid "The form stops accepting applications at this time."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:381
+#: includes/Classes/TransStrings.php:380
 msgid "The page the applicant goes to after sending the form."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:382
+#: includes/Classes/TransStrings.php:381
 msgid "The sender name in the inbox. Works only with a From email."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:383
+#: includes/Classes/TransStrings.php:382
 msgid "The subject line applicants see in their inbox."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:384
+#: includes/Classes/TransStrings.php:383
 msgid "The subject line of the email."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:385
+#: includes/Classes/TransStrings.php:384
 msgid "The web address the applicant goes to after sending the form."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:386
+#: includes/Classes/TransStrings.php:385
 msgid "This field is already on your form. You can add it only once."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:387
+#: includes/Classes/TransStrings.php:386
 msgid "This field is not available."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:390
+#: includes/Classes/TransStrings.php:389
 #: src/blocks/job-list/edit.jsx:23
 msgid "Title"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:391
+#: includes/Classes/TransStrings.php:390
 msgid "To show the confirmation message on that page, add this shortcode to it:"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:392
+#: includes/Classes/TransStrings.php:391
 msgid "Today"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:393
+#: includes/Classes/TransStrings.php:392
 msgid "Top"
 msgstr ""
 
 #. translators: %s is the total number of items
-#: includes/Classes/TransStrings.php:395
+#: includes/Classes/TransStrings.php:394
 #, php-format
 msgid "Total %s"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:396
+#: includes/Classes/TransStrings.php:395
 msgid "Total recipients"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:397
+#: includes/Classes/TransStrings.php:396
 msgid "Trash"
 msgstr ""
 
 #. translators: %s is the email notification title
-#: includes/Classes/TransStrings.php:401
+#: includes/Classes/TransStrings.php:400
 #, php-format
 msgid "Turn on %s"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:402
+#: includes/Classes/TransStrings.php:401
 msgid "Unnamed applicant"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:403
+#: includes/Classes/TransStrings.php:402
 msgid "Untitled notification"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:404
+#: includes/Classes/TransStrings.php:403
 msgid "Update status"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:405
+#: includes/Classes/TransStrings.php:404
 msgid "Upload a .json file exported from Ninja Job Board. The import creates a new job."
 msgstr ""
 
 #. translators: %1$s and %2$s are merge tags that show the applicant name and email
-#: includes/Classes/TransStrings.php:407
+#: includes/Classes/TransStrings.php:406
 #, php-format
 msgid "Use %1$s and %2$s to add the name and email of each applicant."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:408
+#: includes/Classes/TransStrings.php:407
 msgid "Use an address on your domain so the email is delivered."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:409
+#: includes/Classes/TransStrings.php:408
 msgid "Use the arrow keys and enter to select the day of the month"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:410
+#: includes/Classes/TransStrings.php:409
 msgid "Use the arrow keys and enter to select the month"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:411
+#: includes/Classes/TransStrings.php:410
 msgid "Use the arrow keys and enter to select the year"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:412
+#: includes/Classes/TransStrings.php:411
 msgid "Use the merge tag button to add application data."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:413
+#: includes/Classes/TransStrings.php:412
 msgid "Use the plugin's input styles. Turn off to use your theme's styles."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:414
+#: includes/Classes/TransStrings.php:413
 msgid "User"
 msgstr ""
 
 #. translators: %s is the current date and time on the server
-#: includes/Classes/TransStrings.php:416
+#: includes/Classes/TransStrings.php:415
 #, php-format
 msgid "Uses server time. The time now is %s."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:417
+#: includes/Classes/TransStrings.php:416
 msgid "Value"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:418
+#: includes/Classes/TransStrings.php:417
 msgid "View"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:419
+#: includes/Classes/TransStrings.php:418
 msgid "View application"
 msgstr ""
 
 #. translators: %s is the applicant name
-#: includes/Classes/TransStrings.php:421
+#: includes/Classes/TransStrings.php:420
 #, php-format
 msgid "View application from %s"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:424
+#: includes/Classes/TransStrings.php:423
 msgid "What happens to the form while a restriction is active."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:425
+#: includes/Classes/TransStrings.php:424
 msgid "What the applicant sees after sending the form."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:426
+#: includes/Classes/TransStrings.php:425
 msgid "When a restriction applies"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:427
+#: includes/Classes/TransStrings.php:426
 msgid "When it sends"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:428
+#: includes/Classes/TransStrings.php:427
 msgid "Where field labels sit: above, left of, or right of the field."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:429
+#: includes/Classes/TransStrings.php:428
 msgid "Where replies go. Leave empty to use the sender."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:430
+#: includes/Classes/TransStrings.php:429
 msgid "Where the asterisk shows on required fields."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:431
+#: includes/Classes/TransStrings.php:430
 msgid "Who gets this email"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:432
+#: includes/Classes/TransStrings.php:431
 msgid "Write a note first."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:433
+#: includes/Classes/TransStrings.php:432
 msgid "Write a note for your team"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:434
+#: includes/Classes/TransStrings.php:433
 msgid "Yesterday"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:435
+#: includes/Classes/TransStrings.php:434
 msgid "You can add the job details and the application form next."
 msgstr ""
 
-#: includes/Classes/TransStrings.php:436
+#: includes/Classes/TransStrings.php:435
 msgid "You have no jobs yet"
 msgstr ""
 
-#: includes/Classes/TransStrings.php:437
+#: includes/Classes/TransStrings.php:436
 msgid "Your company"
 msgstr ""
 
 #. translators: %s is a page number
-#: includes/Classes/TransStrings.php:439
+#: includes/Classes/TransStrings.php:438
 #, php-format
 msgid "page %s"
 msgstr ""
