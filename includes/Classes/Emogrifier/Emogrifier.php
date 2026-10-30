@@ -15,7 +15,8 @@ if (!defined('ABSPATH')) {
  * so whichever plugin loads first provides them. Only the Composer autoloader class names
  * carry this plugin's "Njb" marker, so two copies never collide.
  *
- * To update, copy scoped-vendor/ from FluentCRM again and replace its "Fcrm" marker with "Njb".
+ * To update, copy scoped-vendor/ from FluentCRM again, then run `npm run prepare:emogrifier`
+ * (build/prepare-emogrifier.mjs): it sets the "Njb" marker and the WordPress.org file guards.
  */
 class Emogrifier
 {

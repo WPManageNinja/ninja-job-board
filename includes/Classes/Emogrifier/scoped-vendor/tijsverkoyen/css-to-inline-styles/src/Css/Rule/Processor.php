@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable WordPress.Security.EscapeOutput.ExceptionNotEscaped -- developer exception messages, never printed
 
 namespace FluentEmogrifier\Vendor\TijsVerkoyen\CssToInlineStyles\Css\Rule;
 

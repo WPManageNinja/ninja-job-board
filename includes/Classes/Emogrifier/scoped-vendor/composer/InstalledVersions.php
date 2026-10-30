@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable WordPress.Security.EscapeOutput.ExceptionNotEscaped -- developer exception messages, never printed
 
 /*
  * This file is part of Composer.

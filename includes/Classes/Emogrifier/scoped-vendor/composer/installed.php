@@ -1,4 +1,9 @@
-<?php return array(
+<?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+return array(
     'root' => array(
         'name' => '__root__',
         'pretty_version' => 'dev-master',
