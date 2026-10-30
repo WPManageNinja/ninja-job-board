@@ -1,11 +1,12 @@
 /**
  * Block editor additions for job posts:
  * - "Job details" panel: location, vacancies, experience, job type (registered post meta)
- * - "Ninja Job Board" panel: links to this job's applications, form and settings in the app
+ * - The job tab bar: links to this job's applications, form and settings in the app
  */
 const { registerPlugin } = wp.plugins;
 const PluginDocumentSettingPanel = (wp.editor && wp.editor.PluginDocumentSettingPanel) || wp.editPost.PluginDocumentSettingPanel;
-const { TextControl, SelectControl, ExternalLink } = wp.components;
+const { TextControl, SelectControl } = wp.components;
+const { createPortal, useEffect, useState } = wp.element;
 const { useSelect } = wp.data;
 const { useEntityProp } = wp.coreData;
 const { __ } = wp.i18n;
@@ -61,32 +62,84 @@ function JobDetailsPanel() {
     );
 }
 
-function JobLinksPanel() {
-    const { postType, postId, isNew } = useSelect((select) => ({
+/**
+ * The job tab bar of the app (Applications, Application Form, ...), placed above the editor toolbar.
+ * The classic editor prints the same bar in PHP (Menu::pushJobNav).
+ */
+function JobTabBar() {
+    const { postType, postId } = useSelect((select) => ({
         postType: select('core/editor').getCurrentPostType(),
-        postId: select('core/editor').getCurrentPostId(),
-        isNew: select('core/editor').isEditedPostNew()
+        postId: select('core/editor').getCurrentPostId()
     }), []);
+    const [container, setContainer] = useState(null);
 
-    if (postType !== 'wp_job_board' || !settings.canManageApp || !settings.appUrl) {
+    const show = postType === 'wp_job_board' && settings.canManageApp && settings.appUrl && postId;
+
+    useEffect(() => {
+        if (!show) {
+            return undefined;
+        }
+
+        const node = document.createElement('div');
+        node.className = 'wpjb_editor_nav_slot';
+
+        // The editor renders its skeleton after the plugins, so wait for the header
+        const mount = () => {
+            const header = document.querySelector('.interface-interface-skeleton__header');
+            if (!header || !header.parentNode) {
+                return false;
+            }
+            header.parentNode.insertBefore(node, header);
+            setContainer(node);
+            return true;
+        };
+
+        let observer = null;
+        if (!mount()) {
+            observer = new MutationObserver(() => {
+                if (mount()) {
+                    observer.disconnect();
+                }
+            });
+            observer.observe(document.body, { childList: true, subtree: true });
+        }
+
+        return () => {
+            if (observer) {
+                observer.disconnect();
+            }
+            node.remove();
+            setContainer(null);
+        };
+    }, [show]);
+
+    if (!show || !container) {
         return null;
     }
 
     const link = (route) => settings.appUrl + '#/edit-form/' + postId + '/' + route;
+    const tabs = [
+        { route: 'form_entries', title: __('Applications', 'ninja-job-board') },
+        { route: 'form-builder', title: __('Application Form', 'ninja-job-board') },
+        { route: 'settings/confirmation_settings', title: __('Form Settings', 'ninja-job-board') },
+        { route: 'email_settings', title: __('Email Notifications', 'ninja-job-board') },
+        { route: 'email_broadcast', title: __('Email Broadcast', 'ninja-job-board') }
+    ];
 
-    return (
-        <PluginDocumentSettingPanel name="wpjb-job-links" title={__('Ninja Job Board', 'ninja-job-board')}>
-            {isNew ? (
-                <p>{__('Save the job to manage its application form and applications.', 'ninja-job-board')}</p>
-            ) : (
-                <ul className="wpjb_job_links">
-                    <li><ExternalLink href={link('form_entries')}>{__('Applications', 'ninja-job-board')}</ExternalLink></li>
-                    <li><ExternalLink href={link('form-builder')}>{__('Application form', 'ninja-job-board')}</ExternalLink></li>
-                    <li><ExternalLink href={link('settings/confirmation_settings')}>{__('Form settings', 'ninja-job-board')}</ExternalLink></li>
-                    <li><ExternalLink href={link('email_settings')}>{__('Email notifications', 'ninja-job-board')}</ExternalLink></li>
-                </ul>
-            )}
-        </PluginDocumentSettingPanel>
+    return createPortal(
+        <nav className="wpjb_edit_nav is-block-editor" aria-label={__('Job sections', 'ninja-job-board')}>
+            <ul className="wpjb_edit_tabs">
+                {tabs.map((tab) => (
+                    <li key={tab.route}>
+                        <a className="wpjb_edit_tab" href={link(tab.route)}>{tab.title}</a>
+                    </li>
+                ))}
+                <li>
+                    <span className="wpjb_edit_tab is-active" aria-current="page">{__('Edit job post', 'ninja-job-board')}</span>
+                </li>
+            </ul>
+        </nav>,
+        container
     );
 }
 
@@ -94,7 +147,7 @@ registerPlugin('ninja-job-board-job-editor', {
     render: () => (
         <>
             <JobDetailsPanel />
-            <JobLinksPanel />
+            <JobTabBar />
         </>
     )
 });

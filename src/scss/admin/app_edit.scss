@@ -80,6 +80,17 @@ body.post-type-wp_job_board .wpjb_edit_nav {
     }
 }
 
+// Block editor: the bar sits above the editor toolbar (src/blocks/job-editor.jsx)
+body.post-type-wp_job_board .wpjb_edit_nav.is-block-editor {
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0 20px;
+
+    span.wpjb_edit_tab {
+        cursor: default;
+    }
+}
+
 body.post-type-wp_job_board #screen-meta-links .show-settings {
     border-color: var(--wpjb-border);
     border-radius: var(--wpjb-radius-sm);

@@ -2,7 +2,8 @@
   "use strict";
   const { registerPlugin } = wp.plugins;
   const PluginDocumentSettingPanel = wp.editor && wp.editor.PluginDocumentSettingPanel || wp.editPost.PluginDocumentSettingPanel;
-  const { TextControl, SelectControl, ExternalLink } = wp.components;
+  const { TextControl, SelectControl } = wp.components;
+  const { createPortal, useEffect, useState } = wp.element;
   const { useSelect } = wp.data;
   const { useEntityProp } = wp.coreData;
   const { __ } = wp.i18n;
@@ -57,19 +58,62 @@
       }
     ));
   }
-  function JobLinksPanel() {
-    const { postType, postId, isNew } = useSelect((select) => ({
+  function JobTabBar() {
+    const { postType, postId } = useSelect((select) => ({
       postType: select("core/editor").getCurrentPostType(),
-      postId: select("core/editor").getCurrentPostId(),
-      isNew: select("core/editor").isEditedPostNew()
+      postId: select("core/editor").getCurrentPostId()
     }), []);
-    if (postType !== "wp_job_board" || !settings.canManageApp || !settings.appUrl) {
+    const [container, setContainer] = useState(null);
+    const show = postType === "wp_job_board" && settings.canManageApp && settings.appUrl && postId;
+    useEffect(() => {
+      if (!show) {
+        return void 0;
+      }
+      const node = document.createElement("div");
+      node.className = "wpjb_editor_nav_slot";
+      const mount = () => {
+        const header = document.querySelector(".interface-interface-skeleton__header");
+        if (!header || !header.parentNode) {
+          return false;
+        }
+        header.parentNode.insertBefore(node, header);
+        setContainer(node);
+        return true;
+      };
+      let observer = null;
+      if (!mount()) {
+        observer = new MutationObserver(() => {
+          if (mount()) {
+            observer.disconnect();
+          }
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+      }
+      return () => {
+        if (observer) {
+          observer.disconnect();
+        }
+        node.remove();
+        setContainer(null);
+      };
+    }, [show]);
+    if (!show || !container) {
       return null;
     }
     const link = (route) => settings.appUrl + "#/edit-form/" + postId + "/" + route;
-    return /* @__PURE__ */ wp.element.createElement(PluginDocumentSettingPanel, { name: "wpjb-job-links", title: __("Ninja Job Board", "ninja-job-board") }, isNew ? /* @__PURE__ */ wp.element.createElement("p", null, __("Save the job to manage its application form and applications.", "ninja-job-board")) : /* @__PURE__ */ wp.element.createElement("ul", { className: "wpjb_job_links" }, /* @__PURE__ */ wp.element.createElement("li", null, /* @__PURE__ */ wp.element.createElement(ExternalLink, { href: link("form_entries") }, __("Applications", "ninja-job-board"))), /* @__PURE__ */ wp.element.createElement("li", null, /* @__PURE__ */ wp.element.createElement(ExternalLink, { href: link("form-builder") }, __("Application form", "ninja-job-board"))), /* @__PURE__ */ wp.element.createElement("li", null, /* @__PURE__ */ wp.element.createElement(ExternalLink, { href: link("settings/confirmation_settings") }, __("Form settings", "ninja-job-board"))), /* @__PURE__ */ wp.element.createElement("li", null, /* @__PURE__ */ wp.element.createElement(ExternalLink, { href: link("email_settings") }, __("Email notifications", "ninja-job-board")))));
+    const tabs = [
+      { route: "form_entries", title: __("Applications", "ninja-job-board") },
+      { route: "form-builder", title: __("Application Form", "ninja-job-board") },
+      { route: "settings/confirmation_settings", title: __("Form Settings", "ninja-job-board") },
+      { route: "email_settings", title: __("Email Notifications", "ninja-job-board") },
+      { route: "email_broadcast", title: __("Email Broadcast", "ninja-job-board") }
+    ];
+    return createPortal(
+      /* @__PURE__ */ wp.element.createElement("nav", { className: "wpjb_edit_nav is-block-editor", "aria-label": __("Job sections", "ninja-job-board") }, /* @__PURE__ */ wp.element.createElement("ul", { className: "wpjb_edit_tabs" }, tabs.map((tab) => /* @__PURE__ */ wp.element.createElement("li", { key: tab.route }, /* @__PURE__ */ wp.element.createElement("a", { className: "wpjb_edit_tab", href: link(tab.route) }, tab.title))), /* @__PURE__ */ wp.element.createElement("li", null, /* @__PURE__ */ wp.element.createElement("span", { className: "wpjb_edit_tab is-active", "aria-current": "page" }, __("Edit job post", "ninja-job-board"))))),
+      container
+    );
   }
   registerPlugin("ninja-job-board-job-editor", {
-    render: () => /* @__PURE__ */ wp.element.createElement(wp.element.Fragment, null, /* @__PURE__ */ wp.element.createElement(JobDetailsPanel, null), /* @__PURE__ */ wp.element.createElement(JobLinksPanel, null))
+    render: () => /* @__PURE__ */ wp.element.createElement(wp.element.Fragment, null, /* @__PURE__ */ wp.element.createElement(JobDetailsPanel, null), /* @__PURE__ */ wp.element.createElement(JobTabBar, null))
   });
 })();
