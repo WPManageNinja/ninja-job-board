@@ -6,6 +6,7 @@ use WPJobBoard\Classes\ArrayHelper;
 use WPJobBoard\Classes\File\FileAccess;
 use WPJobBoard\Classes\File\FileHandler;
 use WPJobBoard\Classes\Models\Forms;
+use WPJobBoard\Classes\Tools\SchedulingSettings;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -332,6 +333,12 @@ class FileUploadComponent extends BaseComponent
         $form = Forms::getForm($formId);
         if (!$form || $form->post_status !== 'publish') {
             $this->sendError(__('Form not found', 'ninja-job-board'), 'no form found');
+        }
+
+        // The same schedule, entry limit and login rules as the submission
+        $restrictions = (new SchedulingSettings())->validateForm(array(), $formId);
+        if ($restrictions) {
+            $this->sendError(wp_strip_all_tags(reset($restrictions)), 'restricted', 403);
         }
 
         $element = $this->getFileUploadElement($formId, $elementName);

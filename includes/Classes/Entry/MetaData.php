@@ -21,8 +21,51 @@ class MetaData
     public function __construct($entry)
     {
         $this->entry = $entry;
-        $this->postId = $entry->getRawInput('__wpjb_current_page_id');
+        $this->postId = self::resolvePostId($entry->getRawInput('__wpjb_current_page_id'), $entry->form_id);
         $this->userId = $entry->user_id;
+    }
+
+    /**
+     * The visitor sends the page ID, so accept it only for a public page that embeds this form.
+     * Otherwise use the job, so {wp:*} and {post_meta:*} can not read another post.
+     */
+    public static function resolvePostId($pageId, $formId)
+    {
+        $pageId = absint($pageId);
+        $formId = absint($formId);
+        if (!$pageId || $pageId === $formId) {
+            return $formId;
+        }
+
+        $page = get_post($pageId);
+        if (!$page || !is_post_publicly_viewable($page) || post_password_required($page)) {
+            return $formId;
+        }
+
+        return self::embedsForm($page->post_content, $formId) ? $pageId : $formId;
+    }
+
+    private static function embedsForm($content, $formId)
+    {
+        if (preg_match_all('/' . get_shortcode_regex(array('wp_job_form')) . '/', $content, $matches, PREG_SET_ORDER)) {
+            foreach ($matches as $match) {
+                $atts = shortcode_parse_atts($match[3]);
+                if (is_array($atts) && isset($atts['id']) && absint($atts['id']) === $formId) {
+                    return true;
+                }
+            }
+        }
+
+        if (preg_match_all('/<!--\s+wp:ninja-job-board\/application-form\s+(\{.*?\})\s+\/?-->/', $content, $matches)) {
+            foreach ($matches[1] as $json) {
+                $attrs = json_decode($json, true);
+                if (is_array($attrs) && isset($attrs['jobId']) && absint($attrs['jobId']) === $formId) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public function getWPValues($key)
