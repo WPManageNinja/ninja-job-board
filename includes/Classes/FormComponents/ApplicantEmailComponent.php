@@ -63,20 +63,17 @@ class ApplicantEmailComponent extends BaseComponent
 
     public function validateEmailOnSubmission($error, $elementId, $element, $data)
     {
-        // Validation Already failed so We are just returning it
         if($error) {
             return $error;
         }
         $value = ArrayHelper::get($data, $elementId);
         if($value) {
-            // We have to check if it's a valid email address or not
             if(!is_email($value)) {
                 /* translators: %s: field label */
                 return sprintf(__('Enter a valid email address in %s.', 'ninja-job-board'), ArrayHelper::get($element, 'label'));
             }
         }
 
-        // check if confirm email exists and need to validate
         if(ArrayHelper::get($element, 'options.confirm_email') == 'yes') {
             $confirmEmailvalue = ArrayHelper::get($data, '__confirm_'.$elementId);
             if($confirmEmailvalue != $value) {

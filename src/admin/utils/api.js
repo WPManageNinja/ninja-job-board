@@ -1,9 +1,6 @@
 /**
- * Client for the plugin's REST API (namespace ninja-job-board/v1).
- * Uses WordPress cookie authentication: every request sends the wp_rest nonce.
- *
- * Every method returns a Promise with the response JSON.
- * A failed request rejects with { status, message, data }.
+ * REST client for ninja-job-board/v1 with WordPress cookie auth (the wp_rest nonce goes with every request).
+ * Methods return a Promise with the response JSON; a failed request rejects with { status, message, data }.
  */
 import { $t } from './i18n.js';
 
@@ -90,7 +87,6 @@ export default {
     delete: (path, data) => request('DELETE', path, data),
     upload: (path, formData) => request('POST', path, formData),
     /**
-     * URL for a file download that the browser opens directly (CSV, JSON).
      * The nonce goes in the query string because the browser can not send headers.
      */
     downloadUrl: (path, params = {}) => buildUrl(path, { ...params, _wpnonce: config().nonce })

@@ -49,7 +49,6 @@
 
     export default {
         name: 'inputPopoverDropdown',
-        // Icons used as tags in the template must be registered here
         components: { ArrowDown, MenuIcon },
         emits: ['command'],
         setup() {

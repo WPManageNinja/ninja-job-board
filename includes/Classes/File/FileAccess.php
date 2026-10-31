@@ -10,14 +10,8 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Serves uploaded application files (CVs etc.) only to users who can view the application.
- *
- * Files stay in uploads/wpjobboard/, but every link the plugin prints points to
- * admin-post.php?action=wpjb_download_file. The handler checks the login, the capability and
- * that the file belongs to the application, then streams it. The upload folder denies direct
- * access on Apache; for Nginx see the FAQ in readme.txt.
- *
- * @since 2.0.0
+ * Serves uploads only through admin-post.php?action=wpjb_download_file after login, capability and ownership checks.
+ * The upload folder denies direct access on Apache only; for Nginx see the FAQ in readme.txt.
  */
 class FileAccess
 {
@@ -33,13 +27,6 @@ class FileAccess
         add_action('admin_init', array($this, 'maybeProtectUploadDir'));
     }
 
-    /**
-     * The link to a file of an application
-     * @param int    $submissionId
-     * @param string $fileName Base name of the stored file
-     * @param bool   $inline   Show in the browser (images, PDF) instead of downloading
-     * @return string
-     */
     public static function downloadUrl($submissionId, $fileName, $inline = false)
     {
         $args = array(
@@ -54,9 +41,7 @@ class FileAccess
     }
 
     /**
-     * Base names of the files stored for an upload field value (array of file URLs)
-     * @param mixed $values
-     * @return array
+     * Base names of the stored files for an upload field value (array of file URLs)
      */
     public static function fileNames($values)
     {
@@ -81,8 +66,7 @@ class FileAccess
     }
 
     /**
-     * Stream a file after the access checks. Read-only, so a nonce is not needed:
-     * the link is opened from emails and new tabs.
+     * Read-only, so no nonce: the link is opened from emails and new tabs.
      */
     public function serve()
     {
@@ -126,9 +110,6 @@ class FileAccess
     }
 
     /**
-     * The access decision for one file request, separate from the streaming so it can be tested.
-     *
-     * @param int    $submissionId
      * @param string $fileName Sanitized base name
      * @return array{status: int, path: string} 200 with the real path, or 400/403/404 with an empty path
      */
@@ -163,7 +144,7 @@ class FileAccess
     }
 
     /**
-     * Write the .htaccess and index.php guards once per protection version (covers sites upgraded from 1.x)
+     * Rewrite the upload dir guards when PROTECTION_VERSION changes (also covers sites upgraded from 1.x)
      */
     public function maybeProtectUploadDir()
     {

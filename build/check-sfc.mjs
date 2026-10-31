@@ -1,8 +1,5 @@
-/**
- * Compile .vue files with the Vue 3 compiler and report errors and warnings.
- * Usage: node build/check-sfc.mjs <file.vue> [...more files]
- * Exit code 1 when any file has an error.
- */
+// Compiles .vue files with the Vue 3 compiler; exits 1 on any error.
+// Usage: node build/check-sfc.mjs <file.vue> [...more files]
 import { parse, compileTemplate, compileScript } from 'vue/compiler-sfc';
 import { readFileSync } from 'node:fs';
 

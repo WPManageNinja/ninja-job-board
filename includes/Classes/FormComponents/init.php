@@ -3,7 +3,6 @@
 if (!defined('ABSPATH')) {
     exit;
 }
-// Load and Register Form Components
 new \WPJobBoard\Classes\FormComponents\ApplicantNameComponent();
 new \WPJobBoard\Classes\FormComponents\ApplicantEmailComponent();
 new \WPJobBoard\Classes\FormComponents\TextComponent();

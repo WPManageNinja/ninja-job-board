@@ -6,10 +6,7 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 use WPJobBoard\Classes\File\FileHandler;
 use WPJobBoard\Classes\Models\Submission;
 
-/**
- * Base class for the integration tier: real WordPress, real database, every test in a
- * transaction that is rolled back. See tests/php/integration-bootstrap.php for the safety model.
- */
+// Every test runs in a rolled-back transaction; see integration-bootstrap.php for the safety model.
 abstract class IntegrationTestCase extends BaseTestCase
 {
     /** @var \wpdb */
@@ -88,11 +85,6 @@ abstract class IntegrationTestCase extends BaseTestCase
         }, 10, 3);
     }
 
-    // ─── Actors ────────────────────────────────────────────────────────────
-
-    /**
-     * Create a user with a role and optional extra capabilities, and return its ID
-     */
     protected function makeUser($role, array $caps = array())
     {
         $userId = wp_insert_user(array(
@@ -120,10 +112,7 @@ abstract class IntegrationTestCase extends BaseTestCase
         $this->actAs($this->makeUser('administrator'));
     }
 
-    // ─── REST ──────────────────────────────────────────────────────────────
-
     /**
-     * Dispatch a request to the plugin's REST namespace in-process
      * @return \WP_REST_Response
      */
     protected function rest($method, $path, array $params = array())
@@ -135,11 +124,8 @@ abstract class IntegrationTestCase extends BaseTestCase
         return rest_do_request($request);
     }
 
-    // ─── Fixtures ──────────────────────────────────────────────────────────
-
     /**
      * A published job with the default application form (name, email, CV upload).
-     * Created through the REST API as an admin, like the admin app does.
      * @return int Job (form) ID
      */
     protected function makeJob($title = 'Test job', $authorId = null)
@@ -162,7 +148,6 @@ abstract class IntegrationTestCase extends BaseTestCase
     }
 
     /**
-     * Insert an application row directly (for tests that are not about the submission flow)
      * @return int Application ID
      */
     protected function makeApplication($formId, array $formatted = array(), array $columns = array())
@@ -192,7 +177,6 @@ abstract class IntegrationTestCase extends BaseTestCase
     }
 
     /**
-     * Put a file in the plugin's upload folder with a valid plugin file name
      * @return array{name: string, path: string, url: string}
      */
     protected function makeUploadedFile($originalName = 'cv.pdf', $contents = "%PDF-1.4\n%%EOF\n")
@@ -207,9 +191,7 @@ abstract class IntegrationTestCase extends BaseTestCase
     }
 
     /**
-     * Submit the public application form through the real AJAX handler, as an anonymous visitor.
      * The required CV field gets a valid upload unless $fields sets '__file_upload_input_files[]'.
-     *
      * @return array{status: int, body: mixed, raw: string, row: array|null} row = the stored application
      */
     protected function submitApplication($formId, array $fields)
@@ -246,8 +228,6 @@ abstract class IntegrationTestCase extends BaseTestCase
         }
         return $result;
     }
-
-    // ─── wp_die / wp_send_json capture ─────────────────────────────────────
 
     /**
      * Run code that ends in wp_send_json()/wp_die() as an AJAX request and capture the result

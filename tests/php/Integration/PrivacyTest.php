@@ -4,9 +4,6 @@ namespace NinjaJobBoard\Tests\Integration;
 
 use NinjaJobBoard\Tests\IntegrationTestCase;
 
-/**
- * WordPress privacy tools (Tools > Export/Erase Personal Data) and IP logging.
- */
 class PrivacyTest extends IntegrationTestCase
 {
     public function test_exporter_returns_the_applications_of_that_email_only()

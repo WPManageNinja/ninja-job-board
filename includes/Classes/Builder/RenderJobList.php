@@ -11,10 +11,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Render Job List Class
- * @since 1.0.0
- */
 class RenderJobList
 {
     public function render($args)

@@ -1,7 +1,3 @@
-/**
- * Print one element in a new window, with the admin print styles
- * @param {HTMLElement} element
- */
 export function printElement(element) {
     if (!element) {
         return;

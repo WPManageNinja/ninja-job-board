@@ -4,10 +4,6 @@ namespace NinjaJobBoard\Tests\Integration;
 
 use NinjaJobBoard\Tests\IntegrationTestCase;
 
-/**
- * Gutenberg blocks (rendered in PHP), the job fields in the block editor, and the rule that a job
- * page does not show the form or the details twice.
- */
 class BlocksTest extends IntegrationTestCase
 {
     public function test_the_three_blocks_are_registered_with_a_php_render()
@@ -101,16 +97,11 @@ class BlocksTest extends IntegrationTestCase
         $this->assertSame('Berlin', get_post_meta($jobId, 'job_location', true));
     }
 
-    // ─── Helpers ───────────────────────────────────────────────────────────
-
     private function renderBlock($name, array $attributes)
     {
         return render_block(array('blockName' => $name, 'attrs' => $attributes, 'innerBlocks' => array(), 'innerHTML' => '', 'innerContent' => array()));
     }
 
-    /**
-     * The content of a job page as the theme would print it
-     */
     private function jobPageContent($jobId)
     {
         global $post, $wp_query;

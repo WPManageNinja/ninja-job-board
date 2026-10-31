@@ -11,10 +11,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Per-form settings: builder, confirmation, design, scheduling and email notifications
- * @since 2.0.0
- */
 class FormSettingsController extends Controller
 {
     public function getBuilder(\WP_REST_Request $request)

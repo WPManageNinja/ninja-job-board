@@ -1,6 +1,5 @@
 <template>
     <div>
-        <!--Confirmation Type-->
         <el-form-item>
             <template #label>
                 <span class="wpjb_field_label">{{ $t('After submission') }}</span>
@@ -14,7 +13,6 @@
             </el-radio-group>
         </el-form-item>
 
-        <!--Same page: message to show-->
         <el-form-item v-if="confirmation.redirectTo === 'samePage'" class="is-stacked">
             <template #label>
                 <span class="wpjb_field_label">{{ $t('Confirmation message') }}</span>
@@ -23,7 +21,6 @@
             <wp-editor editor_id="wp_confirmation_editor_1" :height="250" :editor-shortcodes="editorShortcodes" v-model="confirmation.messageToShow" />
         </el-form-item>
 
-        <!--Same page: after form submission behavior-->
         <el-form-item v-if="confirmation.redirectTo === 'samePage'">
             <template #label>
                 <span class="wpjb_field_label">{{ $t('Form after submission') }}</span>
@@ -35,7 +32,6 @@
             </el-radio-group>
         </el-form-item>
 
-        <!--Custom page-->
         <el-form-item v-else-if="confirmation.redirectTo === 'customPage'">
             <template #label>
                 <span class="wpjb_field_label">{{ $t('Redirect page') }}</span>
@@ -52,7 +48,6 @@
             <p class="wpjb_field_note">{{ $t('To show the confirmation message on that page, add this shortcode to it:') }} <code>[wpjobboard_confirmation]</code></p>
         </el-form-item>
 
-        <!--Custom URL-->
         <el-form-item v-else-if="confirmation.redirectTo == 'customUrl'">
             <template #label>
                 <span class="wpjb_field_label">{{ $t('Redirect URL') }}</span>

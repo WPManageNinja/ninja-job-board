@@ -1,7 +1,4 @@
 <?php
-/**
- * Email Styles
- */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
@@ -12,7 +9,6 @@ $wpjobboard_settings =  apply_filters('wpjobboard/email_template_colors', array(
     'text_color'            => '#444444'
 ));
 
-// Load colours
 $wpjobboard_bg              = $wpjobboard_settings['background_color'];
 $wpjobboard_body            = $wpjobboard_settings['body_background_color'];
 $wpjobboard_base            = $wpjobboard_settings['base_color'];

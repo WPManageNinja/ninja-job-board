@@ -14,9 +14,6 @@ class DashboardWidgetModule
         add_action('wp_dashboard_setup', array($this, 'addWidget'));
     }
 
-    /**
-     *
-     */
     public function addWidget()
     {
         if (!AccessControl::hasEndPointPermission('get_submissions', 'submissions')) {

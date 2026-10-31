@@ -166,10 +166,7 @@ class FileUploadComponent extends BaseComponent
     }
 
     /**
-     * Convert the submitted file names to file URLs.
-     *
-     * Only accepts files that this plugin uploaded for this exact form and field.
-     * Each upload leaves a short-lived server-side record (transient). We consume that record here,
+     * Only files this plugin uploaded for this form and field pass: the upload transient record is consumed here,
      * so the client can not submit arbitrary names, URLs, or another applicant's file.
      */
     public function formatUploadedValue($dataName, $element, $data)
@@ -353,7 +350,6 @@ class FileUploadComponent extends BaseComponent
             $this->sendError(__('Invalid file upload', 'ninja-job-board'), 'invalid upload');
         }
 
-        // We have to validate the uploaded file now
         $file = $this->handleUploadFile($uploadFile, $element, $formId);
 
         if (!empty($file['error'])) {
@@ -419,11 +415,6 @@ class FileUploadComponent extends BaseComponent
         ), $code);
     }
 
-    /**
-     * Image files get a small thumbnail. Other files show an extension label instead.
-     *
-     * @return string The image URL, or an empty string for non-image files
-     */
     /**
      * CSV export: one protected download link per file
      */

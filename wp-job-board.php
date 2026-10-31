@@ -60,8 +60,6 @@ class WPJobBoard
 
     public function adminHooks()
     {
-        // Init The Classes
-        // Register Admin menu
         $menu = new \WPJobBoard\Classes\Menu();
         $menu->register();
 
@@ -70,11 +68,9 @@ class WPJobBoard
             $adminApp->bootView();
         });
 
-        // init tinymce
         $tinyMCE = new \WPJobBoard\Classes\Integrations\TinyMceBlock();
         $tinyMCE->register();
 
-        // Dashboard Widget Here
         $dashboardWidget = new \WPJobBoard\Classes\DashboardWidgetModule();
         $dashboardWidget->register();
 
@@ -82,7 +78,6 @@ class WPJobBoard
 
     public function registerShortcodes()
     {
-        // Register the shortcode
         add_shortcode('wp_job_form', function ($args) {
             $args = shortcode_atts(array(
                 'id'         => '',
@@ -143,19 +138,14 @@ class WPJobBoard
         // Admin REST API (rest_api_init runs outside of is_admin())
         (new \WPJobBoard\Http\Router())->register();
 
-        // Application files are served only after a permission check
         (new \WPJobBoard\Classes\File\FileAccess())->register();
 
-        // Personal data export/erase and the privacy policy text
         (new \WPJobBoard\Classes\Privacy())->register();
 
-        // Honeypot and optional Cloudflare Turnstile on the public form
         (new \WPJobBoard\Classes\SpamProtection())->register();
 
-        // Gutenberg blocks: Job list, Application form, Job details
         (new \WPJobBoard\Classes\Blocks())->register();
 
-        // Form Submission Handler
         $submissionHandler = new \WPJobBoard\Classes\SubmissionHandler();
         add_action('wp_ajax_wpjb_submit_form', array($submissionHandler, 'handeSubmission'));
         add_action('wp_ajax_nopriv_wpjb_submit_form', array($submissionHandler, 'handeSubmission'));
@@ -163,11 +153,9 @@ class WPJobBoard
         $scheduleSettings = new \WPJobBoard\Classes\Tools\SchedulingSettings();
         $scheduleSettings->checkRestrictionHooks();
 
-        // Register Post Type
         new \WPJobBoard\Classes\PostType();
 
 
-        // Default value Parser
         $formDefaultValueRenderer = new \WPJobBoard\Classes\DefaultValueParser\FormDefaultValueRenderer();
         $formDefaultValueRenderer->register();
 
@@ -193,7 +181,6 @@ class WPJobBoard
 }
 
 add_action('plugins_loaded', function () {
-    // Let's check again if Pro version is available or not
     (new WPJobBoard())->boot();
 });
 register_activation_hook(__FILE__, function ($newWorkWide) {
@@ -202,7 +189,6 @@ register_activation_hook(__FILE__, function ($newWorkWide) {
     $activator->migrateDatabases($newWorkWide);
 });
 
-// Handle Newtwork new Site Activation
 add_action('wpmu_new_blog', function ($blogId) {
     require_once(WPJOBBOARD_DIR . 'includes/Classes/Activator.php');
     switch_to_blog($blogId);

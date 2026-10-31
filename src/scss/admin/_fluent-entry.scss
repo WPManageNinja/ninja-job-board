@@ -1,5 +1,4 @@
-// Fluent design layer: Single application view.
-// Scope every rule under .wpjb_app (see _fluent.scss for tokens and shared primitives).
+// Scope every rule under .wpjb_app (tokens live in _fluent.scss).
 
 .wpjb_app .wpjb_entry {
     min-height: 300px;
@@ -7,8 +6,6 @@
     .wpjb_num {
         font-variant-numeric: tabular-nums;
     }
-
-    // ─── Header ─────────────────────────────────────────────────────────────
 
     .wpjb_entry_back {
         display: inline-flex;
@@ -78,7 +75,6 @@
         }
     }
 
-    // Prev / Next: one outlined pair
     .wpjb_entry_nav {
         display: inline-flex;
 
@@ -108,8 +104,6 @@
         margin-left: 6px;
     }
 
-    // ─── Two columns ────────────────────────────────────────────────────────
-
     .wpjb_entry_grid {
         display: grid;
         grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
@@ -126,7 +120,6 @@
         color: var(--wpjb-text);
     }
 
-    // Element Plus switch label in the card head
     .info_box_header_actions .el-switch__label {
         color: var(--wpjb-text-secondary);
         font-size: 13px;
@@ -140,8 +133,6 @@
             color: var(--wpjb-text);
         }
     }
-
-    // ─── Application answers ────────────────────────────────────────────────
 
     .wpjb_answers {
         margin: 0;
@@ -190,8 +181,6 @@
         }
     }
 
-    // ─── Activity timeline ──────────────────────────────────────────────────
-
     .wpjb_note_box {
         margin-bottom: 20px;
         padding-bottom: 20px;
@@ -219,7 +208,6 @@
             margin: 0;
             padding: 0 0 20px 24px;
 
-            // The dot
             &::before {
                 content: '';
                 position: absolute;
@@ -233,7 +221,6 @@
                 background: var(--wpjb-surface);
             }
 
-            // The line to the next item
             &::after {
                 content: '';
                 position: absolute;
@@ -293,8 +280,6 @@
         color: var(--wpjb-text-secondary);
     }
 
-    // ─── Side: status ───────────────────────────────────────────────────────
-
     .wpjb_status_now {
         display: flex;
         flex-wrap: wrap;
@@ -317,8 +302,6 @@
             width: 100%;
         }
     }
-
-    // ─── Side: details ──────────────────────────────────────────────────────
 
     .wpjb_details {
         margin: 0;
@@ -350,8 +333,6 @@
             white-space: nowrap;
         }
     }
-
-    // ─── Side: other applications ───────────────────────────────────────────
 
     .wpjb_other_apps {
         margin: 0;
@@ -389,7 +370,7 @@
     }
 }
 
-// ─── File chips (server HTML from FileUploadComponent::convertValueToHtml) ──
+// File chips: server HTML from FileUploadComponent::convertValueToHtml
 
 .wpjb_app .wpjb_file_list {
     display: flex;
@@ -444,8 +425,6 @@
         white-space: nowrap;
     }
 }
-
-// ─── Stack the columns on narrow screens ────────────────────────────────────
 
 @media (max-width: 1023px) {
     .wpjb_app .wpjb_entry {

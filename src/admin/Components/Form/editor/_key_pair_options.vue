@@ -52,7 +52,6 @@
 
     export default {
         name: 'key_pair_options',
-        // Icons used as tags in the template must be registered here
         components: { draggable, Rank },
         props: ['value'],
         setup() {

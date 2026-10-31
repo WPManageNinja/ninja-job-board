@@ -13,7 +13,6 @@
                 <div class="wpjb_card_head">
                     <h3>{{ $t('Layout') }}</h3>
                 </div>
-                <!--Label placement-->
                 <el-form-item>
                     <template #label>
                         <span class="wpjb_field_label">{{ $t('Label alignment') }}</span>
@@ -27,7 +26,6 @@
                     </el-radio-group>
                 </el-form-item>
 
-                <!--Required asterisk mark position -->
                 <el-form-item>
                     <template #label>
                         <span class="wpjb_field_label">{{ $t('Required marker') }}</span>
@@ -41,7 +39,6 @@
                     </el-radio-group>
                 </el-form-item>
 
-                <!--Submit Button Position -->
                 <el-form-item>
                     <template #label>
                         <span class="wpjb_field_label">{{ $t('Submit button position') }}</span>
@@ -59,7 +56,6 @@
                 <div class="wpjb_card_head">
                     <h3>{{ $t('Field styles') }}</h3>
                 </div>
-                <!--Label font weight-->
                 <el-form-item>
                     <template #label>
                         <span class="wpjb_field_label">{{ $t('Bold labels') }}</span>
@@ -69,7 +65,6 @@
                                v-model="layout_settings.extra_styles.wpjb_bold_labels"/>
                 </el-form-item>
 
-                <!--Input Styling Option-->
                 <el-form-item>
                     <template #label>
                         <span class="wpjb_field_label">{{ $t('Default input styles') }}</span>

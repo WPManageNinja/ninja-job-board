@@ -1,17 +1,8 @@
 /**
- * Prepares the scoped CSS inliner copied from FluentCRM for this plugin.
- * Run after copying app/Services/Libs/Emogrifier/scoped-vendor from FluentCRM to
- * includes/Classes/Emogrifier/scoped-vendor:
- *
- *   npm run prepare:emogrifier
- *
- * 1. Renames FluentCRM's autoloader marker ("Fcrm") to "Njb", so both plugins can load
- *    their copy at the same time. The shared FluentEmogrifier\Vendor prefix stays.
+ * Prepares the scoped CSS inliner copied from FluentCRM (scoped-vendor/). Safe to run more than once.
+ * 1. Renames the autoloader marker "Fcrm" to "Njb", so both plugins can load their copy at the same time.
  * 2. Adds the ABSPATH guard to the procedural Composer files (Plugin Check: direct file access).
- * 3. Marks the Symfony exception messages as not output (Plugin Check: ExceptionNotEscaped).
- *    They are developer messages that the inliner never prints.
- *
- * Safe to run more than once.
+ * 3. Marks the Symfony exception messages as not output (Plugin Check: ExceptionNotEscaped); the inliner never prints them.
  */
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';

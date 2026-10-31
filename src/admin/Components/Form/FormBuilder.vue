@@ -144,7 +144,6 @@
 </template>
 
 <script>
-    // Iterate an array or an object like lodash/each
     const each = (collection, callback) => {
         Object.keys(collection || {}).forEach((key) => callback(collection[key], key));
     };
@@ -156,7 +155,6 @@
     import draggable from 'vuedraggable'
     import SubmitButtonSettings from './editor/_SubmitButtonSettings.vue';
 
-    // Icon for each field type in the "Add a field" list
     const fieldIcons = {
         applicant_name: User,
         applicant_email: Message,
@@ -183,7 +181,6 @@
             ElementEditor,
             draggable,
             SubmitButtonSettings,
-            // Icons used as tags in the template must be registered here
             Setting,
             ArrowDown,
             Rank
@@ -339,7 +336,6 @@
                    return this.handlePro(component);
                 }
 
-                // check if it's single only
                 if (component.single_only && this.alreadyExistElement(component.group)) {
                     this.$message({
                         message: this.$t('This field is already on your form. You can add it only once.'),
@@ -367,7 +363,6 @@
             getClonedItem(component) {
                 let componentName = component.type;
                 let nonMutableElement = JSON.parse(JSON.stringify(component));
-                // Find an unique name for this elament
                 nonMutableElement.id = this.getComponentUID(componentName);
                 if (!nonMutableElement.field_options) {
                     nonMutableElement.field_options = {};

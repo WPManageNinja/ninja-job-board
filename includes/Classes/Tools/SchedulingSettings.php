@@ -10,10 +10,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Form Scheduling and Restriction Class
- * @since 1.0.0
- */
 class SchedulingSettings
 {
     public function checkRestrictionHooks()
@@ -47,13 +43,11 @@ class SchedulingSettings
 
     public function checkRestrictionOnRender($wrapperCSSClasses, $form)
     {
-        // if now sheduleing settings found then just return
         if (!get_post_meta($form->ID, 'wpjb_form_scheduling_settings', true)) {
             return $wrapperCSSClasses;
         }
 
         $extra_css_class = '';
-        // We have some schedule settings now so we have add some wrapper class
         $sheduleSettings = $form->scheduleing_settings;
         if ($message = $this->checkIfExceedsEntryLimit($form->ID, $sheduleSettings)) {
             $extra_css_class = 'wpjb_exceeds_entry_limit';

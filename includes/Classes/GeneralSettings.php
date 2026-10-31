@@ -6,10 +6,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * General Settings Definations here
- * @since 1.0.0
- */
 class GeneralSettings
 {
 

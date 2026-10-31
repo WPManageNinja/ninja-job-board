@@ -8,10 +8,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Manage Submission
- * @since 1.0.0
- */
 class Submission
 {
     public function create($submission)

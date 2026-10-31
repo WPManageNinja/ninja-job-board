@@ -1,8 +1,6 @@
-// Fluent design layer: Jobs list, applications lists, stage tabs toolbar, create dialog, welcome/empty states.
-// Scope every rule under .wpjb_app (see _fluent.scss for tokens and shared primitives).
+// Scope every rule under .wpjb_app (tokens live in _fluent.scss).
 
 .wpjb_app {
-    // Search input in a title row or a toolbar
     .wpjb_search {
         width: 240px;
     }
@@ -15,7 +13,6 @@
         width: 210px;
     }
 
-    // Job title plus "#ID" and the hover row actions on one line
     .wpjb_job_meta {
         display: flex;
         align-items: baseline;
@@ -56,7 +53,6 @@
             padding-right: 20px;
         }
 
-        // Primary link in a row: reads as text, turns into a link on hover
         .wpjb_cell_link {
             color: var(--wpjb-text);
             font-weight: 500;
@@ -90,14 +86,12 @@
         }
     }
 
-    // Quiet icon actions at the end of an applications row
     .el-table td.wpjb_actions_cell .cell,
     .el-table th.wpjb_actions_cell .cell {
         padding: 0 12px 0 4px;
         overflow: visible;
     }
 
-    // Quiet icon actions at the end of an applications row
     .wpjb_icon_actions {
         display: inline-flex;
         gap: 2px;
@@ -127,7 +121,6 @@
         }
     }
 
-    // Toolbar: stage tabs left, filters right
     .wpjb_applications .wpjb_toolbar {
         padding: 12px 16px;
 
@@ -153,13 +146,11 @@
         background: transparent;
     }
 
-    // Empty state for a fresh install
     .wpjb_welcome {
         max-width: 640px;
         margin: 40px auto 0;
     }
 
-    // Dialogs: Fluent card look
     .wpjb_dialog {
         --el-dialog-border-radius: var(--wpjb-radius);
         --el-dialog-padding-primary: 24px;
@@ -204,7 +195,6 @@
 }
 
 @media (max-width: 1120px) {
-    // Make room for the hover row actions on one line
     .wpjb_app .wpjb_job_meta > .wpjb_num {
         display: none;
     }

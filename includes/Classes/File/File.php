@@ -5,11 +5,7 @@ namespace WPJobBoard\Classes\File;
 class File extends \SplFileInfo
 {
     /**
-     * A map of mime types and their default extensions.
-     *
-     * This list has been placed under the public domain by the Apache HTTPD project.
-     * This list has been updated from upstream on 2013-04-23.
-     *
+     * Mime type to default extension map, public domain from the Apache HTTPD project (updated 2013-04-23).
      * @see http://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types
      */
     protected $defaultExtensions = [
@@ -785,43 +781,15 @@ class File extends \SplFileInfo
         'x-conference/x-cooltalk'                                                   => 'ice',
     ];
 
-    /**
-     * Original file name.
-     *
-     * @var string $originalName
-     */
     private $originalName;
 
-    /**
-     * Mime type of the file.
-     *
-     * @var string $mimeType
-     */
     private $mimeType;
 
-    /**
-     * File size in kilobyte.
-     *
-     * @var int|null $size
-     */
+    /** @var int|null Size in kilobytes */
     private $size;
 
-    /**
-     * File upload error.
-     *
-     * @var int $error
-     */
     private $error;
 
-    /**
-     * HTTP File instantiator.
-     *
-     * @param $path
-     * @param $originalName
-     * @param null $mimeType
-     * @param null $size
-     * @param null $error
-     */
     public function __construct($path, $originalName, $mimeType = null, $size = null, $error = null)
     {
         $this->originalName = $this->getName($originalName);
@@ -833,13 +801,7 @@ class File extends \SplFileInfo
     }
 
     /**
-     * @taken from \Symfony\Component\HttpFoundation\File\File
-     *
-     * Returns locale independent base name of the given path.
-     *
-     * @param string $name The new file name
-     *
-     * @return string containing
+     * Locale-independent basename of the path (from Symfony HttpFoundation File).
      */
     public function getName($name)
     {
@@ -850,21 +812,11 @@ class File extends \SplFileInfo
         return $originalName;
     }
 
-    /**
-     * Get the file upload error.
-     *
-     * @return int
-     */
     public function getError()
     {
         return $this->error;
     }
 
-    /**
-     * Returns whether the file was uploaded successfully.
-     *
-     * @return bool True if the file has been uploaded with HTTP and no error occurred
-     */
     public function isValid()
     {
         $isOk = UPLOAD_ERR_OK === $this->getError();
@@ -873,34 +825,19 @@ class File extends \SplFileInfo
     }
 
     /**
-     * Returns the original file extension.
-     *
-     * It is extracted from the original file name that was uploaded.
-     * Then it should not be considered as a safe value.
-     *
-     * @return string The extension
+     * Taken from the client file name, so it is not a safe value.
      */
     public function getClientOriginalExtension()
     {
         return pathinfo($this->originalName, PATHINFO_EXTENSION);
     }
 
-    /**
-     * Take an educated guess of the file's extension.
-     *
-     * @return mixed|null
-     */
     public function guessExtension()
     {
         $type = $this->getMimeType();
         return isset($this->defaultExtensions[$type]) ? $this->defaultExtensions[$type] : null;
     }
 
-    /**
-     * Take an educated guess of the file's mime type.
-     *
-     * @return string
-     */
     public function getMimeType()
     {
         $path = $this->getPathname();
@@ -911,11 +848,6 @@ class File extends \SplFileInfo
         return $typeInfo['type'];
     }
 
-    /**
-     * Get original HTTP file array
-     *
-     * @return array
-     */
     public function toArray()
     {
         return [
@@ -928,10 +860,6 @@ class File extends \SplFileInfo
     }
 
     /**
-     * Returns the contents of the file.
-     *
-     * @return string the contents of the file
-     *
      * @throws \RuntimeException
      */
     public function getContents()

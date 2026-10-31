@@ -14,13 +14,8 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Registers the admin REST API.
- *
- * Every route maps to a key in AccessControl's permission map. The permission callback checks
- * the actor capability and, for users with "own" permissions, the ownership of the form.
- * Cookie authentication (X-WP-Nonce or _wpnonce) protects the routes against CSRF.
- *
- * @since 2.0.0
+ * Admin REST API. Every route maps to a key in the AccessControl permission map;
+ * cookie authentication (X-WP-Nonce or _wpnonce) protects the routes against CSRF.
  */
 class Router
 {
@@ -39,7 +34,6 @@ class Router
         $campaigns = new CampaignsController();
         $settings = new SettingsController();
 
-        // Forms (job posts)
         $this->route('/forms', 'GET', array($forms, 'index'), 'get_forms', 'forms');
         $this->route('/forms', 'POST', array($forms, 'store'), 'create_form', 'forms');
         $this->route('/forms/available', 'GET', array($forms, 'available'), 'get_available_forms', 'submissions');
@@ -51,7 +45,6 @@ class Router
         $this->route('/forms/(?P<id>\d+)/restore', 'POST', array($forms, 'restore'), 'restore_form', 'forms', 'form');
         $this->route('/forms/(?P<id>\d+)/export', 'GET', array($forms, 'export'), 'export_form', 'forms', 'form');
 
-        // Form settings
         $this->route('/forms/(?P<id>\d+)/builder', 'GET', array($formSettings, 'getBuilder'), 'get_custom_form_settings', 'forms', 'form');
         $this->route('/forms/(?P<id>\d+)/builder', 'POST', array($formSettings, 'saveBuilder'), 'save_form_builder_settings', 'forms', 'form');
         $this->route('/forms/(?P<id>\d+)/confirmation', 'GET', array($formSettings, 'getConfirmation'), 'get_form_settings', 'forms', 'form');
@@ -63,7 +56,6 @@ class Router
         $this->route('/forms/(?P<id>\d+)/notifications', 'GET', array($formSettings, 'getNotifications'), 'get_email_notifications', 'forms', 'form');
         $this->route('/forms/(?P<id>\d+)/notifications', 'POST', array($formSettings, 'saveNotifications'), 'save_email_notifications', 'forms', 'form');
 
-        // Applications (submissions)
         $this->route('/applications', 'GET', array($applications, 'index'), 'get_submissions', 'submissions', 'form_param');
         $this->route('/applications/export', 'GET', array($applications, 'export'), 'export_submissions', 'submissions', 'form_param');
         $this->route('/applications/report', 'GET', array($applications, 'report'), 'get_form_report', 'submissions', 'form_param');
@@ -73,7 +65,6 @@ class Router
         $this->route('/applications/(?P<id>\d+)/notes', 'POST', array($applications, 'addNote'), 'add_submission_note', 'submissions', 'application');
         $this->route('/applications/(?P<id>\d+)/status', 'POST', array($applications, 'updateStatus'), 'change_application_status', 'submissions', 'application');
 
-        // Email campaigns
         $this->route('/forms/(?P<id>\d+)/campaigns', 'GET', array($campaigns, 'index'), 'get_campaigns', 'email_campaigns', 'form');
         $this->route('/forms/(?P<id>\d+)/campaigns', 'POST', array($campaigns, 'store'), 'send_email_campaign', 'email_campaigns', 'form');
         $this->route('/forms/(?P<id>\d+)/campaigns/count', 'GET', array($campaigns, 'count'), 'get_email_counts', 'email_campaigns', 'form');
@@ -81,7 +72,6 @@ class Router
         $this->route('/campaigns/(?P<id>\d+)/send', 'POST', array($campaigns, 'send'), 'send_emails', 'email_campaigns');
         $this->route('/campaigns/(?P<id>\d+)/emails', 'GET', array($campaigns, 'emails'), 'get_campaign_emails', 'email_campaigns');
 
-        // Global settings
         $this->route('/settings', 'GET', array($settings, 'show'), 'get_global_settings', 'global');
         $this->route('/settings', 'POST', array($settings, 'update'), 'update_global_settings', 'global');
         $this->route('/settings/image', 'POST', array($settings, 'uploadImage'), 'wpjb_upload_image', 'global');
@@ -90,9 +80,6 @@ class Router
     }
 
     /**
-     * @param string   $path
-     * @param string   $method
-     * @param callable $callback
      * @param string   $endpoint Key in AccessControl's permission map
      * @param string   $group    Group in AccessControl's permission map
      * @param string   $scope    What identifies the form for the ownership check:

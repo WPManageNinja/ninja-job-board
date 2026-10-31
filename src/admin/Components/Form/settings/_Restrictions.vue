@@ -4,7 +4,6 @@
             <div class="wpjb_card_head">
                 <h3>{{ $t('Application limit') }}</h3>
             </div>
-            <!--Limit Number of Entries-->
             <el-form-item>
                 <template #label>
                     <span class="wpjb_field_label">{{ $t('Limit applications') }}</span>
@@ -14,7 +13,6 @@
                            v-model="form.limitNumberOfEntries.status"></el-switch>
             </el-form-item>
 
-            <!--Additional fields when limit number of entries enabled-->
             <el-form-item v-if="form.limitNumberOfEntries.status == 'yes'">
                 <template #label>
                     <span class="wpjb_field_label">{{ $t('Maximum applications') }}</span>
@@ -52,7 +50,6 @@
             <div class="wpjb_card_head">
                 <h3>{{ $_x('Schedule', 'Settings section heading') }}</h3>
             </div>
-            <!--Schedule Form-->
             <el-form-item>
                 <template #label>
                     <span class="wpjb_field_label">{{ $t('Schedule the form') }}</span>
@@ -62,7 +59,6 @@
                            v-model="form.scheduleForm.status"></el-switch>
             </el-form-item>
 
-            <!--Additional fields when form scheduling enabled-->
             <el-form-item v-if="form.scheduleForm.status == 'yes'">
                 <template #label>
                     <span class="wpjb_field_label">{{ $t('Opens on') }}</span>
@@ -113,7 +109,6 @@
             <div class="wpjb_card_head">
                 <h3>{{ $_x('Login', 'Settings section heading') }}</h3>
             </div>
-            <!--Require user to be logged in-->
             <el-form-item>
                 <template #label>
                     <span class="wpjb_field_label">{{ $t('Require login') }}</span>
@@ -123,7 +118,6 @@
                            v-model="form.requireLogin.status"></el-switch>
             </el-form-item>
 
-            <!--Additional fields when user logged in is enabled-->
             <el-form-item v-if="form.requireLogin.status == 'yes'">
                 <template #label>
                     <span class="wpjb_field_label">{{ $t('Login required message') }}</span>

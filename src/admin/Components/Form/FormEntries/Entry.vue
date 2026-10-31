@@ -389,7 +389,6 @@ export default {
                     this.$message.error(error.message);
                 });
         },
-        // Small localStorage helpers (the old global mixin had these)
         setStoreData(key, value) {
             try {
                 window.localStorage.setItem('wppayforms_' + key, value);

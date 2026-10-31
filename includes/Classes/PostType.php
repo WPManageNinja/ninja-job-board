@@ -6,10 +6,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Register and initialize custom post type for Payment Forms
- * @since 1.0.0
- */
 class PostType
 {
 
@@ -69,7 +65,6 @@ class PostType
 
     public function registerJobCategories()
     {
-        // Add new taxonomy, make it hierarchical (like categories)
         $labels = array(
             'name'              => _x('Job Category', 'taxonomy general name', 'ninja-job-board'),
             'singular_name'     => _x('Job Category', 'taxonomy singular name', 'ninja-job-board'),
@@ -99,9 +94,6 @@ class PostType
         register_taxonomy('wpjb-job-categories', array($this->postTypeName), $args);
     }
 
-    /**
-     * The job fields editable in the block editor (Job details panel) and the classic meta box
-     */
     public function registerJobMeta()
     {
         $fields = array(
@@ -163,10 +155,7 @@ class PostType
     }
 
     /**
-     * The job details list (type, location, vacancies, experience, posted date)
-     * @param \WP_Post   $post
-     * @param array|null $fields Which items to show: type, location, vacancies, experience, posted. Null = all
-     * @return string HTML
+     * @param array|null $fields Items to show: type, location, vacancies, experience, posted. Null = all
      */
     public static function renderJobMeta($post, $fields = null)
     {

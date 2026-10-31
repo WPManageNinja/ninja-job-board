@@ -7,10 +7,6 @@ use WPJobBoard\Classes\Browser;
 use WPJobBoard\Classes\Emogrifier\Emogrifier;
 use WPJobBoard\Classes\View;
 
-/**
- * The code that replaced or updated third-party libraries in 2.0.0: the browser and platform
- * stored with an application (Browser), the CSS inliner for emails, and the date picker locale.
- */
 class LibrariesTest extends IntegrationTestCase
 {
     /**

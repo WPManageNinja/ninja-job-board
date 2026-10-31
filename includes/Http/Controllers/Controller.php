@@ -8,16 +8,10 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Shared helpers for the REST controllers
- * @since 2.0.0
- */
 abstract class Controller
 {
     /**
-     * Load the job form from the {id} route parameter
-     * @param \WP_REST_Request $request
-     * @return \WP_Post|\WP_Error
+     * @return \WP_Post|\WP_Error The form from the {id} route parameter
      */
     protected function requireForm(\WP_REST_Request $request)
     {
@@ -30,10 +24,6 @@ abstract class Controller
 
     /**
      * A request parameter as plain text. Arrays keep their shape.
-     * @param \WP_REST_Request $request
-     * @param string           $key
-     * @param mixed            $default
-     * @return mixed
      */
     protected function text(\WP_REST_Request $request, $key, $default = '')
     {
@@ -46,9 +36,6 @@ abstract class Controller
 
     /**
      * A request parameter as nested settings. Strings pass through wp_kses_post().
-     * @param \WP_REST_Request $request
-     * @param string           $key
-     * @return array
      */
     protected function settings(\WP_REST_Request $request, $key)
     {

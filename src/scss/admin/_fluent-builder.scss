@@ -1,9 +1,5 @@
-// Fluent design layer: Application form builder and job post edit screen nav.
-// Scope every rule under .wpjb_app (see _fluent.scss for tokens and shared primitives).
-// Exception: Element Plus teleports popovers to <body>, so popover rules at the end
-// of this file are not under .wpjb_app. They use the tokens with fallbacks.
-
-// ─── Builder layout ─────────────────────────────────────────────────────────
+// Scope every rule under .wpjb_app (tokens live in _fluent.scss).
+// Exception: Element Plus teleports popovers to <body>, so the popover rules at the end are unscoped.
 
 .wpjb_app .wpjb_builder {
     .wpjb_builder_layout {
@@ -48,8 +44,6 @@
     }
 }
 
-// ─── Field rows ─────────────────────────────────────────────────────────────
-
 .wpjb_app .wpjb_builder {
     .wpjb_field_list {
         min-height: 64px;
@@ -67,7 +61,6 @@
             background: var(--wpjb-surface-weak);
         }
 
-        // Form step: a page break between groups of fields
         &.is-step .wpjb_field_head {
             background: var(--wpjb-surface-weak);
             border-top: 1px dashed var(--wpjb-border-strong);
@@ -163,7 +156,6 @@
         transform: rotate(180deg);
     }
 
-    // Submit button row: always last, set apart from the sortable fields
     .wpjb_field_submit {
         border-top: 1px solid var(--wpjb-border);
         border-bottom: 0;
@@ -198,8 +190,6 @@
     }
 }
 
-// ─── Field settings form ────────────────────────────────────────────────────
-
 .wpjb_app .wpjb_builder .wpjb_editor_form {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -212,7 +202,6 @@
     .editor_form_item {
         min-width: 0;
 
-        // Wide controls take the full row
         &.is-textarea,
         &.is-html,
         &.is-key_pair,
@@ -315,7 +304,6 @@
     }
 }
 
-// Choice options (dropdown, radio, checkbox fields)
 .wpjb_app .wpjb_builder .wpjb_options_editor {
     width: 100%;
 
@@ -385,8 +373,6 @@
         }
     }
 }
-
-// ─── "Add a field" palette ──────────────────────────────────────────────────
 
 .wpjb_app .wpjb_builder {
     .wpjb_palette_card .wpjb_card_body {
@@ -476,8 +462,6 @@
     }
 }
 
-// ─── Shared editor and shortcode helpers (Common components) ───────────────
-
 .wpjb_app {
     .wp_vue_editor {
         width: 100%;
@@ -566,7 +550,7 @@
     }
 }
 
-// ─── Shortcode popovers (teleported to <body>, so not under .wpjb_app) ──────
+// Teleported to <body>, so not under .wpjb_app; tokens need fallbacks
 
 .el-popper.wpjb_shortcode_popper {
     padding: 0;
@@ -582,7 +566,6 @@
         list-style: none;
     }
 
-    // input-popover.vue: grouped list
     .el-dropdown-list {
         max-height: 320px;
         overflow-y: auto;
@@ -611,7 +594,6 @@
         }
     }
 
-    // input-popover-dropdown.vue: groups on the left, tags on the right
     .el_pop_data_group {
         display: flex;
         max-height: 340px;
@@ -678,10 +660,7 @@
     }
 }
 
-// ─── Fixes for WordPress core form styles inside Element Plus inputs ───────
-// WP forms.css gives input[type=text] its own border, padding and height,
-// which draws a second box inside .el-input__wrapper.
-
+// WP forms.css styles input[type=text], which draws a second box inside .el-input__wrapper
 .wpjb_app .wpjb_builder {
     // --el-border-radius-small (6px) turns 14px checkboxes into circles
     .el-checkbox__inner {

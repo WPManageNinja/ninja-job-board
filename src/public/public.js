@@ -3,10 +3,7 @@
         forms: {},
         general: window.wp_job_board_general,
         formData: {},
-        /**
-         * Get a translated string from wp_job_board_general.i18n.
-         * Replaces %s with the given value. Falls back to the English text.
-         */
+        // Translated string from wp_job_board_general.i18n; %s gets the value; falls back to the English text
         i18n(key, fallback, value) {
             let strings = (this.general && this.general.i18n) ? this.general.i18n : {};
             let text = strings[key] || fallback;

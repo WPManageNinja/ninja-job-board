@@ -140,7 +140,6 @@
                         }
                     })
                     .catch(error => {
-                        // Stop the loop on error
                         this.sending_email = false;
                         if (!this.isUnmounted) {
                             this.$showAjaxError(error);

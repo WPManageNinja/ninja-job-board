@@ -13,10 +13,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Email campaigns to the applicants of a job post
- * @since 2.0.0
- */
 class CampaignsController extends Controller
 {
     const BATCH_SIZE = 12;
@@ -60,9 +56,6 @@ class CampaignsController extends Controller
         );
     }
 
-    /**
-     * Create the campaign and queue one email per matching applicant
-     */
     public function store(\WP_REST_Request $request)
     {
         $form = $this->requireForm($request);
@@ -150,7 +143,7 @@ class CampaignsController extends Controller
     }
 
     /**
-     * Send the next batch of pending emails. The admin app calls this until nothing is left.
+     * The admin app calls this until nothing is left.
      */
     public function send(\WP_REST_Request $request)
     {
@@ -242,9 +235,6 @@ class CampaignsController extends Controller
         return $campaign;
     }
 
-    /**
-     * Campaign filter settings with only known status keys
-     */
     private function campaignSettings($settings)
     {
         $settings = is_array($settings) ? wpJobBoardSanitizeText($settings) : array();

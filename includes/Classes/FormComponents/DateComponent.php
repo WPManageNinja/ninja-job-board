@@ -131,7 +131,7 @@ class DateComponent extends BaseComponent
 
     private function getDateFormatConfigJSON($fieldOptions, $form)
     {
-        // We are converting moment.js format to flatpickr format
+        // moment.js format to flatpickr format
         $fieldOptions['date_format'] = $this->convertDateFormat($fieldOptions['date_format']);
         $dateFormat = ArrayHelper::get($fieldOptions, 'date_format');
 

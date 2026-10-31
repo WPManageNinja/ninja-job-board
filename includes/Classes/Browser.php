@@ -7,12 +7,8 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * The visitor's browser, platform and IP address, stored with each application.
- *
- * A small user-agent parser for current browsers. The order of the checks matters:
- * most browsers also send "Chrome" and "Safari" in their user agent.
- *
- * @since 2.0.0 Replaces the 2010 Browser.php (Chris Schuld)
+ * The visitor's browser, platform and IP. The order of the checks matters: most browsers
+ * also send "Chrome" and "Safari" in their user agent.
  */
 class Browser
 {
@@ -20,9 +16,6 @@ class Browser
 
     private $userAgent = '';
 
-    /**
-     * @param string $userAgent Defaults to the current request's user agent
-     */
     public function __construct($userAgent = '')
     {
         if ($userAgent === '' && isset($_SERVER['HTTP_USER_AGENT'])) {
@@ -36,9 +29,6 @@ class Browser
         return $this->userAgent;
     }
 
-    /**
-     * @return string For example: Chrome, Safari, Firefox, Edge, Opera, Samsung Internet
-     */
     public function getBrowser()
     {
         $browsers = array(
@@ -60,9 +50,6 @@ class Browser
         return self::UNKNOWN;
     }
 
-    /**
-     * @return string For example: Windows, macOS, iOS, iPadOS, Android, Linux, ChromeOS
-     */
     public function getPlatform()
     {
         $platforms = array(

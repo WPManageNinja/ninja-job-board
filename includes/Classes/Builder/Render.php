@@ -10,10 +10,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Ajax Handler Class
- * @since 1.0.0
- */
 class Render
 {
     public function render($formId, $show_title = false)
@@ -219,7 +215,6 @@ class Render
                 /* translators: %s: field label */
                 'field_required'    => __('%s is required.', 'ninja-job-board'),
                 'file_upload'       => __('File upload', 'ninja-job-board'),
-                // File upload (Dropzone) messages. Keep the {{…}} tokens unchanged.
                 /* translators: Do not translate {{filesize}} and {{maxFilesize}}. They are replaced with file sizes in MB. */
                 'file_too_big'      => __('The file is too big ({{filesize}} MB). Maximum file size: {{maxFilesize}} MB.', 'ninja-job-board'),
                 'invalid_file_type' => __('You cannot upload files of this type.', 'ninja-job-board'),

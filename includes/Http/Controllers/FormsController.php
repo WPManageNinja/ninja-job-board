@@ -10,10 +10,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Job posts (forms)
- * @since 2.0.0
- */
 class FormsController extends Controller
 {
     public function index(\WP_REST_Request $request)
@@ -180,7 +176,7 @@ class FormsController extends Controller
     }
 
     /**
-     * Download the form as a JSON file. The browser opens this URL directly, with _wpnonce.
+     * The browser opens this URL directly, with _wpnonce.
      */
     public function export(\WP_REST_Request $request)
     {
@@ -268,9 +264,6 @@ class FormsController extends Controller
         }
     }
 
-    /**
-     * Replace the English defaults of the demo form with translated text.
-     */
     private function localizeDemoForm($form)
     {
         if (!is_array($form)) {

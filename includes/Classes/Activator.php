@@ -6,10 +6,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Ajax Handler Class
- * @since 1.0.0
- */
 class Activator
 {
     public $wpfDbVersion = WPJOBBOARD_DB_VERSION;
@@ -19,7 +15,6 @@ class Activator
         global $wpdb;
         if ($network_wide) {
             $site_ids = get_sites(array('fields' => 'ids', 'network_id' => get_current_network_id(), 'number' => 0));
-            // Install the plugin for all these sites.
             foreach ($site_ids as $site_id) {
                 switch_to_blog($site_id);
                 $this->migrate();
@@ -160,9 +155,6 @@ class Activator
         return false;
     }
 
-    /**
-     * Create the pages for success and failure redirects
-     */
     public function createPages()
     {
         $options = get_option('wpjobboard_confirmation_page_id');

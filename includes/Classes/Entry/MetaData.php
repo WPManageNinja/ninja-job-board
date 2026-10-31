@@ -9,10 +9,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Entry MetaDat
- * @since 1.0.0
- */
 class MetaData
 {
     protected $entry;
@@ -93,7 +89,6 @@ class MetaData
 
     /**
      * User fields that placeholders can read. Never the password hash or activation key.
-     * @return array
      */
     public static function allowedUserFields()
     {
@@ -104,10 +99,7 @@ class MetaData
     }
 
     /**
-     * Placeholders can not read protected ("_" prefixed) or sensitive meta
-     * @param string $key
-     * @param string $type post|user
-     * @return bool
+     * Placeholders can not read protected ("_" prefixed) or sensitive meta. $type: post|user
      */
     public static function isAllowedMetaKey($key, $type)
     {

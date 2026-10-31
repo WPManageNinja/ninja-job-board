@@ -1,7 +1,4 @@
 <?php
-/**
- * Email Footer
- */
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }

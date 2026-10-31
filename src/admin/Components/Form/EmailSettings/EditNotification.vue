@@ -219,7 +219,6 @@
         },
         methods: {
             update(formName) {
-                // validate first please
                 this.showErrorMessage = true;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {

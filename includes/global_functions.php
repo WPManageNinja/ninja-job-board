@@ -17,12 +17,8 @@ function wpJobBoardPrintInternal( $string ) {
 }
 
 /**
- * Verify the nonce of a public (front-end) form request.
- *
- * Sites with full-page caching can serve an expired nonce to visitors. Such sites can turn the check off
- * with the `wpjobboard/verify_public_nonce` filter. Submissions still pass all server-side validation.
- *
- * @return bool
+ * Sites with full-page caching can serve an expired nonce; they can turn the check off with the
+ * `wpjobboard/verify_public_nonce` filter. Submissions still pass all server-side validation.
  */
 function wpJobBoardVerifyPublicNonce() {
     if (!apply_filters('wpjobboard/verify_public_nonce', true)) {
@@ -34,9 +30,6 @@ function wpJobBoardVerifyPublicNonce() {
 
 /**
  * wp_kses_post() that also keeps <style> blocks. The entry table template has its own CSS.
- *
- * @param string $html
- * @return string
  */
 function wpJobBoardKsesWithStyle($html) {
     $allowed = wp_kses_allowed_html('post');
@@ -46,9 +39,6 @@ function wpJobBoardKsesWithStyle($html) {
 
 /**
  * Sanitize nested request data as plain text. Keeps the array structure.
- *
- * @param mixed $values
- * @return mixed
  */
 function wpJobBoardSanitizeText($values) {
     if (is_array($values)) {

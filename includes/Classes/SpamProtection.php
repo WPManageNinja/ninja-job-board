@@ -7,13 +7,7 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Spam protection for the public application form.
- *
- * - Honeypot: always on. A hidden field that people never see; bots fill it.
- * - Cloudflare Turnstile: optional. On when the site key and secret key are saved
- *   in Settings > General. The token is checked with Cloudflare's siteverify API.
- *
- * @since 2.0.0
+ * Public form spam checks: an always-on honeypot, plus Cloudflare Turnstile when both keys are saved in Settings > General.
  */
 class SpamProtection
 {
@@ -75,8 +69,6 @@ class SpamProtection
 
     /**
      * @param string   $error     An error message from an earlier check, or ''
-     * @param array    $form_data The submitted form fields
-     * @param \WP_Post $form
      * @return string Error message, or '' when the submission looks human
      */
     public function check($error, $form_data, $form)

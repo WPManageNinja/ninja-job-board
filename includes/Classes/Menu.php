@@ -8,10 +8,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Register Menu and Admin Pages
- * @since 1.0.0
- */
 class Menu
 {
     public function register()
@@ -63,13 +59,6 @@ class Menu
             $menuPermission,
             'edit-tags.php?taxonomy=wpjb-job-categories&post_type=wp_job_board',
         );
-
-
-//        $submenu['wpjobboard.php']['support'] = array(
-//            __('Support', 'ninja-job-board'),
-//            $menuPermission,
-//            'admin.php?page=wpjobboard.php#/support',
-//        );
     }
 
     public function render()
@@ -133,9 +122,6 @@ class Menu
 
     }
 
-    /**
-     * The admin app is an ES module
-     */
     public function loadAsModule($tag, $handle)
     {
         if ($handle === 'wpjobboard_admin_app' && strpos($tag, 'type="module"') === false) {

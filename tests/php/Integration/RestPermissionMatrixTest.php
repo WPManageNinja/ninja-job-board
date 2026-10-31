@@ -4,18 +4,10 @@ namespace NinjaJobBoard\Tests\Integration;
 
 use NinjaJobBoard\Tests\IntegrationTestCase;
 
-/**
- * Who can call which admin REST route.
- *
- * - Anonymous: 401 on every route.
- * - Logged in without plugin permissions: 403 on every route.
- * - "Own forms" users: only their own forms and the applications of their own forms.
- */
 class RestPermissionMatrixTest extends IntegrationTestCase
 {
     /**
-     * Every route of the namespace. A new route must be added here (and to the permission map),
-     * otherwise test_every_registered_route_is_in_the_matrix fails.
+     * A new route must be added here and to the permission map, or test_every_registered_route_is_in_the_matrix fails.
      * {form} = a form ID, {app} = an application ID, {campaign} = a campaign ID
      */
     private const ROUTES = array(

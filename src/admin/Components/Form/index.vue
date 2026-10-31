@@ -44,7 +44,6 @@
             }
         },
         computed: {
-            // The settings screens bring their own full-height layout
             isSettingsRoute() {
                 return ['confirmation_settings', 'design_options', 'scheduling_settings'].indexOf(this.$route.name) !== -1;
             }
@@ -64,7 +63,6 @@
                     })
             },
             editForm() {
-                // validate first
                 if (!this.form.post_title) {
                     this.$message.error(this.$t('Enter a job title.'));
                     return;

@@ -56,9 +56,6 @@ class FileHandler
         return $uploadedFile;
     }
 
-    /**
-     * Register filters for custom upload dir
-     */
     public function overrideUploadDir()
     {
         add_filter('wp_handle_upload_prefilter', function ($file) {
@@ -74,11 +71,6 @@ class FileHandler
         });
     }
 
-    /**
-     * Set plugin's custom upload dir
-     * @param  array $param
-     * @return array $param
-     */
     public function setCustomUploadDir($param)
     {
         $param['url'] = $param['baseurl'] . WPJOBBOARD_UPLOAD_DIR;
@@ -90,11 +82,6 @@ class FileHandler
     }
 
 
-    /**
-     * Rename the uploaded file name before saving
-     * @param  array $file
-     * @return array $file
-     */
     public function renameFileName($file)
     {
         $prefix = 'wpf-' . bin2hex(random_bytes(16)) . '-wpf-';
@@ -102,10 +89,6 @@ class FileHandler
         return $file;
     }
 
-    /**
-     * The plugin's upload directory (path and URL)
-     * @return array
-     */
     public static function getUploadDir()
     {
         $uploadDir = wp_upload_dir(null, false);
@@ -116,9 +99,7 @@ class FileHandler
     }
 
     /**
-     * Create the upload directory with the index.php and .htaccess guards
-     * @param string $path
-     * @param bool   $refresh Rewrite the guards even when they exist (after a guard update)
+     * @param bool $refresh Rewrite the guards even when they exist (after a guard update)
      */
     public static function ensureProtectedDir($path, $refresh = false)
     {
@@ -140,8 +121,6 @@ class FileHandler
 
     /**
      * Check that a file name has the random prefix that renameFileName() adds
-     * @param string $fileName
-     * @return bool
      */
     public static function isPluginFileName($fileName)
     {
@@ -149,10 +128,7 @@ class FileHandler
     }
 
     /**
-     * Check that a URL points to a file directly inside the plugin's upload directory
-     * @param string $url
-     * @param string $uploadUrl
-     * @return bool
+     * Check that a URL points to a file directly inside the plugin upload directory, not a subfolder
      */
     public static function isPluginFileUrl($url, $uploadUrl)
     {
@@ -171,11 +147,6 @@ class FileHandler
         return $fileName === sanitize_file_name($fileName) && self::isPluginFileName($fileName);
     }
 
-    /**
-     * Transient key for the server-side record of an upload
-     * @param string $fileName
-     * @return string
-     */
     public static function uploadRecordKey($fileName)
     {
         return 'wpjb_upl_' . md5($fileName);

@@ -121,7 +121,6 @@
                 });
                 this.editingNotificationIndex = this.notifications.length - 1;
             },
-            // The save button sits in the title row; the editor validates and emits as before
             saveCurrent() {
                 const editor = this.$refs.notificationEditor;
                 if (editor) {

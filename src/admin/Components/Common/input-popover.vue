@@ -60,7 +60,6 @@ import { MoreFilled, Tickets } from '@element-plus/icons-vue';
 
 export default {
     name: 'inputPopover',
-    // Icons used as tags in the template must be registered here
     components: { Tickets },
     emits: ['update:modelValue'],
     setup() {

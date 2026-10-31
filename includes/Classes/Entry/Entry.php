@@ -13,10 +13,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Entry Methods
- * @since 1.0.0
- */
 class Entry
 {
     protected $formId;
@@ -58,21 +54,11 @@ class Entry
         return $value;
     }
 
-    /**
-     * The submitted value without any HTML conversion
-     * @param string $key
-     * @return mixed
-     */
     public function getRawFormattedInput($key)
     {
         return isset($this->formattedInput[$key]) ? $this->formattedInput[$key] : '';
     }
 
-    /**
-     * The submitted value as safe HTML
-     * @param string $key
-     * @return string
-     */
     public function getInputHtml($key)
     {
         if (!isset($this->formattedInput[$key])) {
@@ -82,8 +68,7 @@ class Entry
     }
 
     /**
-     * Fields with an HTML converter (e.g. file upload) return HTML, which goes through wp_kses_post().
-     * All other values are plain text and are escaped.
+     * Converter HTML (e.g. file upload) goes through wp_kses_post(); plain text values are escaped.
      */
     protected function valueToHtml($value, $key)
     {
@@ -104,7 +89,6 @@ class Entry
 
     public function getInputFieldsHtmlTable()
     {
-        // We have to make the items as label and value pair first
         $inputItems = $this->formattedInput;
         $labels = (array)Forms::getFormInputLabels($this->formId);
         $items = array();

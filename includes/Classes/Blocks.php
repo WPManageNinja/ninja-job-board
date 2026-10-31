@@ -11,13 +11,8 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Gutenberg blocks: Job list, Application form and Job details.
- *
- * All three are dynamic blocks rendered in PHP by the same code as the shortcodes,
- * so the front end, the editor preview (ServerSideRender) and [wp_job_list] / [wp_job_form]
- * stay identical. block.json files live in assets/blocks/<name>/ (copied from src/blocks/).
- *
- * @since 2.0.0
+ * Dynamic blocks rendered by the shortcode code, so front end, editor preview and shortcodes match.
+ * block.json files live in assets/blocks/<name>/ (copied from src/blocks/).
  */
 class Blocks
 {
@@ -52,9 +47,6 @@ class Blocks
         ));
     }
 
-    /**
-     * Job details panel and job navigation in the block editor, only when editing a job
-     */
     public function enqueueJobEditor()
     {
         $screen = function_exists('get_current_screen') ? get_current_screen() : null;
@@ -148,9 +140,6 @@ class Blocks
         return $this->wrap(PostType::renderJobMeta($form, $fields));
     }
 
-    /**
-     * The chosen job, or the current post when the block sits in a job post
-     */
     private function jobId($jobId, $block)
     {
         $jobId = absint($jobId);
@@ -169,9 +158,6 @@ class Blocks
         return '<div ' . get_block_wrapper_attributes() . '>' . $html . '</div>';
     }
 
-    /**
-     * A hint shown only in the editor preview; visitors see nothing
-     */
     private function editorNotice($message)
     {
         if (!$this->isEditorPreview()) {

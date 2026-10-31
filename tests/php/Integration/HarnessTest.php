@@ -4,9 +4,6 @@ namespace NinjaJobBoard\Tests\Integration;
 
 use NinjaJobBoard\Tests\IntegrationTestCase;
 
-/**
- * The harness itself: writes are visible inside a test and gone after it.
- */
 class HarnessTest extends IntegrationTestCase
 {
     private static $jobIdSeen;

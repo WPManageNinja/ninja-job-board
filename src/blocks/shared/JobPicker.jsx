@@ -1,7 +1,4 @@
-/**
- * Job dropdown for the Application form and Job details blocks.
- * value 0 = "Current job" (the job post the block is in), shown only inside a job post.
- */
+// value 0 = "Current job" (the job post the block is in), offered only inside a job post.
 const { SelectControl, Spinner } = wp.components;
 const { useSelect } = wp.data;
 const { __ } = wp.i18n;

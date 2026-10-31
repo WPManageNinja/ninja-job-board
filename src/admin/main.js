@@ -32,9 +32,6 @@ const router = createRouter({
 
 const app = createApp(App);
 
-/*
- * Helpers that every component can use as this.$name
- */
 Object.assign(app.config.globalProperties, {
     $api: api,
     $notify: ElNotification,
@@ -83,7 +80,6 @@ Object.assign(app.config.globalProperties, {
 });
 
 app.directive('loading', ElLoading.directive);
-// Element Plus texts (pagination, selects, tables, dialogs, date picker) in the site language
 provideGlobalConfig({ locale: elementLocale() }, app, true);
 
 app.use(router);

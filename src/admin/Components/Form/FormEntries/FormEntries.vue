@@ -127,7 +127,6 @@
                 this.$router.push({ query: { ...this.$route.query, internal_status: this.selected_internal_status || undefined } });
             },
             exportCSV() {
-                // CSV is the only export format
                 window.location.href = this.$api.downloadUrl('/applications/export', {
                     form_id: parseInt(this.form_id),
                     application_status: this.selected_application_status,

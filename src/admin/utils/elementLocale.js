@@ -1,8 +1,6 @@
 /**
- * Element Plus locale built from this plugin's translations, so pagination, selects, tables,
- * dialogs and the date picker follow the site language. Element Plus fills its own {total},
- * {pager}, {count}, {max} and {column} markers, so they are passed in as placeholder values.
- * Parts of the English locale that the admin does not use are kept as they are.
+ * Element Plus locale from this plugin's translations. Element Plus fills its own {total}, {pager},
+ * {count}, {max} and {column} markers, so they are passed in as placeholder values.
  */
 import en from 'element-plus/es/locale/lang/en.mjs';
 import { $t, $_x } from './i18n.js';

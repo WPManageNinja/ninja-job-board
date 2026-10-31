@@ -1,12 +1,6 @@
 /**
- * Builds every asset of the plugin:
- *
- * 1. The admin app (Vue 3 + Element Plus) as one ES module: assets/admin/app.js + app.css
- * 2. Classic scripts (IIFE) that WordPress enqueues normally: the admin boot script,
- *    the public form scripts and the TinyMCE button
- * 3. Stand-alone stylesheets for the public pages and the post edit screen
- *
- * Usage: npm run build | npm run dev (rebuilds the admin app on change)
+ * Builds all plugin assets: the admin app (one ES module), the classic IIFE scripts that
+ * WordPress enqueues, and the stand-alone stylesheets. `npm run dev` rebuilds the admin app on change.
  */
 import { build } from 'vite';
 import vue from '@vitejs/plugin-vue';

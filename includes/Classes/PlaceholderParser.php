@@ -11,28 +11,12 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Placeholder Parser for a submission
- * @since 1.0.0
- */
 class PlaceholderParser
 {
     /**
-     * @param $string
-     * @param $submission
-     *
-     * Possible Submission Parameters: [can be found on submission.ATRRIBUTE_NAME]
-     * {submission.id}
-     * {submission.submission_hash}
-     * {submission.applicant_name}
-     * {submission.applicant_email}
-     * {submission.application_status}
-     *
-     * Possible Input Item Parameters [can be found on submission.form_data_formatted.INPUTNAME]
-     * {input.INPUTNAME}
-     *
-     * @param string $context Where the result goes: 'html' (values are HTML-escaped), 'url' (values are URL-encoded)
-     *                        or 'text' (raw values; the caller must sanitize the result for its own context).
+     * Placeholders: {submission.id|submission_hash|applicant_name|applicant_email|application_status}
+     * and {input.INPUTNAME}.
+     * @param string $context 'html' (values HTML-escaped), 'url' (URL-encoded) or 'text' (raw; the caller must sanitize).
      */
     public static function parse($string, $submission, $context = 'html')
     {
@@ -47,7 +31,6 @@ class PlaceholderParser
 
         $formattedParsables = array();
         foreach ($parsables as $parsableKey => $parsable) {
-            // Get Parsed Group
             $group = strtok($parsable, '.:');
             $itemExt = str_replace(array($group . '.', $group . ':'), '', $parsable);
             $formattedParsables[$group][$parsableKey] = $itemExt;
@@ -110,12 +93,6 @@ class PlaceholderParser
         return $parsedData;
     }
 
-    /**
-     * Escape a placeholder value for the target context
-     * @param mixed  $value
-     * @param string $context
-     * @return string
-     */
     public static function escapeValue($value, $context)
     {
         if (is_array($value)) {

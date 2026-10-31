@@ -1,13 +1,11 @@
 (function() {
     tinymce.PluginManager.add( 'wpjb_mce_job_button', function( editor, url ) {
         var vars = window.wpjb_tinymce_vars || {};
-        // Add Button to Visual Editor Toolbar
         editor.addButton('wpjb_mce_job_button', {
             title: vars.button_title || 'Insert job application form',
             cmd: 'wpjb_mce_job_command',
             image: url + '/tinymce_icon.png'
         });
-        // Add Command when Button Clicked
         editor.addCommand('wpjb_mce_job_command', function() {
             editor.windowManager.open({
                 title: window.wpjb_tinymce_vars.title,

@@ -1,9 +1,6 @@
 import { $t } from './i18n.js';
 
-/**
- * Labels and badge colors for job post statuses and application statuses.
- * Colors use the Fluent badge palette (see _fluent.scss).
- */
+// Badge colors use the Fluent badge palette (see _fluent.scss).
 const TONES = {
     // Application status (what the applicant sees)
     applied: 'blue',
@@ -43,10 +40,7 @@ function humanize(key) {
     return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
-/**
- * @param {string} type application | internal | post
- * @param {string} key  The stored status key
- */
+// type: application | internal | post
 export function statusLabel(type, key) {
     const vars = window.wpJobBoardsAdmin || {};
     if (type === 'application' && vars.applicationStatuses && vars.applicationStatuses[key]) {

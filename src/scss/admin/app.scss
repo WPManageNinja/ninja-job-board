@@ -374,7 +374,6 @@ a.el-button {
   padding: 10px 20px;
 }
 
-//transition: slide
 .slide-down-enter-active {
   transition: all .8s;
   max-height: 100vh;
@@ -585,7 +584,7 @@ ul.wpf_no_style {
   }
 }
 
-// Fluent design layer (loads last, scoped to .wpjb_app)
+// Fluent design layer: must load last
 @import "./fluent";
 @import "./fluent-lists";
 @import "./fluent-entry";

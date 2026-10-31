@@ -9,12 +9,6 @@ if (!defined('ABSPATH')) {
 class View
 {
 
-    /**
-     * Generate a view file
-     * @param  string $path
-     * @param  array  $data
-     * @return string [generated html]
-     */
     public static function make($path, $data = [])
     {
         if (file_exists($path = self::getFilePath($path))) {
@@ -26,11 +20,6 @@ class View
         return '';
     }
 
-    /**
-     * Resolve the view file path
-     * @param  string $path
-     * @return string
-     */
     protected static function getFilePath($path)
     {
         $path = str_replace('.', DIRECTORY_SEPARATOR, $path);

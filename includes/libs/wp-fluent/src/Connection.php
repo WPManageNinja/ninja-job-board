@@ -56,7 +56,6 @@ class Connection
 
         $this->setAdapter()->setAdapterConfig($config)->connect();
 
-        // Create event dependency
         $this->eventHandler = $this->container->build('\\WpFluent\\EventHandler');
 
         if ($alias) {
@@ -65,8 +64,6 @@ class Connection
     }
 
     /**
-     * Create an easily accessible query builder alias
-     *
      * @param $alias
      */
     public function createAlias($alias)
@@ -78,18 +75,12 @@ class Connection
         AliasFacade::setQueryBuilderInstance($builder);
     }
 
-    /**
-     * Returns an instance of Query Builder
-     */
     public function getQueryBuilder()
     {
         return $this->container->build('\\WpFluent\\QueryBuilder\\QueryBuilderHandler', array($this));
     }
 
 
-    /**
-     * Create the connection adapter
-     */
     protected function connect()
     {
         $this->setDbInstance($this->wpdb);

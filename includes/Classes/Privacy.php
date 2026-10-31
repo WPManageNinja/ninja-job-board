@@ -11,12 +11,7 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Connects job applications to the WordPress privacy tools
- * (Tools > Export Personal Data / Erase Personal Data).
- *
- * Applications are matched by the applicant email address.
- *
- * @since 2.0.0
+ * WordPress privacy export/erase tools for applications, matched by the applicant email address.
  */
 class Privacy
 {
@@ -105,7 +100,6 @@ class Privacy
     }
 
     /**
-     * Delete the applications, their activity and their uploaded files.
      * Always reads page 1: the rows of the previous page are already gone.
      */
     public function erase($email, $page = 1)
@@ -157,10 +151,6 @@ class Privacy
             ->get();
     }
 
-    /**
-     * Delete the uploaded files of one application
-     * @param int $submissionId
-     */
     public function deleteApplicationFiles($submissionId)
     {
         $submission = (new Submission())->getSubmission(absint($submissionId));

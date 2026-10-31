@@ -1,10 +1,6 @@
 <?php
 /**
- * Runs when the plugin is deleted from the Plugins screen.
- *
- * Data is removed only when the site owner turned on
- * Settings > General > "Delete all data when the plugin is deleted".
- * Otherwise jobs, applications and files stay, so a reinstall keeps them.
+ * Deletes data only when Settings > General > "Delete all data when the plugin is deleted" is on.
  *
  * @package NinjaJobBoard
  */
@@ -13,9 +9,6 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
     exit;
 }
 
-/**
- * Remove all plugin data from the current site
- */
 if (!function_exists('wpjobboard_uninstall_site')) :
 function wpjobboard_uninstall_site()
 {
@@ -47,13 +40,11 @@ function wpjobboard_uninstall_site()
         }
     }
 
-    // The confirmation page the plugin created on activation
     $pageId = absint(get_option('wpjobboard_confirmation_page_id'));
     if ($pageId && get_post_type($pageId) === 'page') {
         wp_delete_post($pageId, true);
     }
 
-    // Tables
     foreach (array('wjb_applications', 'wjb_application_activities', 'wjb_email_campaigns', 'wjb_campaign_emails') as $table) {
         $wpdb->query('DROP TABLE IF EXISTS ' . esc_sql($wpdb->prefix . $table)); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.NotPrepared -- fixed table names; uninstall only
     }
@@ -61,7 +52,6 @@ function wpjobboard_uninstall_site()
     // Options and the upload record transients
     $wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s", $wpdb->esc_like('wpjobboard_') . '%', $wpdb->esc_like('_transient_wpjb_upl_') . '%', $wpdb->esc_like('_transient_timeout_wpjb_upl_') . '%')); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- uninstall only
 
-    // Uploaded application files
     $uploads = wp_upload_dir(null, false);
     $dir = trailingslashit($uploads['basedir']) . 'wpjobboard';
     if (is_dir($dir)) {
@@ -76,9 +66,6 @@ function wpjobboard_uninstall_site()
 }
 endif;
 
-/**
- * Run the cleanup on every site of a network, or on the single site
- */
 if (!function_exists('wpjobboard_uninstall')) :
 function wpjobboard_uninstall()
 {

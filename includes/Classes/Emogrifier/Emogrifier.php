@@ -7,16 +7,10 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Inlines CSS into email HTML for email clients that ignore <style> tags.
- *
- * The same inliner FluentCRM uses (app/Services/Libs/Emogrifier): a php-scoped copy of
- * tijsverkoyen/css-to-inline-styles 2.4.0 and symfony/css-selector 5.4.45 (PHP 7.4+).
- * The scoped classes share the FluentEmogrifier\Vendor prefix with the other Fluent plugins,
- * so whichever plugin loads first provides them. Only the Composer autoloader class names
- * carry this plugin's "Njb" marker, so two copies never collide.
- *
- * To update, copy scoped-vendor/ from FluentCRM again, then run `npm run prepare:emogrifier`
- * (build/prepare-emogrifier.mjs): it sets the "Njb" marker and the WordPress.org file guards.
+ * Inlines CSS into email HTML. A php-scoped copy of FluentCRM's inliner: the FluentEmogrifier\Vendor
+ * classes are shared with the other Fluent plugins (first loaded wins); only the Composer autoloader
+ * carries this plugin's "Njb" marker, so two copies never collide.
+ * To update, copy scoped-vendor/ from FluentCRM again, then run `npm run prepare:emogrifier`.
  */
 class Emogrifier
 {
@@ -24,19 +18,12 @@ class Emogrifier
 
     private $css = '';
 
-    /**
-     * @param string $html Email HTML. <style> tags in it are inlined too.
-     * @param string $css  Extra CSS to inline
-     */
     public function __construct($html, $css = '')
     {
         $this->html = (string)$html;
         $this->css = (string)$css;
     }
 
-    /**
-     * @return string The HTML with the CSS inlined; @media rules stay in a <style> tag
-     */
     public function emogrify()
     {
         if (!class_exists('\FluentEmogrifier\Vendor\TijsVerkoyen\CssToInlineStyles\CssToInlineStyles')) {

@@ -9,15 +9,9 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Form export, import and duplication helpers
- * @since 1.1.0
- */
 class GlobalTools
 {
-    /**
-     * Form meta keys that an export file can contain and an import can write
-     */
+    // Allowlist: the only form meta keys an export can contain and an import can write
     private $allowedMetaKeys = array(
         'wpjobboard_application_builder_settings',
         'wpjobboard_submit_button_settings',
@@ -65,7 +59,6 @@ class GlobalTools
 
     public function createFormFromData($form)
     {
-        // Create the form post type
         $postId = wp_insert_post(array(
             'post_title'   => sanitize_text_field(ArrayHelper::get($form, 'post_title', 'imported form ' . gmdate('Y-m-d'))),
             'post_content' => wp_kses_post(ArrayHelper::get($form, 'post_content', '')),

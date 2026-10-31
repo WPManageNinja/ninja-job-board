@@ -13,10 +13,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Job applications (submissions)
- * @since 2.0.0
- */
 class ApplicationsController extends Controller
 {
     public function index(\WP_REST_Request $request)
@@ -122,9 +118,6 @@ class ApplicationsController extends Controller
         );
     }
 
-    /**
-     * Change the application status and/or the internal status, with an optional note
-     */
     public function updateStatus(\WP_REST_Request $request)
     {
         $submission = $this->requireSubmission($request);
@@ -174,9 +167,6 @@ class ApplicationsController extends Controller
         );
     }
 
-    /**
-     * Application count by status for one form
-     */
     public function report(\WP_REST_Request $request)
     {
         $formId = absint($request->get_param('form_id'));
@@ -202,7 +192,7 @@ class ApplicationsController extends Controller
     }
 
     /**
-     * Download the applications of one form as CSV. The browser opens this URL directly, with _wpnonce.
+     * The browser opens this URL directly, with _wpnonce.
      */
     public function export(\WP_REST_Request $request)
     {
@@ -306,17 +296,11 @@ class ApplicationsController extends Controller
         return $wheres;
     }
 
-    /**
-     * The status key when it is one of the known statuses, otherwise ''
-     */
     private function knownStatus($value, $statuses)
     {
         return (is_string($value) && isset($statuses[$value])) ? $value : '';
     }
 
-    /**
-     * The human label of a status, or the stored key when the status is unknown
-     */
     private function statusName($labels, $key)
     {
         return isset($labels[$key]) ? $labels[$key] : (string)$key;
@@ -344,9 +328,6 @@ class ApplicationsController extends Controller
         ));
     }
 
-    /**
-     * Build RFC 4180 CSV text
-     */
     private function toCsv($rows)
     {
         $lines = array();
@@ -362,7 +343,7 @@ class ApplicationsController extends Controller
     }
 
     /**
-     * Plain-text cell value. A leading quote stops spreadsheet apps from running it as a formula.
+     * A leading quote stops spreadsheet apps from running the value as a formula.
      */
     private function safeCell($value)
     {

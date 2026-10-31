@@ -1,4 +1,3 @@
-// Fluent design language for the Ninja Job Board admin.
 // Tokens follow FluentCRM / Fluent Support (--fc-*), so the plugins look like one family.
 // Everything is scoped under .wpjb_app (the admin app root) to win over legacy rules.
 
@@ -19,7 +18,6 @@ body.toplevel_page_wpjobboard {
 }
 
 .wpjb_app {
-    // Base palette (same values as FluentCRM)
     --wpjb-bg: #F5F7FA;
     --wpjb-surface: #FFFFFF;
     --wpjb-surface-weak: #F9FAFB;
@@ -34,7 +32,6 @@ body.toplevel_page_wpjobboard {
     --wpjb-radius: 8px;
     --wpjb-radius-sm: 6px;
 
-    // Status badge pairs (text / background)
     --wpjb-badge-neutral: #222530;
     --wpjb-badge-neutral-bg: #F2F5F8;
     --wpjb-badge-blue: #122368;
@@ -50,7 +47,6 @@ body.toplevel_page_wpjobboard {
     --wpjb-badge-red: #681219;
     --wpjb-badge-red-bg: #FFEBEC;
 
-    // Element Plus follows the same palette
     --el-color-primary: #335CFF;
     --el-color-primary-light-3: #7090FF;
     --el-color-primary-light-5: #99B0FF;
@@ -106,8 +102,6 @@ body.toplevel_page_wpjobboard {
         min-height: calc(100vh - 32px);
     }
 }
-
-// ─── App header ─────────────────────────────────────────────────────────────
 
 .wpjb_app .wpjb_topbar {
     display: flex;
@@ -174,8 +168,6 @@ body.toplevel_page_wpjobboard {
     }
 }
 
-// ─── Job context bar (second row, like FluentCRM's sub menu) ────────────────
-
 .wpjb_app .wpjb_subbar {
     display: flex;
     flex-wrap: wrap;
@@ -241,8 +233,6 @@ body.toplevel_page_wpjobboard {
     }
 }
 
-// ─── Page body, title row and cards ─────────────────────────────────────────
-
 .wpjb_app {
     .wpjb_page {
         padding: 24px 20px;
@@ -259,7 +249,6 @@ body.toplevel_page_wpjobboard {
         box-shadow: none;
     }
 
-    // Title row: title + count on the left, actions on the right
     .payform_section_header {
         display: flex;
         flex-wrap: wrap;
@@ -330,7 +319,6 @@ body.toplevel_page_wpjobboard {
         padding: 20px;
     }
 
-    // Toolbar row inside a card (filters, search)
     .wpjb_toolbar {
         display: flex;
         flex-wrap: wrap;
@@ -348,8 +336,6 @@ body.toplevel_page_wpjobboard {
     }
 }
 
-// ─── Buttons ────────────────────────────────────────────────────────────────
-
 .wpjb_app {
     .el-button {
         --el-button-border-color: var(--wpjb-border);
@@ -361,7 +347,6 @@ body.toplevel_page_wpjobboard {
         font-weight: 500;
     }
 
-    // Primary actions use the dark Fluent button
     .el-button--primary:not(.is-link):not(.is-text) {
         --el-button-bg-color: var(--wpjb-primary);
         --el-button-border-color: var(--wpjb-primary);
@@ -391,8 +376,7 @@ body.toplevel_page_wpjobboard {
     border-radius: 3px;
 }
 
-// WordPress core styles input[type=text] and textarea (border, padding, min-height).
-// Element Plus draws its own box around the inner field, so reset the core styles.
+// WordPress core styles input[type=text] and textarea; Element Plus draws its own box, so reset the core styles.
 .wpjb_app {
     .el-input__inner,
     .el-select__input {
@@ -424,8 +408,6 @@ body.toplevel_page_wpjobboard {
     }
 }
 
-// ─── Status badges ──────────────────────────────────────────────────────────
-
 .wpjb_app .wpjb_badge {
     display: inline-flex;
     align-items: center;
@@ -455,8 +437,6 @@ body.toplevel_page_wpjobboard {
         }
     }
 }
-
-// ─── Stage tabs: the pipeline filter (Fluent Support style segmented tabs) ──
 
 .wpjb_app .wpjb_stages {
     display: flex;
@@ -503,8 +483,6 @@ body.toplevel_page_wpjobboard {
         text-align: center;
     }
 }
-
-// ─── Tables ─────────────────────────────────────────────────────────────────
 
 .wpjb_app .el-table {
     --el-table-border-color: var(--wpjb-border);
@@ -590,8 +568,6 @@ body.toplevel_page_wpjobboard {
     border-top: 1px solid var(--wpjb-border);
 }
 
-// ─── Settings layout (white sub sidebar, like FluentCRM settings) ───────────
-
 .wpjb_app .wpjb_settings_layout {
     display: grid;
     grid-template-columns: 240px minmax(0, 1fr);
@@ -639,7 +615,6 @@ body.toplevel_page_wpjobboard {
         }
     }
 
-    // Settings forms: label (with help) left, control right, hairline between rows
     .el-form-item {
         margin-bottom: 0;
         padding: 16px 0;
@@ -655,8 +630,6 @@ body.toplevel_page_wpjobboard {
         font-weight: 500;
     }
 }
-
-// ─── Empty states ───────────────────────────────────────────────────────────
 
 .wpjb_app .wpjb_empty {
     padding: 56px 24px;

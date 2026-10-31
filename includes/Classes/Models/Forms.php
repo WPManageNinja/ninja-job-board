@@ -9,10 +9,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Ajax Handler Class
- * @since 1.0.0
- */
 class Forms
 {
     public static function getForms($args = array(), $with = array())

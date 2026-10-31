@@ -1,8 +1,4 @@
-/**
- * Block editor additions for job posts:
- * - "Job details" panel: location, vacancies, experience, job type (registered post meta)
- * - The job tab bar: links to this job's applications, form and settings in the app
- */
+// Block editor additions for job posts: the "Job details" meta panel and the job tab bar.
 const { registerPlugin } = wp.plugins;
 const PluginDocumentSettingPanel = (wp.editor && wp.editor.PluginDocumentSettingPanel) || wp.editPost.PluginDocumentSettingPanel;
 const { TextControl, SelectControl } = wp.components;
@@ -62,10 +58,7 @@ function JobDetailsPanel() {
     );
 }
 
-/**
- * The job tab bar of the app (Applications, Application Form, ...), placed above the editor toolbar.
- * The classic editor prints the same bar in PHP (Menu::pushJobNav).
- */
+// The app's job tab bar, above the editor toolbar. The classic editor prints it in PHP (Menu::pushJobNav).
 function JobTabBar() {
     const { postType, postId } = useSelect((select) => ({
         postType: select('core/editor').getCurrentPostType(),

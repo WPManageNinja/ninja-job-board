@@ -5,10 +5,7 @@ namespace NinjaJobBoard\Tests\Integration;
 use NinjaJobBoard\Tests\IntegrationTestCase;
 use WPJobBoard\Classes\File\FileHandler;
 
-/**
- * The reported vulnerability (WordPress.org, 2026): unauthenticated stored XSS through file upload
- * values, rendered as HTML in the admin application view. Plus the same class for text fields.
- */
+// Regression for the WordPress.org 2026 report: unauthenticated stored XSS through file upload values in the admin view.
 class StoredXssTest extends IntegrationTestCase
 {
     // The exact payload from the report
@@ -91,9 +88,7 @@ class StoredXssTest extends IntegrationTestCase
         return $result['row'];
     }
 
-    /**
-     * The HTML the admin application view receives for one field (rendered with v-html)
-     */
+    // The HTML the admin application view receives for one field (rendered with v-html)
     private function renderedValue($applicationId, $fieldId)
     {
         $this->actAsAdmin();

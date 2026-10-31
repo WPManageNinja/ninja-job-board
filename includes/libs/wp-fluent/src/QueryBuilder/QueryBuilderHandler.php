@@ -46,8 +46,6 @@ class QueryBuilderHandler
     protected $adapterConfig;
 
     /**
-     * The PDO fetch parameters to use
-     *
      * @var array
      */
     protected $fetchParameters = array(5); // PDO::FETCH_OBJ; kept as a value, the builder runs on $wpdb
@@ -75,7 +73,6 @@ class QueryBuilderHandler
             $this->tablePrefix = $this->adapterConfig['prefix'];
         }
 
-        // Query builder adapter instance
         $this->adapterInstance = $this->container->build(
             '\\WpFluent\\QueryBuilder\\Adapters\\' . ucfirst($this->adapter),
             array($this->connection)
@@ -83,8 +80,6 @@ class QueryBuilderHandler
     }
 
     /**
-     * Set the fetch mode
-     *
      * @param $mode
      * @return $this
      */
@@ -96,8 +91,6 @@ class QueryBuilderHandler
     }
 
     /**
-     * Fetch query results as object of specified type
-     *
      * @param $className
      * @param array $constructorArgs
      * @return QueryBuilderHandler
@@ -152,8 +145,6 @@ class QueryBuilderHandler
     }
 
     /**
-     * Get all rows
-     *
      * @return array|object|null
      * @throws \WpFluent\Exception
      */
@@ -181,8 +172,6 @@ class QueryBuilderHandler
     }
 
     /**
-     * Get first row
-     *
      * @return \stdClass|null
      */
     public function first()
@@ -220,13 +209,10 @@ class QueryBuilderHandler
     }
 
     /**
-     * Get count of rows
-     *
      * @return int
      */
     public function count()
     {
-        // Get the current statements
         $originalStatements = $this->statements;
 
         unset($this->statements['orderBys']);
@@ -246,13 +232,10 @@ class QueryBuilderHandler
      */
     protected function aggregate($type)
     {
-        // Get the current selects
         $mainSelects = isset($this->statements['selects']) ? $this->statements['selects'] : null;
-        // Replace select with a scalar value like `count`
         $this->statements['selects'] = array($this->raw($type . '(*) as field'));
         $row = $this->get();
 
-        // Set the select as it was
         if ($mainSelects) {
             $this->statements['selects'] = $mainSelects;
         } else {
@@ -322,8 +305,6 @@ class QueryBuilderHandler
             return $eventResult;
         }
 
-        // If first value is not an array
-        // Its not a batch insert
         if (! is_array(current($data))) {
             $start = microtime(true);
 
@@ -333,7 +314,6 @@ class QueryBuilderHandler
 
             $return = $this->db->insert_id;
         } else {
-            // Its a batch insert
             $executionTime = 0;
             $return = array();
             foreach ($data as $subData) {
@@ -620,7 +600,6 @@ class QueryBuilderHandler
      */
     public function where($key, $operator = null, $value = null)
     {
-        // If two params are given then assume operator is =
         if (func_num_args() == 2) {
             $value = $operator;
             $operator = '=';
@@ -638,7 +617,6 @@ class QueryBuilderHandler
      */
     public function orWhere($key, $operator = null, $value = null)
     {
-        // If two params are given then assume operator is =
         if (func_num_args() == 2) {
             $value = $operator;
             $operator = '=';
@@ -656,7 +634,6 @@ class QueryBuilderHandler
      */
     public function whereNot($key, $operator = null, $value = null)
     {
-        // If two params are given then assume operator is =
         if (func_num_args() == 2) {
             $value = $operator;
             $operator = '=';
@@ -674,7 +651,6 @@ class QueryBuilderHandler
      */
     public function orWhereNot($key, $operator = null, $value = null)
     {
-        // If two params are given then assume operator is =
         if (func_num_args() == 2) {
             $value = $operator;
             $operator = '=';
@@ -815,18 +791,14 @@ class QueryBuilderHandler
         // in the closure should reflect here
         $joinBuilder = $this->container->build('\\WpFluent\\QueryBuilder\\JoinBuilder', array($this->connection));
         $joinBuilder = & $joinBuilder;
-        // Call the closure with our new joinBuilder object
         $key($joinBuilder);
         $table = $this->addTablePrefix($table, false);
-        // Get the criteria only query from the joinBuilder object
         $this->statements['joins'][] = compact('type', 'table', 'joinBuilder');
 
         return $this;
     }
 
     /**
-     * Runs a transaction
-     *
      * @param $callback
      *
      * @return $this
@@ -834,16 +806,13 @@ class QueryBuilderHandler
     public function transaction(\Closure $callback)
     {
         try {
-            // Begin the PDO transaction
             $this->db->query('START TRANSACTION');
 
-            // Get the Transaction class
             $transaction = $this->container->build(
                 '\\WpFluent\\QueryBuilder\\Transaction',
                 array($this->connection)
             );
 
-            // Call closure
             $callback($transaction);
 
             // If no errors have been thrown or the transaction wasn't completed within
@@ -855,7 +824,6 @@ class QueryBuilderHandler
             // Commit or rollback behavior has been handled in the closure, so exit
             return $this;
         } catch (\Exception $e) {
-            // something happened, rollback changes
             $this->db->query('ROLLBACK');
 
             return $this;
@@ -902,8 +870,6 @@ class QueryBuilderHandler
     }
 
     /**
-     * Add a raw query
-     *
      * @param $value
      * @param $bindings
      *
@@ -915,8 +881,6 @@ class QueryBuilderHandler
     }
 
     /**
-     * Return db instance
-     *
      * @return \wpdb
      */
     public function db()
@@ -961,8 +925,6 @@ class QueryBuilderHandler
     }
 
     /**
-     * Add table prefix (if given) on given string.
-     *
      * @param      $values
      * @param bool $tableFieldMix If we have mixes of field and table names with a "."
      *
@@ -974,21 +936,16 @@ class QueryBuilderHandler
             return $values;
         }
 
-        // $value will be an array and we will add prefix to all table names
-
-        // If supplied value is not an array then make it one
         $single = false;
 
         if (! is_array($values)) {
             $values = array($values);
-            // We had single value, so should return a single value
             $single = true;
         }
 
         $return = array();
 
         foreach ($values as $key => $value) {
-            // It's a raw query, just add it to our return array and continue next
             if ($value instanceof Raw || $value instanceof \Closure) {
                 $return[$key] = $value;
                 continue;
@@ -1008,7 +965,6 @@ class QueryBuilderHandler
             $return[$key] = $value;
         }
 
-        // If we had single value then we should return a single value (end value of the array)
         return $single ? end($return) : $return;
     }
 
@@ -1097,8 +1053,6 @@ class QueryBuilderHandler
     }
 
     /**
-     * Get the paginated rows.
-     *
      * @param null $perPage
      * @param array $columns
      *

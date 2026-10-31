@@ -4,11 +4,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Managing Access Control
- * This is not complete on version 1.0.0 but we will definately add this feature.
- * @since 1.0.0
- */
 class AccessControl
 {
     public static function hasGrandAccess()
@@ -43,12 +38,6 @@ class AccessControl
 
     /**
      * REST permission check: actor capability and form ownership.
-     *
-     * @param string $endpoint     Key in the permission map
-     * @param string $group        Group in the permission map
-     * @param int    $formId       Form the request acts on (0 if none)
-     * @param int    $submissionId Application the request acts on (0 if none)
-     * @return bool
      */
     public static function canAccess($endpoint, $group, $formId = 0, $submissionId = 0)
     {
@@ -61,12 +50,6 @@ class AccessControl
 
     /**
      * A user who has only an "own" permission can act only on forms they created.
-     *
-     * @param string $permission The capability that granted the access
-     * @param string $endpoint
-     * @param int    $formId
-     * @param int    $submissionId
-     * @return bool
      */
     private static function canAccessForm($permission, $endpoint, $formId, $submissionId)
     {
@@ -88,7 +71,6 @@ class AccessControl
         }
 
         if (!$formId) {
-            // Routes that do not touch a single form
             return in_array($endpoint, array('get_forms', 'create_form', 'get_available_forms'), true);
         }
 
@@ -286,20 +268,17 @@ class AccessControl
         return array(
             'wpjb_full_access',
             'wpjb_can_view_menus',
-            // FOrm Related Actions
             'wpjb_can_edit_all_forms',
             'wpjb_can_add_form',
             'wpjb_can_edit_own_form',
             'wpjb_can_delete_all_forms',
             'wpjb_can_delete_own_created_forms',
-            // Submission Related Actions
             'wpjb_can_view_all_entries',
             'wpjb_can_view_entries_of_own_created_forms',
             'wpjb_can_delete_all_entries',
             'wpjb_can_delete_entries_of_own_created_forms',
             'wpjb_can_edit_all_form_entries',
             'wpjb_can_edit_entries_of_own_created_forms',
-            // Global Settings Related
             'wpjb_can_change_global_settings',
         );
     }

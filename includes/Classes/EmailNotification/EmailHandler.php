@@ -12,10 +12,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Email Handler Class for Email Notification
- * @since 1.0.0
- */
 class EmailHandler
 {
     public function register()
@@ -31,7 +27,6 @@ class EmailHandler
             return;
         }
 
-        // Let's filter the notifications
         $validNotifiations = array();
         foreach ($notifications as $notification) {
             $status = ArrayHelper::get($notification, 'status');
@@ -126,21 +121,11 @@ class EmailHandler
         return $headers;
     }
 
-    /**
-     * Header-safe single-line text
-     * @param string $text
-     * @return string
-     */
     private function sanitizeHeaderText($text)
     {
         return trim(str_replace(array("\r", "\n", '<', '>'), '', sanitize_text_field($text)));
     }
 
-    /**
-     * Comma separated addresses to an array of valid emails
-     * @param string $emails
-     * @return array
-     */
     private function sanitizeEmailList($emails)
     {
         $valid = array();
@@ -177,11 +162,9 @@ class EmailHandler
         $emailBody = $emailHeader . $emailBody . $emailFooter;
 
         try {
-            // apply CSS styles inline for picky email clients
             $emogrifier = new Emogrifier($emailBody, $css);
             $emailBody = $emogrifier->emogrify();
         } catch (\Exception $e) {
-            // Send the email without inlined CSS
         }
         return $emailBody;
     }

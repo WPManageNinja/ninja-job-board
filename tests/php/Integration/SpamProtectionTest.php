@@ -5,10 +5,6 @@ namespace NinjaJobBoard\Tests\Integration;
 use NinjaJobBoard\Tests\IntegrationTestCase;
 use WPJobBoard\Classes\SpamProtection;
 
-/**
- * Honeypot (always on) and Cloudflare Turnstile (optional) on the public form.
- * Cloudflare's siteverify API is stubbed at the HTTP layer (outbound third party).
- */
 class SpamProtectionTest extends IntegrationTestCase
 {
     public function test_a_filled_honeypot_is_rejected_and_nothing_is_stored()
@@ -105,8 +101,6 @@ class SpamProtectionTest extends IntegrationTestCase
         $this->assertStringNotContainsString('secret-key', wp_json_encode($shown));
         $this->assertTrue($shown['turnstile_secret_saved']);
     }
-
-    // ─── Helpers ───────────────────────────────────────────────────────────
 
     private $verifyCalls = 0;
     private $lastVerifyBody = array();

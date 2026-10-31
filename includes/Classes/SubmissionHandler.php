@@ -9,10 +9,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Form Submission Handler
- * @since 1.0.0
- */
 class SubmissionHandler
 {
     private $applicantName = '';
@@ -57,7 +53,6 @@ class SubmissionHandler
         $formattedElements = Forms::getFormattedElements($formId);
         $this->validate($form_data, $formattedElements, $form);
 
-        // Extract Input Items Here
         $inputItems = array();
         foreach ($formattedElements['input'] as $inputName => $inputElement) {
             $value = $this->sanitizeValue(ArrayHelper::get($form_data, $inputName), $inputElement['type']);
@@ -106,7 +101,6 @@ class SubmissionHandler
 
         do_action('wpjobboard/before_submission_data_insert', $submission, $form_data);
 
-        // Insert Submission
         $submissionModel = new Submission();
         $submissionId = $submissionModel->create($submission);
         do_action('wpjobboard/after_submission_data_insert', $submissionId, $formId);
@@ -129,7 +123,6 @@ class SubmissionHandler
         $applicantName = '';
         $applicantEmail = '';
 
-        // Validate Normal Inputs
         foreach ($formattedElements['input'] as $elementId => $element) {
             $error = false;
             if (ArrayHelper::get($element, 'options.required') == 'yes' && empty($form_data[$elementId])) {
@@ -178,7 +171,6 @@ class SubmissionHandler
 
     public function parseConfirmation($confirmation, $submission)
     {
-        // add payment hash to the url
         if (
             ($confirmation['redirectTo'] == 'customUrl' && $confirmation['customUrl']) ||
             ($confirmation['redirectTo'] == 'customPage' && $confirmation['customPage'])
@@ -199,12 +191,6 @@ class SubmissionHandler
         return $confirmation;
     }
 
-    /**
-     * Sanitize a submitted value by the field type
-     * @param mixed  $value
-     * @param string $type
-     * @return mixed
-     */
     private function sanitizeValue($value, $type)
     {
         if (is_array($value)) {
@@ -230,8 +216,7 @@ class SubmissionHandler
     }
 
     /**
-     * Unguessable hash. It is the only key that opens the public confirmation page.
-     * @return string
+     * Unguessable: it is the only key that opens the public confirmation page.
      */
     private function getHash()
     {

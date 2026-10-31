@@ -1,7 +1,4 @@
 <?php
-/**
- * Email Header
- */
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;

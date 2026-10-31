@@ -9,10 +9,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Entry MetaDat
- * @since 1.0.0
- */
 class GlobalMetaData
 {
     protected $postId;

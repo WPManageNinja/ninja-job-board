@@ -9,10 +9,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Global plugin settings
- * @since 2.0.0
- */
 class SettingsController extends Controller
 {
     public function show(\WP_REST_Request $request)

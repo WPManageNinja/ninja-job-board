@@ -1,6 +1,4 @@
-// Job post edit screen (wp-admin/post.php for wp_job_board).
-// Compiled to assets/css/jobboard-edit.css and loaded only on this screen.
-// The tab bar matches the app's job tab bar (.wpjb_subbar / .wpjb_tab in _fluent.scss).
+// Compiled to jobboard-edit.css, loaded only on the wp_job_board edit screen. Tab bar mirrors .wpjb_subbar in _fluent.scss.
 
 body.post-type-wp_job_board {
     // Same values as the app tokens in _fluent.scss
@@ -23,8 +21,6 @@ body.post-type-wp_job_board {
         display: none;
     }
 }
-
-// ─── Job tab bar ────────────────────────────────────────────────────────────
 
 body.post-type-wp_job_board .wpjb_edit_nav {
     // Full width white bar: undo the .wrap margins and the #wpcontent padding.
@@ -95,8 +91,6 @@ body.post-type-wp_job_board #screen-meta-links .show-settings {
     border-color: var(--wpjb-border);
     border-radius: var(--wpjb-radius-sm);
 }
-
-// ─── "Job Info" meta box ────────────────────────────────────────────────────
 
 body.post-type-wp_job_board #wpjobboard_metabox_job_info {
     .inside {
