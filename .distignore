@@ -1,6 +1,5 @@
 # Files that do not go into the WordPress.org SVN release.
-# The Vue/SCSS source (src/), build script (build/) and package.json stay in the release
-# so reviewers and users can read and rebuild the source of the compiled assets.
+# The source of the compiled assets is on GitHub; readme.txt links to it (guideline 4).
 .git
 .gitignore
 .distignore
@@ -18,6 +17,15 @@ build/.lock
 # WordPress.org page assets (icon, banner); they go to the SVN assets/ folder, not the plugin
 .wordpress-org
 README.md
+
+# Build source and tooling
+/src
+/build
+/package.json
+/package-lock.json
+/i18n.config.json
+/i18n.node.cjs
+/reservedWords.json
 
 # Repo docs and the translation lint (tests/ is excluded above)
 CLAUDE.md

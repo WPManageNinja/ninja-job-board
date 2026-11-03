@@ -3,8 +3,9 @@
  * 1. Renames the autoloader marker "Fcrm" to "Njb", so both plugins can load their copy at the same time.
  * 2. Adds the ABSPATH guard to the procedural Composer files (Plugin Check: direct file access).
  * 3. Marks the Symfony exception messages as not output (Plugin Check: ExceptionNotEscaped); the inliner never prints them.
+ * 4. Deletes composer/installed.json, which the autoloader does not read.
  */
-import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -23,6 +24,13 @@ const phpFiles = (dir) => readdirSync(dir).flatMap((name) => {
 });
 
 let changed = 0;
+const installedJson = join(vendor, 'composer/installed.json');
+if (existsSync(installedJson)) {
+    rmSync(installedJson);
+    changed++;
+    console.log('removed ' + relative(root, installedJson));
+}
+
 for (const file of phpFiles(vendor)) {
     const original = readFileSync(file, 'utf8');
     let code = original.replace(/Fcrm([0-9a-f]{32})/g, 'Njb$1');

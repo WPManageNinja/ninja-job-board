@@ -79,7 +79,9 @@ The form's CSS and JavaScript load only on pages that show a form or a job list.
 
 = Source code =
 
-The full source code, including the uncompiled admin app and blocks, is on [GitHub](https://github.com/WPManageNinja/ninja-job-board). Bug reports and pull requests are welcome.
+The files in `assets/admin`, `assets/blocks`, `assets/css` and `assets/js` are compiled. Their source (the Vue admin app, the blocks and the SCSS) is on [GitHub](https://github.com/WPManageNinja/ninja-job-board). Each release has a matching tag, for example `v2.0.0`.
+
+To build: `npm install`, then `npm run build`. Bug reports and pull requests are welcome.
 
 = Other plugins by WPManageNinja =
 
