@@ -10,10 +10,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Form Info Handler Class
- * @since 1.0.0
- */
 class FormDefaultValueRenderer
 {
     public function register()
@@ -30,7 +26,7 @@ class FormDefaultValueRenderer
                 'placeholders' => FormPlaceholders::getWPPlaceHolders()
             ),
             'user'  => array(
-                'title'        => __('Current User Info'),
+                'title'        => __('Current User Info', 'ninja-job-board'),
                 'placeholders' => FormPlaceholders::getUserPlaceholders()
             ),
             'other' => array(
@@ -53,7 +49,6 @@ class FormDefaultValueRenderer
         }
         $formattedParsables = [];
         foreach ($parsables as $parsableKey => $parsable) {
-            // Get Parsed Group
             $group = strtok($parsable, '.:');
             $itemExt = str_replace(array($group . '.', $group . ':'), '', $parsable);
             $formattedParsables[$group][$parsableKey] = $itemExt;

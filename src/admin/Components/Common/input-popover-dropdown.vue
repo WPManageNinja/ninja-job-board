@@ -1,16 +1,17 @@
 <template>
     <div>
         <el-popover
-            ref="input-popover1"
             placement="right"
-            popper-class="el-dropdown-list-wrapper"
-            v-model="visible"
+            popper-class="el-dropdown-list-wrapper wpjb_shortcode_popper"
+            :width="'auto'"
+            ref="shortcodePopover"
             trigger="click">
             <div class="el_pop_data_group">
                 <div  class="el_pop_data_headings">
                     <ul>
                         <li
                             v-for="(item,item_index) in data"
+                            :key="item_index"
                             :data-item_index="item_index"
                             :class="(activeIndex == item_index) ? 'active_item_selected' : ''"
                             @click="activeIndex = item_index">
@@ -19,24 +20,40 @@
                     </ul>
                 </div>
                 <div class="el_pop_data_body">
-                    <ul v-for="(item,current_index) in data" v-show="activeIndex == current_index" :class="'el_pop_body_item_'+current_index">
-                        <li @click="insertShortcode(code.tag)" v-for="code in item.placeholders">{{code.label}} <span>{{code.tag}}</span></li>
+                    <ul v-for="(item,current_index) in data" :key="current_index" v-show="activeIndex == current_index" :class="'el_pop_body_item_'+current_index">
+                        <li @click="insertShortcode(code.tag)" v-for="(code, codeIndex) in item.placeholders" :key="codeIndex">{{code.label}} <span>{{code.tag}}</span></li>
                     </ul>
                 </div>
             </div>
+            <template #reference>
+                <el-button class="editor-add-shortcode"
+                           size="small"
+                           :type="buttonType"
+                           :link="btnType == 'text'"
+                           :aria-label="buttonLabel ? undefined : $t('Insert shortcode')"
+                           :title="buttonLabel ? undefined : $t('Insert shortcode')">
+                    <template v-if="buttonLabel">
+                        <span v-html="buttonLabel"></span>
+                        <el-icon class="wpjb_icon_right"><ArrowDown /></el-icon>
+                    </template>
+                    <el-icon v-else><MenuIcon /></el-icon>
+                </el-button>
+            </template>
         </el-popover>
-        <el-button class="editor-add-shortcode"
-                   size="mini"
-                   v-popover:input-popover1
-                   :type="btnType"
-                   v-html="buttonText"
-        />
     </div>
 </template>
 
 <script>
+    // Menu is renamed: <Menu> would render the native HTML <menu> element
+    import { ArrowDown, Menu as MenuIcon } from '@element-plus/icons-vue';
+
     export default {
         name: 'inputPopoverDropdown',
+        components: { ArrowDown, MenuIcon },
+        emits: ['command'],
+        setup() {
+            return { ArrowDown, MenuIcon };
+        },
         props: {
             data: Array,
             close_on_insert: {
@@ -45,11 +62,10 @@
                     return true;
                 }
             },
+            // null shows the translated default label; '' shows only the icon
             buttonText: {
                 type: String,
-                default() {
-                    return 'Add Shortcodes <i class="el-icon-arrow-down el-icon--right"></i>';
-                }
+                default: null
             },
             btnType: {
                 type: String,
@@ -58,17 +74,25 @@
                 }
             }
         },
+        computed: {
+            buttonLabel() {
+                return this.buttonText === null ? this.$t('Add shortcodes') : this.buttonText;
+            },
+            // Element Plus has no type="text" button; it is a link button now
+            buttonType() {
+                return this.btnType == 'text' ? '' : this.btnType;
+            }
+        },
         data() {
           return {
-              activeIndex: 0,
-              visible: false
+              activeIndex: 0
           }
         },
         methods: {
             insertShortcode(code) {
                 this.$emit('command', code);
-                if(this.close_on_insert) {
-                    this.visible = false;
+                if(this.close_on_insert && this.$refs.shortcodePopover) {
+                    this.$refs.shortcodePopover.hide();
                 }
             }
         },
@@ -76,80 +100,3 @@
         }
     }
 </script>
-
-<style lang="scss">
-
-    .el-dropdown-list-wrapper {
-        padding: 0;
-
-        .group-title {
-            display: block;
-            padding: 5px 10px;
-            background-color: gray;
-            color: #fff;
-        }
-    }
-
-    .input-textarea-value {
-        position: relative;
-
-        .icon {
-            position: absolute;
-            right: 0;
-            top: -18px;
-            cursor: pointer;
-        }
-    }
-    .el_pop_data_group {
-        background: #6c757d;
-        overflow: hidden;
-        .el_pop_data_headings {
-            max-width: 150px;
-            float: left;
-            ul {
-                padding: 0;
-                margin: 10px 0px;
-                li {
-                    color: white;
-                    padding: 5px 10px 5px 10px;
-                    display: block;
-                    margin-bottom: 0px;
-                    border-bottom: 1px solid #949393;
-                    cursor: pointer;
-                    &.active_item_selected {
-                        background: whitesmoke;
-                        color: #6c757d;
-                        border-left: 2px solid #6c757d;
-                    }
-                }
-            }
-        }
-
-        .el_pop_data_body {
-            float: left;
-            background: whitesmoke;
-            width: 350px;
-            ul {
-                padding: 10px 0;
-                margin: 0;
-                li {
-                    color: black;
-                    padding: 5px 10px 5px 10px;
-                    display: block;
-                    margin-bottom: 0px;
-                    border-bottom: 1px dotted #dadada;
-                    cursor: pointer;
-                    text-align: left;
-                    &:hover {
-                        background: white;
-                    }
-                    span {
-                        font-size: 11px;
-                        color: #8e8f90;
-                    }
-                }
-            }
-        }
-    }
-
-</style>

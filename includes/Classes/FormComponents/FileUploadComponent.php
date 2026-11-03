@@ -3,8 +3,10 @@
 namespace WPJobBoard\Classes\FormComponents;
 
 use WPJobBoard\Classes\ArrayHelper;
+use WPJobBoard\Classes\File\FileAccess;
 use WPJobBoard\Classes\File\FileHandler;
 use WPJobBoard\Classes\Models\Forms;
+use WPJobBoard\Classes\Tools\SchedulingSettings;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -22,6 +24,7 @@ class FileUploadComponent extends BaseComponent
         add_filter('wpjobboard/submitted_value_' . $this->componentName, array($this, 'formatUploadedValue'), 10, 3);
         add_filter('wpjobboard/validate_data_on_submission_' . $this->componentName, array($this, 'validateUploadedValue'), 10, 4);
         add_filter('wpjobboard/rendering_entry_value_' . $this->componentName, array($this, 'convertValueToHtml'), 10, 3);
+        add_filter('wpjobboard/exporting_entry_value_' . $this->componentName, array($this, 'exportValue'), 10, 3);
         add_action('wpjobboard/require_entry_html', array($this, 'registerConvertHtml'));
         add_filter('wpjobboard/require_entry_html_done', array($this, 'deRegisterConvertHtml'));
     }
@@ -35,40 +38,40 @@ class FileUploadComponent extends BaseComponent
             'postion_group'   => 'general',
             'editor_elements' => array(
                 'label'             => array(
-                    'label' => 'Upload Label',
+                    'label' => __('Upload label', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 ),
                 'button_text'       => array(
-                    'label' => 'Upload Button Text',
+                    'label' => __('Upload button text', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 ),
                 'required'          => array(
-                    'label' => 'Required',
+                    'label' => __('Required', 'ninja-job-board'),
                     'type'  => 'switch',
                     'group' => 'general'
                 ),
                 'max_file_size'     => array(
-                    'label' => 'Max File Size (in MegaByte)',
+                    'label' => __('Maximum file size (in MB)', 'ninja-job-board'),
                     'type'  => 'number',
                     'group' => 'general'
                 ),
                 'max_allowed_files' => array(
-                    'label' => 'Max Upload Files',
+                    'label' => __('Maximum number of files', 'ninja-job-board'),
                     'type'  => 'number',
                     'group' => 'general'
                 ),
                 'allowed_files'     => array(
-                    'label'         => 'Allowed file types',
+                    'label'         => __('Allowed file types', 'ninja-job-board'),
                     'type'          => 'checkbox',
                     'wrapper_class' => 'checkbox_new_lined',
                     'options'       => $this->getFileTypes('label')
                 )
             ),
             'field_options'   => array(
-                'label'             => 'Upload Your File',
-                'button_text'       => 'Drag & Drop your files or Browse',
+                'label'             => __('Upload your file', 'ninja-job-board'),
+                'button_text'       => __('Drag and drop your files or browse', 'ninja-job-board'),
                 'required'          => 'yes',
                 'max_file_size'     => 2,
                 'max_allowed_files' => 1,
@@ -104,7 +107,7 @@ class FileUploadComponent extends BaseComponent
 
         $btnText = ArrayHelper::get($fieldOptions, 'button_text');
         if (!$btnText) {
-            $btnText = 'Drag & Drop your files or Browse';
+            $btnText = __('Drag and drop your files or browse', 'ninja-job-board');
         }
 
         $associateKey = '__' . $element['id'] . '_files';
@@ -116,23 +119,23 @@ class FileUploadComponent extends BaseComponent
             'data-max_files'     => $maxFilesCount,
             'data-max_file_size' => $maxFileSize,
             'data-associate_key' => $associateKey,
-            'data-btn_txt'       => htmlspecialchars($btnText),
+            'data-btn_txt'       => $btnText,
             'class'              => $inputClass,
             'id'                 => $inputId,
             'multiple'           => 'true',
-            'data-file_required' => $fieldOptions['required']
+            'data-file_required' => ArrayHelper::get($fieldOptions, 'required')
         );
         if ($maxFilesCount > 1) {
             $attributes['multiple'] = 'true';
         }
         ?>
 
-        <div data-element_type="<?php echo esc_html($this->elementName); ?>"
-             class="<?php echo esc_html($controlClass); ?>">
+        <div data-element_type="<?php echo esc_attr($this->elementName); ?>"
+             class="<?php echo esc_attr($controlClass); ?>">
             <?php $this->buildLabel($fieldOptions, $form, array('for' => $inputId)); ?>
             <div class="wpjb_input_content wpjb_file_upload_wrapper dropzone dropzone_parent">
-                <input type="hidden" name="<?php echo esc_html($element['id']); ?>" value="<?php echo esc_html($associateKey); ?>"/>
-                <input <?php wpJobBoardPrintInternal($this->builtAttributes($attributes)); ?> />
+                <input type="hidden" name="<?php echo esc_attr($element['id']); ?>" value="<?php echo esc_attr($associateKey); ?>"/>
+                <input <?php echo $this->builtAttributes($attributes); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- every value escaped with esc_attr() in builtAttributes() ?> />
             </div>
             <div class="upload_error_message"></div>
         </div>
@@ -141,39 +144,77 @@ class FileUploadComponent extends BaseComponent
 
     public function validateUploadedValue($error, $elementId, $element, $form_data)
     {
-        // Check it's required
-        $isRequired = ArrayHelper::get($element, 'options.required') == 'yes';
+        $dataName = ArrayHelper::get($form_data, $elementId);
+        $dataValues = ($dataName) ? ArrayHelper::get($form_data, $dataName) : [];
+        $dataValues = is_array($dataValues) ? array_filter($dataValues) : [];
 
+        $maxFiles = absint(ArrayHelper::get($element, 'options.max_allowed_files'));
+        if ($maxFiles && count($dataValues) > $maxFiles) {
+            /* translators: %d: maximum number of files */
+            return sprintf(_n('You can upload a maximum of %d file.', 'You can upload a maximum of %d files.', $maxFiles, 'ninja-job-board'), $maxFiles);
+        }
+
+        $isRequired = ArrayHelper::get($element, 'options.required') == 'yes';
         if (!$isRequired) {
             return false;
         }
 
-        $dataName = ArrayHelper::get($form_data, $elementId);
-        $dataValues = ArrayHelper::get($form_data, $dataName);
-
         if (!$dataValues) {
-            $error = ArrayHelper::get($element, 'options.label') . ' is required, Please upload required files';
+            /* translators: %s: field label */
+            $error = sprintf(__('%s is required. Please upload the required files.', 'ninja-job-board'), ArrayHelper::get($element, 'options.label'));
         }
         return $error;
     }
 
+    /**
+     * Only files this plugin uploaded for this form and field pass: the upload transient record is consumed here,
+     * so the client can not submit arbitrary names, URLs, or another applicant's file.
+     */
     public function formatUploadedValue($dataName, $element, $data)
     {
-        if (!$dataName) {
+        if (!$dataName || !is_string($dataName)) {
             return array();
         }
 
         $files = ArrayHelper::get($data, $dataName);
 
-        if(!$files) {
+        if (!$files || !is_array($files)) {
             return [];
         }
 
+        $formId = absint(ArrayHelper::get($data, '__wpjb_form_id'));
+        $uploadDir = FileHandler::getUploadDir();
+        $maxFiles = absint(ArrayHelper::get($element, 'options.max_allowed_files'));
+
         $fullPathFiles = array();
-        $uploadDir = get_option('wpjobboard_upload_dir');
         foreach ($files as $file) {
-            $fullPathFiles[] = $uploadDir . '/' . $file;
+            if (!is_string($file)) {
+                continue;
+            }
+
+            $fileName = sanitize_file_name(wp_basename($file));
+
+            if (!$fileName || $fileName !== $file || !FileHandler::isPluginFileName($fileName)) {
+                continue;
+            }
+
+            if (!file_exists($uploadDir['path'] . '/' . $fileName)) {
+                continue;
+            }
+
+            $record = get_transient(FileHandler::uploadRecordKey($fileName));
+            if (!$record || $record !== $formId . ':' . $element['id']) {
+                continue;
+            }
+            delete_transient(FileHandler::uploadRecordKey($fileName));
+
+            $fullPathFiles[] = $uploadDir['url'] . '/' . $fileName;
+
+            if ($maxFiles && count($fullPathFiles) >= $maxFiles) {
+                break;
+            }
         }
+
         return $fullPathFiles;
     }
 
@@ -189,26 +230,45 @@ class FileUploadComponent extends BaseComponent
 
     public function convertValueToHtml($values, $submission, $element)
     {
-        if (empty($values)) {
+        if (empty($values) || !is_array($values)) {
             return '';
         }
-        $html = '<div class="payform_file_lists">';
-        foreach ($values as $file) {
-            $previewUrl = $this->getPreviewUrl($file);
-            $html .= '<div class="payform_each_file"><a title="Click to View/Download" href="' . $file . '" target="_blank" rel="noopener"><img src="' . $previewUrl . '" /></a></div>';
+
+        $submissionId = (is_object($submission) && !empty($submission->id)) ? absint($submission->id) : 0;
+
+        $html = '<div class="wpjb_file_list">';
+        foreach (FileAccess::fileNames($values) as $baseName) {
+            // Show the original name: drop the random "wpf-<hash>-wpf-" prefix
+            $displayName = preg_replace('/^wpf-[a-f0-9]{32}-wpf-/', '', $baseName);
+            $ext = strtolower(pathinfo($baseName, PATHINFO_EXTENSION));
+
+            // Without an application there is no permission to check, so show the name only
+            if (!$submissionId) {
+                $html .= '<span class="wpjb_file"><span class="wpjb_file_name">' . esc_html($displayName) . '</span></span>';
+                continue;
+            }
+
+            $html .= '<a class="wpjb_file" href="' . esc_url(FileAccess::downloadUrl($submissionId, $baseName, true)) . '" target="_blank" rel="noopener" title="' . esc_attr__('Open file in a new tab', 'ninja-job-board') . '">';
+            if ($this->isImage($baseName)) {
+                $html .= '<img class="wpjb_file_thumb" src="' . esc_url(FileAccess::downloadUrl($submissionId, $baseName, true)) . '" alt="" width="32" height="32" />';
+            } else {
+                $html .= '<span class="wpjb_file_ext">' . esc_html($ext ? strtoupper(substr($ext, 0, 4)) : __('File', 'ninja-job-board')) . '</span>';
+            }
+            $html .= '<span class="wpjb_file_name">' . esc_html($displayName) . '</span>';
+            $html .= '</a>';
         }
         $html .= '</div>';
-        return $html;
+        return wp_kses_post($html);
     }
 
     private function getFileAcceptExtensions($element)
     {
         $fieldOptions = ArrayHelper::get($element, 'field_options');
-        $allowedFiles = ArrayHelper::get($fieldOptions, 'allowed_files');
+        $allowedFiles = (array)ArrayHelper::get($fieldOptions, 'allowed_files', []);
         $fileTypes = $this->getFileTypes('accepts');
         $accepts = [];
         foreach ($allowedFiles as $allowedFile) {
-            $accepts[] = ArrayHelper::get($fileTypes, $allowedFile);
+            $accepts[] = str_replace(' ', '', (string)ArrayHelper::get($fileTypes, $allowedFile));
         }
         $accepts = array_filter($accepts);
         $accepts = implode(',', $accepts);
@@ -219,27 +279,27 @@ class FileUploadComponent extends BaseComponent
     {
         $types = array(
             'images' => array(
-                'label'   => 'Images (jpg, jpeg, gif, png, bmp)',
+                'label'   => __('Images (jpg, jpeg, gif, png, bmp)', 'ninja-job-board'),
                 'accepts' => '.jpg,.jpeg,.gif,.png,.bmp'
             ),
             'audios' => array(
-                'label'   => 'Audio (mp3, wav, ogg, wma, mka, m4a, ra, mid, midi)',
+                'label'   => __('Audio (mp3, wav, ogg, wma, mka, m4a, ra, mid, midi)', 'ninja-job-board'),
                 'accepts' => '.mp3, .wav, .ogg, .wma, .mka, .m4a, .ra, .mid, .midi'
             ),
             'pdf'    => array(
-                'label'   => 'pdf',
+                'label'   => __('PDF (pdf)', 'ninja-job-board'),
                 'accepts' => '.pdf'
             ),
             'docs'   => array(
-                'label'   => 'Docs (doc, ppt, pps, xls, mdb, docx, xlsx, pptx, odt, odp, ods, odg, odc, odb, odf, rtf, txt)',
+                'label'   => __('Docs (doc, ppt, pps, xls, mdb, docx, xlsx, pptx, odt, odp, ods, odg, odc, odb, odf, rtf, txt)', 'ninja-job-board'),
                 'accepts' => '.doc,.ppt,.pps,.xls,.mdb,.docx,.xlsx,.pptx,.odt,.odp,.ods,.odg,.odc,.odb,.odf,.rtf,.txt'
             ),
             'zips'   => array(
-                'label'   => 'Zip Archives (zip, gz, gzip, rar, 7z)',
+                'label'   => __('Zip archives (zip, gz, gzip, rar, 7z)', 'ninja-job-board'),
                 'accepts' => '.zip,.gz,.gzip,.rar,.7z'
             ),
             'csv'    => array(
-                'label'   => 'CSV (csv)',
+                'label'   => __('CSV (csv)', 'ninja-job-board'),
                 'accepts' => '.csv'
             )
         );
@@ -259,31 +319,61 @@ class FileUploadComponent extends BaseComponent
 
     public function handleFileUpload()
     {
-        $formId = ArrayHelper::get($_REQUEST, 'form_id');
-        $elementName = ArrayHelper::get($_REQUEST, 'element_name');
+        if (!wpJobBoardVerifyPublicNonce()) {
+            $this->sendError(__('Security check failed. Please reload the page and try again.', 'ninja-job-board'), 'nonce', 403);
+        }
+
+        $formId = isset($_REQUEST['form_id']) ? absint($_REQUEST['form_id']) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- verified in wpJobBoardVerifyPublicNonce()
+        $elementName = isset($_REQUEST['element_name']) ? sanitize_key(wp_unslash($_REQUEST['element_name'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         if (!$formId || !$elementName) {
-            $this->sendError('Wrong file upload instance', 'no element found');
+            $this->sendError(__('Wrong file upload instance', 'ninja-job-board'), 'no element found');
+        }
+
+        $form = Forms::getForm($formId);
+        if (!$form || $form->post_status !== 'publish') {
+            $this->sendError(__('Form not found', 'ninja-job-board'), 'no form found');
+        }
+
+        // The same schedule, entry limit and login rules as the submission
+        $restrictions = (new SchedulingSettings())->validateForm(array(), $formId);
+        if ($restrictions) {
+            $this->sendError(wp_strip_all_tags(reset($restrictions)), 'restricted', 403);
         }
 
         $element = $this->getFileUploadElement($formId, $elementName);
         $fieldOptions = ArrayHelper::get($element, 'field_options');
         if (!$element || !$fieldOptions) {
-            $this->sendError('Element not found', 'no element found');
+            $this->sendError(__('Element not found', 'ninja-job-board'), 'no element found');
         }
 
-        $uploadFile = $_FILES['file'];
-        // We have to validate the uploaded file now
+        if (empty($_FILES['file']) || !is_array($_FILES['file']) || empty($_FILES['file']['tmp_name'])) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+            $this->sendError(__('No file was uploaded', 'ninja-job-board'), 'no file');
+        }
+
+        $uploadFile = $_FILES['file']; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- validated by FileHandler and wp_handle_upload()
+
+        if (!is_uploaded_file($uploadFile['tmp_name'])) {
+            $this->sendError(__('Invalid file upload', 'ninja-job-board'), 'invalid upload');
+        }
+
         $file = $this->handleUploadFile($uploadFile, $element, $formId);
 
         if (!empty($file['error'])) {
-            $this->sendError($file['error'], $file);
+            $this->sendError(esc_html($file['error']), 'upload_error');
         }
 
-        $file['original_name'] = sanitize_text_field($uploadFile['name']);
-        update_option('wpjobboard_upload_dir', dirname($file['url']));
+        $fileName = wp_basename($file['file']);
 
-        wp_send_json($file, 200);
+        // Server-side record: this file belongs to this form field. It is consumed on submission.
+        set_transient(FileHandler::uploadRecordKey($fileName), $formId . ':' . $element['id'], DAY_IN_SECONDS);
+
+        wp_send_json(array(
+            'file'          => $fileName,
+            'url'           => esc_url_raw($file['url']),
+            'type'          => sanitize_mime_type($file['type']),
+            'original_name' => sanitize_file_name($uploadFile['name'])
+        ), 200);
     }
 
     public function getFileUploadElement($formId, $elementName)
@@ -311,15 +401,15 @@ class FileUploadComponent extends BaseComponent
         $errors = apply_filters('wpjobboard/upload_validation_errors', $errors, $file, $element, $formId);
 
         if ($errors) {
-            $errorMessage = 'Validation Failed';
+            $errorMessage = esc_html__('Validation Failed', 'ninja-job-board');
             if (is_array($errors)) {
                 $errorMessage .= '<ul>';
                 foreach ($errors as $error) {
-                    $errorMessage .= '<li>' . $error . '</li>';
+                    $errorMessage .= '<li>' . esc_html($error) . '</li>';
                 }
                 $errorMessage .= '</ul>';
             }
-            $this->sendError($errorMessage, $errors);
+            $this->sendError($errorMessage, array_map('esc_html', (array)$errors));
         }
         return $fileHandler->upload();
     }
@@ -328,24 +418,25 @@ class FileUploadComponent extends BaseComponent
     {
         wp_send_json_error(array(
             'message' => $message,
-            'error'   => $error,
-            'ok'      => 'ine'
-        ), 423);
+            'error'   => $error
+        ), $code);
     }
 
-    private function getPreviewUrl($file)
+    /**
+     * CSV export: one protected download link per file
+     */
+    public function exportValue($values, $submission, $element)
     {
-        $ext = pathinfo($file, PATHINFO_EXTENSION);
-        $imageExtensions = array('jpg', 'jpeg', 'gif', 'png', 'bmp');
-        if (in_array($ext, $imageExtensions)) {
-            return $file;
+        $links = array();
+        foreach (FileAccess::fileNames($values) as $baseName) {
+            $links[] = FileAccess::downloadUrl($submission->id, $baseName);
         }
+        return implode(' ', $links);
+    }
 
-        if ($ext == 'pdf') {
-            return WPJOBBOARD_URL . '/assets/images/pdf_icon.png';
-        }
-
-        // Return normal Document Extension
-        return WPJOBBOARD_URL . '/assets/images/document.png';
+    private function isImage($fileName)
+    {
+        $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        return in_array($ext, array('jpg', 'jpeg', 'gif', 'png', 'bmp'), true);
     }
 }

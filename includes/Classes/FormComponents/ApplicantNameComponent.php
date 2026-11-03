@@ -19,34 +19,34 @@ class ApplicantNameComponent extends BaseComponent
     {
         return array(
             'type'            => 'applicant_name',
-            'editor_title'    => 'Applicant Name',
+            'editor_title'    => __('Applicant name', 'ninja-job-board'),
             'group'           => 'input',
             'postion_group'   => 'general',
             'editor_elements' => array(
                 'label'         => array(
-                    'label' => 'Field Label',
+                    'label' => __('Field label', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 ),
                 'placeholder'   => array(
-                    'label' => 'Placeholder',
+                    'label' => __('Placeholder', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 ),
                 'required'      => array(
-                    'label' => 'Required',
+                    'label' => __('Required', 'ninja-job-board'),
                     'type'  => 'switch',
                     'group' => 'general'
                 ),
                 'default_value' => array(
-                    'label' => 'Default Value',
+                    'label' => __('Default value', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 ),
             ),
             'field_options'   => array(
-                'label' => 'Your Name',
-                'placeholder' => 'Name',
+                'label' => __('Your name', 'ninja-job-board'),
+                'placeholder' => __('Name', 'ninja-job-board'),
                 'required' => 'yes'
             )
         );

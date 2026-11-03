@@ -2,7 +2,6 @@
 
 namespace WPJobBoard\Classes\Tools;
 
-use WPJobBoard\Classes\AccessControl;
 use WPJobBoard\Classes\ArrayHelper;
 use WPJobBoard\Classes\Models\Forms;
 
@@ -10,60 +9,28 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Managing Global Tools
- * @since 1.1.0
- */
 class GlobalTools
 {
-    public function registerEndpoints()
+    // Allowlist: the only form meta keys an export can contain and an import can write
+    private $allowedMetaKeys = array(
+        'wpjobboard_application_builder_settings',
+        'wpjobboard_submit_button_settings',
+        'jobboard_confirmation_settings',
+        'wpjobboard_form_design_settings',
+        'wpjb_email_notifications',
+        'wpjb_form_scheduling_settings',
+        'wpjobboard_show_title_description',
+        'application_start_timestamp',
+        'application_end_timestamp',
+        'job_location',
+        'job_vacancies',
+        'job_experince_text',
+        'job_type'
+    );
+
+    private function getAllowedMetaKeys()
     {
-        add_action('wp_ajax_wpjobboard_global_tools', array($this, 'handeEndPoint'));
-    }
-
-    public function handeEndPoint()
-    {
-        $route = sanitize_text_field($_REQUEST['route']);
-
-        $validRoutes = array(
-            'get_forms'   => 'getForms',
-            'export_form' => 'exportFormJson',
-            'upload_form' => 'handleImportForm'
-        );
-
-        if (isset($validRoutes[$route])) {
-            AccessControl::checkAndPresponseError($route, 'tools');
-            do_action('wpjobboard/doing_ajax_forms_' . $route);
-            return $this->{$validRoutes[$route]}();
-        }
-    }
-
-    public function getForms()
-    {
-        $forms = wpJobBoardDB()->table('posts')
-            ->select(['ID', 'post_title'])
-            ->where('post_type', 'wp_job_board')
-            ->where('post_status', 'publish')
-            ->orderBy('ID', 'DESC')
-            ->get();
-        wp_send_json_success(array(
-            'forms' => $forms
-        ), 200);
-    }
-
-    public function exportFormJson()
-    {
-        $formId = absint($_REQUEST['form_id']);
-        $form = $this->getForm($formId);
-
-        if (!$form) {
-           exit('No Form Found');
-        }
-
-        header('Content-disposition: attachment; filename=' . sanitize_title($form['post_title'] . '-export-form-', 'export-form-', 'view') . '-' . gmdate('Y-m-d') . '.json');
-        header('Content-type: application/json');
-        echo json_encode($form);
-        exit();
+        return (array)apply_filters('wpjobboard/form_meta_keys_for_export', $this->allowedMetaKeys);
     }
 
     public function getForm($formId)
@@ -80,7 +47,9 @@ class GlobalTools
 
         $formattedMeta = array();
         foreach ($metas as $meta) {
-            $formattedMeta[$meta->meta_key] = maybe_unserialize($meta->meta_value);
+            if (in_array($meta->meta_key, $this->getAllowedMetaKeys(), true)) {
+                $formattedMeta[$meta->meta_key] = maybe_unserialize($meta->meta_value);
+            }
         }
 
         $form['form_meta'] = $formattedMeta;
@@ -88,59 +57,26 @@ class GlobalTools
         return $form;
     }
 
-    public function handleImportForm()
-    {
-        $importFile = $_FILES['import_file'];
-        $tmpName = $importFile['tmp_name'];
-        $form = json_decode(file_get_contents($tmpName), true);
-        $form = apply_filters('wpjobboard/impor_form_json_data', $form);
-
-        // validate the $form and it's content
-        if (
-            !is_array($form) ||
-            !isset($form['post_title']) ||
-            $form['post_type'] != 'wp_job_board'
-        ) {
-            wp_send_json_error(array(
-                'message' => 'Invalid FIle, Please upload right json file'
-            ), 423);
-        }
-
-        add_action('wpjobboard/before_form_json_import', $form);
-
-        $newForm = $this->createFormFromData($form);
-
-        add_action('wpjobboard/form_json_imported', $newForm);
-
-        wp_send_json_success(array(
-            'message' => 'Form successfully imported',
-            'form' => $newForm
-        ), 200);
-    }
-
     public function createFormFromData($form)
     {
-        // Create the form post type
         $postId = wp_insert_post(array(
-            'post_title'   => ArrayHelper::get($form, 'post_title', 'imported form '.gmdate('Y-m-d')),
-            'post_content' => ArrayHelper::get($form, 'post_content', ''),
+            'post_title'   => sanitize_text_field(ArrayHelper::get($form, 'post_title', 'imported form ' . gmdate('Y-m-d'))),
+            'post_content' => wp_kses_post(ArrayHelper::get($form, 'post_content', '')),
             'post_type'    => 'wp_job_board',
             'post_status'  => 'publish',
             'post_author'  => get_current_user_id()
         ));
 
-        if (is_wp_error($postId) && wp_doing_ajax()) {
-            wp_send_json_error(array(
-                'message' => 'Something is wrong when processing the file. Please try again'
-            ), 423);
-        } else if(is_wp_error($postId)) {
+        if (is_wp_error($postId) || !$postId) {
             return false;
         }
 
         $metas = ArrayHelper::get($form, 'form_meta', array());
         if (is_array($metas)) {
             foreach ($metas as $metaKey => $metaValue) {
-                update_post_meta($postId, $metaKey, $metaValue);
+                if (in_array($metaKey, $this->getAllowedMetaKeys(), true)) {
+                    update_post_meta($postId, $metaKey, wpJobBoardSanitize($metaValue));
+                }
             }
         }
 

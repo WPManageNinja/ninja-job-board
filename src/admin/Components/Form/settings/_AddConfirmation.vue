@@ -1,97 +1,43 @@
 <template>
     <div>
-        <!--Confirmation Type-->
         <el-form-item>
-            <template slot="label">
-                Confirmation Type
-                <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <div slot="content">
-                        <h3>Confirmation Type</h3>
-                        <p>
-                            After submit, where the page will redirect to.
-                        </p>
-                    </div>
-                    <i class="el-icon-info el-text-info" />
-                </el-tooltip>
+            <template #label>
+                <span class="wpjb_field_label">{{ $t('After submission') }}</span>
+                <span class="wpjb_field_help">{{ $t('What the applicant sees after sending the form.') }}</span>
             </template>
-            <el-radio v-for="(redirectOption, optionName) in redirectToOptions"
-                      v-model="confirmation.redirectTo" :label="optionName" border :key="optionName"
-            >
-                {{ redirectOption }}
-            </el-radio>
+            <el-radio-group v-model="confirmation.redirectTo">
+                <el-radio-button v-for="(redirectOption, optionName) in redirectToOptions"
+                                 :value="optionName" :key="optionName">
+                    {{ redirectOption }}
+                </el-radio-button>
+            </el-radio-group>
         </el-form-item>
 
-        <!--Additional fields based on the redirect to selection-->
-        <!--Same page-->
-        <div v-if="confirmation.redirectTo === 'samePage'" class="conditional-items">
-            <!--Message to show-->
-            <el-form-item>
-                <template slot="label">
-                    Message to show
-                    <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
-                            <h3>Confirmation Message Text</h3>
-                            <p>
-                                Enter the text you would like the user to <br>
-                                see on the confirmation page of this form.
-                            </p>
-                        </div>
-
-                        <i class="el-icon-info el-text-info" />
-                    </el-tooltip>
-                </template>
-
-                <wp-editor editor_id="wp_confirmation_editor_1" :height="250" :editor-shortcodes="editorShortcodes" v-model="confirmation.messageToShow" />
-            </el-form-item>
-
-            <!--After form submisssion behavior-->
-            <el-form-item>
-                <template slot="label">
-                    After Form Submission
-                    <el-tooltip class="item" placement="bottom-start" effect="light">
-                        <div slot="content">
-                            <h3>After Form Submission Behavior</h3>
-                            <p>
-                                Select the behavior after form submission, <br>
-                                whether you want to hide or reset the form.
-                            </p>
-                        </div>
-                        <i class="el-icon-info el-text-info"></i>
-                    </el-tooltip>
-                </template>
-
-                <el-radio v-model="confirmation.samePageFormBehavior"
-                          label="hide_form" border>Hide Form
-                </el-radio>
-
-                <el-radio v-model="confirmation.samePageFormBehavior"
-                          label="reset_form" border>Reset Form
-                </el-radio>
-            </el-form-item>
-        </div>
-
-        <!--Custom page-->
-        <el-form-item v-else-if="confirmation.redirectTo === 'customPage'"
-                      class="conditional-items"
-        >
-            <template slot="label">
-                Select Page
-
-                <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <div slot="content">
-                        <h3>Redirect Form to Page</h3>
-
-                        <p>
-                            Select the page you would like the user to be <br>
-                            redirected to after they have submitted the form.
-                        </p>
-                    </div>
-
-                    <i class="el-icon-info el-text-info" />
-                </el-tooltip>
+        <el-form-item v-if="confirmation.redirectTo === 'samePage'" class="is-stacked">
+            <template #label>
+                <span class="wpjb_field_label">{{ $t('Confirmation message') }}</span>
+                <span class="wpjb_field_help">{{ $t('Shown on the same page after the form is sent.') }}</span>
             </template>
+            <wp-editor editor_id="wp_confirmation_editor_1" :height="250" :editor-shortcodes="editorShortcodes" v-model="confirmation.messageToShow" />
+        </el-form-item>
 
-            <el-select v-model="confirmation.customPage" filterable placeholder="Select">
+        <el-form-item v-if="confirmation.redirectTo === 'samePage'">
+            <template #label>
+                <span class="wpjb_field_label">{{ $t('Form after submission') }}</span>
+                <span class="wpjb_field_help">{{ $t('Hide the form, or clear it for a new application.') }}</span>
+            </template>
+            <el-radio-group v-model="confirmation.samePageFormBehavior">
+                <el-radio-button value="hide_form">{{ $t('Hide the form') }}</el-radio-button>
+                <el-radio-button value="reset_form">{{ $t('Reset form') }}</el-radio-button>
+            </el-radio-group>
+        </el-form-item>
+
+        <el-form-item v-else-if="confirmation.redirectTo === 'customPage'">
+            <template #label>
+                <span class="wpjb_field_label">{{ $t('Redirect page') }}</span>
+                <span class="wpjb_field_help">{{ $t('The page the applicant goes to after sending the form.') }}</span>
+            </template>
+            <el-select v-model="confirmation.customPage" filterable :placeholder="$t('Select a page')" :aria-label="$t('Redirect page')">
                 <el-option
                     v-for="page in pages"
                     :key="page.ID"
@@ -99,41 +45,31 @@
                     :value="page.ID"
                 />
             </el-select>
-            <p>Add the following shortcode to the page to show Submission Confirmation: <code>[wpjobboard_confirmation]</code></p>
+            <p class="wpjb_field_note">{{ $t('To show the confirmation message on that page, add this shortcode to it:') }} <code>[wpjobboard_confirmation]</code></p>
         </el-form-item>
 
-        <!--Custom URL-->
-        <el-form-item class="conditional-items" v-else-if="confirmation.redirectTo == 'customUrl'">
-            <template slot="label">
-                Custom URL
-                <el-tooltip class="item" placement="bottom-start" effect="light">
-                    <div slot="content">
-                        <h3>Redirect Form to URL</h3>
-                        <p>
-                            Enter the URL of the webpage you would <br>
-                            like the user to be redirected to after <br>
-                            they have submitted the form.
-                        </p>
-                    </div>
-                    <i class="el-icon-info el-text-info" />
-                </el-tooltip>
+        <el-form-item v-else-if="confirmation.redirectTo == 'customUrl'">
+            <template #label>
+                <span class="wpjb_field_label">{{ $t('Redirect URL') }}</span>
+                <span class="wpjb_field_help">{{ $t('The web address the applicant goes to after sending the form.') }}</span>
             </template>
-
-            <el-input size="small" placeholder="Redirect URL" v-model="confirmation.customUrl">
-                <popover
-                    @command="(code) => { confirmation.customUrl += code }"
-                    slot="suffix" :data="editorShortcodes"
-                    btnType="text"
-                    buttonText='<i class="el-icon-menu"></i>'>
-                </popover>
+            <el-input placeholder="https://" v-model="confirmation.customUrl" :aria-label="$t('Redirect URL')">
+                <template #suffix>
+                    <popover
+                        @command="(code) => { confirmation.customUrl += code }"
+                        :data="editorShortcodes"
+                        btnType="text"
+                        buttonText="">
+                    </popover>
+                </template>
             </el-input>
-            <p>Add the following shortcode to the page to show Submission Confirmation: <code>[wpjobboard_confirmation]</code></p>
+            <p class="wpjb_field_note">{{ $t('To show the confirmation message on that page, add this shortcode to it:') }} <code>[wpjobboard_confirmation]</code></p>
         </el-form-item>
     </div>
 </template>
 
 <script>
-    import wpEditor from '../../Common/_wp_editor';
+    import wpEditor from '../../Common/_wp_editor.vue';
     import popover from '../../Common/input-popover-dropdown.vue';
 
     export default {
@@ -151,9 +87,9 @@
         data() {
             return {
                 redirectToOptions: {
-                    samePage: 'Same Page',
-                    customPage: 'To a Page',
-                    customUrl: 'To a Custom URL',
+                    samePage: this.$t('Show a message'),
+                    customPage: this.$t('Go to a page'),
+                    customUrl: this.$t('Go to a URL'),
                 }
             }
         },

@@ -1,0 +1,5 @@
+# Ninja Job Board
+
+## Coding rules
+
+Use translations consistently: `__('text', 'ninja-job-board')` in PHP and `$t('text')` in Vue. Do not split translatable sentences across multiple `$t()` calls or concatenate a `$t()` result with a value; use placeholders (`$t('Wait until %s', date)`, `$_n('%s ticket', '%s tickets', n)`) and `$_x('Open', 'Ticket status')` when one English word needs different translations in different places. Vue strings reach translators through the generated `includes/Classes/TransStrings.php`: after adding or changing `$t()` / `$_n()` / `$_x()` strings run `npm run translate` (the static test tier fails on a stale map). Put a `<!-- translators: ... -->` or `// translators: ...` comment on the line directly above any string with placeholders; the lint fails on a placeholder string without one, on em/en dashes in UI text, and on keys with leading or trailing whitespace. Long paragraphs go in `reservedWords.json` under a short `Snake_Case_Key` and the template calls `$t('Snake_Case_Key')`. See `docs/js-translations.md`.

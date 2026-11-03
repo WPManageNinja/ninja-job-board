@@ -13,10 +13,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Entry Methods
- * @since 1.0.0
- */
 class Entry
 {
     protected $formId;
@@ -58,9 +54,41 @@ class Entry
         return $value;
     }
 
+    public function getRawFormattedInput($key)
+    {
+        return isset($this->formattedInput[$key]) ? $this->formattedInput[$key] : '';
+    }
+
+    public function getInputHtml($key)
+    {
+        if (!isset($this->formattedInput[$key])) {
+            return '';
+        }
+        return $this->valueToHtml($this->formattedInput[$key], $key);
+    }
+
+    /**
+     * Converter HTML (e.g. file upload) goes through wp_kses_post(); plain text values are escaped.
+     */
+    protected function valueToHtml($value, $key)
+    {
+        if (is_array($value)) {
+            $converted = $this->maybeNeedToConverHtml($value, $key);
+            if (is_string($converted)) {
+                return wp_kses_post($converted);
+            }
+            $value = implode(', ', array_filter((array)$converted, 'is_scalar'));
+        }
+
+        if (!is_scalar($value)) {
+            return '';
+        }
+
+        return esc_html((string)$value);
+    }
+
     public function getInputFieldsHtmlTable()
     {
-        // We have to make the items as label and value pair first
         $inputItems = $this->formattedInput;
         $labels = (array)Forms::getFormInputLabels($this->formId);
         $items = array();
@@ -70,16 +98,12 @@ class Entry
                 $label = $labels[$itemKey];
             }
 
-            if (is_array($item)) {
-                $item = $this->maybeNeedToConverHtml($item, $itemKey);
-                if (is_array($item)) {
-                    $item = implode(', ', $item);
-                }
-            }
+            $item = $this->valueToHtml($item, $itemKey);
 
             $items[] = array(
                 'label' => $label,
-                'value' => $item
+                'value' => $item,
+                'type'  => ArrayHelper::get($this->getFormattedInputs(), 'input.' . $itemKey . '.type')
             );
         }
 
@@ -103,7 +127,7 @@ class Entry
             return $this->getSubscriptionsHtml();
         }
 
-        if (property_exists($this->submission, $name)) {
+        if (is_object($this->submission) && property_exists($this->submission, $name)) {
             return $this->submission->{$name};
         }
 

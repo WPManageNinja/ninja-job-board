@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Integration tier: real WordPress, real MySQL (strict mode), non-default table prefix (njbt_).
+  Every test runs in a transaction that is rolled back.
+
+  Run it deliberately:
+
+      composer test:integration
+      # or: NJB_INTEGRATION=1 vendor/bin/phpunit -c phpunit.integration.xml
+
+  The bootstrap refuses to start without NJB_INTEGRATION=1, and refuses a site whose table
+  prefix is wp_. Read the safety model in tests/php/integration-bootstrap.php first.
+-->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd"
+         bootstrap="tests/php/integration-bootstrap.php"
+         backupGlobals="false"
+         colors="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         stderr="true"
+         executionOrder="default"
+         cacheResultFile="tests/php/.phpunit.cache/integration-results">
+    <!--
+      stderr="true": PHPUnit's progress output on stdout would flip headers_sent(), which changes
+      how wp_send_json() behaves. Keeping stdout clean keeps handlers behaving as on a real request.
+    -->
+    <testsuites>
+        <testsuite name="Integration Tests">
+            <directory>tests/php/Integration</directory>
+        </testsuite>
+        <!-- Drops and recreates the plugin tables (DDL), so it runs last and outside a transaction -->
+        <testsuite name="Destructive">
+            <directory>tests/php/Destructive</directory>
+        </testsuite>
+    </testsuites>
+
+    <coverage processUncoveredFiles="false">
+        <include>
+            <directory suffix=".php">includes/</directory>
+            <file>uninstall.php</file>
+        </include>
+        <exclude>
+            <directory>includes/libs/</directory>
+            <directory>includes/views/</directory>
+            <directory>includes/Classes/Emogrifier/</directory>
+            <file>includes/Classes/Browser.php</file>
+        </exclude>
+    </coverage>
+</phpunit>

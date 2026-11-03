@@ -1,47 +1,41 @@
 <template>
     <div class="wppaymform_editor">
-        <el-menu mode="horizontal"
-                 :router="true"
-                 :default-active="current_route"
-        >
-            <li role="menuitem" class="el-menu-item">
-                <a :href="form.edit_url">
-                    <i class="dashicons dashicons-edit"></i>
-                    <span>Post Details</span>
-                </a>
-            </li>
-            <el-menu-item
-                v-for="formMenu in form_menus"
-                :key="formMenu.route"
-                :route="{ name: formMenu.route, params: { form_id: form_id } }"
-                :index="formMenu.route">
-                <i :class="formMenu.icon"></i>
-                <span>{{  formMenu.title }}</span>
-            </el-menu-item>
-            <el-menu-item
-                :route="{ name: 'form_entries', params: { form_id: form_id } }"
-                index="entries"
-            >
-                <i class="dashicons dashicons-text"></i>
-                <span>{{  $t('Job Applications') }}</span>
-            </el-menu-item>
-        </el-menu>
-        <div class="payform_editor_wrapper">
+        <div class="wpjb_subbar">
+            <div class="wpjb_subbar_title">
+                <span :title="form.post_title">{{ form.post_title }}</span>
+                <status-badge v-if="form.post_status" type="post" :status="form.post_status"/>
+            </div>
+            <nav :aria-label="$t('Job sections')">
+                <ul class="wpjb_tabs">
+                    <li v-for="formMenu in form_menus" :key="formMenu.route">
+                        <router-link :to="{ name: formMenu.route, params: { form_id: form_id } }"
+                                     :class="['wpjb_tab', { 'is-active': isActiveMenu(formMenu) }]">
+                            {{ formMenu.title }}
+                        </router-link>
+                    </li>
+                    <li v-if="form.edit_url">
+                        <a class="wpjb_tab" :href="form.edit_url">
+                            {{ $t('Edit job post') }}
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div :class="['payform_editor_wrapper', { wpjb_page: !isSettingsRoute }]">
             <router-view :form_id="form_id"></router-view>
         </div>
     </div>
 </template>
 
-<script type="text/babel">
-    import WpEditor from '../Common/_wp_editor';
-    import Clipboard from 'clipboard';
+<script>
+    import WpEditor from '../Common/_wp_editor.vue';
+    import StatusBadge from '../Common/StatusBadge.vue';
     export default {
         name: 'global_wrapper',
-        components: {WpEditor},
+        components: {WpEditor, StatusBadge},
         data() {
             return {
                 form_id: this.$route.params.form_id,
-                current_route: this.$route.name,
                 form_menus: [],
                 editFormModalShow: false,
                 form: {},
@@ -49,83 +43,93 @@
                 saving: false,
             }
         },
+        computed: {
+            isSettingsRoute() {
+                return ['confirmation_settings', 'design_options', 'scheduling_settings'].indexOf(this.$route.name) !== -1;
+            }
+        },
         methods: {
             getForm() {
                 this.fetching = true;
-                this.$adminGet({
-                    route: 'get_form',
-                    form_id: this.form_id
-                })
+                this.$api.get('/forms/' + this.form_id)
                     .then(response => {
-                        this.form = response.data.form;
+                        this.form = response.form;
                     })
-                    .fail(error => {
-
+                    .catch(error => {
+                        this.$showAjaxError(error);
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.fetching = false;
                     })
             },
             editForm() {
-                // validate first
                 if (!this.form.post_title) {
-                    this.$message.error('Please provide form title');
+                    this.$message.error(this.$t('Enter a job title.'));
                     return;
                 }
                 this.saving = true;
-                this.$adminPost({
-                    route: 'update_form',
-                    form_id: this.form.ID,
+                this.$api.post('/forms/' + this.form.ID, {
                     post_title: this.form.post_title,
                     post_content: this.form.post_content,
                     show_title_description: this.form.show_title_description
                 })
                     .then(response => {
-                        this.$message.success(response.data.message);
+                        this.$message.success(response.message);
                         this.editFormModalShow = false;
                     })
-                    .fail(error => {
-                        this.$message.error(error.responseJSON.data.message);
+                    .catch(error => {
+                        this.$message.error(error.message);
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.saving = false;
                     });
             },
             setFormMenu() {
+                // match: the route names that keep the tab highlighted
                 this.form_menus = this.applyFilters('wpf_set_form_menus', [
                     {
+                        route: 'form_entries',
+                        title: this.$t('Applications'),
+                        match: ['form_entries', 'entry']
+                    },
+                    {
                         route: 'edit_form',
-                        title: 'Application Form',
-                        icon: 'dashicons dashicons-lightbulb'
+                        title: this.$t('Application form'),
+                        match: ['edit_form']
                     },
                     {
                         route: 'confirmation_settings',
-                        title: 'Form Settings',
-                        icon: 'dashicons dashicons-admin-settings'
+                        title: this.$t('Form settings'),
+                        match: ['confirmation_settings', 'design_options', 'scheduling_settings']
                     },
                     {
                         route: 'email_settings',
-                        title: 'Email Notifications',
-                        icon: 'dashicons dashicons-email-alt'
+                        title: this.$t('Email notifications'),
+                        match: ['email_settings']
                     },
                     {
                         route: 'email_campaigns',
-                        title: 'Email Broadcast',
-                        icon: 'dashicons dashicons-email-alt2'
-                    },
+                        title: this.$t('Email broadcasts'),
+                        match: ['email_campaigns', 'new_email_campaign', 'view_email_campaign']
+                    }
                 ], this.form_id);
+            },
+            isActiveMenu(menu) {
+                return (menu.match || [menu.route]).indexOf(this.$route.name) !== -1;
+            }
+        },
+        watch: {
+            // Duplicating a job opens the new job in the same view
+            '$route.params.form_id'(formId) {
+                if (formId && formId !== this.form_id) {
+                    this.form_id = formId;
+                    this.getForm();
+                }
             }
         },
         mounted() {
             this.setFormMenu();
             this.getForm();
-            var clipboard = new Clipboard('.copy');
-            clipboard.on('success', (e) => {
-                this.$message({
-                    message: 'Copied to Clipboard!',
-                    type: 'success'
-                });
-            });
         }
     }
 </script>

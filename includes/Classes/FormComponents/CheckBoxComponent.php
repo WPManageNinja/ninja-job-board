@@ -17,43 +17,43 @@ class CheckBoxComponent extends BaseComponent
     {
         return array(
             'type'            => 'checkbox',
-            'editor_title'    => 'Checkbox Field',
+            'editor_title'    => __('Checkbox', 'ninja-job-board'),
             'group'           => 'input',
             'postion_group'   => 'general',
             'editor_elements' => array(
                 'label'         => array(
-                    'label' => 'Field Label',
+                    'label' => __('Field label', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 ),
                 'required'      => array(
-                    'label' => 'Required',
+                    'label' => __('Required', 'ninja-job-board'),
                     'type'  => 'switch',
                     'group' => 'general'
                 ),
                 'default_value' => array(
-                    'label' => 'Default Value',
+                    'label' => __('Default value', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 ),
                 'options'       => array(
-                    'label' => 'Field Options',
+                    'label' => __('Field options', 'ninja-job-board'),
                     'type'  => 'key_pair',
                     'group' => 'general'
                 )
             ),
             'field_options'   => array(
-                'label' => 'Checkboxes',
+                'label' => __('Checkboxes', 'ninja-job-board'),
                 'required' => 'no',
                 'default_value' => '',
                 'options'     => array(
                     array(
-                        'label' => 'Checkbox Item 1',
-                        'value' => 'Checkbox Item 1'
+                        'label' => __('Checkbox item 1', 'ninja-job-board'),
+                        'value' => __('Checkbox item 1', 'ninja-job-board')
                     ),
                     array(
-                        'label' => 'Checkbox Item 2',
-                        'value' => 'Checkbox Item 2'
+                        'label' => __('Checkbox item 2', 'ninja-job-board'),
+                        'value' => __('Checkbox item 2', 'ninja-job-board')
                     )
                 )
             )

@@ -8,10 +8,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Register Menu and Admin Pages
- * @since 1.0.0
- */
 class Menu
 {
     public function register()
@@ -33,8 +29,8 @@ class Menu
 
 
         add_menu_page(
-            __('WP Job Board', 'ninja-job-board'),
-            __('WP Job Board', 'ninja-job-board'),
+            __('Ninja Job Board', 'ninja-job-board'),
+            __('Job Board', 'ninja-job-board'),
             $menuPermission,
             'wpjobboard.php',
             array($this, 'render'),
@@ -63,13 +59,6 @@ class Menu
             $menuPermission,
             'edit-tags.php?taxonomy=wpjb-job-categories&post_type=wp_job_board',
         );
-
-
-//        $submenu['wpjobboard.php']['support'] = array(
-//            __('Support', 'wpjobboard'),
-//            $menuPermission,
-//            'admin.php?page=wpjobboard.php#/support',
-//        );
     }
 
     public function render()
@@ -79,13 +68,11 @@ class Menu
 
     public function enqueueAssets()
     {
-        if (isset($_GET['page']) && $_GET['page'] == 'wpjobboard.php') {
+        if (isset($_GET['page']) && sanitize_text_field(wp_unslash($_GET['page'])) === 'wpjobboard.php') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- page detection only
 
-            if(is_dir(wp_upload_dir()['basedir'] . WPJOBBOARD_UPLOAD_DIR) && !file_exists(wp_upload_dir()['basedir'] . WPJOBBOARD_UPLOAD_DIR . '/index.php')) {
-                file_put_contents(
-                    wp_upload_dir()['basedir'] . WPJOBBOARD_UPLOAD_DIR . '/index.php',
-                    file_get_contents(WPJOBBOARD_DIR.'includes/Classes/File/Stubs/index.stub')
-                );
+            $uploadDir = \WPJobBoard\Classes\File\FileHandler::getUploadDir();
+            if (is_dir($uploadDir['path'])) {
+                \WPJobBoard\Classes\File\FileHandler::ensureProtectedDir($uploadDir['path']);
             }
 
             if (function_exists('wp_enqueue_editor')) {
@@ -99,27 +86,28 @@ class Menu
             if (function_exists('wp_enqueue_editor')) {
                 wp_enqueue_editor();
             }
-            wp_enqueue_script('wpjobboard_boot', WPJOBBOARD_URL . 'assets/js/jobboard-boot.js', array('jquery'), WPJOBBOARD_VERSION, true);
-            // 3rd party developers can now add their scripts here
+            wp_enqueue_script('wpjobboard_boot', WPJOBBOARD_URL . 'assets/admin/boot.js', array(), WPJOBBOARD_VERSION, true);
+            // 3rd party developers can now add their scripts here (they can use window.WPJobBoard)
             do_action('wpjobboard/booting_admin_app');
-            wp_enqueue_script('wpjobboard_admin_app', WPJOBBOARD_URL . 'assets/js/jobboard-admin.js', array('wpjobboard_boot'), WPJOBBOARD_VERSION, true);
-            wp_enqueue_style('wpjobboard_admin_app', WPJOBBOARD_URL . 'assets/css/jobboard-admin.css', array(), WPJOBBOARD_VERSION);
+            wp_enqueue_script('wpjobboard_admin_app', WPJOBBOARD_URL . 'assets/admin/app.js', array('wpjobboard_boot'), WPJOBBOARD_VERSION, true);
+            wp_enqueue_style('wpjobboard_admin_app', WPJOBBOARD_URL . 'assets/admin/app.css', array(), WPJOBBOARD_VERSION);
+            add_filter('script_loader_tag', array($this, 'loadAsModule'), 10, 2);
 
             $payformAdminVars = apply_filters('wpjobboard/admin_app_vars', array(
-                'i18n'                => array(
-                    'All Job Posts' => __('All Job Posts', 'ninja-job-board')
-                ),
+                // Generated from the admin app's $t() calls by i18n.node.cjs (npm run translate)
+                'i18n'                => TransStrings::getStrings(),
                 'applicationStatuses' => GeneralSettings::getApplicationStatuses(),
                 'internalStatuses'    => GeneralSettings::getInternalStatuses(),
-                'image_upload_url'    => admin_url('admin-ajax.php?action=wpjb_global_settings_handler&route=wpjb_upload_image'),
+                'rest'                => array(
+                    'root'  => esc_url_raw(rest_url(\WPJobBoard\Http\Router::NAMESPACE_V1)),
+                    'nonce' => wp_create_nonce('wp_rest')
+                ),
                 'forms_count'         => Forms::getTotalCount(),
                 'assets_url'          => WPJOBBOARD_URL . 'assets/',
-                'ajaxurl'             => admin_url('admin-ajax.php'),
                 'printStyles'         => apply_filters('wpjobboard/print_styles', [
-                    WPJOBBOARD_URL . 'assets/css/jobboard-admin.css',
+                    WPJOBBOARD_URL . 'assets/admin/app.css',
                     WPJOBBOARD_URL . 'assets/css/jobboard-print.css',
                 ]),
-                'ace_path_url'        => WPJOBBOARD_URL . 'assets/libs/ace'
             ));
 
             wp_localize_script('wpjobboard_boot', 'wpJobBoardsAdmin', $payformAdminVars);
@@ -134,9 +122,18 @@ class Menu
 
     }
 
+    public function loadAsModule($tag, $handle)
+    {
+        if ($handle === 'wpjobboard_admin_app' && strpos($tag, 'type="module"') === false) {
+            $tag = preg_replace('/<script(?![^>]*type=)/', '<script type="module"', $tag, 1);
+            $tag = str_replace(array("type='text/javascript'", 'type="text/javascript"'), 'type="module"', $tag);
+        }
+        return $tag;
+    }
+
     public function getIcon()
     {
-        $svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220.17 200.16"><defs><style>.a{fill:#fff;}</style></defs><title>Asset 860</title><path class="a" d="M168.28,56.61H56.89A15.88,15.88,0,0,0,41,72.5V251.88a15.89,15.89,0,0,0,15.89,15.89H168.28a15.9,15.9,0,0,0,15.89-15.89V72.5a15.89,15.89,0,0,0-15.88-15.89Zm-23,14.88a14.05,14.05,0,1,1-14,14.06h0A14,14,0,0,1,145.25,71.49Zm-89.69,5.6a4.67,4.67,0,0,1,4.67-4.65h75a16.12,16.12,0,0,0-2.52,2.14,15.54,15.54,0,0,0-4.38,10.86A16.15,16.15,0,0,0,137.71,100a11,11,0,0,0,1.07.45H60.24a4.68,4.68,0,0,1-4.68-4.67h0ZM169.08,251a1.41,1.41,0,0,1-1.41,1.4H57a1.41,1.41,0,0,1-1.41-1.4h0v-4.45a1.4,1.4,0,0,1,1.41-1.4H167.67a1.4,1.4,0,0,1,1.41,1.4h0Zm0-27.93H55.57V207.29A1.41,1.41,0,0,1,57,205.88H167.67a1.41,1.41,0,0,1,1.41,1.41Zm0-41.61H55.57V165.56A1.41,1.41,0,0,1,57,164.15H167.67a1.41,1.41,0,0,1,1.41,1.41Zm0-41.6H55.57v-16a1.4,1.4,0,0,1,1.41-1.4H167.67a1.4,1.4,0,0,1,1.41,1.4Zm0-44.09a4.7,4.7,0,0,1-4.68,4.67h0l-5.06-5.18-.41.38,0,0-.35-.36A15.31,15.31,0,0,0,160.94,91a12.52,12.52,0,0,0,.53-1.78,16.08,16.08,0,0,0,.34-2,13.54,13.54,0,0,0,.06-1.8,14,14,0,0,0-.18-2.24,15.9,15.9,0,0,0-5-9.23,16.45,16.45,0,0,0-1.77-1.45h9.55a4.67,4.67,0,0,1,4.67,4.65Z" transform="translate(-41 -56.61)"/></svg>';
+        $svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill="black" fill-rule="evenodd" transform="rotate(-6 10 12)" d="M6 5.5h8a2 2 0 0 1 2 2v9.5a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-9.5a2 2 0 0 1 2 -2zM7.5 9.5h5a1 1 0 0 1 1 1v0a1 1 0 0 1 -1 1h-5a1 1 0 0 1 -1 -1v-0a1 1 0 0 1 1 -1zM7.25 13h4.0a0.75 0.75 0 0 1 0.75 0.75v0.0a0.75 0.75 0 0 1 -0.75 0.75h-4.0a0.75 0.75 0 0 1 -0.75 -0.75v-0.0a0.75 0.75 0 0 1 0.75 -0.75zM7.25 16h5.5a0.75 0.75 0 0 1 0.75 0.75v0.0a0.75 0.75 0 0 1 -0.75 0.75h-5.5a0.75 0.75 0 0 1 -0.75 -0.75v-0.0a0.75 0.75 0 0 1 0.75 -0.75z"/><circle fill="black" cx="9.6" cy="4" r="2.8"/></svg>';
         return 'data:image/svg+xml;base64,' . base64_encode($svg);
     }
 
@@ -148,50 +145,41 @@ class Menu
 
 
         add_action('admin_footer', function () {
-            echo '<script type="text/javascript">jQuery("#toplevel_page_wpjobboard").addClass("wp-has-current-submenu wp-menu-open");</script>';
+            wp_print_inline_script_tag('jQuery("#toplevel_page_wpjobboard").addClass("wp-has-current-submenu wp-menu-open");');
         });
 
         wp_enqueue_style('wpjobboard_admin_edit_app', WPJOBBOARD_URL . 'assets/css/jobboard-edit.css', array(), WPJOBBOARD_VERSION);
         $urlBase = admin_url('admin.php?page=wpjobboard.php#/edit-form/' . $post->ID . '/');
+        $editUrl = get_edit_post_link($post->ID);
         ?>
-        <ul role="menubar" class="el-menu--horizontal el-menu">
-            <li role="menuitem" class="el-menu-item  is-active" tabindex="0">
-                <a href="#">
-                    <i class="dashicons dashicons-edit"></i>
-                    <span><?php _e('Post Details', 'wpjobboard'); ?></span>
-                </a>
-            </li>
-            <li role="menuitem" tabindex="1" class="el-menu-item">
-                <a href="<?php echo esc_url($urlBase); ?>form-builder">
-                    <i class="dashicons dashicons-lightbulb"></i>
-                    <span><?php _e('Application Form', 'wpjobboard');?></span>
-                </a>
-            </li>
-            <li role="menuitem" tabindex="2" class="el-menu-item" style="border-bottom-color: transparent;">
-                <a href="<?php echo esc_url($urlBase); ?>settings/confirmation_settings">
-                    <i class="dashicons dashicons-admin-settings"></i>
-                    <span><?php _e('Form Settings', 'wpjobboard');?></span>
-                </a>
-            </li>
-            <li role="menuitem" tabindex="3" class="el-menu-item" style="border-bottom-color: transparent;">
-                <a href="<?php echo esc_url($urlBase); ?>email_settings">
-                    <i class="dashicons dashicons-email-alt"></i>
-                    <span><?php _e('Email Notifications', 'wpjobboard');?></span>
-                </a>
-            </li>
-            <li role="menuitem" tabindex="4" class="el-menu-item" style="border-bottom-color: transparent;">
-                <a href="<?php echo esc_url($urlBase); ?>form_entries">
-                    <i class="dashicons dashicons-text"></i>
-                    <span><?php _e('Job Applications', 'wpjobboard');?></span>
-                </a>
-            </li>
-        </ul>
+        <nav class="wpjb_edit_nav" aria-label="<?php esc_attr_e('Job sections', 'ninja-job-board'); ?>">
+            <ul class="wpjb_edit_tabs">
+                <li>
+                    <a class="wpjb_edit_tab" href="<?php echo esc_url($urlBase . 'form_entries'); ?>"><?php esc_html_e('Applications', 'ninja-job-board'); ?></a>
+                </li>
+                <li>
+                    <a class="wpjb_edit_tab" href="<?php echo esc_url($urlBase . 'form-builder'); ?>"><?php esc_html_e('Application Form', 'ninja-job-board'); ?></a>
+                </li>
+                <li>
+                    <a class="wpjb_edit_tab" href="<?php echo esc_url($urlBase . 'settings/confirmation_settings'); ?>"><?php esc_html_e('Form Settings', 'ninja-job-board'); ?></a>
+                </li>
+                <li>
+                    <a class="wpjb_edit_tab" href="<?php echo esc_url($urlBase . 'email_settings'); ?>"><?php esc_html_e('Email Notifications', 'ninja-job-board'); ?></a>
+                </li>
+                <li>
+                    <a class="wpjb_edit_tab" href="<?php echo esc_url($urlBase . 'email_broadcast'); ?>"><?php esc_html_e('Email Broadcast', 'ninja-job-board'); ?></a>
+                </li>
+                <li>
+                    <a class="wpjb_edit_tab is-active" aria-current="page" href="<?php echo esc_url($editUrl ? $editUrl : '#'); ?>"><?php esc_html_e('Edit job post', 'ninja-job-board'); ?></a>
+                </li>
+            </ul>
+        </nav>
         <?php
     }
 
     public function maybeMenuExpand()
     {
-        if (isset($_GET['taxonomy']) && $_GET['taxonomy'] == 'wpjb-job-categories') {
+        if (isset($_GET['taxonomy']) && sanitize_key(wp_unslash($_GET['taxonomy'])) == 'wpjb-job-categories') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- menu highlight only
             ?>
             <script type="text/javascript">
                 jQuery(document).ready(function ($) {
@@ -200,7 +188,7 @@ class Menu
                     $element.addClass('current');
                     $element.parent().addClass('current');
                 });
-            </script>';
+            </script>
 <?php
         }
     }

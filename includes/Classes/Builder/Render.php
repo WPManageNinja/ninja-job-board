@@ -10,10 +10,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Ajax Handler Class
- * @since 1.0.0
- */
 class Render
 {
     public function render($formId, $show_title = false)
@@ -70,7 +66,10 @@ class Render
     public function renderFormHeader($form, $steps = [])
     {
         global $wp;
-        $currentUrl = home_url(add_query_arg($_GET, $wp->request));;
+        $currentUrl = home_url(add_query_arg(array(), $wp->request));
+        if (!empty($_SERVER['QUERY_STRING'])) {
+            $currentUrl .= '?' . sanitize_text_field(wp_unslash($_SERVER['QUERY_STRING']));
+        }
         $labelPlacement = $form->designSettings['labelPlacement'];
         $btnPosition = ArrayHelper::get($form->designSettings, 'submit_button_position');
 
@@ -115,15 +114,15 @@ class Render
         $wrapperClassStr = implode(' ', $formWrapperClasses);
 
         ?>
-        <div class="<?php echo esc_html($wrapperClassStr); ?>">
+        <div class="<?php echo esc_attr($wrapperClassStr); ?>">
         <?php if ($form->show_title == 'yes'): ?>
         <h3 class="wp_form_title"><?php echo esc_html($form->post_title); ?></h3>
     <?php endif; ?>
         <?php do_action('wpjobboard/form_render_before', $form); ?>
-        <form <?php wpJobBoardPrintInternal($this->builtAttributes($formAttributes)); ?>>
+        <form <?php echo $this->builtAttributes($formAttributes); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in builtAttributes() ?>>
         <input type="hidden" name="__wpjb_form_id" value="<?php echo intval($form->ID); ?>"/>
         <input type="hidden" name="__wpjb_current_url" value="<?php echo esc_url($currentUrl); ?>">
-        <input type="hidden" name="__wpjb_current_page_id" value="<?php echo get_the_ID(); ?>">
+        <input type="hidden" name="__wpjb_current_page_id" value="<?php echo intval(get_the_ID()); ?>">
         <?php do_action('wpjobboard/form_render_start_form', $form); ?>
         <?php if ($steps): ?>
         <?php do_action('wpjobboard/form_step_header', $steps, $form); ?>
@@ -137,7 +136,7 @@ class Render
         $submitButton = Forms::getButtonSettings($form->ID);
         $processingText = $submitButton['processing_text'];
         if (!$processingText) {
-            $processingText = __('Please Wait…', 'ninja-job-board');
+            $processingText = __('Please wait…', 'ninja-job-board');
         }
         $button_text = $submitButton['button_text'];
         if (!$button_text) {
@@ -155,7 +154,7 @@ class Render
         ?>
         <?php do_action('wpjobboard/form_render_before_submit_button', $form); ?>
         <div class="wpjb_form_group wpjb_form_submissions">
-            <button <?php echo wp_kses_post($this->builtAttributes($buttonAttributes)); ?>>
+            <button <?php echo $this->builtAttributes($buttonAttributes); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in builtAttributes() ?>>
                 <span class="wpjb_txt_normal"><?php wpJobBoardPrintInternal($this->parseText($button_text, $form->ID)); ?></span>
                 <span style="display: none;" class="wpjb_txt_loading">
                     <?php  wpJobBoardPrintInternal($this->parseText($processingText, $form->ID)); ?>
@@ -193,8 +192,8 @@ class Render
     {
         do_action('wpjobboard/wpjobboard_adding_assets', $form);
 
-        wp_register_script('flatpickr', WPJOBBOARD_URL . 'assets/libs/flatpickr/flatpickr.min.js', array(), '4.5.7', true);
-        wp_register_style('flatpickr', WPJOBBOARD_URL . 'assets/libs/flatpickr/flatpickr.min.css', array(), '4.5.7', 'all');
+        wp_register_script('flatpickr', WPJOBBOARD_URL . 'assets/libs/flatpickr/flatpickr.min.js', array(), '4.6.13', true);
+        wp_register_style('flatpickr', WPJOBBOARD_URL . 'assets/libs/flatpickr/flatpickr.min.css', array(), '4.6.13', 'all');
 
         wp_enqueue_script('wpjobboard_public', WPJOBBOARD_URL . 'assets/js/jobboard-public.js', array('jquery'), WPJOBBOARD_VERSION, true);
         wp_enqueue_style('wpjobboard_public', WPJOBBOARD_URL . 'assets/css/wp_job_board-public.css', array(), WPJOBBOARD_VERSION);
@@ -203,21 +202,40 @@ class Render
             'form_id' => $form->ID
         ), $form));
 
-        wp_register_script('dropzone', WPJOBBOARD_URL . 'assets/libs/dropzone/dropzone.min.js', array('jquery'), '5.5.0', true);
+        wp_register_script('dropzone', WPJOBBOARD_URL . 'assets/libs/dropzone/dropzone.min.js', array('jquery'), '5.9.3', true);
         wp_register_script('wpjobboard_file_upload', WPJOBBOARD_URL . 'assets/js/fileupload.js', array('jquery', 'wpjobboard_public', 'dropzone'), WPJOBBOARD_VERSION, true);
 
         wp_localize_script('wpjobboard_public', 'wp_job_board_general', array(
             'ajax_url'  => admin_url('admin-ajax.php'),
+            'nonce'     => wp_create_nonce('wpjobboard_public_nonce'),
+            'i18n'      => array(
+                'submit_error'      => __('Something went wrong while submitting the form. Please try again.', 'ninja-job-board'),
+                /* translators: %s: raw response text from the server */
+                'server_response'   => __('Server response: %s', 'ninja-job-board'),
+                /* translators: %s: field label */
+                'field_required'    => __('%s is required.', 'ninja-job-board'),
+                'file_upload'       => __('File upload', 'ninja-job-board'),
+                /* translators: Do not translate {{filesize}} and {{maxFilesize}}. They are replaced with file sizes in MB. */
+                'file_too_big'      => __('The file is too big ({{filesize}} MB). Maximum file size: {{maxFilesize}} MB.', 'ninja-job-board'),
+                'invalid_file_type' => __('You cannot upload files of this type.', 'ninja-job-board'),
+                /* translators: Do not translate {{statusCode}}. It is replaced with the HTTP status code. */
+                'response_error'    => __('The server responded with code {{statusCode}}.', 'ninja-job-board'),
+                'cancel_upload'     => __('Cancel upload', 'ninja-job-board'),
+                'upload_canceled'   => __('Upload canceled.', 'ninja-job-board'),
+                'cancel_confirm'    => __('Are you sure you want to cancel this upload?', 'ninja-job-board'),
+                'remove_file'       => __('Remove file', 'ninja-job-board'),
+                'max_files'         => __('You cannot upload any more files.', 'ninja-job-board')
+            ),
             'date_i18n' => array(
                 'previousMonth'    => __('Previous Month', 'ninja-job-board'),
                 'nextMonth'        => __('Next Month', 'ninja-job-board'),
                 'months'           => [
-                    'sorthand' => [
+                    'shorthand' => [
                         __('Jan', 'ninja-job-board'),
                         __('Feb', 'ninja-job-board'),
                         __('Mar', 'ninja-job-board'),
                         __('Apr', 'ninja-job-board'),
-                        __('May', 'ninja-job-board'),
+                        _x('May', 'short month name', 'ninja-job-board'),
                         __('Jun', 'ninja-job-board'),
                         __('Jul', 'ninja-job-board'),
                         __('Aug', 'ninja-job-board'),
@@ -275,6 +293,7 @@ class Render
                     30,
                     31
                 ],
+                'firstDayOfWeek'   => (int)get_option('start_of_week', 0),
                 'rangeSeparator'   => __(' to ', 'ninja-job-board'),
                 'weekAbbreviation' => __('Wk', 'ninja-job-board'),
                 'scrollTitle'      => __('Scroll to increment', 'ninja-job-board'),
@@ -297,7 +316,7 @@ class Render
     {
         $atts = ' ';
         foreach ($attributes as $attributeKey => $attribute) {
-            $atts .= $attributeKey . "='" . $attribute . "' ";
+            $atts .= sanitize_key($attributeKey) . '="' . esc_attr($attribute) . '" ';
         }
         return $atts;
     }

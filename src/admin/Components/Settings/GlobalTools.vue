@@ -1,71 +1,62 @@
 <template>
-    <div>
-        <div class="all_payforms_wrapper payform_section wpf_min_width">
-            <div class="payform_section_header">
-                <h3 class="payform_section_title">
-                    {{ $t('Tools') }}
-                </h3>
-            </div>
-            <div class="payform_section_body">
-                <div class="wpf_settings_section">
-                    <div class="sub_section_header">
-                        <h3>{{ $t('Export From') }}</h3>
-                        <p>You can export any form as .json format that you have and then you can import the form in any
-                            in
-                            WPJobBoard</p>
-                    </div>
-                    <hr/>
-                    <div v-loading="fetching_forms" class="sub_section_body">
-                        <br/>
-                        <el-form label-position="top">
-                            <el-form-item label="Select the form to export">
-                                <el-select size="mini" v-model="export_id" placeholder="Select Form">
-                                    <el-option
-                                        v-for="item in forms"
-                                        :key="item.ID"
-                                        :label="'#'+item.ID+' - '+item.post_title"
-                                        :value="item.ID">
-                                    </el-option>
-                                </el-select>
-                                <el-button @click="exportForm" :disabled="!export_id" type="primary" size="mini">
-                                    Export
-                                </el-button>
-                            </el-form-item>
-                        </el-form>
-                    </div>
-                </div>
-                <div class="wpf_settings_section">
-                    <div class="sub_section_header">
-                        <h3>{{ $t('Import From') }}</h3>
-                        <p>You can import any form that is exported from wppayfrom</p>
-                    </div>
-                    <hr/>
-                    <div class="sub_section_body">
-                        <br/>
-                        <form enctype="multipart/form-data" id="upload_json_form">
-                            <input type="hidden" name="action" value="wpjobboard_global_tools"/>
-                            <input type="hidden" name="route" value="upload_form"/>
-                            <label>
-                                Upload .json file
-                                <input required type="file" name="import_file"/>
-                            </label>
-                            <el-button v-loading="uploadingForm" @click="importForm" type="primary" size="mini">Import Form</el-button>
-                        </form>
-
-                        <div v-if="last_uploaded_form">
-                            <hr />
-                            <p>Form successfully imported. <router-link :to="{name: 'edit_form', params: { form_id: last_uploaded_form.ID }}">Click here to view</router-link></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="wpjb_settings_page">
+        <div class="payform_section_header">
+            <h3 class="payform_section_title">{{ $t('Import & export') }}</h3>
         </div>
+
+        <section class="wpjb_card wpjb_setting_card" aria-labelledby="wpjb_export_title">
+            <div class="wpjb_card_head">
+                <h3 id="wpjb_export_title">{{ $t('Export a job') }}</h3>
+                <p>{{ $t('Download a job and its application form as a .json file. Import it on any site that runs Ninja Job Board.') }}</p>
+            </div>
+            <div v-loading="fetching_forms" class="wpjb_card_body">
+                <div class="wpjb_tool_row">
+                    <el-select v-model="export_id" filterable :placeholder="$t('Select a job')" :aria-label="$t('Job to export')">
+                        <el-option
+                            v-for="item in forms"
+                            :key="item.ID"
+                            :label="'#'+item.ID+' - '+item.post_title"
+                            :value="item.ID">
+                        </el-option>
+                    </el-select>
+                    <el-button @click="exportForm" :disabled="!export_id" type="primary" :icon="Download">
+                        {{ $t('Export JSON') }}
+                    </el-button>
+                </div>
+            </div>
+        </section>
+
+        <section class="wpjb_card wpjb_setting_card" aria-labelledby="wpjb_import_title">
+            <div class="wpjb_card_head">
+                <h3 id="wpjb_import_title">{{ $t('Import a job') }}</h3>
+                <p>{{ $t('Upload a .json file exported from Ninja Job Board. The import creates a new job.') }}</p>
+            </div>
+            <div class="wpjb_card_body">
+                <form enctype="multipart/form-data" ref="upload_json_form" class="wpjb_tool_row" @submit.prevent="importForm">
+                    <input required type="file" name="import_file" accept=".json,application/json"
+                           ref="import_file" :aria-label="$t('JSON file to import')"/>
+                    <el-button :loading="uploadingForm" @click="importForm" type="primary" :icon="Upload">
+                        {{ $t('Import') }}
+                    </el-button>
+                </form>
+
+                <p v-if="last_uploaded_form" class="wpjb_tool_result" role="status">
+                    {{ $t('Job imported.') }}
+                    <router-link :to="{name: 'edit_form', params: { form_id: last_uploaded_form.ID }}">{{ $t('Open the job') }}</router-link>
+                </p>
+            </div>
+        </section>
     </div>
 </template>
 
-<script type="text/babel">
+<script>
+    import { Download, Upload } from '@element-plus/icons-vue';
+
     export default {
         name: 'global_tools',
+        setup() {
+            return { Download, Upload };
+        },
         data() {
             return {
                 forms: [],
@@ -80,53 +71,43 @@
         methods: {
             getForms() {
                 this.fetching_forms = true;
-                this.$get({
-                    action: 'wpjobboard_global_tools',
-                    route: 'get_forms'
-                })
+                this.$api.get('/forms/available')
                     .then(response => {
-                        this.forms = response.data.forms;
+                        this.forms = response.forms;
                     })
-                    .fail(error => {
+                    .catch(error => {
                         this.$showAjaxError(error);
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.fetching_forms = false;
                     });
             },
             exportForm() {
-                let query = jQuery.param({
-                    action: 'wpjobboard_global_tools',
-                    route: 'export_form',
-                    form_id: this.export_id
-                });
-                window.location.href = window.wpJobBoardsAdmin.ajaxurl + '?' + query;
-                this.$notify.success('Exporting form');
+                window.location.href = this.$api.downloadUrl('/forms/' + this.export_id + '/export');
+                this.$notify.success(this.$t('Downloading the job file.'));
                 this.export_id = '';
             },
             importForm() {
-                var that = this;
-                jQuery.ajax({
-                    url: window.wpJobBoardsAdmin.ajaxurl,
-                    type: "POST",
-                    data: new FormData(jQuery('#upload_json_form')[0]),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    beforeSend() {
-                        that.uploadingForm = true;
-                    },
-                    success(response) {
-                        that.$notify.success(response.data.message);
-                        that.last_uploaded_form = response.data.form;
-                        jQuery('#upload_json_form')[0].reset();
-                        that.uploadingForm = false;
-                    },
-                    error (error) {
-                        that.$showAjaxError(error);
-                        that.uploadingForm = false;
-                    }
-                });
+                const file = this.$refs.import_file.files[0];
+                if (!file) {
+                    this.$message.error(this.$t('Select a .json file to import.'));
+                    return;
+                }
+                const formData = new FormData();
+                formData.append('import_file', file);
+                this.uploadingForm = true;
+                this.$api.upload('/forms/import', formData)
+                    .then(response => {
+                        this.$notify.success(response.message);
+                        this.last_uploaded_form = response.form;
+                        this.$refs.upload_json_form.reset();
+                    })
+                    .catch(error => {
+                        this.$showAjaxError(error);
+                    })
+                    .finally(() => {
+                        this.uploadingForm = false;
+                    });
             }
         },
         mounted() {

@@ -1,80 +1,78 @@
 <template>
-    <div class="form_entries_wrapper">
-
-        <div v-loading="fetching" class="wpf_entries">
-            <el-table
-                :data="allEntry"
-                style="width: 100%"
-                :row-class-name="tableRowClassName"
-            >
-                <el-table-column
-                    label="ID"
-                    width="60">
-                    <template slot-scope="scope">
-                        <router-link
-                            :to="{ name: 'entry', params: { entry_id: scope.row.id, form_id: scope.row.form_id }}">
-                            {{scope.row.id}}
-                        </router-link>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    v-if="!router_form_id"
-                    label="Form"
-                    width="220">
-                    <template slot-scope="scope">
-                        {{ scope.row.post_title }} ({{ scope.row.form_id }})
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    label="Name"
-                    width="160"
-                    prop="applicant_name">
-                </el-table-column>
-                <el-table-column
-                    label="Email"
-                    prop="applicant_email"
-                >
-                    <template slot-scope="scope">
-                        {{ scope.row.applicant_email }}
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    label="Application Status">
-                    <template slot-scope="scope">
-                    <span :class="'wpf_pay_status_'+scope.row.application_status">
-                        <i :class="getApplicationStatusIcon(scope.row.application_status)"/>
-                        {{ scope.row.application_status }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    label="Internal Status">
-                    <template slot-scope="scope">
-                    <span :class="'wpf_pay_status_'+scope.row.status">
-                        {{ scope.row.status }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    label="Submitted At"
-                    prop="created_at">
-                </el-table-column>
-                <el-table-column
-                    label="Actions"
-                    width="130"
-                    fixed="right">
-                    <template slot-scope="scope">
-                        <el-button-group>
-                            <el-button @click="goToViewRoute(scope.row)" type="primary" icon="el-icon-view" size="mini"></el-button>
-                            <el-button @click="showDeleteConformation(scope.row)" type="danger" size="mini" icon="el-icon-delete"></el-button>
-                        </el-button-group>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </div>
-        <div class="wpf_entry_pagination">
+    <div class="form_entries_wrapper wpjb_entries_table">
+        <el-table
+            v-loading="fetching"
+            :data="allEntry"
+            style="width: 100%"
+            :row-class-name="tableRowClassName"
+            :empty-text="$t('No applications match these filters.')"
+        >
+            <el-table-column :label="$t('Applicant')" min-width="190">
+                <template #default="scope">
+                    <router-link
+                        class="wpjb_cell_primary wpjb_cell_link"
+                        :to="{ name: 'entry', params: { entry_id: scope.row.id, form_id: scope.row.form_id }}">
+                        {{ scope.row.applicant_name || $t('Unnamed applicant') }}
+                    </router-link>
+                    <span class="wpjb_cell_secondary">{{ scope.row.applicant_email }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column v-if="!router_form_id" :label="$t('Job')" min-width="150">
+                <template #default="scope">
+                    <router-link
+                        class="wpjb_cell_job"
+                        :to="{ name: 'form_entries', params: { form_id: scope.row.form_id } }">
+                        {{ scope.row.post_title || ('#' + scope.row.form_id) }}
+                    </router-link>
+                </template>
+            </el-table-column>
+            <el-table-column :label="$t('Status')" width="120">
+                <template #default="scope">
+                    <status-badge type="application" :status="scope.row.application_status"/>
+                </template>
+            </el-table-column>
+            <el-table-column :label="$t('Internal')" width="140">
+                <template #default="scope">
+                    <status-badge type="internal" :status="scope.row.status"/>
+                </template>
+            </el-table-column>
+            <el-table-column :label="$t('Submitted')" width="130">
+                <template #default="scope">
+                    <span class="wpjb_num">{{ $dateFormat(scope.row.created_at, 'MMM D, YYYY') }}</span>
+                    <span class="wpjb_cell_secondary wpjb_num">{{ $dateFormat(scope.row.created_at, 'h:mm A') }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column width="96" align="right" class-name="wpjb_actions_cell">
+                <template #header>
+                    <span class="screen-reader-text">{{ $t('Actions') }}</span>
+                </template>
+                <template #default="scope">
+                    <div class="wpjb_icon_actions">
+                        <el-button
+                            text
+                            :icon="View"
+                            :aria-label="/* translators: %s is the applicant name */ $t('View application from %s', scope.row.applicant_name || scope.row.applicant_email || '')"
+                            :title="$t('View application')"
+                            @click="goToViewRoute(scope.row)"
+                        />
+                        <el-button
+                            text
+                            class="is-danger"
+                            :icon="Delete"
+                            :aria-label="/* translators: %s is the applicant name */ $t('Delete application from %s', scope.row.applicant_name || scope.row.applicant_email || '')"
+                            :title="$t('Delete application')"
+                            @click="showDeleteConformation(scope.row)"
+                        />
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table>
+        <div v-if="pagination.total" class="wpjb_pagination">
             <el-pagination
+                background
                 @size-change="pageSizeChange"
                 @current-change="changePage"
-                :current-page.sync="pagination.current_page"
+                v-model:current-page="pagination.current_page"
                 :page-sizes="page_sizes"
                 :page-size="pagination.per_page"
                 layout="total, sizes, prev, pager, next"
@@ -82,29 +80,42 @@
             </el-pagination>
         </div>
 
-        <!--Delete Entry Confimation Modal-->
         <el-dialog
-            title="Are You Sure, You want to delete this Entry?"
-            :visible.sync="delete_pop_up"
+            class="wpjb_dialog"
+            :title="$t('Delete this application?')"
+            v-model="delete_pop_up"
             :before-close="handleDeleteClose"
-            width="60%">
-            <div v-if="deleting_row" class="modal_body">
-                <p>All the data assoscilate with this entry will be deleted, including payment information and other associate information</p>
-                <p>You are deleting entry id: <b>{{ deleting_row.id }}</b>. <br />Form Title: <b>{{ deleting_row.post_title }}</b></p>
-            </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="delete_pop_up = false">Cancel</el-button>
-                <el-button type="primary" @click="deleteEntryNow()">Confirm Delete</el-button>
-            </span>
+            width="480px">
+            <template v-if="deleting_row">
+                <p v-if="deleting_row.post_title">
+                    <!-- translators: %1$s is the applicant name or email, %2$s is the job title -->
+                    {{ $t('The application from %1$s for %2$s will be deleted permanently. You cannot undo this.', deleting_row.applicant_name || deleting_row.applicant_email, deleting_row.post_title) }}
+                </p>
+                <p v-else>
+                    <!-- translators: %s is the applicant name or email -->
+                    {{ $t('The application from %s will be deleted permanently. You cannot undo this.', deleting_row.applicant_name || deleting_row.applicant_email) }}
+                </p>
+            </template>
+            <template #footer>
+                <el-button @click="delete_pop_up = false">{{ $t('Cancel') }}</el-button>
+                <el-button type="danger" :loading="deletetingItem" @click="deleteEntryNow()">{{ $t('Delete application') }}</el-button>
+            </template>
         </el-dialog>
     </div>
 </template>
 
-<script type="text/babel">
-    import fromatPrice from '../../../common/formatPrice';
+<script>
+    import { View, Delete } from '@element-plus/icons-vue';
+    import StatusBadge from './StatusBadge.vue';
+
     export default {
         name: 'entries_table',
+        components: { StatusBadge },
         props: ['form_id', 'entry_ticker', 'application_status', 'search_string', 'status'],
+        emits: ['getEntries', 'deleted'],
+        setup() {
+            return { View, Delete };
+        },
         watch: {
             form_id() {
                 this.pagination.current_page = 1;
@@ -158,23 +169,24 @@
             getEntries() {
                 this.fetching = true;
                 let query = {
-                    action: 'wpjb_submission_endpoints',
-                    route: 'get_submissions',
-                    form_id: parseInt(this.form_id),
+                    form_id: parseInt(this.form_id) || 0,
                     application_status: this.application_status,
                     status: this.status,
-                    page_number: this.pagination.current_page,
+                    page: this.pagination.current_page,
                     per_page: this.pagination.per_page,
-                    search_string: this.search_string
+                    search: this.search_string
                 }
 
-                this.$get(query)
+                this.$api.get('/applications', query)
                     .then(response => {
-                        this.allEntry = response.data.submissions;
-                        this.pagination.total = response.data.total;
-                        this.$emit('getEntries', response.data);
+                        this.allEntry = response.submissions;
+                        this.pagination.total = response.total;
+                        this.$emit('getEntries', response);
                     })
-                    .always(() => {
+                    .catch(error => {
+                        this.$showAjaxError(error);
+                    })
+                    .finally(() => {
                         this.fetching = false;
                     });
             },
@@ -182,26 +194,25 @@
                 this.deleting_row = row;
                 this.delete_pop_up = true;
             },
-            handleDeleteClose() {
+            handleDeleteClose(done) {
                 this.deleting_row = null;
                 this.delete_pop_up = false;
+                if (typeof done === 'function') {
+                    done();
+                }
             },
             deleteEntryNow() {
                 this.deletetingItem = true;
-                this.$post({
-                    action: 'wpjb_submission_endpoints',
-                    route: 'delete_submission',
-                    submission_id: this.deleting_row.id,
-                    form_id: this.deleting_row.form_id
-                })
+                this.$api.delete(`/applications/${this.deleting_row.id}`)
                     .then(response => {
-                        this.$message.success(response.data.message);
+                        this.$message.success(response.message);
                         this.getEntries();
+                        this.$emit('deleted', response);
                     })
-                    .fail(error => {
-                        this.$message.error(error.responseJSON.data.message);
+                    .catch(error => {
+                        this.$message.error(error.message);
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.deletetingItem = false;
                         this.handleDeleteClose();
                     });
@@ -210,13 +221,6 @@
                 this.pagination.current_page = page;
                 this.pagination.page_number = page;
                 this.getEntries()
-            },
-            getFormattedMoney(row) {
-                let amount = row.payment_total;
-                if (!amount) {
-                    return 'n/a';
-                }
-                return fromatPrice(amount, row.currencySettings);
             },
             goToViewRoute(row) {
                 this.$router.push({
@@ -228,19 +232,7 @@
                 this.pagination.per_page = pageSize;
                 this.getEntries()
             },
-            getApplicationStatusIcon(status) {
-                if (status == 'pending') {
-                    return 'el-icon-time';
-                } else if (status == 'paid') {
-                    return 'el-icon-check';
-                } else if (status == 'failed') {
-                    return 'el-icon-error';
-                } else if (status == 'refunded') {
-                    return 'el-icon-warning';
-                }
-                return '';
-            },
-            tableRowClassName({row, rowIndex}) {
+            tableRowClassName({row}) {
                 return 'wpf_row_' + row.application_status;
             },
         },

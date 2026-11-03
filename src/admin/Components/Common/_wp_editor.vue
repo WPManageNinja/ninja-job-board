@@ -6,7 +6,7 @@
             :class="{'popover-wrapper-plaintext': !hasWpEditor}"
             :data="editorShortcodes"
             @command="handleCommand"></popover>
-        <textarea v-if="hasWpEditor" class="wp_vue_editor" :id="editor_id">{{value}}</textarea>
+        <textarea v-if="hasWpEditor" class="wp_vue_editor" :id="editor_id">{{modelValue}}</textarea>
         <textarea v-else
                   class="wp_vue_editor wp_vue_editor_plain"
                   v-model="plain_content"
@@ -15,7 +15,7 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
     import popover from './input-popover-dropdown.vue'
 
     export default {
@@ -23,6 +23,7 @@
         components: {
             popover
         },
+        emits: ['update:modelValue'],
         props: {
             editor_id: {
                 type: String,
@@ -30,7 +31,7 @@
                     return 'wp_editor_' + Date.now() + parseInt(Math.random() * 1000);
                 }
             },
-            value: {
+            modelValue: {
                 type: String,
                 default() {
                     return '';
@@ -46,14 +47,14 @@
         },
         data() {
             return {
-                hasWpEditor: !!window.wp.editor,
-                plain_content: this.value,
-                cursorPos: this.value.length
+                hasWpEditor: !!(window.wp && window.wp.editor),
+                plain_content: this.modelValue,
+                cursorPos: this.modelValue ? this.modelValue.length : 0
             }
         },
         watch: {
             plain_content() {
-                this.$emit('input', this.plain_content);
+                this.$emit('update:modelValue', this.plain_content);
             }
         },
         methods: {
@@ -70,7 +71,7 @@
                         toolbar1: 'bold,italic,bullist,numlist,link,blockquote,alignleft,aligncenter,alignright,strikethrough,forecolor,codeformat,undo,redo',
                         setup(ed) {
                             ed.on('init', (ed) => {
-                                    tinyMCE.get(that.editor_id).setContent(that.value);
+                                    tinyMCE.get(that.editor_id).setContent(that.modelValue);
                                     tinyMCE.execCommand('mceRepaint');
                                 }
                             );
@@ -88,7 +89,7 @@
             },
             changeContentEvent() {
                 let content = wp.editor.getContent(this.editor_id);
-                this.$emit('input', content);
+                this.$emit('update:modelValue', content);
             },
             handleCommand(command) {
                 if (this.hasWpEditor) {
@@ -102,7 +103,7 @@
             },
             updateCursorPos() {
                 var cursorPos = jQuery('.wp_vue_editor_plain').prop('selectionStart');
-                this.$set(this, 'cursorPos', cursorPos);
+                this.cursorPos = cursorPos;
             },
             reloadEditor() {
                 wp.editor.remove(this.editor_id);
@@ -117,28 +118,3 @@
         }
     }
 </script>
-<style lang="scss">
-    .wp_vue_editor {
-        width: 100%;
-        min-height: 100px;
-    }
-
-    .wp_vue_editor_wrapper {
-        position: relative;
-
-        .popover-wrapper {
-            z-index: 2;
-            position: absolute;
-            top: 0;
-            right: 0;
-            &-plaintext {
-                left: auto;
-                right: 0;
-                top: -32px;
-            }
-        }
-        .wp-editor-tabs {
-            float: left;
-        }
-    }
-</style>

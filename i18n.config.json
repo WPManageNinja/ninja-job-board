@@ -1,0 +1,37 @@
+{
+    "_comment": "Read by i18n.node.cjs (generator) and tests/lint/translation-map.cjs. Paths are relative to the repo root. The `runtime` block is only used by the fluent-plugins-skills installer.",
+    "textDomain": "ninja-job-board",
+    "namespace": "WPJobBoard\\Classes",
+    "abspathGuard": true,
+    "helpers": {
+        "t": [
+            "$t"
+        ],
+        "n": [
+            "$_n"
+        ],
+        "x": [
+            "$_x"
+        ]
+    },
+    "reservedWords": "reservedWords.json",
+    "targets": [
+        {
+            "name": "admin",
+            "sourceDirs": [
+                "src/admin"
+            ],
+            "output": "includes/Classes/TransStrings.php",
+            "className": "TransStrings",
+            "method": "getStrings"
+        }
+    ],
+    "runtime": {
+        "file": "src/admin/utils/i18n.js",
+        "mapGlobal": "window.wpJobBoardsAdmin.i18n",
+        "definitions": [
+            "src/admin/main.js:42 ($t)"
+        ],
+        "packageManager": "npm"
+    }
+}

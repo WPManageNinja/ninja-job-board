@@ -2,7 +2,6 @@
 
 namespace WPJobBoard\Classes\Tools;
 
-use WPJobBoard\Classes\AccessControl;
 use WPJobBoard\Classes\ArrayHelper;
 use WPJobBoard\Classes\Models\Forms;
 use WPJobBoard\Classes\Models\Submission;
@@ -11,69 +10,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Form Scheduling and Restriction Class
- * @since 1.0.0
- */
 class SchedulingSettings
 {
-    public function register()
-    {
-        add_action('wp_ajax_wpjb_scheduling_endpoints', array($this, 'schedulingAjaxHandler'));
-    }
-
-    public function schedulingAjaxHandler()
-    {
-        $route = sanitize_text_field($_REQUEST['route']);
-        $validRoutes = array(
-            'get_settings'    => 'getSettings',
-            'update_settings' => 'updateSettings'
-        );
-        if (isset($validRoutes[$route])) {
-            AccessControl::checkAndPresponseError('save_form_settings', 'forms');
-            do_action('wpjobboard/doing_ajax_forms_' . $route);
-            return $this->{$validRoutes[$route]}();
-        }
-    }
-
-    public function getSettings()
-    {
-        $formId = intval($_REQUEST['form_id']);
-        $settings = Forms::getSchedulingSettings($formId);
-
-        wp_send_json_success(array(
-            'scheduling_settings' => $settings,
-            'current_date_time'   => gmdate('d M Y H:i:s')
-        ), 200);
-    }
-
-    public function updateSettings()
-    {
-        $formId = intval($_REQUEST['form_id']);
-        $settings = wpJobBoardSanitize(ArrayHelper::get($_REQUEST, 'settings', []));
-
-        if (
-            ArrayHelper::get($settings, 'limitNumberOfEntries.status') == 'no' &&
-            ArrayHelper::get($settings, 'scheduleForm.status') == 'no' &&
-            ArrayHelper::get($settings, 'requireLogin.status') == 'no'
-        ) {
-            $settings = false;
-        }
-
-        if (ArrayHelper::get($settings, 'scheduleForm.status') == 'no') {
-            update_post_meta($formId, 'application_start_date', 0);
-            update_post_meta($formId, 'application_end_date', 0);
-        } else {
-            update_post_meta($formId, 'application_start_timestamp', strtotime(ArrayHelper::get($settings, 'scheduleForm.start_date')));
-            update_post_meta($formId, 'application_end_timestamp', strtotime(ArrayHelper::get($settings, 'scheduleForm.end_date')));
-        }
-
-        update_post_meta($formId, 'wpjb_form_scheduling_settings', $settings);
-        wp_send_json_success(array(
-            'message' => __('Settings successfully updated', 'ninja-job-board')
-        ), 200);
-    }
-
     public function checkRestrictionHooks()
     {
         add_filter('wpjobboard/form_wrapper_css_classes', array($this, 'checkRestrictionOnRender'), 10, 2);
@@ -105,13 +43,11 @@ class SchedulingSettings
 
     public function checkRestrictionOnRender($wrapperCSSClasses, $form)
     {
-        // if now sheduleing settings found then just return
         if (!get_post_meta($form->ID, 'wpjb_form_scheduling_settings', true)) {
             return $wrapperCSSClasses;
         }
 
         $extra_css_class = '';
-        // We have some schedule settings now so we have add some wrapper class
         $sheduleSettings = $form->scheduleing_settings;
         if ($message = $this->checkIfExceedsEntryLimit($form->ID, $sheduleSettings)) {
             $extra_css_class = 'wpjb_exceeds_entry_limit';
@@ -126,7 +62,7 @@ class SchedulingSettings
 
         if ($extra_css_class) {
             $wrapperCSSClasses[] = $extra_css_class;
-            $wrapperCSSClasses[] = 'wpjb_restriction_action_' . $sheduleSettings['restriction_applied_type'];
+            $wrapperCSSClasses[] = 'wpjb_restriction_action_' . sanitize_html_class(ArrayHelper::get($sheduleSettings, 'restriction_applied_type'));
         }
         return $wrapperCSSClasses;
     }
@@ -143,7 +79,7 @@ class SchedulingSettings
             if ($totalEntryCount >= intval($numberOfEntries)) {
                 return $limitEntrySettings['limit_exceeds_message']
                     ? $limitEntrySettings['limit_exceeds_message']
-                    : __('Submission limit has been exceded.', 'ninja-job-board');
+                    : __('The application limit has been reached.', 'ninja-job-board');
             }
         }
         return false;
@@ -159,7 +95,7 @@ class SchedulingSettings
             if ($time < $start) {
                 return $timeSchedule['before_start_message']
                     ? $timeSchedule['before_start_message']
-                    : __('Form submission is not started yet.', 'ninja-job-board');
+                    : __('The application period has not started yet.', 'ninja-job-board');
 
             }
             if ($time >= $end) {

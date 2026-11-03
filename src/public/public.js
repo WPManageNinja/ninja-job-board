@@ -3,6 +3,18 @@
         forms: {},
         general: window.wp_job_board_general,
         formData: {},
+        // Translated string from wp_job_board_general.i18n; %s gets the value; falls back to the English text
+        i18n(key, fallback, value) {
+            let strings = (this.general && this.general.i18n) ? this.general.i18n : {};
+            let text = strings[key] || fallback;
+            if (typeof value !== 'undefined') {
+                text = text.replace('%s', () => String(value));
+            }
+            return text;
+        },
+        requiredText(label) {
+            return this.i18n('field_required', '%s is required.', label);
+        },
         init() {
             let body = $(document.body);
             this.forms = body.find('.wpjb_form');
@@ -42,15 +54,14 @@
             $.post(this.general.ajax_url, {
                 action: 'wpjb_submit_form',
                 form_id: formId,
+                wpjb_nonce: this.general.nonce,
                 form_data: $(form).serialize()
             })
                 .then(response => {
                     if (!response || !response.data || !response.data.confirmation) {
                         let $errorDiv = form.parent().find('.wpjb_form_errors');
-                        $errorDiv.html('<p class="wpjb_form_error_heading">Something is wrong when submitting the form</p>').show();
-                        $errorDiv.append('<div class="wpjb_error_items">Server Response: ');
-                        $errorDiv.append('<p>' + response + '</p>');
-                        $errorDiv.append('</div>');
+                        $errorDiv.html('').append($('<p class="wpjb_form_error_heading"></p>').text(that.i18n('submit_error', 'Something went wrong while submitting the form. Please try again.'))).show();
+                        $errorDiv.append($('<div class="wpjb_error_items"></div>').text(that.i18n('server_response', 'Server response: %s', String(response))));
                         form.parent().addClass('wpjb_form_has_errors');
                         form.trigger('wpjb_form_fail_submission', response);
                         form.removeClass('wpjb_submitting_form');
@@ -90,21 +101,25 @@
                 })
                 .fail(error => {
                     let $errorDiv = form.parent().find('.wpjb_form_errors');
-                    $errorDiv.html('<p class="wpjb_form_error_heading">' + error.responseJSON.data.message + '</p>').show();
-                    $errorDiv.append('<ul class="wpjb_error_items">');
-                    $.each(error.responseJSON.data.errors, (errorId, errorText) => {
-                        $errorDiv.append('<li class="error_item_' + errorId + '">' + errorText + '</li>');
+                    let errorData = (error.responseJSON && error.responseJSON.data) ? error.responseJSON.data : {};
+                    $errorDiv.html('').append($('<p class="wpjb_form_error_heading"></p>').text(errorData.message || that.i18n('submit_error', 'Something went wrong while submitting the form. Please try again.'))).show();
+                    let $errorList = $('<ul class="wpjb_error_items"></ul>');
+                    $.each(errorData.errors || {}, (errorId, errorText) => {
+                        $errorList.append($('<li></li>').addClass('error_item_' + String(errorId).replace(/[^\w-]/g, '')).text(errorText));
                     });
-                    $errorDiv.append('</ul>');
+                    $errorDiv.append($errorList);
                     form.parent().addClass('wpjb_form_has_errors');
-                    form.trigger('wpjb_form_fail_submission', error.responseJSON.data);
+                    form.trigger('wpjb_form_fail_submission', errorData);
                     form.removeClass('wpjb_submitting_form');
 
                     form.removeClass('wpjb_submitting_form');
                     form.find('button.wpjb_submit_button').removeAttr('disabled');
                 })
                 .always(() => {
-
+                    // A Turnstile token works once; get a fresh one for the next attempt
+                    if (window.turnstile && form.find('.cf-turnstile').length) {
+                        window.turnstile.reset(form.find('.cf-turnstile')[0]);
+                    }
                 });
         },
         initDatePiker() {
@@ -150,7 +165,8 @@
         },
         validateIntoDom($scope, form) {
             let $inputs = $scope.find('input[data-required="yes"],textarea[data-required="yes"], select[data-required="yes"]');
-            let errors = []
+            let that = this;
+            let errors = [];
             $.each($inputs, (index, input) => {
                 let $input = $(input);
                 if(!$input.val()) {
@@ -160,7 +176,7 @@
                     }
                     errors.push({
                         name: $input.attr('name'),
-                        text: label + ' is required'
+                        text: that.requiredText(label)
                     });
                 }
             });
@@ -172,18 +188,18 @@
                     let label = $input.closest('.wpjb_form_group').find('.wpjb_input_label label').text();
                     errors.push({
                         name: $input.attr('name'),
-                        text: label + ' is required'
+                        text: that.requiredText(label)
                     });
                 }
             });
 
             let checkboxRequiredWrappers = $scope.find('.wpjb_item_checkbox[data-checkbox_required="yes"]');
             $.each(checkboxRequiredWrappers, (index, checkWrapper) => {
-                 $checkWrapper = $(checkWrapper);
+                 let $checkWrapper = $(checkWrapper);
                  if(!$checkWrapper.find('input:checked').length) {
                      errors.push({
                          name: 'checkbox',
-                         text: $checkWrapper.find('.wpjb_input_label label').text() + ' is required'
+                         text: that.requiredText($checkWrapper.find('.wpjb_input_label label').text())
                      });
                  }
             });
@@ -195,11 +211,11 @@
                 if(!form.find('input[name="'+associateKey+'[]"]').val()) {
                     let label = $fileInput.closest('.wpjb_form_group').find('.wpjb_input_label label').text();
                     if(!label) {
-                        label = 'File upload';
+                        label = that.i18n('file_upload', 'File upload');
                     }
                     errors.push({
                         name: associateKey,
-                        text: label+' is required'
+                        text: that.requiredText(label)
                     });
                 }
             });
@@ -208,15 +224,16 @@
             $errorDiv.html('').hide();
 
             if(errors.length) {
-                $errorDiv.append('<ul class="wpjb_error_items">');
+                let $errorList = $('<ul class="wpjb_error_items"></ul>');
                 let errorsCast = {};
                 $.each(errors, (errorIndex, error) => {
                     if(!errorsCast[error.name]) {
                         errorsCast[error.name] = true;
-                        $errorDiv.append('<li class="error_item_' + errorIndex + '">' + error.text + '</li>');
+                        // .text() keeps label text from being parsed as HTML
+                        $errorList.append($('<li></li>').addClass('error_item_' + errorIndex).text(error.text));
                     }
                 });
-                $errorDiv.append('</ul>');
+                $errorDiv.append($errorList);
                 $errorDiv.show();
             } else {
                 return true;

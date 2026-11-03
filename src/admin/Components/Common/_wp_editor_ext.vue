@@ -1,11 +1,11 @@
 <template>
     <div class="wp_vue_editor_wrapper" :class="'editor_wrapper_'+ninja_editor_id">
         <template v-if="hasWpEditor">
-            <button @click="showPro" v-if="!has_pro" type="button" class="button ninja_demo_media_button"><span class="dashicons dashicons-admin-media"></span> Add Media (pro)</button>
-            <textarea :style="{ minHeight: height }" class="wp_vue_editor" :id="ninja_editor_id">{{value}}</textarea>
+            <button @click="showPro" v-if="!has_pro" type="button" class="button ninja_demo_media_button"><span class="dashicons dashicons-admin-media"></span> {{ $t('Add media (Pro)') }}</button>
+            <textarea :style="{ minHeight: height }" class="wp_vue_editor" :id="ninja_editor_id">{{modelValue}}</textarea>
         </template>
         <template v-else>
-            <p style="font-style: italic"><small>WP Editor is only available on WordPress version 4.8 or later. Please Upgrade Your WordPress Core</small></p>
+            <p class="wpjb_help">{{ $t('The WordPress editor needs WordPress 4.8 or later. Update WordPress to use it.') }}</p>
             <textarea
                       class="wp_vue_editor wp_vue_editor_plain"
                       v-model="plain_content">
@@ -15,9 +15,10 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
     export default {
         name: 'wp_editor',
+        emits: ['update:modelValue'],
         props: {
             editor_id: {
                 type: String,
@@ -25,7 +26,7 @@
                     return 'wp_editor_'+Date.now();
                 }
             },
-            value: {
+            modelValue: {
                 type: String,
                 default() {
                     return '';
@@ -40,8 +41,8 @@
         },
         data() {
             return {
-                hasWpEditor: !!window.wp.editor,
-                plain_content: this.value,
+                hasWpEditor: !!(window.wp && window.wp.editor),
+                plain_content: this.modelValue,
                 has_pro: true,
             }
         },
@@ -52,10 +53,10 @@
         },
         watch: {
             plain_content() {
-                this.$emit('input', this.plain_content);
+                this.$emit('update:modelValue', this.plain_content);
             },
-            value() {
-                if(!this.value) {
+            modelValue() {
+                if(!this.modelValue) {
                     this.reloadEditor();
                 }
             }
@@ -88,11 +89,11 @@
             slugify(text)
             {
                 return text.toString().toLowerCase()
-                    .replace(/\s+/g, '-')           // Replace spaces with -
-                    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
-                    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
-                    .replace(/^-+/, '')             // Trim - from start of text
-                    .replace(/-+$/, '');            // Trim - from end of text
+                    .replace(/\s+/g, '-')
+                    .replace(/[^\w\-]+/g, '')
+                    .replace(/\-\-+/g, '-')
+                    .replace(/^-+/, '')
+                    .replace(/-+$/, '');
             },
             reloadEditor() {
                 wp.editor.remove(this.ninja_editor_id);
@@ -101,49 +102,18 @@
             },
             changeContentEvent() {
                 let content = wp.editor.getContent(this.ninja_editor_id);
-                this.$emit('input', content);
+                this.$emit('update:modelValue', content);
             },
             showPro() {
-                window.ninjaTableBus.$emit('show_pro_popup', 1);
+                // has_pro is always true, so this button never shows. The old event bus is gone.
+                this.$message.info(this.$t('Adding media is a Pro feature.'));
             }
         },
         mounted() {
             this.initEditor();
         },
-        beforeDestroy() {
+        beforeUnmount() {
 
         }
     }
 </script>
-<style lang="scss">
-    button.button.ninja_demo_media_button {
-        position: absolute;
-        z-index: 9999999999;
-        cursor: pointer;
-    }
-    .wp_vue_editor {
-        width: 100%;
-        min-height: 100px;
-    }
-    .wp_vue_editor_wrapper {
-        position: relative;
-
-        .popover-wrapper {
-            z-index: 2;
-            position: absolute;
-            top: 0;
-            right: 0;
-            &-plaintext {
-                left: auto;
-                right: 0;
-                top: -32px;
-            }
-        }
-        button.wp-switch-editor {
-            margin: 0px !important;
-            padding-bottom: 14px;
-            line-height: 22px;
-            height: 28px;
-        }
-    }
-</style>

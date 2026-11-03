@@ -1,5 +1,8 @@
 <?php
-// Load and Register Form Components
+
+if (!defined('ABSPATH')) {
+    exit;
+}
 new \WPJobBoard\Classes\FormComponents\ApplicantNameComponent();
 new \WPJobBoard\Classes\FormComponents\ApplicantEmailComponent();
 new \WPJobBoard\Classes\FormComponents\TextComponent();

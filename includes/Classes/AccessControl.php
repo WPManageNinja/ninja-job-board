@@ -4,11 +4,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Managing Access Control
- * This is not complete on version 1.0.0 but we will definately add this feature.
- * @since 1.0.0
- */
 class AccessControl
 {
     public static function hasGrandAccess()
@@ -41,15 +36,47 @@ class AccessControl
         return false;
     }
 
-    public static function checkAndPresponseError($endpoint = false, $group = false, $message = '')
+    /**
+     * REST permission check: actor capability and form ownership.
+     */
+    public static function canAccess($endpoint, $group, $formId = 0, $submissionId = 0)
     {
-        if(self::hasEndPointPermission($endpoint, $group)) {
+        $permission = self::hasEndPointPermission($endpoint, $group);
+        if (!$permission) {
+            return false;
+        }
+        return self::canAccessForm($permission, $endpoint, absint($formId), absint($submissionId));
+    }
+
+    /**
+     * A user who has only an "own" permission can act only on forms they created.
+     */
+    private static function canAccessForm($permission, $endpoint, $formId, $submissionId)
+    {
+        // "Can add form" lets a user create forms and work on the forms they created
+        $ownScoped = is_string($permission) && (strpos($permission, '_own') !== false || $permission === 'wpjb_can_add_form');
+        if (!$ownScoped) {
             return true;
         }
-        wp_send_json_error(array(
-            'message' => ($message) ? $message : __('Sorry, You do not have permission to do this action: ', 'ninja-job-board').$endpoint,
-            'action' => $endpoint
-        ), 423);
+
+        if ($submissionId) {
+            $submission = wpJobBoardDB()->table('wjb_applications')
+                ->select(array('form_id'))
+                ->where('id', $submissionId)
+                ->first();
+            if (!$submission || ($formId && intval($submission->form_id) !== $formId)) {
+                return false;
+            }
+            $formId = intval($submission->form_id);
+        }
+
+        if (!$formId) {
+            return in_array($endpoint, array('get_forms', 'create_form', 'get_available_forms'), true);
+        }
+
+        $form = get_post($formId);
+
+        return $form && $form->post_type === 'wp_job_board' && intval($form->post_author) === get_current_user_id();
     }
 
     public static function hasEndPointPermission($endpoint = false, $group = false)
@@ -128,6 +155,40 @@ class AccessControl
                     'wpjb_can_edit_own_form',
                     'wpjb_can_add_form'
                 ),
+                'get_email_notifications'    => array(
+                    'wpjb_can_edit_all_forms',
+                    'wpjb_can_edit_own_form',
+                    'wpjb_can_add_form'
+                ),
+                'save_email_notifications'   => array(
+                    'wpjb_can_edit_all_forms',
+                    'wpjb_can_edit_own_form',
+                    'wpjb_can_add_form'
+                ),
+                'get_scheduling_settings'    => array(
+                    'wpjb_can_edit_all_forms',
+                    'wpjb_can_edit_own_form',
+                    'wpjb_can_add_form'
+                ),
+                'save_scheduling_settings'   => array(
+                    'wpjb_can_edit_all_forms',
+                    'wpjb_can_edit_own_form',
+                    'wpjb_can_add_form'
+                ),
+                'duplicate_form'             => array(
+                    'wpjb_can_add_form'
+                ),
+                'restore_form'               => array(
+                    'wpjb_can_edit_all_forms',
+                    'wpjb_can_edit_own_form'
+                ),
+                'export_form'                => array(
+                    'wpjb_can_edit_all_forms',
+                    'wpjb_can_edit_own_form'
+                ),
+                'import_form'                => array(
+                    'wpjb_can_add_form'
+                ),
             ),
             'submissions' => array(
                 'get_submissions'          => array(
@@ -166,9 +227,22 @@ class AccessControl
                     'wpjb_can_delete_all_entries',
                     'wpjb_can_delete_entries_of_own_created_forms',
                 ),
+                'get_form_report'          => array(
+                    'wpjb_can_view_all_entries',
+                    'wpjb_can_view_entries_of_own_created_forms',
+                ),
+                'export_submissions'       => array(
+                    'wpjb_can_view_all_entries',
+                    'wpjb_can_view_entries_of_own_created_forms',
+                ),
             ),
+            // Email campaigns send email to many applicants: full access only
+            'email_campaigns' => array(),
             'global'      => array(
-                'update_global_currency_settings' => array(
+                'get_global_settings'    => array(
+                    'wpjb_can_change_global_settings'
+                ),
+                'update_global_settings' => array(
                     'wpjb_can_change_global_settings'
                 ),
                 'wpjb_upload_image'                => array(
@@ -194,20 +268,17 @@ class AccessControl
         return array(
             'wpjb_full_access',
             'wpjb_can_view_menus',
-            // FOrm Related Actions
             'wpjb_can_edit_all_forms',
             'wpjb_can_add_form',
             'wpjb_can_edit_own_form',
             'wpjb_can_delete_all_forms',
             'wpjb_can_delete_own_created_forms',
-            // Submission Related Actions
             'wpjb_can_view_all_entries',
             'wpjb_can_view_entries_of_own_created_forms',
             'wpjb_can_delete_all_entries',
             'wpjb_can_delete_entries_of_own_created_forms',
             'wpjb_can_edit_all_form_entries',
             'wpjb_can_edit_entries_of_own_created_forms',
-            // Global Settings Related
             'wpjb_can_change_global_settings',
         );
     }

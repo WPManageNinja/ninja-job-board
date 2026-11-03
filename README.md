@@ -1,75 +1,59 @@
-WP Job Board Plugin for WordPress 
----
-WP Job Board us a light weight plugin that adds a job board along with application form to your WordPress website.
+![Ninja Job Board](.wordpress-org/banner-1544x500.jpg)
 
-<b>Description</b>
+# Ninja Job Board
 
-Want to hire your next effective and energetic employee then WP Job Board can help. With this plugin you can post a job circular right into your WordPress site and manage the whole hiring process from your WordPress dashboard.
+Post jobs, collect applications with CVs, and manage applicants in WordPress.
 
-WP Job Board is a self-hosted WordPress Plugin where you can build a questionnaire form by drag and drop form builder. 
+[Download from WordPress.org](https://wordpress.org/plugins/ninja-job-board/) · Requires WordPress 6.3+ and PHP 7.4+
 
-<b>The Following Form fields are available to build your:</b>
-- Applicant Name
-- Applicant Email
-- File Upload Field
-- Single Line Text
-- Texarea Field
-- Number Field
-- Dropdown Select Field
-- Radio Choice Field
-- CheckBoxes
-- Date Field
-- Hidden Input Field
-- Markup HTML
-- Form Steps to breakdown your form to several pages.
-- More is coming soon.
+## Features
 
-#### Application Management
-With built-in application management system, you can see the total applications of your job post. You can also set application status as well as internal status.
+- **Jobs and a careers page.** Each job is a WordPress post. List jobs with the Job List block or `[wp_job_list]`, and show a form anywhere with the Job Application Form block or `[wp_job_form id="123"]`.
+- **Application form builder.** Drag and drop fields: name, email, CV upload, text, number, dropdown, radio, checkboxes, date, hidden, HTML and form steps.
+- **Applicant tracking.** Status tabs, an application status and a private internal status, notes, an activity timeline, search, print and CSV export.
+- **Email.** Notifications on each application, and a broadcast to all applicants with a given status.
+- **Security and privacy.** Private CV downloads, a honeypot and optional Cloudflare Turnstile, the WordPress privacy export and erase tools, optional IP logging, and an opt-in data cleanup on uninstall.
 
-In individual application view page, you can see the complete submitted data, uploaded applicant cv. You can also change the application status and internal status easily. One of the important feature is, you can add notes to each application.
+## Screenshots
 
-#### Super fast and Light Weight Form
-This is a super fast form builder and it's only loads css and js if you add the form in a page. Every line of CSS and JS is useful and there has no extra css and js. For a normal form, It's loads less than 30KB css and js combined. This form builder plugin will not slow down your site. it's the fastest form builder plugin in WordPress. It has also a nice interface to give detailed information of your job post.
+| | |
+|---|---|
+| ![All jobs](.wordpress-org/screenshot-1.png) All jobs | ![Applications](.wordpress-org/screenshot-2.png) Applications for a job |
+| ![Application](.wordpress-org/screenshot-3.png) An application | ![Form builder](.wordpress-org/screenshot-4.png) Application form builder |
+| ![Email notifications](.wordpress-org/screenshot-5.png) Email notifications | ![Block editor](.wordpress-org/screenshot-6.png) A job in the block editor |
+| ![Job List block](.wordpress-org/screenshot-7.png) The Job List block | ![Job page](.wordpress-org/screenshot-8.png) A job page with the form |
+| ![Job list](.wordpress-org/screenshot-9.png) The job list on your site | ![Settings](.wordpress-org/screenshot-10.png) General settings |
 
-#### Features Tracker
-- Job Posting with information *(DONE)*
-- Application Form Builder *(DONE)*
-- CV Management System *(Done)*
-- Application status management *(Done)*
-- Filter Applications based on status *(Done)*
-- Search Applications with keywords/full text search *(Done)*
-- Email Notification System management *(Done)*
-- Export Data as CSV/Excel/JSON *(On development)
-- Send bulk emails to the applicants and filter by application status (On development)
-- Application Assesment for HR Department (On development)
+## Development
 
-This plugin is a very planned project, and we have a long term development plan for this. We already invested around 200 human working hours (+coffees) on it, and we have the intention to spend much more on it. Please let us know what features you want, and we are happy to add that in our development sprint.
+The admin app uses Vue 3, Element Plus and Vite. The blocks use the WordPress block editor packages.
 
-#### Installation
+```bash
+npm install
+npm run build   # build assets/admin, assets/blocks and assets/css
+npm run dev     # rebuild on change
+```
 
-This section describes how to install the plugin and get it working.
-e.g.
+Source files:
 
-1. Upload the plugin files to the /wp-content/plugins/ directory, or install the plugin through the WordPress plugins screen directly.
-1. Activate the plugin through the ‘Plugins’ screen in WordPress
-1. Use the WPPay Forms -> All Forms -> Add a Form to create a form and get started.
+- `src/admin/`: the admin app
+- `src/blocks/`: the Gutenberg blocks and the job editor panel
+- `src/scss/`: admin and front-end styles
+- `includes/`: PHP. REST routes are in `includes/Http/Router.php`.
 
-##### How to Build
-- `npm install`
-- `npm run dev` # for dev build
-- `npm run watch` # for development and auto compile
-- `npm run production` # form Production build
+### Tests
 
-##### Other Plugins by WPManageNinja
-<ul>
-<li><a href="https://wordpress.org/plugins/ninja-tables/" target="_blank">Ninja Tables – WP Data Table Plugin for WordPress</a></li>
-<li><a href="https://wordpress.org/plugins/fluentform/" target="_blank">WP Fluent Form – Contact Form Plugin for WordPress with Advanced Form Builder Features</a></li>
-<li><a href="https://wpmanageninja.com/downloads/wppayform-pro-wordpress-payments-form-builder/" target="_blank">WPPayForm - WordPress Payments made simple</a></li>
-</ul>
+PHP integration tests run against a real WordPress install and database. See [tests/README.md](tests/README.md) for the setup.
 
+```bash
+composer install
+npm run test:php
+```
 
-##### Changelog
+### WordPress.org assets
 
-= 1.0.0 - July 05, 2019 =
-- Initial Release
+`.wordpress-org/` holds the plugin icon, banner and screenshots for the WordPress.org page. `banner.html` is the source of the banner. These files are not part of the plugin release.
+
+## License
+
+GPLv2 or later.

@@ -6,10 +6,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Ajax Handler Class
- * @since 1.0.0
- */
 class Activator
 {
     public $wpfDbVersion = WPJOBBOARD_DB_VERSION;
@@ -18,13 +14,7 @@ class Activator
     {
         global $wpdb;
         if ($network_wide) {
-            // Retrieve all site IDs from this network (WordPress >= 4.6 provides easy to use functions for that).
-            if (function_exists('get_sites') && function_exists('get_current_network_id')) {
-                $site_ids = get_sites(array('fields' => 'ids', 'network_id' => get_current_network_id()));
-            } else {
-                $site_ids = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs WHERE site_id = $wpdb->siteid;");
-            }
-            // Install the plugin for all these sites.
+            $site_ids = get_sites(array('fields' => 'ids', 'network_id' => get_current_network_id(), 'number' => 0));
             foreach ($site_ids as $site_id) {
                 switch_to_blog($site_id);
                 $this->migrate();
@@ -44,7 +34,9 @@ class Activator
 
         $this->createPages();
 
-        include 'PostType.php';
+        if (!class_exists('\WPJobBoard\Classes\PostType')) {
+            require_once __DIR__ . '/PostType.php';
+        }
         $postTypeClass = new PostType();
         $postTypeClass->register();
         flush_rewrite_rules(true);
@@ -155,7 +147,7 @@ class Activator
     private function runSQL($sql, $tableName)
     {
         global $wpdb;
-        if ($wpdb->get_var("SHOW TABLES LIKE '$tableName'") != $tableName) {
+        if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $tableName)) != $tableName) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- schema check during activation
             require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
             dbDelta($sql);
             return true;
@@ -163,9 +155,6 @@ class Activator
         return false;
     }
 
-    /**
-     * Create the pages for success and failure redirects
-     */
     public function createPages()
     {
         $options = get_option('wpjobboard_confirmation_page_id');

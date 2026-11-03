@@ -1,0 +1,32 @@
+# Files that do not go into the WordPress.org SVN release.
+# The source of the compiled assets is on GitHub; readme.txt links to it (guideline 4).
+.git
+.gitignore
+.distignore
+node_modules
+svn
+# Development tooling (tests run against a local test site, see tests/README.md)
+vendor
+tests
+composer.json
+composer.lock
+phpunit.integration.xml
+build/.lock
+.gstack
+
+# WordPress.org page assets (icon, banner); they go to the SVN assets/ folder, not the plugin
+.wordpress-org
+README.md
+
+# Build source and tooling
+/src
+/build
+/package.json
+/package-lock.json
+/i18n.config.json
+/i18n.node.cjs
+/reservedWords.json
+
+# Repo docs and the translation lint (tests/ is excluded above)
+CLAUDE.md
+docs

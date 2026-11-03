@@ -1,0 +1,26 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "ninja-job-board/job-details",
+    "title": "Job Details",
+    "category": "widgets",
+    "icon": "id-alt",
+    "description": "A job's type, location, vacancies, experience and posted date. In a job post it uses that job.",
+    "keywords": ["job", "location", "type", "vacancies"],
+    "textdomain": "ninja-job-board",
+    "usesContext": ["postId", "postType"],
+    "attributes": {
+        "jobId": { "type": "number", "default": 0 },
+        "fields": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["type", "location", "vacancies", "experience", "posted"] },
+            "default": ["type", "location", "vacancies", "experience", "posted"]
+        }
+    },
+    "supports": {
+        "html": false,
+        "spacing": { "margin": true, "padding": true }
+    },
+    "editorScript": "wpjobboard-blocks",
+    "editorStyle": "wpjobboard-blocks-editor"
+}

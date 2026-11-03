@@ -17,39 +17,39 @@ class NumberComponent extends BaseComponent
     {
         return array(
             'type'            => 'number',
-            'editor_title'    => 'Number Field',
+            'editor_title'    => __('Number', 'ninja-job-board'),
             'group'           => 'input',
             'is_markup'       => 'no',
             'postion_group'   => 'general',
             'editor_elements' => array(
                 'label'         => array(
-                    'label' => 'Field Label',
+                    'label' => __('Field label', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 ),
                 'placeholder'   => array(
-                    'label' => 'Placeholder',
+                    'label' => __('Placeholder', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 ),
                 'required'      => array(
-                    'label' => 'Required',
+                    'label' => __('Required', 'ninja-job-board'),
                     'type'  => 'switch',
                     'group' => 'general'
                 ),
                 'default_value' => array(
-                    'label' => 'Default Value',
+                    'label' => __('Default value', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 ),
                 'min_value' => array(
-                    'label' => 'Minimum Value',
+                    'label' => __('Minimum value', 'ninja-job-board'),
                     'type'  => 'number',
                     'group' => 'general'
                 ),
             ),
             'field_options'   => array(
-                'label' => 'Numeric Value',
+                'label' => __('Numeric value', 'ninja-job-board'),
                 'placeholder' => '',
                 'required' => 'no'
             )

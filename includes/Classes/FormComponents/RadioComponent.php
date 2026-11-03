@@ -17,43 +17,43 @@ class RadioComponent extends BaseComponent
     {
         return array(
             'type'            => 'radio',
-            'editor_title'    => 'Radio Field',
+            'editor_title'    => __('Radio', 'ninja-job-board'),
             'group'           => 'input',
             'postion_group'   => 'general',
             'editor_elements' => array(
                 'label'         => array(
-                    'label' => 'Field Label',
+                    'label' => __('Field label', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 ),
                 'required'      => array(
-                    'label' => 'Required',
+                    'label' => __('Required', 'ninja-job-board'),
                     'type'  => 'switch',
                     'group' => 'general'
                 ),
                 'default_value' => array(
-                    'label' => 'Default Value',
+                    'label' => __('Default value', 'ninja-job-board'),
                     'type'  => 'text',
                     'group' => 'general'
                 ),
                 'options'       => array(
-                    'label' => 'Field Choices',
+                    'label' => __('Field choices', 'ninja-job-board'),
                     'type' => 'key_pair',
                     'group' => 'general'
                 )
             ),
             'field_options'   => array(
-                'label' => 'Radio',
+                'label' => __('Radio', 'ninja-job-board'),
                 'placeholder' => '',
                 'required' => 'no',
                 'options' => array(
                     array(
-                        'label' => 'Radio Item 1',
-                        'value' => 'Radio Item 1'
+                        'label' => __('Radio item 1', 'ninja-job-board'),
+                        'value' => __('Radio item 1', 'ninja-job-board')
                     ),
                     array(
-                        'label' => 'Radio Item 2',
-                        'value' => 'Radio Item 2'
+                        'label' => __('Radio item 2', 'ninja-job-board'),
+                        'value' => __('Radio item 2', 'ninja-job-board')
                     )
                 )
             )

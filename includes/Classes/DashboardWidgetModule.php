@@ -2,6 +2,10 @@
 
 namespace WPJobBoard\Classes;
 
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 class DashboardWidgetModule
 {
 
@@ -10,12 +14,9 @@ class DashboardWidgetModule
         add_action('wp_dashboard_setup', array($this, 'addWidget'));
     }
 
-    /**
-     *
-     */
     public function addWidget()
     {
-        if (!AccessControl::hasEndPointPermission('get_sumissions', 'submissions')) {
+        if (!AccessControl::hasEndPointPermission('get_submissions', 'submissions')) {
             return false;
         }
         wp_add_dashboard_widget('wpjb_stat_widget', __('WPJobBoard Latest Applications', 'ninja-job-board'), array($this, 'showStat'), 10, 1);
@@ -39,7 +40,7 @@ class DashboardWidgetModule
         $allCurrencySettings = [];
 
         if (!$stats) {
-            echo 'You can see Job Applications here';
+            esc_html_e('You can see Job Applications here', 'ninja-job-board');
             return;
         }
 
@@ -53,8 +54,10 @@ class DashboardWidgetModule
         <ul class="wpjb_dashboard_stats">
             <?php foreach ($stats as $stat): ?>
                 <li>
-                    <a title="Form: <?php echo esc_url($stat->post_title); ?>"
-                       href="<?php echo admin_url('admin.php?page=wpjobboard.php#/edit-form/' . intval($stat->form_id) . '/entries/' . $stat->id . '/view'); ?>">
+                    <a title="<?php
+                    /* translators: %s: job title */
+                    echo esc_attr(sprintf(__('Job: %s', 'ninja-job-board'), $stat->post_title)); ?>"
+                       href="<?php echo esc_url(admin_url('admin.php?page=wpjobboard.php#/edit-form/' . intval($stat->form_id) . '/entries/' . intval($stat->id) . '/view')); ?>">
                         #<?php echo esc_html($stat->id); ?> - <?php echo esc_html($stat->applicant_name); ?>
                     </a>
                 </li>
@@ -63,15 +66,21 @@ class DashboardWidgetModule
 
         <?php if (!defined('NINJA_TABLES_DIR_URL')): ?>
         <div class="wpjb_recommended_plugin">
-            Recommended Plugin: <b>Ninja Tables</b> - Best Table Plugin for WP -
-            <a href="<?php echo esc_url_raw($this->getInstallUrl('ninja-tables')); ?>">Install</a>
-            | <a target="_blank" rel="noopener" href="https://wordpress.org/plugins/ninja-tables/">Learn More</a>
+            <?php
+            /* translators: %s: plugin name */
+            printf(esc_html__('Recommended plugin: %s, the best table plugin for WordPress.', 'ninja-job-board'), '<b>Ninja Tables</b>');
+            ?>
+            <a href="<?php echo esc_url($this->getInstallUrl('ninja-tables')); ?>"><?php esc_html_e('Install', 'ninja-job-board'); ?></a>
+            | <a target="_blank" rel="noopener" href="https://wordpress.org/plugins/ninja-tables/"><?php esc_html_e('Learn more', 'ninja-job-board'); ?></a>
         </div>
     <?php elseif (!defined('ENHANCED_BLOCKS_VERSION')) : ?>
         <div class="wpjb_recommended_plugin">
-            Recommended Plugin: <b>Enhanced Blocks – Page Builder Blocks for Gutenberg</b> <br/>
-            <a href="<?php echo esc_url_raw($this->getInstallUrl('enhanced-blocks')); ?>">Install</a>
-            | <a target="_blank" rel="noopener" href="https://wordpress.org/plugins/enhanced-blocks/">Learn More</a>
+            <?php
+            /* translators: %s: plugin name */
+            printf(esc_html__('Recommended plugin: %s, page builder blocks for Gutenberg.', 'ninja-job-board'), '<b>Enhanced Blocks</b>');
+            ?> <br/>
+            <a href="<?php echo esc_url($this->getInstallUrl('enhanced-blocks')); ?>"><?php esc_html_e('Install', 'ninja-job-board'); ?></a>
+            | <a target="_blank" rel="noopener" href="https://wordpress.org/plugins/enhanced-blocks/"><?php esc_html_e('Learn more', 'ninja-job-board'); ?></a>
         </div>
     <?php endif; ?>
         <style>

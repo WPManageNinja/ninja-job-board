@@ -1,16 +1,44 @@
 <template>
 <div>
-    <el-popover
-        ref="input-popover"
-        placement="bottom"
-        width="200"
-        popper-class="el-dropdown-list-wrapper"
-        trigger="click">
+    <el-input size="small" v-if="fieldType != 'textarea'" v-model="model" :type="fieldType">
+        <template #append>
+            <el-popover
+                placement="bottom"
+                :width="200"
+                popper-class="el-dropdown-list-wrapper wpjb_shortcode_popper"
+                trigger="click">
+                <ul class="el-dropdown-menu el-dropdown-list">
+                    <li v-for="(item, itemIndex) in data" :key="itemIndex">
+                        <span v-if="data.length > 1" class="group-title">{{ item.title }}</span>
+                        <ul>
+                            <li v-for="(title, code) in item.shortcodes"
+                                :key="code"
+                                @click="insertShortcode(code)"
+                                class="el-dropdown-menu__item">
+                                {{ title }}
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <template #reference>
+                    <el-button :icon="MoreFilled" :aria-label="$t('Insert shortcode')" :title="$t('Insert shortcode')"></el-button>
+                </template>
+            </el-popover>
+        </template>
+    </el-input>
+
+    <div v-if="fieldType == 'textarea'" class="input-textarea-value">
+        <el-popover
+            placement="bottom"
+            :width="200"
+            popper-class="el-dropdown-list-wrapper wpjb_shortcode_popper"
+            trigger="click">
             <ul class="el-dropdown-menu el-dropdown-list">
-                <li v-for="item in data">
+                <li v-for="(item, itemIndex) in data" :key="itemIndex">
                     <span v-if="data.length > 1" class="group-title">{{ item.title }}</span>
                     <ul>
-                        <li v-for="title, code in item.shortcodes"
+                        <li v-for="(title, code) in item.shortcodes"
+                            :key="code"
                             @click="insertShortcode(code)"
                             class="el-dropdown-menu__item">
                             {{ title }}
@@ -18,24 +46,27 @@
                     </ul>
                 </li>
             </ul>
-    </el-popover>
-
-    <el-input size="small" v-if="fieldType != 'textarea'" v-model="model" :type="fieldType">
-        <el-button slot="append" icon="el-icon-more" v-popover:input-popover></el-button>
-    </el-input>
-
-    <div v-if="fieldType == 'textarea'" class="input-textarea-value">
-        <i class="icon el-icon-tickets" v-popover:input-popover></i>
+            <template #reference>
+                <button type="button" class="icon wpjb_shortcode_trigger" :aria-label="$t('Insert shortcode')" :title="$t('Insert shortcode')"><el-icon><Tickets /></el-icon></button>
+            </template>
+        </el-popover>
         <el-input type="textarea" v-model="model"></el-input>
     </div>
 </div>
 </template>
 
 <script>
+import { MoreFilled, Tickets } from '@element-plus/icons-vue';
+
 export default {
     name: 'inputPopover',
+    components: { Tickets },
+    emits: ['update:modelValue'],
+    setup() {
+        return { MoreFilled, Tickets };
+    },
     props: {
-        value : String,
+        modelValue: String,
         fieldType: String,
         data: Array,
         attrName: {
@@ -45,12 +76,12 @@ export default {
     },
     data() {
         return {
-            model: this.value,
+            model: this.modelValue,
         }
     },
     watch: {
         model() {
-            this.$emit('input', this.model);
+            this.$emit('update:modelValue', this.model);
         }
     },
     methods: {
@@ -63,27 +94,3 @@ export default {
     }
 }
 </script>
-
-<style lang="scss">
-    .el-dropdown-list-wrapper {
-        padding: 0;
-
-        .group-title {
-            display: block;
-            padding: 5px 10px;
-            background-color: gray;
-            color: #fff;
-        }
-    }
-
-    .input-textarea-value {
-        position: relative;
-
-        .icon {
-            position: absolute;
-            right: 0;
-            top: -18px;
-            cursor: pointer;
-        }
-    }
-</style>

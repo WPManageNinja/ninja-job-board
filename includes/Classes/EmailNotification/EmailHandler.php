@@ -12,10 +12,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Email Handler Class for Email Notification
- * @since 1.0.0
- */
 class EmailHandler
 {
     public function register()
@@ -31,7 +27,6 @@ class EmailHandler
             return;
         }
 
-        // Let's filter the notifications
         $validNotifiations = array();
         foreach ($notifications as $notification) {
             $status = ArrayHelper::get($notification, 'status');
@@ -60,22 +55,25 @@ class EmailHandler
 
     public function proceesEmaillNotification($notifiation, $submission)
     {
-        do_action('wpjobboard/require_entry_html');
-        $notification['from_name'] = PlaceholderParser::parse(ArrayHelper::get($notifiation, 'from_name'), $submission);
-        $notification['from_email'] = PlaceholderParser::parse(ArrayHelper::get($notifiation, 'from_email'), $submission);
-        $notification['reply_to'] = PlaceholderParser::parse(ArrayHelper::get($notifiation, 'reply_to'), $submission);
-        $notification['email_to'] = PlaceholderParser::parse(ArrayHelper::get($notifiation, 'email_to'), $submission);
-        $notification['email_subject'] = PlaceholderParser::parse(ArrayHelper::get($notifiation, 'email_subject'), $submission);
-        $notification['email_body'] = PlaceholderParser::parse(ArrayHelper::get($notifiation, 'email_body'), $submission);
         $notifiation = apply_filters('wpjobboard/email_notification_before_send', $notifiation, $submission);
+
+        do_action('wpjobboard/require_entry_html');
+        $notification = array(
+            'from_name'     => $this->sanitizeHeaderText(PlaceholderParser::parse(ArrayHelper::get($notifiation, 'from_name'), $submission, 'text')),
+            'from_email'    => sanitize_email(PlaceholderParser::parse(ArrayHelper::get($notifiation, 'from_email'), $submission, 'text')),
+            'reply_to'      => sanitize_email(PlaceholderParser::parse(ArrayHelper::get($notifiation, 'reply_to'), $submission, 'text')),
+            'email_to'      => $this->sanitizeEmailList(PlaceholderParser::parse(ArrayHelper::get($notifiation, 'email_to'), $submission, 'text')),
+            'email_subject' => $this->sanitizeHeaderText(PlaceholderParser::parse(ArrayHelper::get($notifiation, 'email_subject'), $submission, 'text')),
+            'email_body'    => wpJobBoardKsesWithStyle(PlaceholderParser::parse(ArrayHelper::get($notifiation, 'email_body'), $submission, 'html'))
+        );
         do_action('wpjobboard/require_entry_html_done');
 
-        if(!$notification['email_to'] || !$notification['email_subject'] || !$notification['email_body']) {
+        if (!$notification['email_to'] || !$notification['email_subject'] || !$notification['email_body']) {
             return;
         }
 
-        $notification['email_body']  = $this->getEmailWithTemplate($notification['email_body'], $submission, $notifiation);
-        $headers = $this->getEmailHeader($notifiation);
+        $notification['email_body'] = $this->getEmailWithTemplate($notification['email_body'], $submission, $notifiation);
+        $headers = $this->getEmailHeader($notification);
 
         $result = wp_mail(
             $notification['email_to'],
@@ -84,34 +82,34 @@ class EmailHandler
             $headers
         );
 
-        if($result) {
-            SubmissionActivity::createActivity(array(
-                'form_id'       => $submission->form_id,
-                'submission_id' => $submission->id,
-                'type'          => 'activity',
-                'created_by'    => 'WPJobBoard BOT',
-                'content'       => "Email Notification sent to {$notification['email_to']} and the subject: {$notification['email_subject']}."
-            ));
+        $emailTo = esc_html(implode(', ', $notification['email_to']));
+        $subject = esc_html($notification['email_subject']);
+
+        if ($result) {
+            /* translators: 1: recipient email addresses, 2: email subject */
+            $content = sprintf(__('Email notification sent to %1$s with the subject: %2$s.', 'ninja-job-board'), $emailTo, $subject);
         } else {
-            SubmissionActivity::createActivity(array(
-                'form_id'       => $submission->form_id,
-                'submission_id' => $submission->id,
-                'type'          => 'activity',
-                'created_by'    => 'WPJobBoard BOT',
-                'content'       => "Maybe email sending failed to {$notification['email_to']} and the subject: {$notification['email_subject']}, You may check wp_mail fuction and probably you should use smtp"
-            ));
+            /* translators: 1: recipient email addresses, 2: email subject */
+            $content = sprintf(__('The email notification to %1$s may have failed (subject: %2$s). Check wp_mail() or set up SMTP.', 'ninja-job-board'), $emailTo, $subject);
         }
+
+        SubmissionActivity::createActivity(array(
+            'form_id'       => $submission->form_id,
+            'submission_id' => $submission->id,
+            'type'          => 'activity',
+            'created_by'    => 'WPJobBoard BOT',
+            'content'       => $content
+        ));
     }
 
-    public function getEmailHeader($notification) {
+    public function getEmailHeader($notification)
+    {
         $headers = [
             'Content-Type: text/html; charset=UTF-8'
         ];
 
         if ($notification['from_name'] && $notification['from_email']) {
             $headers[] = "From: {$notification['from_name']} <{$notification['from_email']}>";
-        } elseif ($notification['from_name']) {
-            $headers[] = "From: {$notification['from_name']}";
         } elseif ($notification['from_email']) {
             $headers[] = "From: <{$notification['from_email']}>";
         }
@@ -121,6 +119,23 @@ class EmailHandler
         }
 
         return $headers;
+    }
+
+    private function sanitizeHeaderText($text)
+    {
+        return trim(str_replace(array("\r", "\n", '<', '>'), '', sanitize_text_field($text)));
+    }
+
+    private function sanitizeEmailList($emails)
+    {
+        $valid = array();
+        foreach (explode(',', (string)$emails) as $email) {
+            $email = sanitize_email(trim($email));
+            if ($email && is_email($email)) {
+                $valid[] = $email;
+            }
+        }
+        return array_values(array_unique($valid));
     }
 
     public function getEmailWithTemplate($emailBody, $submission, $notification)
@@ -147,11 +162,9 @@ class EmailHandler
         $emailBody = $emailHeader . $emailBody . $emailFooter;
 
         try {
-            // apply CSS styles inline for picky email clients
             $emogrifier = new Emogrifier($emailBody, $css);
             $emailBody = $emogrifier->emogrify();
-        } catch (Exception $e) {
-
+        } catch (\Exception $e) {
         }
         return $emailBody;
     }

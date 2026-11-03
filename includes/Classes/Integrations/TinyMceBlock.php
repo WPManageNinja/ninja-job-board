@@ -6,11 +6,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Add Button To TinyMCE Editor
- *
- * @since 1.0.0
- */
 class TinyMceBlock
 {
     public function register()
@@ -23,28 +18,24 @@ class TinyMceBlock
 
     public function registerButton()
     {
-        // Check if the logged in WordPress User can edit Posts or Pages
-        // If not, don't register our TinyMCE plugin
         if (!current_user_can('edit_posts') && !current_user_can('edit_pages')) {
             return;
         }
 
-        // Check if the logged in WordPress User has the Visual Editor enabled
-        // If not, don't register our TinyMCE plugin
         if (get_user_option('rich_editing') !== 'true') {
             return;
         }
 
-        // We are adding localized vars here
         wp_localize_script('jquery','wpjb_tinymce_vars', array(
                 "label" => __('Select a Form to insert', 'ninja-job-board'),
                 "title" => __('Insert Form Shortcode', 'ninja-job-board'),
                 "select_error" => __('Please select a Form', 'ninja-job-board'),
                 "insert_text" => __('Insert Shortcode', 'ninja-job-board'),
+                "button_title" => __('Insert job application form', 'ninja-job-board'),
+                "show_title" => __('Show form title', 'ninja-job-board'),
                 "forms" => $this->getAllFormsForMce(),
         ));
 
-        // Setup filters
         add_filter('mce_external_plugins', array(&$this, 'addTinymcePlugin'));
         add_filter('mce_buttons', array(&$this, 'addTinymceToolbarButton'));
     }
@@ -68,7 +59,7 @@ class TinyMceBlock
             'orderby' => 'date',
             'order' => 'DESC',
             'post_type' => 'wp_job_board',
-            'post_status' => 'any'
+            'post_status' => 'publish'
         );
 
         $tables = get_posts($args);

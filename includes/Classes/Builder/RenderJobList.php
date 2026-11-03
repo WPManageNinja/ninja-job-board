@@ -11,10 +11,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Render Job List Class
- * @since 1.0.0
- */
 class RenderJobList
 {
     public function render($args)
@@ -35,7 +31,7 @@ class RenderJobList
             $categoryQuery = [
                 'taxonomy' => 'wpjb-job-categories',
                 'field'    => 'slug',
-                'terms'    => $cats
+                'terms'    => array_map('sanitize_title', $formattedCats)
             ];
         }
 
@@ -66,19 +62,20 @@ class RenderJobList
         }
 
         $postsArg = [
-            'post_type' => 'wp_job_board',
-            'posts_per_page' => $args['posts_per_page'],
-            'order' => $args['order'],
+            'post_type'      => 'wp_job_board',
+            'post_status'    => 'publish',
+            'posts_per_page' => min(500, max(1, intval($args['posts_per_page']))),
+            'order'          => (strtoupper($args['order']) === 'ASC') ? 'ASC' : 'DESC',
         ];
 
         if($categoryQuery) {
-            $postsArg['tax_query'] = [
+            $postsArg['tax_query'] = [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- the [wp_job_list categories=""] filter needs it
                 $categoryQuery
             ];
         }
 
         if($metaQuery) {
-            $postsArg['meta_query'] = $metaQuery;
+            $postsArg['meta_query'] = $metaQuery; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- hides expired jobs (application end date)
         }
 
         $jobs = get_posts($postsArg);
@@ -86,7 +83,7 @@ class RenderJobList
         if($jobs) {
             $this->addAssets();
         } else {
-            return 'No Current Job Found';
+            return esc_html__('No Current Job Found', 'ninja-job-board');
         }
 
         $categories = array();
@@ -94,13 +91,14 @@ class RenderJobList
             $expDate = '—';
             $expDateTime = Forms::getExpirationDateTime($job->ID);
             if($expDateTime) {
-                $expDate = date('d M, Y', strtotime($expDateTime));
+                $expDate = date_i18n('d M, Y', strtotime($expDateTime));
             }
             $experinceText = get_post_meta($job->ID, 'job_experince_text', true);
             $category = $this->getFirstCategory($job->ID);
             $job->exp_date = $expDate;
             $job->job_type = GeneralSettings::getJobTypeName(get_post_meta($job->ID, 'job_type', true));
             $job->experince_text = ($experinceText) ? $experinceText : '—';
+            $job->location = get_post_meta($job->ID, 'job_location', true);
             $job->category = $category;
             if($category) {
                 $categories[$category->slug] = $category->name;
@@ -133,6 +131,7 @@ class RenderJobList
 
     private function pushJS()
     {
+        wp_enqueue_script('jquery');
         add_action('wp_footer', function () {
             ?>
             <script type="text/javascript">
