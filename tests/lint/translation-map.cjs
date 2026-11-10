@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * @fluent-i18n-toolkit v5
+ * @fluent-i18n-toolkit v6
  *
  * S0 lint: the Vue translation map must match the source it is generated
  * from, and every key in it must be reachable at runtime.

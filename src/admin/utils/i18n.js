@@ -1,5 +1,5 @@
 /**
- * @fluent-i18n-toolkit v5
+ * @fluent-i18n-toolkit v6
  *
  * Runtime translation helpers for the Vue apps: $t(), $_n() and $_x().
  *
@@ -95,15 +95,27 @@ const PLURAL_RULE_KEY = PLURAL_DELIMITER + 'plural_index';
  * gettext rule depends only on n, n % 10 and n % 100, so a larger count is
  * read as n % 100 + 100. Without a table (an older map) English rules apply.
  */
-function pluralIndex(count) {
-    const number = parseFloat(String(count).replace(/,/g, ''));
-    const table = translationMap()[PLURAL_RULE_KEY];
-
-    if (!Array.isArray(table) || !Number.isFinite(number)) {
-        return number === 1 ? 0 : 1;
+export function countToInteger(count) {
+    if (typeof count === 'number') {
+        return Number.isFinite(count) ? Math.floor(Math.abs(count)) : NaN;
     }
 
-    const n = Math.floor(Math.abs(number));
+    // A locale-formatted count: "1,234", "1.234", "1 234" (any space), "1'234".
+    // A trailing separator with one or two digits is a decimal part and is
+    // dropped; every other separator groups thousands.
+    const whole = String(count ?? '').trim().replace(/[.,]\d{1,2}$/, '');
+    const digits = whole.replace(/\D/g, '');
+
+    return digits === '' ? NaN : parseInt(digits, 10);
+}
+
+function pluralIndex(count) {
+    const n = countToInteger(count);
+    const table = translationMap()[PLURAL_RULE_KEY];
+
+    if (!Array.isArray(table) || !Number.isFinite(n)) {
+        return n === 1 ? 0 : 1;
+    }
 
     return table[n < 200 ? n : (n % 100) + 100] || 0;
 }

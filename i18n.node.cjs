@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * @fluent-i18n-toolkit v5
+ * @fluent-i18n-toolkit v6
  *
  * Builds the PHP translation map(s) behind the Vue app's $t() / $_n() / $_x()
  * helpers, from i18n.config.json in this directory.
